@@ -308,6 +308,8 @@ abstract class AbstractInstrumentSample
      */
     public long extendLease( long lease )
     {
+        m_instrumentProxy.getInstrumentableProxy().getInstrumentManager().incrementLeaseRequests();
+        
         synchronized( this )
         {
             // Only extend the lease if it is not permanent.
@@ -855,6 +857,14 @@ abstract class AbstractInstrumentSample
 
         // Propagate to the parent
         m_instrumentProxy.stateChanged();
+    }
+    
+    /**
+     * Called by the InstrumentProxy class during configuration to make the sample permanent.
+     */
+    void makePermanent()
+    {
+        m_leaseExpirationTime = 0;
     }
 
     /**

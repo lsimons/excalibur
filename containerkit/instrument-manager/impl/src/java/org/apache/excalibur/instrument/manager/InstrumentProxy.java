@@ -181,13 +181,42 @@ public class InstrumentProxy
                         " as \"" + sampleDescription + "\"" );
                 }
                 
-                AbstractInstrumentSample instrumentSample = 
-                    (AbstractInstrumentSample)InstrumentSampleFactory.getInstrumentSample( this,
-                    sampleType, sampleName, sampleInterval, sampleSize, sampleDescription, 0 );
-                instrumentSample.enableLogging( getLogger() );
-                instrumentSample.setConfigured();
-                
-                addInstrumentSample( instrumentSample );
+                // See if the sample already exists.
+                String fullSampleName = InstrumentSampleUtils.generateFullInstrumentSampleName(
+                    m_name, sampleType, sampleInterval, sampleSize );
+                InstrumentSample sample = getInstrumentSample( fullSampleName );
+                if ( sample == null )
+                {
+                    AbstractInstrumentSample instrumentSample = 
+                        (AbstractInstrumentSample)InstrumentSampleFactory.getInstrumentSample( this,
+                        sampleType, sampleName, sampleInterval, sampleSize, sampleDescription, 0 );
+                    instrumentSample.enableLogging( getLogger() );
+                    instrumentSample.setConfigured();
+                                
+                    addInstrumentSample( instrumentSample );
+                }
+                else
+                {
+                    // Sample already existed.
+                    if ( sample instanceof AbstractInstrumentSample )
+                    {
+                        AbstractInstrumentSample instrumentSample =
+                            (AbstractInstrumentSample)sample;
+                        instrumentSample.setConfigured();
+                        // If the sample already existed we will need to make it permanent.
+                        instrumentSample.makePermanent();
+                    }
+                    else
+                    {
+                        // Should never happen with normal operation but an error is better than
+                        //  silently failing.
+                        getLogger().warn(
+                            "Instrument sample was configured but already existed and "
+                            + "could not be cast to an AbstractInstrumentSample.  "
+                            + "Name: " + fullSampleName + ", Class: "
+                            + sample.getClass().getName() );
+                    }
+                }
             }
         }
     }
@@ -576,6 +605,15 @@ public class InstrumentProxy
             }
         }
         
+        if ( instrumentSample.getLeaseExpirationTime() == 0 )
+        {
+            m_instrumentableProxy.getInstrumentManager().incrementPermanentSampleCount();
+        }
+        else
+        {
+            m_instrumentableProxy.getInstrumentManager().incrementLeasedSampleCount();
+        }
+        
         stateChanged();
     }
 
@@ -611,6 +649,8 @@ public class InstrumentProxy
             m_sampleArray = null;
             m_sampleDescriptorArray = null;
         }
+        
+        m_instrumentableProxy.getInstrumentManager().decrementLeasedSampleCount();
         
         stateChanged();
     }
@@ -698,6 +738,8 @@ public class InstrumentProxy
                     this, sampleType, sampleName, sampleInterval, sampleSize,
                     sampleDescription, sampleLease );
                 instrumentSample.enableLogging( getLogger() );
+                
+                m_instrumentableProxy.getInstrumentManager().incrementLeaseRequests();
                 
                 addInstrumentSample( instrumentSample );
                 
@@ -980,12 +1022,15 @@ public class InstrumentProxy
                         String sampleDescription =
                             instrumentSampleConf.getAttribute( "description", sampleName );
                         
+                        // Create the sample with a permanent expiration time.  The correct
+                        //  expiration time will be set when its state is loaded.
                         AbstractInstrumentSample instrumentSample = 
                             (AbstractInstrumentSample)InstrumentSampleFactory.getInstrumentSample(
                             this, sampleType, fullSampleName, sampleInterval, sampleSize,
                             sampleDescription, 0 );
                         instrumentSample.enableLogging( getLogger() );
                         instrumentSample.loadState( instrumentSampleConf );
+                        
                         addInstrumentSample( instrumentSample );
                     }
                     else

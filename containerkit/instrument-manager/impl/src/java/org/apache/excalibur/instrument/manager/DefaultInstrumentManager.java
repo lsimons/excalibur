@@ -67,6 +67,12 @@ public class DefaultInstrumentManager
     public static final String INSTRUMENT_FREE_MEMORY = "free-memory";
     public static final String INSTRUMENT_MEMORY = "memory";
     public static final String INSTRUMENT_ACTIVE_THREAD_COUNT = "active-thread-count";
+    public static final String INSTRUMENT_REGISTRATIONS = "instrumentable-registrations";
+    public static final String INSTRUMENT_INSTRUMENTABLES = "instrumentables";
+    public static final String INSTRUMENT_INSTRUMENTS = "instruments";
+    public static final String INSTRUMENT_SAMPLES = "samples";
+    public static final String INSTRUMENT_LEASED_SAMPLES = "leased-samples";
+    public static final String INSTRUMENT_LEASE_REQUESTS = "lease-requests";
     
     /** The name used to identify this InstrumentManager. */
     private String m_name;
@@ -128,6 +134,36 @@ public class DefaultInstrumentManager
     /** Instrument used to profile the active thread count of the JVM. */
     private ValueInstrument m_activeThreadCountInstrument;
     
+    /** Instrument to track the number of times registerInstrumentable is called. */
+    private CounterInstrument m_registrationsInstrument;
+
+    /** The Instrumentable count. */
+    private int m_instrumentableCount;
+    
+    /** Instrument used to track the number of Instrumentables in the system. */
+    private ValueInstrument m_instrumentablesInstrument;
+
+    /** The Instrument count. */
+    private int m_instrumentCount;
+
+    /** Instrument used to track the number of Instruments in the system. */
+    private ValueInstrument m_instrumentsInstrument;
+
+    /** The Permanent Instrument Sample count. */
+    private int m_permanentSampleCount;
+
+    /** The Leased Instrument Sample count. */
+    private int m_leasedSampleCount;
+
+    /** Instrument used to track the number of Instrument samples in the system. */
+    private ValueInstrument m_samplesInstrument;
+
+    /** Instrument used to track the number of Leased Instrument samples in the system. */
+    private ValueInstrument m_leasedSamplesInstrument;
+    
+    /** Instrument used to track the number of lease requests. */
+    private CounterInstrument m_leaseRequestsInstrument;
+    
     /** State Version. */
     private int m_stateVersion;
 
@@ -157,6 +193,12 @@ public class DefaultInstrumentManager
         m_freeMemoryInstrument = new ValueInstrument( INSTRUMENT_FREE_MEMORY );
         m_memoryInstrument = new ValueInstrument( INSTRUMENT_MEMORY );
         m_activeThreadCountInstrument = new ValueInstrument( INSTRUMENT_ACTIVE_THREAD_COUNT );
+        m_registrationsInstrument = new CounterInstrument( INSTRUMENT_REGISTRATIONS );
+        m_instrumentablesInstrument = new ValueInstrument( INSTRUMENT_INSTRUMENTABLES );
+        m_instrumentsInstrument = new ValueInstrument( INSTRUMENT_INSTRUMENTS );
+        m_samplesInstrument = new ValueInstrument( INSTRUMENT_SAMPLES );
+        m_leasedSamplesInstrument = new ValueInstrument( INSTRUMENT_LEASED_SAMPLES );
+        m_leaseRequestsInstrument = new CounterInstrument( INSTRUMENT_LEASE_REQUESTS );
     }
 
     /*---------------------------------------------------------------
@@ -172,6 +214,20 @@ public class DefaultInstrumentManager
     public void configure( Configuration configuration )
         throws ConfigurationException
     {
+        // Register the InstrumentManager as an Instrumentable.  This must be done before
+        //  the configuration and state file is loaded or our own instruments will not yet
+        //  have proxies.
+        try
+        {
+            registerInstrumentable( this, getInstrumentableName() );
+        }
+        catch ( Exception e )
+        {
+            // Should never happen
+            throw new ConfigurationException(
+                "Unable to register the InstrumentManager's own instruments.", e );
+        }
+
         synchronized( m_semaphore )
         {
             m_configuration = configuration;
@@ -189,15 +245,23 @@ public class DefaultInstrumentManager
                 Configuration instrumentableConf = instrumentableConfs[ i ];
                 String instrumentableName = instrumentableConf.getAttribute( "name" );
 
-                InstrumentableProxy instrumentableProxy = new InstrumentableProxy(
-                    this, null, instrumentableName, instrumentableName );
-                instrumentableProxy.enableLogging( getLogger() );
+                // See if the instrumentable already exists.
+                InstrumentableProxy instrumentableProxy =
+                    (InstrumentableProxy)m_instrumentableProxies.get( instrumentableName );
+                if ( instrumentableProxy == null )
+                {
+                    instrumentableProxy = new InstrumentableProxy(
+                        this, null, instrumentableName, instrumentableName );
+                    instrumentableProxy.enableLogging( getLogger() );
+                    incrementInstrumentableCount();
+                    m_instrumentableProxies.put( instrumentableName, instrumentableProxy );
+    
+                    // Clear the optimized arrays
+                    m_instrumentableProxyArray = null;
+                    m_instrumentableDescriptorArray = null;
+                }
+                // Always configure
                 instrumentableProxy.configure( instrumentableConf );
-                m_instrumentableProxies.put( instrumentableName, instrumentableProxy );
-
-                // Clear the optimized arrays
-                m_instrumentableProxyArray = null;
-                m_instrumentableDescriptorArray = null;
             }
 
             // Configure the state file.
@@ -301,9 +365,6 @@ public class DefaultInstrumentManager
     public void initialize()
         throws Exception
     {
-        // Register the InstrumentManager as an Instrumentable.
-        registerInstrumentable( this, getInstrumentableName() );
-
         if( m_runner == null )
         {
             m_runner = new Thread( this, "InstrumentManagerRunner" );
@@ -360,6 +421,8 @@ public class DefaultInstrumentManager
         throws Exception
     {
         getLogger().debug( "Registering Instrumentable: " + instrumentableName );
+        
+        m_registrationsInstrument.increment();
 
         synchronized( m_semaphore )
         {
@@ -374,12 +437,13 @@ public class DefaultInstrumentManager
                     instrumentableName.substring( pos + 1 );
                 InstrumentableProxy instrumentableProxy =
                     (InstrumentableProxy)m_instrumentableProxies.get( parentName );
-                if( instrumentableProxy == null )
+                if ( instrumentableProxy == null )
                 {
                     // This is a Instrumentable that has not been seen before.
                     instrumentableProxy = new InstrumentableProxy(
                         this, null, parentName, parentName );
                     instrumentableProxy.enableLogging( getLogger() );
+                    incrementInstrumentableCount();
                     // Do not call configure here because there is no configuration
                     //  for discovered instrumentables.
                     m_instrumentableProxies.put( parentName, instrumentableProxy );
@@ -411,6 +475,7 @@ public class DefaultInstrumentManager
                     instrumentableProxy = new InstrumentableProxy(
                         this, null, instrumentableName, instrumentableName );
                     instrumentableProxy.enableLogging( getLogger() );
+                    incrementInstrumentableCount();
                     // Do not call configure here because there is no configuration
                     //  for discovered instrumentables.
                     m_instrumentableProxies.put( instrumentableName, instrumentableProxy );
@@ -700,6 +765,7 @@ public class DefaultInstrumentManager
                 instrumentableProxy = new InstrumentableProxy(
                     this, null, instrumentableName, instrumentableName );
                 instrumentableProxy.enableLogging( getLogger() );
+                incrementInstrumentableCount();
                 m_instrumentableProxies.put( instrumentableName, instrumentableProxy );
 
                 // Clear the optimized arrays
@@ -885,7 +951,13 @@ public class DefaultInstrumentManager
             m_totalMemoryInstrument,
             m_freeMemoryInstrument,
             m_memoryInstrument,
-            m_activeThreadCountInstrument
+            m_activeThreadCountInstrument,
+            m_registrationsInstrument,
+            m_instrumentablesInstrument,
+            m_instrumentsInstrument,
+            m_samplesInstrument,
+            m_leasedSamplesInstrument,
+            m_leaseRequestsInstrument
         };
     }
 
@@ -1252,6 +1324,7 @@ public class DefaultInstrumentManager
                 proxy = new InstrumentableProxy(
                     this, instrumentableProxy, fullChildName, newParentName );
                 proxy.enableLogging( getLogger() );
+                incrementInstrumentableCount();
                 
                 instrumentableProxy.addChildInstrumentableProxy( proxy );
             }
@@ -1274,6 +1347,7 @@ public class DefaultInstrumentManager
                 proxy = new InstrumentableProxy(
                     this, instrumentableProxy, fullChildName, childName );
                 proxy.enableLogging( getLogger() );
+                incrementInstrumentableCount();
                 
                 instrumentableProxy.addChildInstrumentableProxy( proxy );
             }
@@ -1314,6 +1388,7 @@ public class DefaultInstrumentManager
                 proxy = new InstrumentProxy(
                     instrumentableProxy, fullInstrumentName, instrumentName );
                 proxy.enableLogging( getLogger() );
+                incrementInstrumentCount();
 
                 // Set the type of the new InstrumentProxy depending on the
                 //  class of the actual Instrument.
@@ -1433,6 +1508,7 @@ public class DefaultInstrumentManager
                 proxy = new InstrumentableProxy(
                     this, instrumentableProxy, fullChildName, childName );
                 proxy.enableLogging( getLogger() );
+                incrementInstrumentableCount();
                 
                 instrumentableProxy.addChildInstrumentableProxy( proxy );
             }
@@ -1448,6 +1524,85 @@ public class DefaultInstrumentManager
     protected void stateChanged()
     {
         m_stateVersion++;
+    }
+    
+    /**
+     * Called to increment the number of Instrumentables registered.
+     */
+    protected void incrementInstrumentableCount()
+    {
+        int count;
+        synchronized( m_semaphore )
+        {
+            count = ++m_instrumentableCount;
+        }
+        m_instrumentablesInstrument.setValue( count );
+    }
+    
+    /**
+     * Called to increment the number of Instruments registered.
+     */
+    protected void incrementInstrumentCount()
+    {
+        int count;
+        synchronized( m_semaphore )
+        {
+            count = ++m_instrumentCount;
+        }
+        m_instrumentsInstrument.setValue( count );
+    }
+    
+    /**
+     * Called to increment the number of Permanent Instrument Samples registered.
+     */
+    protected void incrementPermanentSampleCount()
+    {
+        int count;
+        synchronized( m_semaphore )
+        {
+            count = ++m_permanentSampleCount + m_leasedSampleCount;
+        }
+        m_samplesInstrument.setValue( count );
+    }
+    
+    /**
+     * Called to increment the number of Leased Instrument Samples registered.
+     */
+    protected void incrementLeasedSampleCount()
+    {
+        int count;
+        int leasedCount;
+        synchronized( m_semaphore )
+        {
+            leasedCount = ++m_leasedSampleCount;
+            count = m_permanentSampleCount + m_leasedSampleCount;
+        }
+        m_samplesInstrument.setValue( count );
+        m_leasedSamplesInstrument.setValue( leasedCount );
+    }
+    
+    /**
+     * Called to decrement the number of Leased Instrument Samples registered.
+     */
+    protected void decrementLeasedSampleCount()
+    {
+        int count;
+        int leasedCount;
+        synchronized( m_semaphore )
+        {
+            leasedCount = --m_leasedSampleCount;
+            count = m_permanentSampleCount + m_leasedSampleCount;
+        }
+        m_samplesInstrument.setValue( count );
+        m_leasedSamplesInstrument.setValue( leasedCount );
+    }
+    
+    /**
+     * Increment the lease requests.
+     */
+    protected void incrementLeaseRequests()
+    {
+        m_leaseRequestsInstrument.increment();
     }
 }
 

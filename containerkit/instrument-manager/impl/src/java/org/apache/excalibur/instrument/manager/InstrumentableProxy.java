@@ -146,16 +146,23 @@ class InstrumentableProxy
                 Configuration childConf = childConfs[ i ];
                 String childName = childConf.getAttribute( "name" );
                 String fullChildName = m_name + "." + childName;
-
-                InstrumentableProxy childProxy = new InstrumentableProxy(
-                    m_instrumentManager, this, fullChildName, childName );
-                childProxy.enableLogging( getLogger() );
+                
+                // See if the instrumentable already exists.
+                InstrumentableProxy childProxy = getChildInstrumentableProxy( fullChildName );
+                if( childProxy == null )
+                {
+                    childProxy = new InstrumentableProxy(
+                        m_instrumentManager, this, fullChildName, childName );
+                    childProxy.enableLogging( getLogger() );
+                    m_instrumentManager.incrementInstrumentableCount();
+                    m_childInstrumentableProxies.put( fullChildName, childProxy );
+    
+                    // Clear the optimized arrays
+                    m_childInstrumentableProxyArray = null;
+                    m_childInstrumentableDescriptorArray = null;
+                }
+                // Always configure the instrumentable.
                 childProxy.configure( childConf );
-                m_childInstrumentableProxies.put( fullChildName, childProxy );
-
-                // Clear the optimized arrays
-                m_childInstrumentableProxyArray = null;
-                m_childInstrumentableDescriptorArray = null;
             }
             
             // Configure any Instruments
@@ -166,15 +173,22 @@ class InstrumentableProxy
                 String instrumentName = instrumentConf.getAttribute( "name" );
                 String fullInstrumentName = m_name + "." + instrumentName;
 
-                InstrumentProxy instrumentProxy =
-                    new InstrumentProxy( this, fullInstrumentName, instrumentName );
-                instrumentProxy.enableLogging( getLogger() );
+                // See if the instrument already exists.
+                InstrumentProxy instrumentProxy = getInstrumentProxy( fullInstrumentName );
+                if ( instrumentProxy == null )
+                {
+                    instrumentProxy =
+                        new InstrumentProxy( this, fullInstrumentName, instrumentName );
+                    instrumentProxy.enableLogging( getLogger() );
+                    m_instrumentManager.incrementInstrumentCount();
+                    m_instrumentProxies.put( fullInstrumentName, instrumentProxy );
+    
+                    // Clear the optimized arrays
+                    m_instrumentProxyArray = null;
+                    m_instrumentDescriptorArray = null;
+                }
+                // Always configure the instrument
                 instrumentProxy.configure( instrumentConf );
-                m_instrumentProxies.put( fullInstrumentName, instrumentProxy );
-
-                // Clear the optimized arrays
-                m_instrumentProxyArray = null;
-                m_instrumentDescriptorArray = null;
             }
         }
     }
@@ -687,6 +701,7 @@ class InstrumentableProxy
                     childProxy = new InstrumentableProxy(
                         m_instrumentManager, this, fullChildName, childName );
                     childProxy.enableLogging( getLogger() );
+                    m_instrumentManager.incrementInstrumentableCount();
                     m_childInstrumentableProxies.put( fullChildName, childProxy );
     
                     // Clear the optimized arrays
@@ -714,6 +729,7 @@ class InstrumentableProxy
                     instrumentProxy =
                         new InstrumentProxy( this, fullInstrumentName, instrumentName );
                     instrumentProxy.enableLogging( getLogger() );
+                    m_instrumentManager.incrementInstrumentCount();
                     m_instrumentProxies.put( fullInstrumentName, instrumentProxy );
     
                     // Clear the optimized arrays
