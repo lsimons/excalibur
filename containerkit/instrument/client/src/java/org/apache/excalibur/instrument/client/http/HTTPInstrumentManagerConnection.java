@@ -244,20 +244,20 @@ public class HTTPInstrumentManagerConnection
         {
             HttpURLConnection conn = (HttpURLConnection)url.openConnection();
             
-            boolean oldConnected = m_connected;
-            m_connected = true;
-            if ( !oldConnected )
-            {
-                // Notify the listeners.
-                InstrumentManagerConnectionListener[] listenerArray = getListenerArray();
-                for ( int i = 0; i < listenerArray.length; i++ )
-                {
-                    listenerArray[i].opened( this );
-                }
-            }
-            
             if ( conn.getResponseCode() == conn.HTTP_OK )
             {
+                boolean oldConnected = m_connected;
+                m_connected = true;
+                if ( !oldConnected )
+                {
+                    // Notify the listeners.
+                    InstrumentManagerConnectionListener[] listenerArray = getListenerArray();
+                    for ( int i = 0; i < listenerArray.length; i++ )
+                    {
+                        listenerArray[i].opened( this );
+                    }
+                }
+                
                 InputStream is = conn.getInputStream();
                 try
                 {
