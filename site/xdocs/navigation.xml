@@ -56,6 +56,30 @@
             <item name="Design Notes" href="/fortress/design-notes.html"/>
         </menu>
 
+        <menu name="Framework">
+            <item name="Documentation" href="/framework/index.html" collapse="true">
+              <item name="Lifecycle" href="/framework/lifecycle.html"/>
+              <item name="COP in Avalon" href="/framework/guide-cop-in-avalon.html"/>
+              <item name="Patterns in Avalon" href="/framework/guide-patterns-avalon.html"/>
+              <item name="IOC Patterns" href="/framework/guide-patterns-ioc.html"/>
+              <item name="IOC Security" href="/framework/guide-patterns-ioc-security.html"/>
+              <item name="Seperation of Concerns" href="/framework/guide-patterns-soc.html"/>
+              <item name="Interface and Implementation" href="/framework/guide-patterns-soii.html"/>
+              <item name="Designing Components" href="/framework/component-design.html"/>
+              <item name="Best Practices" href="/framework/best-practices.html"/>
+            </item>
+            <item name="Developing" href="/developing/index.html" collapse="true">
+              <item name="Authors" href="/developing/authors.html"/>
+              <item name="Introduction" href="/developing/introduction.html"/>
+              <item name="Decomposition" href="/developing/decomposing.html"/>
+              <item name="Avalon Framework" href="/developing/framework.html"/>
+              <item name="Using the framework" href="/developing/implementing.html"/>
+              <item name="Compatibility with Avalon" href="/developing/compatiblity.html"/>
+              <item name="Development Strategies" href="/developing/strategies.html"/>
+              <item name="Conclusion" href="/developing/conclusion.html"/>
+            </item>
+        </menu>
+
         <menu name="Components">
             <item name="Overview" href="/component-list.html"/>
             <item name="Sourceresolver" href="/sourceresolve/index.html" collapse="true">
