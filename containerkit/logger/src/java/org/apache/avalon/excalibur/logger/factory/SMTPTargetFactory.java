@@ -58,7 +58,7 @@ import org.apache.log.output.net.SMTPOutputLogTarget;
  * <p>
  * <pre>
  * &lt;session&gt;
- *   &lt;parameter name="mail.host" value="mail.tanukisoftware.com"/&gt;
+ *   &lt;parameter name="mail.host" value="mail.apache.com"/&gt;
  * &lt;/session&gt;
  * </pre>
  * The Session is created by calling Session.getInstance, providing a Properties
