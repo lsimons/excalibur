@@ -34,7 +34,7 @@
             <ant:exec dir="${maven.dist.dir}" executable="ssh" failonerror="true">
                 <ant:arg line="${pass} ${acct} 'chgrp -R ${grp} ${deployDir};chmod -R a+r ${deployDir}'"/>
             </ant:exec>
-	    </define:tag>
+	</define:tag>
 
         <!--
          @name the name of file to gpg (assumed to be in the distributions dir)
@@ -100,7 +100,7 @@
             <j:set var="deployBase" value="/home/${user}/public_html/dist"/>
         </j:if>
         <j:if test="${isRC == false}">
-            <j:set var="deployBase" value="/www/www.apache.org/dist"/>
+            <j:set var="deployBase" value="/www/www.apache.org/dist/excalibur"/>
         </j:if>
 
         ${pom.getContext().setVariable("maven.repo.list", "default")}
