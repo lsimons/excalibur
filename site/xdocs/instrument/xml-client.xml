@@ -96,7 +96,8 @@
                         <td>
                             The Sample URL is used to obtain information about a particular
                             Sample.  To obtain the actual data points of the sample, the
-                            Sample Snapshot URL must be used.
+                            <a href="xml-client-snapshot.html">Sample Snapshot</a> URL must
+                            be used.
                         </td>
                     </tr>
                     <tr>

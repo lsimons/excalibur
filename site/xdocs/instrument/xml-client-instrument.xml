@@ -198,11 +198,8 @@ limitations under the License.
                             See the documentation for the
                             <a href="xml-client-sample.html">Sample</a> URL for further
                             details.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Attributes:</td>
-                        <td>
+                            <p/>
+                            Attributes:
                             <table>
                                 <tr>
                                     <th>Name</th>

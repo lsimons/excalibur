@@ -191,11 +191,8 @@ limitations under the License.
                             elements will be available.   See the documentation for the
                             <a href="xml-client-instrumentable.html">Instrumentable</a>
                             URL for further details.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Attributes:</td>
-                        <td>
+                            <p/>
+                            Attributes:
                             <table>
                                 <tr>
                                     <th>Name</th>
@@ -245,11 +242,8 @@ limitations under the License.
                             elements will be available.   See the documentation for the
                             <a href="xml-client-instrument.html">Instrument</a>
                             URL for further details.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Attributes:</td>
-                        <td>
+                            <p/>
+                            Attributes:
                             <table>
                                 <tr>
                                     <th>Name</th>
