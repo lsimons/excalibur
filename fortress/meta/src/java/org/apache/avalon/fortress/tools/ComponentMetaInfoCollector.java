@@ -28,8 +28,8 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
 import java.util.ArrayList;
@@ -125,7 +125,7 @@ public final class ComponentMetaInfoCollector extends AbstractQdoxTask
 
         DirectedAcyclicGraphVerifier.verify( dagVerifyList );
     }
-
+    
     /**
      * Write the service list to the "/service.list" file.
      *
@@ -134,16 +134,22 @@ public final class ComponentMetaInfoCollector extends AbstractQdoxTask
      */
     public void writeServiceList( final Iterator it ) throws IOException
     {
-        final PrintWriter writer = new PrintWriter( new FileWriter( m_serviceFile ) );
         int numServices = 0;
-
-        while ( it.hasNext() )
+    
+        final PrintWriter writer = new PrintWriter(
+            new OutputStreamWriter( new ChangedFileOutputStream( m_serviceFile ), "UTF-8" ) );
+        try
         {
-            writer.println( ( (Service) it.next() ).getType() );
-            numServices++;
+            while ( it.hasNext() )
+            {
+                writer.println( ( (Service) it.next() ).getType() );
+                numServices++;
+            }
         }
-
-        writer.close();
+        finally
+        {
+            writer.close();
+        }
 
         if ( numServices == 0 )
         {

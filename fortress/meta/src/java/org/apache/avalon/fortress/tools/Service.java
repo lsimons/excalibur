@@ -18,8 +18,8 @@
 package org.apache.avalon.fortress.tools;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -89,12 +89,11 @@ final class Service
         if ( m_components.isEmpty() ) return;
 
         final File serviceFile = new File( rootDir, "META-INF/services/" + getType() );
-        PrintWriter writer = null;
-
+        
+        final PrintWriter writer = new PrintWriter(
+            new OutputStreamWriter( new ChangedFileOutputStream( serviceFile ), "UTF-8" ) );
         try
         {
-            writer = new PrintWriter( new FileWriter( serviceFile ) );
-
             final Iterator it = m_components.iterator();
             while ( it.hasNext() )
             {
@@ -104,10 +103,7 @@ final class Service
         }
         finally
         {
-            if ( null != writer )
-            {
-                writer.close();
-            }
+            writer.close();
         }
     }
 }

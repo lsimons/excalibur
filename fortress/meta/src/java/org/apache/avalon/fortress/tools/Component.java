@@ -23,8 +23,12 @@ import org.apache.avalon.fortress.util.dag.Vertex;
 import org.apache.tools.ant.BuildException;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.*;
 
 /**
@@ -286,6 +290,48 @@ final class Component
     {
         m_attributes.setProperty( name, value );
     }
+    
+    /**
+     * Only writes the properties file if it is new or if the existing file
+     *  contains different values.
+     */
+    private void writeIfChanged( Properties props, File file, String desc )
+        throws IOException
+    {
+        boolean changed;
+        if ( file.exists() )
+        {
+            Properties oldProps = new Properties();
+            FileInputStream is = new FileInputStream( file );
+            try
+            {
+                oldProps.load( is );
+            }
+            finally
+            {
+                is.close();
+            }
+            
+            changed = !props.equals( oldProps );
+        }
+        else
+        {
+            changed = true;
+        }
+        
+        if ( changed )
+        {
+            FileOutputStream os = new FileOutputStream( file );
+            try
+            {
+                props.store( os, desc );
+            }
+            finally
+            {
+                os.close();
+            }
+        }
+    }
 
     /**
      * Output the meta information.
@@ -297,35 +343,32 @@ final class Component
     {
         final String fileName = getType().replace( '.', '/' ).concat( ".meta" );
         final String depsName = getType().replace( '.', '/' ).concat( ".deps" );
-        File output = new File( rootDir, fileName );
-        FileOutputStream writer = null;
-
-        try
+        
+        // Write out the meta file if it has changed.
+        writeIfChanged( m_attributes, new File( rootDir, fileName ),
+            "Meta information for " + getType() );
+        
+        final File depsFile = new File( rootDir, depsName );
+        if ( m_dependencies.size() > 0 )
         {
-            writer = new FileOutputStream( output );
-            m_attributes.store( writer, "Meta information for " + getType() );
-
-            if ( m_dependencies.size() > 0 )
+            final PrintWriter writer = new PrintWriter( new OutputStreamWriter(
+                new ChangedFileOutputStream( depsFile ), "UTF-8" ) );
+            try
             {
-                writer.close();
-                output = new File( rootDir, depsName );
-                writer = new FileOutputStream( output );
-
-                Iterator it = m_dependencies.iterator();
-                while ( it.hasNext() )
+                for ( Iterator iter = m_dependencies.iterator(); iter.hasNext(); )
                 {
-                    Service service = (Service) it.next();
-                    String name = service.getType() + "\n";
-                    writer.write( name.getBytes() );
+                    Service service = (Service)iter.next();
+                    writer.println( service.getType() );
                 }
             }
-        }
-        finally
-        {
-            if ( null != writer )
+            finally
             {
                 writer.close();
             }
+        }
+        else if ( depsFile.exists() )
+        {
+            depsFile.delete();
         }
     }
 
