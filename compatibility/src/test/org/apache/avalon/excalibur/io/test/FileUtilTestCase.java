@@ -99,6 +99,8 @@ public final class FileUtilTestCase
         FileUtil.copyFile( m_testFile1, destination );
         assertTrue( "Check Exist", destination.exists() );
         assertTrue( "Check Full copy", destination.length() == FILE1_SIZE );
+        FileUtil.forceDelete( destination );
+        assertTrue( "Check No Exist", !destination.exists() );
     }
 
     public void testCopyFile2()
@@ -108,12 +110,15 @@ public final class FileUtilTestCase
         FileUtil.copyFile( m_testFile2, destination );
         assertTrue( "Check Exist", destination.exists() );
         assertTrue( "Check Full copy", destination.length() == FILE2_SIZE );
+        FileUtil.forceDelete( destination );
+        assertTrue( "Check No Exist", !destination.exists() );
     }
 
     public void testForceDeleteAFile1()
             throws Exception
     {
         final File destination = new File( m_testDirectory, "copy1.txt" );
+        assertFalse( "Copy1.txt already exists", destination.exists() );
         destination.createNewFile();
         assertTrue( "Copy1.txt doesn't exist to delete", destination.exists() );
         FileUtil.forceDelete( destination );
@@ -124,6 +129,7 @@ public final class FileUtilTestCase
             throws Exception
     {
         final File destination = new File( m_testDirectory, "copy2.txt" );
+        assertFalse( "Copy2.txt already exists", destination.exists() );
         destination.createNewFile();
         assertTrue( "Copy2.txt doesn't exist to delete", destination.exists() );
         FileUtil.forceDelete( destination );
