@@ -38,10 +38,15 @@ necessary issues from there.
     </description>
 
     <dependencies>
+        <!-- 
+        Not really needed, and also no longer the official MySQL JDBC driver. 
+        -->
+        <!--
         <dependency>
             <id>mm-mysql</id>
             <version>2.0.13-bin</version>
         </dependency>
+        -->
         <dependency>
             <id>hsqldb</id>
             <version>1.7.1</version>
