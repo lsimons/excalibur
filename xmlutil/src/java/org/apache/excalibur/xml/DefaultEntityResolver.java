@@ -170,7 +170,7 @@ public class DefaultEntityResolver extends AbstractLogEnabled
     /**
      * Set the global component manager.
      * @param manager The global component manager
-     * @exception ComponentException
+     * @exception ServiceException
      */
     public void service(ServiceManager manager) 
     throws ServiceException 

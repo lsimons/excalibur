@@ -171,7 +171,7 @@ public final class XPathUtil {
     /**
      * Use an XPath string to select a single node. XPath namespace
      * prefixes are resolved from the context node, which may not
-     * be what you want ({@link #getSingleNode()}).
+     * be what you want ({@link #getSingleNode(XPathProcessor, Node ,String )}).
      *
      * @param contextNode The node to start searching from.
      * @param str A valid XPath string.
@@ -287,7 +287,7 @@ public final class XPathUtil {
                     l = childs.getLength();
                     while (found == false && m < l) {
                         item = childs.item(m);
-                        if (item.getNodeType() == Document.ELEMENT_NODE
+                        if (item.getNodeType() == Node.ELEMENT_NODE
                             && item.getLocalName().equals(path[i]) == true) {
                             found = true;
                             contextNode = item;
@@ -326,7 +326,7 @@ public final class XPathUtil {
             l = childs.getLength();
             while (found == false && i < l) {
                 item = childs.item(i);
-                if (item.getNodeType() == Document.ELEMENT_NODE
+                if (item.getNodeType() == Node.ELEMENT_NODE
                     && path[startIndex].equals(item.getLocalName()!=null?item.getLocalName():item.getNodeName())) {
                     if (startIndex == path.length-1) {
                         found = true;
@@ -389,7 +389,7 @@ public final class XPathUtil {
                 l = childs.getLength();
                 while (m < l) {
                     item = childs.item(m);
-                    if (item.getNodeType() == Document.ELEMENT_NODE) {
+                    if (item.getNodeType() == Node.ELEMENT_NODE) {
                         // Work around for DOM Level 1
                         if (path[startIndex].equals(item.getLocalName()!=null?item.getLocalName():item.getNodeName()) == true) {
                             result.addNode(item);
@@ -404,7 +404,7 @@ public final class XPathUtil {
                 l = childs.getLength();
                 while (m < l) {
                     item = childs.item(m);
-                    if (item.getNodeType() == Document.ELEMENT_NODE) {
+                    if (item.getNodeType() == Node.ELEMENT_NODE) {
                         // Work around for DOM Level 1
                         if (path[startIndex].equals(item.getLocalName()!=null?item.getLocalName():item.getNodeName()) == true) {
                             getNodesFromPath(result, item, path, startIndex+1);
@@ -474,7 +474,7 @@ public final class XPathUtil {
      * @param root The node to start the search.
      * @param path XPath search expression.
      * @return     The boolean value of the node.
-     * @throws ProcessingException If the node is not found.
+     * @throws XPathException If the node is not found.
      */
     public static boolean getValueAsBooleanOf(XPathProcessor processor,
                                                 Node root, 

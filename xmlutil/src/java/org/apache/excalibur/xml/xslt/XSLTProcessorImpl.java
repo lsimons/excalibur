@@ -78,6 +78,12 @@ import org.xml.sax.XMLFilter;
  * @version 1.0
  * @since   July 11, 2001
  */
+/**
+ * @author CZiegeler
+ *
+ * To change the template for this generated type comment go to
+ * Window - Preferences - Java - Code Generation - Code and Comments
+ */
 public class XSLTProcessorImpl
     extends AbstractLogEnabled
     implements XSLTProcessor,
@@ -204,7 +210,7 @@ public class XSLTProcessorImpl
     }
 
     /**
-     * @see XSLTProcessor.getTransformerHandler( Source )
+     * @see org.apache.excalibur.xml.xslt.XSLTProcessor#getTransformerHandler(org.apache.excalibur.source.Source)
      */
     public TransformerHandler getTransformerHandler( final Source stylesheet )
         throws XSLTProcessorException
@@ -213,7 +219,7 @@ public class XSLTProcessorImpl
     }
 
     /**
-     * @see XSLTProcessor.getTransformerHandler( Source, XMLFilter )
+     * @see org.apache.excalibur.xml.xslt.XSLTProcessor#getTransformerHandler(org.apache.excalibur.source.Source, org.xml.sax.XMLFilter)
      */
     public TransformerHandler getTransformerHandler( final Source stylesheet,
                                                      final XMLFilter filter )

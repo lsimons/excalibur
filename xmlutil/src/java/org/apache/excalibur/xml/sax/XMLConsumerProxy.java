@@ -22,7 +22,7 @@ import org.xml.sax.ext.LexicalHandler;
 
 /**
  * This class is an utility class proxying a SAX version 2.0
- * {@link ContentHandler} and {@link LexicalHandler) and forwarding it those
+ * {@link ContentHandler} and {@link LexicalHandler} and forwarding it those
  * events received throug its {@link XMLConsumer}s interface.
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
