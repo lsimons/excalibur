@@ -109,7 +109,7 @@ public class InformixDataSource
         if( !InformixDataSource.INIT_FACTORY )
         {
             System.setProperty( Context.INITIAL_CONTEXT_FACTORY,
-                                "org.apache.avalon.excalibur.naming.memory.MemoryInitialContextFactory" );
+                                "org.codehaus.spice.jndikit.memory.MemoryInitialContextFactory" );
         }
     }
 
