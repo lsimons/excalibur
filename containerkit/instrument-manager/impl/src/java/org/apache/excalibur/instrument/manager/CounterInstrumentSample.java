@@ -115,6 +115,16 @@ class CounterInstrumentSample
         // Counts do not propagate, so always reset the count to 0.
         m_count = 0;
     }
+
+    /**
+     * Returns the value to use for filling in the buffer when time is skipped.
+     * <p>
+     * Should only be called when synchronized.
+     */
+    protected int getFillValue()
+    {
+        return 0;
+    }
     
     /**
      * Used to load the state, called from AbstractInstrumentSample.loadState();

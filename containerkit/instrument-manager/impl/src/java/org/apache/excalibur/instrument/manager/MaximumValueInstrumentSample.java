@@ -88,6 +88,16 @@ class MaximumValueInstrumentSample
         m_value = m_lastValue;
         m_valueCount = 0;
     }
+
+    /**
+     * Returns the value to use for filling in the buffer when time is skipped.
+     * <p>
+     * Should only be called when synchronized.
+     */
+    protected int getFillValue()
+    {
+        return m_lastValue;
+    }
     
     /**
      * Allow subclasses to add information into the saved state.

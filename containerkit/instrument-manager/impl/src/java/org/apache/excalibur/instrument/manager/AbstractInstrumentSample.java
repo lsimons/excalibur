@@ -152,7 +152,7 @@ abstract class AbstractInstrumentSample
         // Calculate the maxAge
         m_maxAge = m_size * m_interval;
 
-        init();
+        init( 0 );
 
         // Create the descriptor
         m_descriptor = new InstrumentSampleDescriptorLocalImpl( this );
@@ -670,9 +670,11 @@ abstract class AbstractInstrumentSample
     }
 
     /**
-     * Initializes the sample
+     * Initializes the sample.
+     *
+     * @param fillValue The value to fill the buffer with.
      */
-    private void init()
+    private void init( int fillValue )
     {
         // Calculate an interval time based on the current time by removing the modulous
         //  value of the current time. This will allign the intervals to the start of computer
@@ -683,10 +685,17 @@ abstract class AbstractInstrumentSample
         // History is build with m_value holding the current value and all previous values
         // spanning accross 2 arrays that switch places as time progresses.  This completely
         // removes the need to manage large lists or do array copies.
-        // All history values are 0 initially.
         m_historyIndex = 0;
-        m_historyOld = new int[ m_size - 1 ];
-        m_historyNew = new int[ m_size - 1 ];
+        if ( m_historyOld == null )
+        {
+            m_historyOld = new int[ m_size - 1 ];
+            m_historyNew = new int[ m_size - 1 ];
+        }
+        for ( int i = 0; i < m_historyOld.length; i++ )
+        {
+            m_historyOld[i] = fillValue;
+            m_historyNew[i] = fillValue;
+        }
     }
 
     /**
@@ -751,6 +760,13 @@ abstract class AbstractInstrumentSample
     protected abstract void advanceToNextSample();
 
     /**
+     * Returns the value to use for filling in the buffer when time is skipped.
+     * <p>
+     * Should only be called when synchronized.
+     */
+    protected abstract int getFillValue();
+
+    /**
      * Brings the InstrumentSample's time up to date so that a new value can be added.
      * <p>
      * Should only be called when synchronized.
@@ -776,7 +792,7 @@ abstract class AbstractInstrumentSample
             {
                 // The history is too old, reset the sample.
                 advanceToNextSample();
-                init();
+                init( getFillValue() );
             }
             else
             {

@@ -89,6 +89,16 @@ class MeanValueInstrumentSample
         //  be affected by the old.
         m_valueCount = 0;
     }
+
+    /**
+     * Returns the value to use for filling in the buffer when time is skipped.
+     * <p>
+     * Should only be called when synchronized.
+     */
+    protected int getFillValue()
+    {
+        return m_value;
+    }
     
     /**
      * Allow subclasses to add information into the saved state.
