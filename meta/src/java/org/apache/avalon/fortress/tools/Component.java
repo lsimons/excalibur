@@ -25,6 +25,7 @@ import org.apache.tools.ant.BuildException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 
 /**
@@ -33,8 +34,11 @@ import java.util.*;
  * @author <a href="mailto:dev@avalon.apache.org">The Avalon Team</a>
  * @version CVS $Revision: 1.1 $ $Date: 2004/04/02 08:29:44 $
  */
-final class Component
+public final class Component
 {
+    /** The repository of components. */
+    static final Set m_repository = new HashSet();
+    
     private static final String SINGLE_THREADED = "org.apache.avalon.framework.thread.SingleThreaded";
     private static final String THREAD_SAFE = "org.apache.avalon.framework.thread.ThreadSafe";
     private static final String POOLABLE = "org.apache.avalon.excalibur.pool.Poolable";
@@ -55,15 +59,13 @@ final class Component
 
     private static final String METH_SERVICE = "service";
 
-    /** The repository of components. */
-    static final Set m_repository = new HashSet();
-
     private final JavaClass m_javaClass;
     private final Properties m_attributes;
     private final List m_dependencies;
     private final Vertex m_vertex;
     private final List m_dependencyNames;
     private final List m_serviceNames;
+    private final DocletTag[] m_otherAttributes;
 
     /**
      * Initialize a service with the type name.
@@ -72,7 +74,10 @@ final class Component
      */
     public Component( final JavaClass javaClass )
     {
-        if ( javaClass == null ) throw new NullPointerException( "javaClass" );
+        if ( javaClass == null ) 
+        {
+            throw new NullPointerException( "javaClass" );
+        } 
 
         m_javaClass = javaClass;
         m_attributes = new Properties();
@@ -80,6 +85,7 @@ final class Component
         m_vertex = new Vertex( this );
         m_dependencyNames = new ArrayList( 10 );
         m_serviceNames = new ArrayList( 10 );
+        m_otherAttributes = m_javaClass.getTags();
 
         final DocletTag[] tags = javaClass.getTagsByName( TAG_SERVICE );
         for ( int t = 0; t < tags.length; t++ )
@@ -295,29 +301,102 @@ final class Component
      */
     public void serialize( final File rootDir ) throws IOException
     {
-        final String fileName = getType().replace( '.', '/' ).concat( ".meta" );
-        final String depsName = getType().replace( '.', '/' ).concat( ".deps" );
-        File output = new File( rootDir, fileName );
-        FileOutputStream writer = null;
+        final String type = getType();
+        final String className   = type.substring( type.lastIndexOf('.') + 1 );
+        final String typePackage = type.substring( 0, type.lastIndexOf('.') );
+        final String typePackageDirFormat = typePackage.replace( '.', '/' );
+        
+        final File packageDir = new File( rootDir, typePackageDirFormat );
+        packageDir.mkdirs();
+        
+        writeMetaFile( packageDir, className );
+        writeDepsFile( packageDir, className );
+        writeAttrFile( packageDir, className );
+    }
 
+    private void writeMetaFile( final File packageDir, final String className ) throws IOException
+    {
+        final File output = new File( packageDir, className + ".meta" );
+
+        FileOutputStream writer = null;
+        
         try
         {
             writer = new FileOutputStream( output );
             m_attributes.store( writer, "Meta information for " + getType() );
-
-            if ( m_dependencies.size() > 0 )
+        }
+        finally
+        {
+            if ( null != writer )
             {
                 writer.close();
-                output = new File( rootDir, depsName );
-                writer = new FileOutputStream( output );
+            }
+        }
+    }
 
-                Iterator it = m_dependencies.iterator();
-                while ( it.hasNext() )
+    private void writeDepsFile( final File packageDir, final String className ) throws IOException
+    {
+        if ( m_dependencies.size() == 0 )
+        {
+            return;
+        }
+        
+        final File output = new File( packageDir, className + ".deps" );
+
+        FileOutputStream writer = null;
+        
+        try
+        {
+            writer = new FileOutputStream( output );
+
+            Iterator it = m_dependencies.iterator();
+            while ( it.hasNext() )
+            {
+                Service service = (Service) it.next();
+                String name = service.getType() + "\n";
+                writer.write( name.getBytes() );
+            }
+        }
+        finally
+        {
+            if ( null != writer )
+            {
+                writer.close();
+            }
+        }
+    }
+
+    private void writeAttrFile( final File packageDir, final String className ) throws IOException
+    {
+        final File output = new File( packageDir, className + ".attrs" );
+
+        PrintWriter writer = null;
+        
+        try
+        {
+            writer = new PrintWriter( new FileOutputStream( output ) );
+
+            for (int i = 0; i < m_otherAttributes.length; i++)
+            {
+                DocletTag tag = m_otherAttributes[i];
+                writer.print( tag.getName() );
+                writer.print( " [" );
+                String[] parameters = tag.getParameters();
+                boolean separator = false;
+                for (int j = 0; j < parameters.length; j++)
                 {
-                    Service service = (Service) it.next();
-                    String name = service.getType() + "\n";
-                    writer.write( name.getBytes() );
+                    String parameter = parameters[j];
+                    writer.print( parameter );
+                    if (!separator)
+                    {
+                        separator = true;
+                    }
+                    else
+                    {
+                        writer.print( ';' );
+                    }
                 }
+                writer.println( ']' );
             }
         }
         finally

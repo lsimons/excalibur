@@ -246,7 +246,7 @@ public final class ComponentMetaInfoCollector extends AbstractQdoxTask
         while ( services.hasNext() )
         {
             final Service service = (Service) services.next();
-            log( "Processing service " + service.getType(), Project.MSG_VERBOSE );
+            log( "Processing service " + service.getType(), Project.MSG_INFO );
             try
             {
                 service.serialize( m_destDir );

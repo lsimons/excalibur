@@ -32,7 +32,7 @@ import java.util.Set;
  * @author <a href="mailto:dev@avalon.apache.org">The Avalon Team</a>
  * @version CVS $Revision: 1.1 $ $Date: 2004/04/02 08:29:44 $
  */
-final class Service
+public final class Service
 {
     private final Set m_components;
 
@@ -62,13 +62,16 @@ final class Service
     }
 
     /**
-     * Add a component to the service.
+     * Adds a component that implements the service.
      *
      * @param type  the type name for the component
      */
     public void addComponent( final Component type )
     {
-        if ( type == null ) throw new NullPointerException( "type" );
+        if ( type == null ) 
+        {
+            throw new NullPointerException( "type" );
+        } 
 
         m_components.add( type );
     }
@@ -88,7 +91,10 @@ final class Service
     {
         if ( m_components.isEmpty() ) return;
 
-        final File serviceFile = new File( rootDir, "META-INF/services/" + getType() );
+        final File targetDir = new File( rootDir, "META-INF/services/" );
+        targetDir.mkdirs();
+        
+        final File serviceFile = new File( targetDir, getType() );
         PrintWriter writer = null;
 
         try
