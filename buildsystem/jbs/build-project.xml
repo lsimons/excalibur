@@ -513,7 +513,7 @@ $artifact [$version [$group [$repository]]]
         {
             skipAllDownloads = project.getProperty("do.not.download");
             quiet = project.getProperty("be.real.quiet");
-            
+
             if(skipAllDownloads == null && quiet == null)
             {
               msg =  "=======================================================================\n";
@@ -562,18 +562,18 @@ $artifact [$version [$group [$repository]]]
 
               artifact = dependency[0];
               version = "SNAPSHOT";
-              if( dependency.length > 1 && dependency[1] != "-" )
-                  version = dependency[1];
-
               group = artifact;
               repository = defaultRepository;
+
+              if( dependency.length > 1 && dependency[1] != "-" )
+                  version = dependency[1];
               if(dependency.length > 2 && dependency[2] != "-" )
               {
                 group = dependency[2];
-                if( dependency.length > 3 && dependency[3] != "-" )
-                {
-                  repository = dependency[3];
-                }
+              }
+              if( dependency.length > 3 && dependency[3] != "-" )
+              {
+                repository = dependency[3];
               }
 
               localDir = localRepository + sep + group + sep + "jars" + sep;
@@ -594,7 +594,7 @@ $artifact [$version [$group [$repository]]]
                 if( !file.exists() )
                   doDownload = true;
               }
-              
+
               if(skipAllDownloads != null) doDownload = false;
 
               if(doDownload)
