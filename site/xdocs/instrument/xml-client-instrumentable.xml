@@ -50,7 +50,7 @@ limitations under the License.
                     </tr>
                     <tr>
                         <td><b>name</b></td>
-                        <td>boolean</td>
+                        <td>String</td>
                         <td>
                             The fully qualified name of the Instrumentable being requested.
                         </td>
