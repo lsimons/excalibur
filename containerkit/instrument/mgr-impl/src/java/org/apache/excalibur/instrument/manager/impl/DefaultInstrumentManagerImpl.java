@@ -870,7 +870,7 @@ public class DefaultInstrumentManagerImpl
         FileInputStream is = new FileInputStream( stateFile );
         try
         {
-            loadStateFromStream( is );
+            loadStateFromStream( is, stateFile.getCanonicalPath() );
         }
         finally
         {
@@ -891,9 +891,32 @@ public class DefaultInstrumentManagerImpl
     public void loadStateFromStream( InputStream is )
         throws Exception
     {
+        loadStateFromStream( is, null );
+    }
+
+    /**
+     * Loads the Instrument Manager state from the specified stream.
+     *
+     * @param is Stream to read the instrument manager's state from.
+     * @param location The location of the stream. Used to improve the
+     *                 usefulness of any exceptions thrown.
+     *
+     * @throws Exception if there are any problems loading the state.
+     */
+    private void loadStateFromStream( InputStream is, String location )
+        throws Exception
+    {
         // Ride on top of the Configuration classes to load the state.
         DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
-        Configuration stateConfig = builder.build( is );
+        Configuration stateConfig;
+        if ( location == null )
+        {
+            stateConfig = builder.build( is );
+        }
+        else
+        {
+            stateConfig = builder.build( is, location );
+        }
 
         loadStateFromConfiguration( stateConfig );
     }
