@@ -54,9 +54,71 @@ public abstract class AbstractXMLHandler
     /*---------------------------------------------------------------
      * Methods
      *-------------------------------------------------------------*/
-    protected String makeSafeAttribute( String attribute )
+    /**
+     * Replaces one token with another in a string.
+     *
+     * @param str String with tokens to be replaced.
+     * @param oldToken The token to be replaced.
+     * @param newToken The new token value.
+     *
+     * @return A new String that has had its tokens replaced.
+     */
+    protected final String replaceToken( String str, String oldToken, String newToken )
     {
-        // TODO:
+        int len = str.length();
+        int oldLen = oldToken.length();
+        if ( oldLen == 0 )
+        {
+            // Can't replace nothing.
+            return str;
+        }
+        int newLen = newToken.length();
+        int start = 0;
+        int pos;
+        while ( ( pos = str.indexOf( oldToken, start ) ) >= 0 )
+        {
+            String left;
+            String right;
+            int leftLen;
+            int rightLen;
+            
+            // Get the left side of the string
+            leftLen = pos;
+            if ( leftLen == 0 )
+            {
+                left = "";
+            }
+            else
+            {
+                left = str.substring( 0, pos );
+            }
+            
+            // Get the right side of the string
+            rightLen = len - pos - oldLen;
+            if ( len - pos - oldLen <= 0 )
+            {
+                right = "";
+            }
+            else
+            {
+                right = str.substring( pos + oldLen );
+            }
+            
+            // Rebuild the str variable
+            str = left + newToken + right;
+            len = leftLen + newLen + rightLen;
+            start = leftLen + newLen;
+        }
+        return str;
+    }
+
+    protected final String makeSafeAttribute( String attribute )
+    {
+        attribute = replaceToken( attribute, "&", "&amp;" ); // Must be done first.
+        attribute = replaceToken( attribute, "<", "&lt;" );
+        attribute = replaceToken( attribute, ">", "&gt;" );
+        attribute = replaceToken( attribute, "\"", "&quot;" );
+        
         return attribute;
     }
     
