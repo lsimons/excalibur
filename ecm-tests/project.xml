@@ -19,7 +19,7 @@ limitations under the License.
     <extend>${basedir}/../buildsystem/project-common.xml</extend>
 
     <name>Excalibur Component Manager Tests</name>
-    <id>excalibur-component-tests</id>
+    <id>excalibur-ecm-test</id>
     <currentVersion>1.3</currentVersion>
     <inceptionYear>1997</inceptionYear>
     <shortDescription>Tests for the Excalibur Component Manager</shortDescription>

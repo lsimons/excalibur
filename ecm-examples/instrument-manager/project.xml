@@ -19,7 +19,7 @@
     <extend>${basedir}/../../buildsystem/project-common.xml</extend>
 
     <name>ECM Instrumentation Example</name>
-    <id>excalibur-component-examples</id>
+    <id>excalibur-ecm-examples</id>
     <currentVersion>1.0-dev</currentVersion>
     <inceptionYear>2003</inceptionYear>
     <shortDescription>Excalibur's Excalibur-Component-Manager-Examples component</shortDescription>

@@ -19,7 +19,7 @@ limitations under the License.
     <extend>${basedir}/../buildsystem/project-common.xml</extend>
 
     <name>Excalibur Component Manager</name>
-    <id>excalibur-component</id>
+    <id>excalibur-ecm</id>
     <currentVersion>1.3</currentVersion>
     <inceptionYear>1997</inceptionYear>
     <shortDescription>A lightweight avalon container</shortDescription>

@@ -19,7 +19,7 @@ limitations under the License.
     <extend>${basedir}/../project-common.xml</extend>
 
     <name>Excalibur Fortress Container Tests</name>
-    <id>excalibur-fortress-container-test</id>
+    <id>excalibur-fortress1-test</id>
     
     <shortDescription>The Avalon Fortress container tests</shortDescription>
     <description>
