@@ -101,7 +101,7 @@ JBS is now being installed into ${jbs.home}...
         <available file="${ant.home}/lib/js.jar" property="js.installed.successfully"/>
         <antcall target="js.required"/>
 
-        <copy todir="${ant.home}/lib" file="${jbs.repository.local}/junit/jars/juni-3.8.1.jar" failonerror="false"/>
+        <copy todir="${ant.home}/lib" file="${jbs.repository.local}/junit/jars/junit-3.8.1.jar" failonerror="false"/>
         <available file="${ant.home}/lib/junit-3.8.1.jar" property="junit.installed.successfully"/>
         <antcall target="junit.required"/>
 
