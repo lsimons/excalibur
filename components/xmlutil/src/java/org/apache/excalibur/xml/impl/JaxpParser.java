@@ -118,6 +118,9 @@ public final class JaxpParser
     /** do we stop on recoverable errors ? */
     private boolean m_stopOnRecoverableError;
 
+    /** the hint to the entity resolver */
+    private String m_resolverHint;
+
     /** the Document Builder factory */
     private DocumentBuilderFactory m_docFactory;
 
@@ -143,7 +146,17 @@ public final class JaxpParser
         
         if( manager.hasService( EntityResolver.ROLE ) )
         {
-            m_resolver = (EntityResolver)manager.lookup( EntityResolver.ROLE );
+            if ( m_resolverHint != null )
+            {
+                // select the configured resolver
+                m_resolver = (EntityResolver)manager.lookup( EntityResolver.ROLE + "/" + m_resolverHint );
+            }
+            else
+            {
+                // use default resolver
+                m_resolver = (EntityResolver)manager.lookup( EntityResolver.ROLE );
+            }
+    
             if( getLogger().isDebugEnabled() )
             {
                 getLogger().debug( "JaxpParser: Using EntityResolver: " + m_resolver );
@@ -174,6 +187,7 @@ public final class JaxpParser
         m_stopOnWarning = params.getParameterAsBoolean( "stop-on-warning", true );
         m_stopOnRecoverableError = params.getParameterAsBoolean( "stop-on-recoverable-error", true );
         m_dropDtdComments = params.getParameterAsBoolean( "drop-dtd-comments", false );
+        m_resolverHint = params.getParameterAsString( "resolver-hint", null );
 
         // Get the SAXFactory
         final String saxParserFactoryName = params.getParameter( "sax-parser-factory",
@@ -227,7 +241,8 @@ public final class JaxpParser
                                ", stop on warning: " + m_stopOnWarning +
                                ", stop on recoverable-error: " + m_stopOnRecoverableError +
                                ", saxParserFactory: " + saxParserFactoryName +
-                               ", documentBuilderFactory: " + documentBuilderFactoryName );
+                               ", documentBuilderFactory: " + documentBuilderFactoryName +
+                               ", resolver hint: " + m_resolverHint );
         }
     }
 
