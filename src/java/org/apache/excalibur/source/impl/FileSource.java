@@ -299,6 +299,8 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
      * simultaneous writes. The real file is updated atomically when the output
      * stream is closed.
      *
+     * The returned stream must be closed or cancelled by the calling code.
+     *
      * @return a stream to write to
      * @throws ConcurrentModificationException if another thread is currently
      *         writing to this file.

@@ -63,6 +63,8 @@ public abstract class AbstractSource
     /**
      * Return an <code>InputStream</code> object to read from the source.
      *
+     * The returned stream must be closed by the calling code.
+     *
      * @throws SourceException if file not found or
      *         HTTP location does not exist.
      * @throws IOException if I/O error occured.

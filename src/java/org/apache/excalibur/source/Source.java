@@ -74,6 +74,8 @@ public interface Source
      * This is the data at the point of invocation of this method,
      * so if this is Modifiable, you might get different content
      * from two different invocations.
+     *
+     * The returned stream must be closed by the calling code.
      * 
      * @return the <code>InputStream</code> to read data from (never <code>null</code>).
      * @throws IOException if some I/O problem occurs.

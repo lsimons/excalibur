@@ -89,6 +89,8 @@ public final class ResourceSource
 
     /**
      * Return an <code>InputStream</code> object to read from the source.
+     *
+     * The returned stream must be closed by the calling code.
      */
     public InputStream getInputStream()
         throws IOException, SourceException

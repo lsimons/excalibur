@@ -667,6 +667,8 @@ public class HTTPClientSource extends AbstractLogEnabled
      * returned actually references a temporary local file, which will
      * be written to the server upon closing.
      *
+     * The returned stream must be closed or cancelled by the calling code.
+     *
      * @return an {@link OutputStream} instance
      * @exception IOException if an error occurs
      */
