@@ -495,6 +495,7 @@ public class ContextManager
     private ThreadPolicy buildThreadPolicy()
     {
         String version = System.getProperty( "java.version" );
+
         if ( version.charAt( 2 ) < '4' ) {
             return new OneThreadPolicy();
         }
@@ -911,7 +912,12 @@ public class ContextManager
         }
         catch( ContextException e )
         {
+            final ThreadGroup group = new ThreadGroup("fortress.threads");
+            final GroupedThreadFactory factory = new GroupedThreadFactory(group);
+
             final ThreadPolicy policy = buildThreadPolicy();
+            policy.setThreadFactory( factory );
+            
             final DefaultThreadManager tm = new DefaultThreadManager(policy);
 
             assumeOwnership( tm );
