@@ -679,15 +679,18 @@ abstract class AbstractInstrumentSample
     
                 for( int i = 0; i < sampleValues.length; i++ )
                 {
+                    String token = st.nextToken();
                     try
                     {
-                        sampleValues[ i ] = Integer.parseInt( st.nextToken() );
+                        sampleValues[ i ] = Integer.parseInt( token );
                     }
                     catch( NumberFormatException e )
                     {
                         throw new ConfigurationException( "The compact sample data could not be " +
-                                                          "loaded, because of a number format problem, for InstrumentSample: " +
-                                                          m_name );
+                                                          "loaded, because of a number format " +
+                                                          "problem '" + token + "', " +
+                                                          "for InstrumentSample: " +
+                                                          m_name, history );
                     }
                 }
             }
