@@ -16,12 +16,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <project default="java:jar" xmlns:excalibur="excalibur" xmlns:deploy="deploy" xmlns:artifact="artifact" xmlns:maven="jelly:maven" xmlns:define="jelly:define" xmlns:j="jelly:core" xmlns:ant="jelly:ant">
-    
+
     <define:taglib uri="excalibur">
         <!--
         @name the name of file to deploy
         @dir the name of the directory the file lives in
-        @type the maven "type". Slightly different behaviour: if you want a trailing 's' you 
+        @type the maven "type". Slightly different behaviour: if you want a trailing 's' you
         should add it (ie "jars" instead of "jar")
         -->
         <define:tag name="deploy">
@@ -29,7 +29,7 @@ limitations under the License.
             <j:set var="acct" value="${maven.repo.default.username}@${maven.repo.default.host}"/>
             <j:set var="deployDir" value="${maven.repo.default.directory}/${pom.groupId}/${type}"/>
             <j:set var="grp" value="${maven.repo.default.group}"/>
-            
+
             <ant:exec dir="${dir}" executable="ssh" failonerror="true">
                 <ant:arg line="${pass} ${acct} 'mkdir -p ${deployDir}'"/>
             </ant:exec>
@@ -40,12 +40,12 @@ limitations under the License.
                 <ant:arg line="${pass} ${acct} 'chgrp -R ${grp} ${deployDir};chmod -R a+r ${deployDir}; chmod -R g+w ${deployDir}'"/>
             </ant:exec>
         </define:tag>
-        
+
         <!--
         @name the name of file to deploy
         @dir the name of the directory the file lives in
         @linkname the name of the symlink
-        @type the maven "type". Slightly different behaviour: if you want a trailing 's' you 
+        @type the maven "type". Slightly different behaviour: if you want a trailing 's' you
         should add it (ie "jars" instead of "jar")
         -->
         <define:tag name="symlink">
@@ -54,12 +54,12 @@ limitations under the License.
             <j:set var="deployDir" value="${maven.repo.default.directory}/${pom.groupId}/${type}"/>
             <j:set var="symlinkDir" value="${maven.repo.default.directory}/${pom.groupId}"/>
             <j:set var="grp" value="${maven.repo.default.group}"/>
-            
+
             <ant:exec dir="${dir}" executable="ssh" failonerror="true">
                 <ant:arg line="${pass} ${acct} 'rm -f ${symlinkDir}/${linkname}; ln -s ${deployDir}/${name} ${symlinkDir}/${linkname}'"/>
             </ant:exec>
         </define:tag>
-        
+
         <!--
         @name the name of file to gpg
         @dir the name of the directory the file lives in
@@ -69,27 +69,30 @@ limitations under the License.
                 <ant:arg line="--yes -v --output ${name}.asc --detach-sig --armor ${name}"/>
             </ant:exec>
         </define:tag>
-        
+
         <define:tag name="get-license-bin">
+          <setproxy proxyhost="${maven.proxy.host}" proxyport="${maven.proxy.port}"/>
           <ant:mkdir dir="${maven.dist.bin.assembly.dir}"/>
           <ant:get src="http://svn.apache.org/repos/asf/excalibur/trunk/LICENSE.txt" dest="${maven.dist.bin.assembly.dir}/LICENSE.txt"/>
           <ant:get src="http://svn.apache.org/repos/asf/excalibur/trunk/NOTICE.txt" dest="${maven.dist.bin.assembly.dir}/NOTICE.txt"/>
         </define:tag>
-        
+
         <define:tag name="get-license-src">
+          <setproxy proxyhost="${maven.proxy.host}" proxyport="${maven.proxy.port}"/>
           <ant:mkdir dir="${maven.dist.src.assembly.dir}"/>
           <ant:get src="http://svn.apache.org/repos/asf/excalibur/trunk/LICENSE.txt" dest="${maven.dist.src.assembly.dir}/LICENSE.txt"/>
           <ant:get src="http://svn.apache.org/repos/asf/excalibur/trunk/NOTICE.txt" dest="${maven.dist.src.assembly.dir}/NOTICE.txt"/>
         </define:tag>
-        
+
         <define:tag name="get-license-jar">
+          <setproxy proxyhost="${maven.proxy.host}" proxyport="${maven.proxy.port}"/>
           <ant:mkdir dir="${maven.build.dest}/META-INF"/>
           <ant:get src="http://svn.apache.org/repos/asf/excalibur/trunk/LICENSE.txt" dest="${maven.build.dest}/META-INF/LICENSE.txt"/>
           <ant:get src="http://svn.apache.org/repos/asf/excalibur/trunk/NOTICE.txt" dest="${maven.build.dest}/META-INF/NOTICE.txt"/>
         </define:tag>
-        
+
     </define:taglib>
-    
+
     <goal name="excalibur:tagRelease">
         <j:set var="repoBase" value="https://svn.apache.org/repos/asf/excalibur"/>
         <j:set var="tagName" value="${pom.artifactId}-${pom.currentVersion}-Release"/>
@@ -102,22 +105,22 @@ limitations under the License.
     <preGoal name="dist:build-src">
        <excalibur:get-license-src/>
     </preGoal>
-    
+
     <preGoal name="dist:build-bin">
        <excalibur:get-license-bin/>
     </preGoal>
-    
+
     <preGoal name="jar:jar">
        <excalibur:get-license-jar/>
     </preGoal>
-    
+
     <postGoal name="dist:build-src">
         <excalibur:gpg name="${pom.artifactId}-${pom.currentVersion}-src.zip"
             dir="${maven.dist.dir}"/>
         <excalibur:gpg name="${pom.artifactId}-${pom.currentVersion}-src.tar.gz"
             dir="${maven.dist.dir}"/>
     </postGoal>
-    
+
     <postGoal name="dist:build-bin">
         <excalibur:gpg name="${pom.artifactId}-${pom.currentVersion}.zip"
             dir="${maven.dist.dir}"/>
@@ -126,7 +129,7 @@ limitations under the License.
         <excalibur:gpg name="${pom.artifactId}-${pom.currentVersion}.jar"
             dir="${maven.build.dir}"/>
     </postGoal>
-    
+
     <goal name="dist:deploy-src" prereqs="dist:build-src">
         <excalibur:deploy name="${pom.artifactId}-${pom.currentVersion}-src.zip"
             type="source" dir="${maven.dist.dir}"/>
@@ -136,7 +139,7 @@ limitations under the License.
             type="source" dir="${maven.dist.dir}"/>
         <excalibur:deploy name="${pom.artifactId}-${pom.currentVersion}-src.tar.gz.asc"
             type="source" dir="${maven.dist.dir}"/>
-        
+
         <excalibur:symlink name="${pom.artifactId}-${pom.currentVersion}-src.zip"
             linkname="${pom.artifactId}-current-src.zip" type="source" dir="${maven.dist.dir}"/>
         <excalibur:symlink name="${pom.artifactId}-${pom.currentVersion}-src.zip.asc"
@@ -146,7 +149,7 @@ limitations under the License.
         <excalibur:symlink name="${pom.artifactId}-${pom.currentVersion}-src.tar.gz.asc"
             linkname="${pom.artifactId}-current-src.tar.gz.asc" type="source" dir="${maven.dist.dir}"/>
     </goal>
-    
+
     <goal name="dist:deploy-bin" prereqs="dist:build-bin">
         <excalibur:deploy name="${pom.artifactId}-${pom.currentVersion}.zip"
             type="binaries" dir="${maven.dist.dir}"/>
@@ -156,12 +159,12 @@ limitations under the License.
             type="binaries" dir="${maven.dist.dir}"/>
         <excalibur:deploy name="${pom.artifactId}-${pom.currentVersion}.tar.gz.asc"
             type="binaries" dir="${maven.dist.dir}"/>
-        
+
         <excalibur:deploy name="${pom.artifactId}-${pom.currentVersion}.jar"
             type="jars" dir="${maven.build.dir}"/>
         <excalibur:deploy name="${pom.artifactId}-${pom.currentVersion}.jar.asc"
             type="jars" dir="${maven.build.dir}"/>
-        
+
         <excalibur:symlink name="${pom.artifactId}-${pom.currentVersion}.zip"
             linkname="${pom.artifactId}-current.zip" type="binaries" dir="${maven.dist.dir}"/>
         <excalibur:symlink name="${pom.artifactId}-${pom.currentVersion}.zip.asc"
@@ -170,37 +173,37 @@ limitations under the License.
             linkname="${pom.artifactId}-current.tar.gz" type="binaries" dir="${maven.dist.dir}"/>
         <excalibur:symlink name="${pom.artifactId}-${pom.currentVersion}.tar.gz.asc"
             linkname="${pom.artifactId}-current.tar.gz.asc" type="binaries" dir="${maven.dist.dir}"/>
-        
+
         <excalibur:symlink name="${pom.artifactId}-${pom.currentVersion}.jar"
             linkname="${pom.artifactId}-current.jar" type="jars" dir="${maven.build.dir}"/>
         <excalibur:symlink name="${pom.artifactId}-${pom.currentVersion}.jar.asc"
             linkname="${pom.artifactId}-current.jar.asc" type="jars" dir="${maven.build.dir}"/>
     </goal>
-    
+
     <goal name="excalibur:deploy">
         <maven:user-check user="${maven.username}"/>
-        
+
         <j:if test='${pom.getContext().getVariable("maven.privatekey") == null}'>
             <ant:fail>
                 User must specify -Dmaven.privatekey=X
             </ant:fail>
         </j:if>
-        
+
         <j:set var="user" value="${maven.username}"/>
         <j:set var="key" value="${maven.privatekey}"/>
         <j:set var="host" value="minotaur.apache.org"/>
         <j:set var="url" value="scp://${host}"/>
-        
+
         <j:set var="version" value="${pom.currentVersion}"/>
         <j:set var="isRC" value="${version.indexOf('RC') != '-1' || version.indexOf('dev') != '-1'}"/>
-        
+
         <j:if test="${isRC == true}">
             <j:set var="deployBase" value="/home/${user}/public_html/dist"/>
         </j:if>
         <j:if test="${isRC == false}">
             <j:set var="deployBase" value="/www/www.apache.org/dist/excalibur"/>
         </j:if>
-        
+
         ${pom.getContext().setVariable("maven.repo.list", "default")}
         ${pom.getContext().setVariable("maven.repo.default", url )}
         ${pom.getContext().setVariable("maven.repo.default.host", host)}
@@ -208,10 +211,10 @@ limitations under the License.
         ${pom.getContext().setVariable("maven.repo.default.group", "excalibur")}
         ${pom.getContext().setVariable("maven.repo.default.username", user)}
         ${pom.getContext().setVariable("maven.repo.default.privatekey", key)}
-        
+
         <attainGoal name="dist:deploy"/>
     </goal>
-    
+
     <goal name="excalibur:release" prereqs="excalibur:deploy,excalibur:tagRelease"/>
-    
+
 </project>
