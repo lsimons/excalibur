@@ -19,11 +19,8 @@ limitations under the License.
 
   <extend>${basedir}/../project-common.xml</extend>
 
-  <groupId>excalibur-pool</groupId>
   <id>excalibur-pool-instrumented</id>
   <name>Excalibur Pool Instrumented Implementation</name>
-  <package>org.apache.excalibur.pool</package>
-  <inceptionYear>2001</inceptionYear>
   <shortDescription>Excalibur Pool Instrumented Implementation</shortDescription>
   
   <dependencies>
