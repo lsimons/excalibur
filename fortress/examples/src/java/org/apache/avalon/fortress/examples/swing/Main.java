@@ -39,11 +39,20 @@ public final class Main
     public static void main( String[] args )
         throws Exception
     {
+    	
+    	String containerConfig = "resource://org/apache/avalon/fortress/examples/swing/SwingContainer.xconf";
+    	String loggerConfig = "resource://org/apache/avalon/fortress/examples/swing/SwingContainer.xlog";
+    	
+    	if(args.length >= 1)
+    		containerConfig = args[0];
+    	if(args.length >= 2)
+    		loggerConfig = args[1];
+    	
         // Set up all the preferences for Fortress
         final FortressConfig config = new FortressConfig();
         config.setContainerClass( SwingContainer.class );
-        config.setContainerConfiguration( "resource://org/apache/avalon/fortress/examples/swing/SwingContainer.xconf" );
-        config.setLoggerManagerConfiguration( "resource://org/apache/avalon/fortress/examples/swing/SwingContainer.xlog" );
+        config.setContainerConfiguration( containerConfig );
+        config.setLoggerManagerConfiguration( loggerConfig );
 
         // need the altrmi binaries
 
