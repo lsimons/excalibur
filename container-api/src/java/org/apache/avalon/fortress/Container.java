@@ -77,9 +77,11 @@ public interface Container
     boolean has( String key, Object hint );
     
     /**
-     * Pending
+     * Returns an EventManager implementation. 
+     * This allows components to hook the creation and destruction phases of
+     * components lifecycle.
      * 
-     * @return
+     * @return EventManager implementation.  
      */
     EventManager getEventManager();
 }
