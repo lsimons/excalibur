@@ -15,22 +15,26 @@
      limitations under the License.
 -->
 <document>
-  <properties>
-    <author email="dev@avalon.apache.org">Avalon Development Team</author>
-    <title>Lifecycle Extensions</title>
-  </properties>
-  <body>
-    <section name="Example" >
+    <properties>
+        <title>Merlin Lifecycle Extensions</title>
+    </properties>
+    <body>
+        <section name="Outdated content">
+            <p>
+                <b>Merlin no longer uses the excalibur-lifecycle package.</b>
+            </p>
+        </section>
+        <section name="Example">
 
-      <section name="Create your lifestyle stage interface" >
+            <section name="Create your lifestyle stage interface">
 
-        <p>
+                <p>
           The following interface is your domain specific lifecycle stage 
           interface.  It is the interface that an extension handler will use to
           interact with your component during deployment and decommissioning.
-        </p>
+                </p>
 
-        <source>
+                <source>
  public interface Exploitable
  {
     /**
@@ -39,12 +43,12 @@
      */
      void exploit( String message );
  }
-        </source>
+                </source>
 
-      </section>
+            </section>
 
-      <section name="Create the lifestyle extension handler" >
-        <p>
+            <section name="Create the lifestyle extension handler">
+                <p>
           An extension handler is the implementation class that will be 
           activated by the Merlin container to handle domain specific tasks 
           during the deployment and decommissioning phases.  The extension can 
@@ -52,8 +56,8 @@
           depeding on the particular extension requirements.  IN this example we
           are defining a simple creation stage handler that supplies a message 
           to an instance of Exploitable.
-        </p>
-        <source>
+                </p>
+                <source>
  public class ExploitationManager implements Creator
  {
     /**
@@ -80,41 +84,41 @@
      {
      }
  }
-        </source>
-        <p>
+                </source>
+                <p>
           To complete the defintion of you extension handler you need to prepare
           the meta-info that will be used by Merlin to identify the extension 
           and the stage interface is supports.  The following &lt;type/&gt; 
-          declaration includes an &lt;extensions/&gt; tag that contains a 
-          &lt;reference/&gt; element that includes the reference to the 
+          declaration includes an &lt;extensions/&gt; tag that contains a
+                    &lt;reference/&gt; element that includes the reference to the
           Exploitable lifecycle stage interface. This is the key that Merlin 
           uses to associate a handler with a component.  If you extension class
           requires any specific context values, they should be declared in a 
           context element within the extension element.
-        </p>
+                </p>
 
-        <source>
-&lt;type&gt;
+                <source>
+                    &lt;type&gt;
 
-   &lt;info&gt;
-      &lt;name&gt;my-extension-handler&lt;/name&gt;
-   &lt;/info&gt;
+                    &lt;info&gt;
+                    &lt;name&gt;my-extension-handler&lt;/name&gt;
+                    &lt;/info&gt;
 
-   &lt;extensions&gt;
-     &lt;extension&gt;
-      &lt;name&gt;exploitation&lt;/name&gt;
-      &lt;reference type="Exploitable" version="1.0"/>
-     &lt;/extension&gt;
-   &lt;/extensions&gt;
+                    &lt;extensions&gt;
+                    &lt;extension&gt;
+                    &lt;name&gt;exploitation&lt;/name&gt;
+                    &lt;reference type="Exploitable" version="1.0"/>
+                    &lt;/extension&gt;
+                    &lt;/extensions&gt;
 
-&lt;/type&gt;
+                    &lt;/type&gt;
 
-        </source>
+                </source>
 
-      </section>
+            </section>
 
-      <section name="Create a component implementing the stage interface" >
-      <source>
+            <section name="Create a component implementing the stage interface">
+                <source>
  public class MyComponent extends AbstractLogEnabled implements Exploitable
  {
     /**
@@ -126,9 +130,9 @@
          getLogger().info( message );
      }
  }
-      </source>
+                </source>
 
-        <p>
+                <p>
           To complete the defintion of your component you need to prepare the 
           meta-info that will be used by Merlin to identify the stage interface
           is requires a handler for.  The following &lt;type/&gt; declaration 
@@ -136,36 +140,36 @@
           element that includes the reference to the Exploitable lifecycle stage
           interface. This is the key that Merlin uses to associate the component
           with a handler capable of handling the Exploitable interface.
-        </p>
+                </p>
 
-      <source>
-&lt;type&gt;
+                <source>
+                    &lt;type&gt;
 
-   &lt;info&gt;
-      &lt;name&gt;my-component&lt;/name&gt;
-   &lt;/info&gt;
+                    &lt;info&gt;
+                    &lt;name&gt;my-component&lt;/name&gt;
+                    &lt;/info&gt;
 
-   &lt;stages&gt;
-     &lt;stage&gt;
-      &lt;name&gt;exploit-me&lt;/name&gt;
-      &lt;reference type="Exploitable" version="1.0"/>
-     &lt;/stage&gt;
-   &lt;/stages&gt;
+                    &lt;stages&gt;
+                    &lt;stage&gt;
+                    &lt;name&gt;exploit-me&lt;/name&gt;
+                    &lt;reference type="Exploitable" version="1.0"/>
+                    &lt;/stage&gt;
+                    &lt;/stages&gt;
 
-&lt;/type&gt;
+                    &lt;/type&gt;
 
-      </source>
-    </section>
+                </source>
+            </section>
 
-    <section name="Register you component and the extension" >
+            <section name="Register you component and the extension">
 
-        <p>
+                <p>
           To complete the process you need to declare your handler and component
           in a jar manifest file.  The following entries show the declaration of
           the component and the extension handler.
-        </p>
+                </p>
 
-      <source>
+                <source>
   Manifest-Version: 1.0
   Created-By: Ant 1.5
 
@@ -174,41 +178,41 @@
 
   Name: ExploitationManager.class
   Avalon: Type
-      </source>
+                </source>
 
-    </section>
+            </section>
 
-    <section name="Execute the example" >
+            <section name="Execute the example">
 
-        <p>
+                <p>
           To execute the example you simply need to include a reference to you 
           component within a Merlin container declaration.  The following XML 
           source declares a Merlin kernel, container, and component.  You don't
           need to include the handler because Merlin can sort that out itself 
           based on the information supplied in the meta-info declarations.
-        </p>
+                </p>
 
-      <source>
- &lt;kernel&gt;
+                <source>
+                    &lt;kernel&gt;
 
-   &lt;container name="my-container&gt;
+                    &lt;container name="my-container&gt;
 
-     &lt;classpath&gt;
-       &lt;fileset dir="lib"&gt;
-         &lt;include name="my-domo.jar"/&gt;
-       &lt;/fileset&gt;
-     &lt;/classpath&gt;
+                    &lt;classpath&gt;
+                    &lt;fileset dir="lib"&gt;
+                    &lt;include name="my-domo.jar"/&gt;
+                    &lt;/fileset&gt;
+                    &lt;/classpath&gt;
 
-     &lt;component name="demo" class="MyComponent" activation="startup"/&gt;
+                    &lt;component name="demo" class="MyComponent" activation="startup"/&gt;
 
-   &lt;container&gt;
+                    &lt;container&gt;
 
- &lt;/kernel&gt;
-      </source>
+                    &lt;/kernel&gt;
+                </source>
 
-    </section>
+            </section>
 
-  </section>
+        </section>
 
-  </body>
+    </body>
 </document>

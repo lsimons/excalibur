@@ -18,9 +18,9 @@
 <project>
     <extend>${basedir}/../buildsystem/project-common.xml</extend>
 
-    <name>Excalibur Site</name>
+    <name>Apache Excalibur</name>
     <id>excalibur-docs</id>
 
-    <shortDescription>Excalibur Site</shortDescription>
-    <description>Excalibur Site</description>
+    <shortDescription>Apache Excalibur</shortDescription>
+    <description>Apache Excalibur</description>
 </project>

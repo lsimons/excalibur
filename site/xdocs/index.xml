@@ -1,16 +1,31 @@
 <?xml version="1.0"?>
 
+<!--
+     Copyright 2004 The Apache Software Foundation
+     Licensed  under the  Apache License,  Version 2.0  (the "License");
+     you may not use  this file  except in  compliance with the License.
+     You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed  under the  License is distributed on an "AS IS" BASIS,
+     WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
+     implied.
+
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
 <document>
-    
+
     <properties>
-        <author email="dev@avalon.apache.org">Avalon Documentation Team</author>
-        <title>Excalibur i18n</title>
+        <title>Front Page</title>
     </properties>
-    
+
     <body>
-        
+
         <section name="Excalibur">
-            
+
             <subsection name="Overview">
                 <p>
                     The Excalibur Project contains a set of utilitiy projects 
@@ -21,13 +36,24 @@
             </subsection>
             <subsection name="Index">
                 <table>
-                    <tr><th>Package</th><th>Description</th></tr>
-                    <tr><td><a href="configuration/index.html">Configuration</a></td><td>
+                    <tr>
+                        <th>Package</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="configuration/index.html">Configuration</a>
+                        </td>
+                        <td>
                             <p>
                                 The Configuration package contains extensions to the Avalon Framework
                                 supporting configuration management.
-                            </p></td></tr>
-                    <tr><td>Datasource</td><td>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Datasource</td>
+                        <td>
                             <p>
                                 Avalon Excalibur's DataSource package in
                                 <code>org.apache.avalon.excalibur.datasource</code> allows you
@@ -37,8 +63,11 @@
                                 regardless of which method you choose--since they are obtained
                                 through Avalon's Component Manager infrastructure.
                             </p>
-                        </td></tr>
-                    <tr><td>Event</td><td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Event</td>
+                        <td>
                             <p>
                                 This is the Excalibur Event package which includes event queues,
                                 asynchronous command processing, and the interfaces to support
@@ -49,16 +78,25 @@
                                 event processing.  From there we cleaned up the API and made it as
                                 generic as we could.
                             </p>
-                        </td></tr>
-                    <tr><td><a href="i18n/index.html">i18n</a></td><td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="i18n/index.html">i18n</a>
+                        </td>
+                        <td>
                             <p>
                                 Excalibur's Internationalization package is found in
                                 <code>org.apache.avalon.excalibur.i18n</code>.  Avalon
                                 Excalibur includes a method of managing resources, and
                                 an interface for specifying the resource.  Support for
                                 XML resource bundles are still under development.
-                            </p></td></tr>
-                    <tr><td>Instrumentation</td><td>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Instrumentation</td>
+                        <td>
                             <p>
                                 Excalibur Instrument is an instrumentation utility that allows you
                                 to attach a separate JVM to your running application to determine its
@@ -67,13 +105,19 @@
                                 digest.  Excalibur Instrumentation is such a package that you can use
                                 for your Avalon based projects.
                             </p>
-                        </td></tr>
-                    <tr><td>Lifecycle</td><td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Lifecycle</td>
+                        <td>
                             <p>The Lifecycle package contains a set of interfaces and classes supporting portable lifecycle extensions.</p>
-                            
+
                             <p>Contributions to this project are based on co-development actives by container projects aiming towards cross-container component portability and consistent service management.</p>
-                        </td></tr>
-                    <tr><td>Logger</td><td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Logger</td>
+                        <td>
                             <p>
                                 Find Avalon Excalibur's Log Management System in the
                                 <code>org.apache.avalon.excalibur.logger</code> package.
@@ -82,10 +126,15 @@
                                 be able to define the log categories on a component basis by
                                 specifying a 'logger' attribute which denotes the log category
                                 to use for a particular component (given the
-                                component is <code>LogEnabled</code> or <code>Loggable</code>).
+                                component is
+                                <code>LogEnabled</code> or
+                                <code>Loggable</code>).
                             </p>
-                        </td></tr>
-                    <tr><td>Monitor</td><td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Monitor</td>
+                        <td>
                             <p>
                                 Avalon Excalibur's resource management code allows you to
                                 be notified when a resource has changed.  There are two
@@ -100,8 +149,11 @@
                                 program will be notified when the change occurs instead of
                                 constantly polling it.
                             </p>
-                        </td></tr>
-                    <tr><td>Pool</td><td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Pool</td>
+                        <td>
                             <p>
                                 Find Avalon Excalibur's Pool implementations in the
                                 <code>org.apache.avalon.excalibur.pool</code> package.
@@ -110,8 +162,13 @@
                                 used resources at all, or limiting the used resources
                                 based on specific rules.
                             </p>
-                        </td></tr>
-                    <tr><td><a href="sourceresolve-index.html">Sourceresolver</a></td><td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="sourceresolve-index.html">Sourceresolver</a>
+                        </td>
+                        <td>
                             <p>
                                 A very common problem is resolving a source, which means
                                 finding a source using a URI.
@@ -125,17 +182,28 @@
                                 in the same way, like dealing with custom, self-build
                                 protocols such as myxmldatabase://root/documents/test.xml.
                             </p>
-                        </td></tr>
-                    <tr><td><a href="store-index.html">Store</a></td><td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="store-index.html">Store</a>
+                        </td>
+                        <td>
                             <p>
                                 The Store Package provides a way to store named objects without 
                                 taking care about where and how they are stored.
                                 You can choose between different implementations that store
                                 the data e.g. in memory or on the file system etc.
                             </p>
-                        </td></tr>
-                    <tr><td>Thread</td><td>PENDING</td></tr>
-                    <tr><td>XMLUtil</td><td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Thread</td>
+                        <td>PENDING</td>
+                    </tr>
+                    <tr>
+                        <td>XMLUtil</td>
+                        <td>
                             <p>
                                 Excalibur's XML Utilities provide simplified wrappers
                                 for XML parsers, transformers and XPath evaluators. It
@@ -143,13 +211,18 @@
                                 constructing a pipeline of XML components by defining interfaces
                                 for consuming and producing XML in either SAX or DOM formats.
                             </p>
-                        </td></tr>
+                        </td>
+                    </tr>
                 </table>
             </subsection>
             <subsection name="Depricated">
                 <table>
-                    <tr><th>Package</th><th>Description</th></tr>
-                    <tr><td>Compatability</td>
+                    <tr>
+                        <th>Package</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>Compatability</td>
                         <td>
                             <p>
                                 Avalon is minimizing the number of projects and utilities it maintains
@@ -163,7 +236,11 @@
                             </p>
                         </td>
                     </tr>
-                    <tr><td><a href="component.html">Component</a></td><td>
+                    <tr>
+                        <td>
+                            <a href="component.html">Component</a>
+                        </td>
+                        <td>
                             <p>
                                 Due to a number of issues in ECM, not the least of which is a
                                 simplistic and convoluted design, it has been deprecated in
@@ -172,11 +249,12 @@
                                 it easier to migrate forward.  This project will be maintained
                                 for bug fixes only.
                             </p>
-                        </td></tr>
+                        </td>
+                    </tr>
                 </table>
             </subsection>
         </section>
-        
+
     </body>
-    
+
 </document>

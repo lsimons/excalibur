@@ -1,3 +1,5 @@
+<?xml version="1.0"?>
+
 <!--
      Copyright 2004 The Apache Software Foundation
      Licensed  under the  Apache License,  Version 2.0  (the "License");
@@ -15,24 +17,23 @@
      limitations under the License.
 -->
 <document>
-  <properties>
-    <author email="dev@avalon.apache.org">Avalon Development Team</author>
-    <title>About Excalibur Event</title>
-  </properties>
-  <body>
-    <section name="Introduction" >
-      <p>
+    <properties>
+        <title>Event</title>
+    </properties>
+    <body>
+        <section name="Introduction">
+            <p>
         This is the Excalibur Event package which includes event queues,
         asynchronous command processing, and the interfaces to support
         event based programming.  Event is heavily influenced by Matt
         Welsh's work with the
-        <a href="http://www.cs.berkeley.edu/~mdw/proj/seda/" target="_new" >
+                <a href="http://www.cs.berkeley.edu/~mdw/proj/seda/" target="_new">
         SEDA architecture</a>.
         We forked the portion of his SandStorm server that had to do with
         event processing.  From there we cleaned up the API and made it as
         generic as we could.
-      </p>
-      <p>
+            </p>
+            <p>
         The Event package actually has five related sub packages inside
         of it.  Event is the basic interfaces for the Queues, Sinks,
         Sources, etc.  Command houses code for the CommandManager so that
@@ -42,7 +43,7 @@
         don't have to worry about it.  Lastly, Util provides some basic
         utilities so that we can programatically determine the number
         of processors your hardware has.
-      </p>
-    </section>
-  </body>
+            </p>
+        </section>
+    </body>
 </document>

@@ -15,31 +15,33 @@
      limitations under the License.
 -->
 <document>
-  <properties>
-    <author email="dev@avalon.apache.org">Avalon Development Team</author>
-    <title>Extension Interfaces</title>
-  </properties>
-  <body>
-    <section name="Lifestyle Extension Interfaces" >
+    <properties>
+        <title>Extension Interfaces</title>
+    </properties>
+    <body>
+        <section name="Lifestyle Extension Interfaces">
 
-      <p>
+            <p>
         A container manages extensions using an extension handler.  Handlers
-        may implement the <code>Creator</code> and/or <code>Accessor</code> 
+        may implement the
+                <code>Creator</code> and/or
+                <code>Accessor</code>
         interfaces. A creator extension will be activated during the create and
         destroy stages of a component lifecycle. A accessor extension will be 
         activated during the access and release stages.
-      </p>
+            </p>
 
-      <section name="The Creator Interface" >
+            <section name="The Creator Interface">
 
-        <p>
-          The <code>Creator</code> interface describes the create and destroy
+                <p>
+          The
+                    <code>Creator</code> interface describes the create and destroy
           stages that occur between a component and a container
           during service management.  Lifecycle extensions supporting create
           and destroy stages must implement this interface.
-        </p>
+                </p>
 
-      <source>
+                <source>
  package org.apache.avalon.lifecycle;
 
  import org.apache.avalon.framework.context.Context;
@@ -67,17 +69,18 @@
     void destroy( Object object, Context context );
 
  }
-     </source>
-      </section>
+                </source>
+            </section>
 
-      <section name="Accessor Interface" >
-        <p>
-          The <code>Accessor</code> interface describes the access and release
+            <section name="Accessor Interface">
+                <p>
+          The
+                    <code>Accessor</code> interface describes the access and release
           stages that occur between a service or component manager and a 
           container during service deployment. Lifecycle extensions supporting 
           access and release stages must implement this interface.
-        </p>
-<source>
+                </p>
+                <source>
  package org.apache.avalon.lifecycle;
 
  import org.apache.avalon.framework.context.Context;
@@ -105,8 +108,8 @@
     void release( Object object, Context context );
 
  }
-</source>
-      </section>
-    </section>
-  </body>
+                </source>
+            </section>
+        </section>
+    </body>
 </document>

@@ -15,30 +15,31 @@
      limitations under the License.
 -->
 <document>
-  <properties>
-    <author email="dev@avalon.apache.org">Avalon Development Team</author>
-    <title>Fortress Lifecycle Extensions</title>
-  </properties>
-  <body>
-  <section name="Example" >
+    <properties>
+        <title>Fortress Lifecycle Extensions</title>
+    </properties>
+    <body>
+        <section name="Example">
 
-   <p>
+            <p>
     Let's look at a simple example. The following is also available as a working sample
     in Fortress' examples directory.
-   </p>
+            </p>
 
-   <p>
-    Our example implements a Lifecycle extension for passing a <code>SecurityManager</code> to
-    Components. We'll call it the <code>SecurityManageable</code> interface.
-   </p>
+            <p>
+    Our example implements a Lifecycle extension for passing a
+                <code>SecurityManager</code> to
+    Components. We'll call it the
+                <code>SecurityManageable</code> interface.
+            </p>
 
-  <section name="Define the component extension interface" >
+            <section name="Define the component extension interface">
 
-   <p>
+                <p>
     First we define the new Component extension interface.
-   </p>
+                </p>
 
-   <source>
+                <source>
    /**
     * Simple custom lifecycle extension interface for supplying a component
     * with a security manager.
@@ -53,21 +54,23 @@
        void secure( SecurityManager manager )
            throws SecurityException;
    }
-   </source>
+                </source>
 
-  </section>
+            </section>
 
-  <section name="Create the lifecycle extensions class" >
+            <section name="Create the lifecycle extensions class">
 
-   <p>
-    Next we define the actual extension implementation which invokes the <code>secure()</code>
-    method. We extend from <code>AbstractAccessor</code> since we only want
-    <code>secure()</code> to be invoked upon each access (ie. lookup()) to the component, and
+                <p>
+    Next we define the actual extension implementation which invokes the
+                    <code>secure()</code>
+    method. We extend from
+                    <code>AbstractAccessor</code> since we only want
+                    <code>secure()</code> to be invoked upon each access (ie. lookup()) to the component, and
     don't need to implement the other 3 LifecycleExtension methods (create, release, and
     destroy).
-   </p>
+                </p>
 
-   <source>
+                <source>
    /**
     * Some custom extensions for this container's components.
     */
@@ -93,28 +96,30 @@
            }
        }
    }
-   </source>
+                </source>
 
-    <note>An extension class may run components through any given number of
+                <note>An extension class may run components through any given number of
     extensions, and are not limited to just one.</note>
 
-  </section>
+            </section>
 
-  <section name="Register the lifecycle extensions class" >
+            <section name="Register the lifecycle extensions class">
 
-   <p>
+                <p>
     We then inform our container about the extension. This could be done in several different
-    ways, for simplicity we'll extend <code>initialize()</code> and add it to the
-    <code>LifecycleExtensionManager</code> there.
-   </p>
+    ways, for simplicity we'll extend
+                    <code>initialize()</code> and add it to the
+                    <code>LifecycleExtensionManager</code> there.
+                </p>
 
-   <p>
+                <p>
     (an alternative might be to initialize a LifecycleExtensionManager before creating the
-    container and pass it in via the <code>FortressConfig.setExtensionManager()</code> method,
+    container and pass it in via the
+                    <code>FortressConfig.setExtensionManager()</code> method,
     or to create a LifecycleExtensionManager subclass that includes the extension preset)
-   </p>
+                </p>
 
-   <source>
+                <source>
    /**
     * Simple container that includes custom lifecycle extensions.
     */
@@ -129,19 +134,20 @@
            m_extManager.addExtension( new Extensions() );
        }
    }
-   </source>
+                </source>
 
-  </section>
+            </section>
 
-  <section name="Use the new component interface" >
+            <section name="Use the new component interface">
 
-   <p>
+                <p>
     To use the new SecurityManageable lifecycle extension, we simply implement
     SecurityManageable just as we do with any other Avalon lifecycle interfaces
-    (assuming a predefined Component interface <code>ExtendedComponent</code>).
-   </p>
+    (assuming a predefined Component interface
+                    <code>ExtendedComponent</code>).
+                </p>
 
-   <source>
+                <source>
    /**
     * ExtendedComponentImpl, demonstrating the use of a custom
     * lifecycle stage SecurityManageable. This code does
@@ -178,10 +184,10 @@
            }
        }
    }
-   </source>
-  </section>
+                </source>
+            </section>
 
-  </section>
+        </section>
 
-  </body>
+    </body>
 </document>

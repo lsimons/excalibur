@@ -1,3 +1,5 @@
+<?xml version="1.0"?>
+
 <!--
      Copyright 2004 The Apache Software Foundation
      Licensed  under the  Apache License,  Version 2.0  (the "License");
@@ -15,13 +17,12 @@
      limitations under the License.
 -->
 <document>
-  <properties>
-    <author email="dev@avalon.apache.org">Avalon Development Team</author>
-    <title>Excalibur Event - How To Use Command</title>
-  </properties>
-  <body>
-    <section name="Setting Up The Command Manager" >
-      <p>
+    <properties>
+        <title>Event - How To Use Command</title>
+    </properties>
+    <body>
+        <section name="Setting Up The Command Manager">
+            <p>
         Using Command is a two step process.  You have to set it up,
         and then you can send Commands to it.  Because Command uses
         an Event Pipeline to move the Commands through the Queue to
@@ -30,9 +31,9 @@
         TPC stands for "Thread Per CPU".  The TPCThreadManager allows
         you to customize its behaviour by passing in some parameters.
         The code snippet below is fairly typical:
-      </p>
-      <source>
-<![CDATA[
+            </p>
+            <source>
+                <![CDATA[
 ThreadManager threadManager = new TPCThreadManager();
 threadManager.enableLogging( getLogger().getChildLogger("threadmanager") );
 Parameters params = new Parameters();
@@ -41,55 +42,57 @@ params.setParameter( "sleep-time", "1000" );
 params.setParameter( "block-timeout", "250" );
 threadManager.parameterize( params );
 threadManager.initialize();
-]]>
-      </source>
-      <p>
+      ]]>
+            </source>
+            <p>
         We create a Threadmanager, pass in the Logger, pass in the Parameters,
         and then initialize it.  The table below provides all the parameter names
         that TPCThreadManager recognizes:
-      </p>
-      <table>
-        <tr>
-          <th>Name</th> <th>Description</th> <th>Default Value</th>
-        </tr>
-        <tr>
-          <td>processors</td>
-          <td>Number of processors (autodetected if less than one)</td>
-          <td>Results from SystemUtil.numProcessors()</td>
-        </tr>
-        <tr>
-          <td>threads-per-processor</td>
-          <td>Threads per processor to use (Rewritten to 1 if less than one)</td>
-          <td>1</td>
-        </tr>
-        <tr>
-          <td>sleep-time</td>
-          <td>Time (in milliseconds) to wait between queue pipeline processing runs</td>
-          <td>1000</td>
-        </tr>
-        <tr>
-          <td>block-timeout</td>
-          <td>Time (in milliseconds) to wait for a thread to process a pipeline</td>
-          <td>1000</td>
-        </tr>
-      </table>
-      <p>
+            </p>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Default Value</th>
+                </tr>
+                <tr>
+                    <td>processors</td>
+                    <td>Number of processors (autodetected if less than one)</td>
+                    <td>Results from SystemUtil.numProcessors()</td>
+                </tr>
+                <tr>
+                    <td>threads-per-processor</td>
+                    <td>Threads per processor to use (Rewritten to 1 if less than one)</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>sleep-time</td>
+                    <td>Time (in milliseconds) to wait between queue pipeline processing runs</td>
+                    <td>1000</td>
+                </tr>
+                <tr>
+                    <td>block-timeout</td>
+                    <td>Time (in milliseconds) to wait for a thread to process a pipeline</td>
+                    <td>1000</td>
+                </tr>
+            </table>
+            <p>
         Once the ThreadManager is set up and used, we can set up the CommandManager.
         We do this by instantiating the CommandManager, and registering it with the
         ThreadManager.  Below is a code snippet showing how that is done:
-      </p>
-      <source>
-        <![CDATA[
+            </p>
+            <source>
+                <![CDATA[
 // Create the CommandManager
 CommandManager commandManager = new CommandManager();
 
 // Register it with the ThreadManager
 threadManager.register( commandManager );
-        ]]>
-      </source>
-    </section>
-    <section name="Running Commands" >
-      <p>
+              ]]>
+            </source>
+        </section>
+        <section name="Running Commands">
+            <p>
         There are three Command interfaces: Command, DelayedCommand, and RepeatedCommand.
         Each one of those has a special purpose.  The Command interface exposes the method
         that the CommandManager will execute named, oddly enough, "execute()".  The
@@ -99,14 +102,14 @@ threadManager.register( commandManager );
         interface is used to determine how long and how many times the Command will
         be executed.  Below is a code snippet showing how to send Commands to the
         CommandManager:
-      </p>
-      <source>
-        <![CDATA[
+            </p>
+            <source>
+                <![CDATA[
 Sink commandSink = commandManager.getCommandSink();
 commandSink.enqueue( new MySpecialCommand() );
-        ]]>
-      </source>
-      <p>
+              ]]>
+            </source>
+            <p>
         It's not that hard to use the CommandManager.  Writing a Command is as easy as
         implementing the java.lang.Runnable interface.  There are two distinct advantages
         to using the Command infrastructure: your Command can throw exceptions and it
@@ -117,9 +120,9 @@ commandSink.enqueue( new MySpecialCommand() );
         running a long time without tying up system resources the whole time, then
         write a RepeatedCommand.  Below is an example RepeatedCommand that is used
         for the DefaultPoolManager in MPool:
-      </p>
-      <source>
-        <![CDATA[
+            </p>
+            <source>
+                <![CDATA[
 /**
  * This is run every 10 seconds, starting after a 10 second delay.
  * It gives the appearance of being a long running thread, but it
@@ -181,8 +184,8 @@ private static final class PoolManagerCommand
         }
     }
 }
-    ]]>
-      </source>
-    </section>
-  </body>
+          ]]>
+            </source>
+        </section>
+    </body>
 </document>

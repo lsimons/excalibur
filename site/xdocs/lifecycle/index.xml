@@ -15,25 +15,24 @@
      limitations under the License.
 -->
 <document>
-  <properties>
-    <author email="dev@avalon.apache.org">Avalon Development Team</author>
-    <title>Lifecycle Extensions</title>
-  </properties>
-  <body>
-    <section name="Introduction" >
+    <properties>
+        <title>Lifecycle Extensions</title>
+    </properties>
+    <body>
+        <section name="Introduction">
 
-      <p>
+            <p>
         The Lifecycle package contains a set of interfaces and classes 
         supporting portable lifecycle extensions.
-      </p>
+            </p>
 
-      <p>
+            <p>
         Contributions to this project are based on co-development actives by
         container projects aiming towards cross-container component portability 
         and consistent service management.
-      </p>
+            </p>
 
-      <p>
+            <p>
         The first step in the container project has been undertaken between the
         Fortress and Merlin containers on the subject of lifestyle extension 
         support. The original design and implementation of lifecycle extensions 
@@ -45,11 +44,11 @@
         consensus on a common set of APIs and abstract implementation. These 
         resources constitute the first sub-project of the Excalibur Container 
         package.
-      </p>
+            </p>
 
-    </section>
+        </section>
 
-  </body>
+    </body>
 </document>
 
 
