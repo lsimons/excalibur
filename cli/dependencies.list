@@ -2,19 +2,19 @@
 #
 # artifact-id version groupid repository gumpid gumpopts
 #
-excalibur-fortress-platform - excalibur-fortress - - runtime,inherit=runtime
-excalibur-fortress-container-api - excalibur-fortress - - runtime,inherit=runtime
-excalibur-fortress-container-impl - excalibur-fortress - - runtime,inherit=runtime
+excalibur-fortress-platform - - - - runtime,inherit=runtime
+excalibur-fortress-container-api - - - - runtime,inherit=runtime
+excalibur-fortress-container-impl - - - - runtime,inherit=runtime
 avalon-framework 4.1.5 framework http://www.apache.org/dist/avalon - runtime,inherit=runtime
 avalon-logkit 2.0 - - - runtime,inherit=runtime
 commons-collections 2.1 - - - runtime,inherit=runtime
 concurrent 1.3.1 - - - runtime,inherit=runtime
 excalibur-instrument - - - - runtime,inherit=runtime
-excalibur-instrument-spi - excalibur-instrument - - runtime,inherit=runtime
-excalibur-instrument-impl - excalibur-instrument - - runtime,inherit=runtime
-excalibur-event-api - excalibur-event - - runtime,inherit=runtime
+excalibur-instrument-spi - - - - runtime,inherit=runtime
+excalibur-instrument-impl - - - - runtime,inherit=runtime
+excalibur-event-api - - - - runtime,inherit=runtime
 bcel 5.1 - - - runtime,inherit=runtime
 excalibur-logger - - - - runtime,inherit=runtime
 excalibur-sourceresolve - - - - runtime,inherit=runtime
-excalibur-lifecycle-api - excalibur-lifecycle - - runtime,inherit=runtime
-excalibur-lifecycle-impl - excalibur-lifecycle - - runtime,inherit=runtime
+excalibur-lifecycle-api - - - - runtime,inherit=runtime
+excalibur-lifecycle-impl - - - - runtime,inherit=runtime
