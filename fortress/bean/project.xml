@@ -114,10 +114,14 @@ Bean for working with Avalon-Fortress.
             <id>xml-apis</id>
             <version>2.0.2</version>
         </dependency>
+<!-- Neeme: commented commons-logging out for now, as it seems to cause a 
+     mysterious NPE in logging conf while running FortressBean test case.
+     Maybe only my machine issue?
         <dependency>
             <id>commons-logging</id>
-            <version>1.1-dev</version>
+            <version>1.0.4</version>
         </dependency>
+-->
         <dependency>
             <id>junit</id>
             <version>3.8.1</version>
