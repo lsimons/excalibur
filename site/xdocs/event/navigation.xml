@@ -80,6 +80,9 @@
             <item name="Sourceresolver" href="sourceresolve-index.html"/>
             <item name="Store" href="store-index.html"/>
             <item name="Thread" href="thread.html"/>
+            <item name="XMLUtil" href="xmlutil/index.html" collapse="true">
+                <item name="Overview" href="xmlutil/index.html"/>
+            </item>
         </menu>
 
         <menu name="Miscellaneous" href="misc.html" collapse="true">

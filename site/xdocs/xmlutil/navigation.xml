@@ -70,7 +70,7 @@
                 <item name="Design Notes" href="fortress/design-notes.html"/>
             </item>
             <item name="i18n" href="i18n.html"/>
-            <item name="Lifecycle" href="lifecycle/index.html" collapse="false">
+            <item name="Lifecycle" href="lifecycle/index.html" collapse="true">
                 <item name="Overview" href="lifecycle/index.html"/>
                 <item name="Extensions" href="lifecycle/extension.html"/>
                 <item name="Interfaces" href="lifecycle/interfaces.html"/>
@@ -80,7 +80,7 @@
             <item name="Sourceresolver" href="sourceresolve-index.html"/>
             <item name="Store" href="store-index.html"/>
             <item name="Thread" href="thread.html"/>
-            <item name="XMLUtil" href="xmlutil/index.html" collapse="true">
+            <item name="XMLUtil" href="xmlutil/index.html" collapse="false">
                 <item name="Overview" href="xmlutil/index.html"/>
             </item>
         </menu>
