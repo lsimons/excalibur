@@ -26,7 +26,16 @@
 
         <section name="What is excalibur?">
 
-            <p>
+<p style="display: block; float: right; margin: 15px;">
+<a href="http://ApacheCon.Com/2004/US/">
+<img src="http://ApacheCon.Com/2004/US/logos/logo_only.gif"
+  width="170" height="100" alt="ApacheCon!" title="Come to ApacheCon!"
+  border="0" /><br />
+Come to ApacheCon!
+</a>
+</p>
+            
+<p>
                 Excalibur is an <a href="http://www.opensource.org/">open source</a> software
                 project of <a href="http://www.apache.org/">The Apache Software Foundation</a>.
                 Our primary product is a lightweight, embeddable
