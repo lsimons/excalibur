@@ -38,11 +38,6 @@ import org.xml.sax.SAXException;
 public class Log4JConfTestCase
     extends TestCase
 {
-    public Log4JConfTestCase( final String name )
-    {
-        super( name );
-    }
-
     public void testWrite()
         throws Exception
     {
