@@ -22,7 +22,7 @@ package org.apache.avalon.fortress.examples.interceptors.business;
  * @avalon.service type=PersistenceManager
  * @x-avalon.info name=persistenceManager
  * @x-avalon.lifestyle type=singleton
- * @excalibur.interceptable family=businessObject
+ * @excalibur.interceptable family="businessObject"
  * 
  * @author <a href="mailto:dev@excalibur.apache.org">Excalibur Development Team</a>
  */
@@ -30,7 +30,7 @@ public class DefaultPersistenceManager implements PersistenceManager
 {
     /**
      * @transaction.required
-     * @security.enabled roles=Admin,Director,Worker
+     * @security.enabled roles="Admin,Director,Worker"
      */
     public void persist(Object data)
     {

@@ -19,8 +19,8 @@ package org.apache.avalon.fortress.attributes.qdox.test.data;
 
 /**
  * @attribute1
- * @attribute2 type=MailService
- * @attribute3 type=MailService inheritable=false
+ * @attribute2 type="MailService"
+ * @attribute3 type="MailService" inheritable="false"
  */
 public class Component
 {

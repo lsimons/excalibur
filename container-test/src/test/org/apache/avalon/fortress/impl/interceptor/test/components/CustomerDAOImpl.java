@@ -22,7 +22,7 @@ package org.apache.avalon.fortress.impl.interceptor.test.components;
  * @avalon.service type=CustomerDataAccessObject
  * @x-avalon.lifestyle type=singleton
  * @x-avalon.info name=customerDAO
- * @excalibur.interceptable family=DAO
+ * @excalibur.interceptable family="DAO"
  *
  * @author <a href="mailto:dev@excalibur.apache.org">Excalibur Development Team</a>
  */
