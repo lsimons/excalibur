@@ -40,6 +40,15 @@ import org.apache.avalon.framework.configuration.ConfigurationException;
  *       &lt;/sequence&gt;
  *   &lt;/id-generators&gt;
  * </pre>
+ * or
+ * <pre>
+ *   &lt;id-generators&gt;
+ *       &lt;sequence name="user-ids" logger="cm.ids"&gt;
+ *           &lt;dbpool&gt;user-db&lt;/dbpool&gt;
+ *           &lt;query&gt;SELECT category_ids.nextval FROM DUAL&lt;/query&gt;
+ *       &lt;/sequence&gt;
+ *   &lt;/id-generators&gt;
+ * </pre>
  * Where user-db is the name of a DataSource configured in a datasources element, and query is
  *  any query which will return a single id while maintaining state so that successive calls
  *  will continue to return incremented ids.
