@@ -98,7 +98,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <a href="sourceresolve-index.html">Sourceresolver</a>
+                        <a href="sourceresolve/index.html">Sourceresolver</a>
                     </td>
                     <td>
                         <p>
@@ -118,7 +118,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <a href="store-index.html">Store</a>
+                        <a href="store/index.html">Store</a>
                     </td>
                     <td>
                         <p>
@@ -134,7 +134,7 @@
                     <td>PENDING</td>
                 </tr>
                 <tr>
-                    <td>XMLUtil</td>
+                    <td><a href="xmlutil/index.html">XMLUtil</a></td>
                     <td>
                         <p>
                             Excalibur's XML Utilities provide simplified wrappers
