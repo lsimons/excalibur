@@ -19,13 +19,14 @@ package org.apache.avalon.fortress.tools;
 
 import com.thoughtworks.qdox.model.*;
 import org.apache.avalon.fortress.MetaInfoEntry;
+import org.apache.avalon.fortress.attributes.qdox.QDoxSerializer;
 import org.apache.avalon.fortress.util.dag.Vertex;
 import org.apache.tools.ant.BuildException;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.ObjectOutputStream;
 import java.util.*;
 
 /**
@@ -368,93 +369,21 @@ public final class Component
     {
         final File output = new File( packageDir, className + ".attrs" );
 
-        PrintWriter writer = null;
+        FileOutputStream outStream = new FileOutputStream( output );
         
         try
         {
-            writer = new PrintWriter( new FileOutputStream( output ) );
-
-            DocletTag[] tags = m_javaClass.getTags();
-
-            for (int i = 0; i < tags.length; i++)
-            {
-                DocletTag tag = tags[i];
-                writeDocletTag( writer, null, tag );
-            }
-
-            // TODO: Do we need to inspect super classes?
-            final JavaMethod[] methods = m_javaClass.getMethods();
-        
-            for ( int i = 0; i < methods.length; i++ )
-            {
-                JavaMethod method = methods[i];
-                tags = method.getTags();
-                
-                if (tags.length == 0)
-                {
-                    continue;
-                }
-                
-                for (int j = 0; j < tags.length; j++)
-                {
-                    DocletTag tag = tags[j];
-                    writeDocletTag( writer, method, tag );
-                }
-            }
-
+            ObjectOutputStream objOutStream = new ObjectOutputStream( outStream );
+            QDoxSerializer.instance().serialize( objOutStream, m_javaClass );
+            objOutStream.close();
         }
         finally
         {
-            if ( null != writer )
-            {
-                writer.close();
-            }
+            outStream.flush();
+            outStream.close();
         }
     }
     
-    private void writeDocletTag( PrintWriter writer, JavaMethod method, DocletTag tag )
-        throws IOException
-    {
-        if (method != null)
-        {
-            writer.print( '{' );
-            writer.print( method.getReturns().getValue() );
-            writer.print( ' ' );
-            writer.print( method.getName() );
-            writer.print( '(' );
-            JavaParameter[] params = method.getParameters();
-            for (int i = 0; i < params.length; i++)
-            {
-                JavaParameter param = params[i];
-                writer.print( param.getType().getValue() );
-                
-                if ( i + 1 < params.length )
-                {
-                    writer.print( ',' );
-                }
-            }
-            writer.print( ")} " );
-        }
-        writer.print( tag.getName() );
-        writer.print( " [" );
-        String[] parameters = tag.getParameters();
-        boolean separator = false;
-        for (int j = 0; j < parameters.length; j++)
-        {
-            String parameter = parameters[j];
-            writer.print( parameter );
-            if (!separator)
-            {
-                separator = true;
-            }
-            else
-            {
-                writer.print( ';' );
-            }
-        }
-        writer.println( ']' );
-    }
-
     private String stripQuotes( final String value )
     {
         if ( null == value ) return null;
@@ -510,7 +439,7 @@ public final class Component
         return className;
     }
 
-    private String checkImport ( final JavaSource sourceCode, final String type, final String className)
+    private String checkImport( final JavaSource sourceCode, final String type, final String className)
     {
         final String tail = type.substring( type.lastIndexOf( '.' ) + 1 );
 
