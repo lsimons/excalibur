@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<project name="Jicarilla BuildSystem" default="jbs:install" basedir=".">
+<project name="JBS Installer" default="jbs:install" basedir=".">
     <target name="jbs:info">
         <echo>
 JBS is now being installed into ${jbs.home}...
@@ -50,10 +50,6 @@ JBS is now being installed into ${jbs.home}...
         <property name="jbs.backup" value="${jbs.home}/backup"/>
         <property name="jbs.repository.local" value="${jbs.home}/repository"/>
 
-        <property name="jbs.cvs.root" value=":pserver:anonymous@cvs.sourceforge.net:/cvsroot/jicarilla"/>
-        <property name="jbs.cvs.module" value="jicarilla-sandbox/buildsystem"/>
-        <property name="jbs.repository.module" value="jicarilla-maven-repository"/>
-
         <antcall target="jbs:info"/>
 
         <mkdir dir="${jbs.home}"/>
@@ -66,33 +62,27 @@ JBS is now being installed into ${jbs.home}...
             </fileset>
         </move>
 
-        <mkdir dir="${jbs.repository.local}"/>
-        <mkdir dir="${jbs.work}/${jbs.cvs.module}"/>
-        <mkdir dir="${jbs.work}/${jbs.repository.module}"/>
+        <get src="http://svn.apache.org/repos/asf/excalibur/trunk/buildsystem/jbs/install/jbs-current.tgz"
+          dest="${jbs.work}/jbs-current.tgz"/>
+        <untar src="${jbs.work}/jbs-current.tgz" dest="${jbs.home}"/>
 
-        <cvs cvsRoot="${jbs.cvs.root}"
-                package="${jbs.cvs.module}"
-                dest="${jbs.work}"
-                quiet="true"
-                failonerror="true"/>
+        <mkdir dir="${jbs.repository.local}/bsh"/>
+        <mkdir dir="${jbs.repository.local}/bsh/jars"/>
+        <mkdir dir="${jbs.repository.local}/bsh/licenses"/>
+        <mkdir dir="${jbs.repository.local}/js"/>
+        <mkdir dir="${jbs.repository.local}/js/jars"/>
+        <mkdir dir="${jbs.repository.local}/js/licenses"/>
 
-        <move todir="${jbs.home}">
-            <fileset dir="${jbs.work}/${jbs.cvs.module}"
-                     defaultexcludes="no">
-            </fileset>
-        </move>
-
-        <cvs cvsRoot="${jbs.cvs.root}"
-                package="${jbs.repository.module}"
-                dest="${jbs.work}"
-                quiet="true"
-                failonerror="true"/>
-
-        <move todir="${jbs.repository.local}">
-            <fileset dir="${jbs.work}/${jbs.repository.module}"
-                     defaultexcludes="no">
-            </fileset>
-        </move>
+	<get src="http://svn.apache.org/repos/asf/excalibur/repository/bsh/jars/bsh-2.0b1.jar"
+          dest="${jbs.repository.local}/bsh/jars/bsh-2.0b1.jar"/>
+	<get src="http://svn.apache.org/repos/asf/excalibur/repository/bsh/licenses/LICENSE.txt"
+          dest="${jbs.repository.local}/bsh/licenses/LICENSE.txt"/>
+	<get src="http://svn.apache.org/repos/asf/excalibur/repository/bsh/licenses/LICENSE-alternative.txt"
+          dest="${jbs.repository.local}/bsh/licenses/LICENSE-alternative.txt"/>
+	<get src="http://svn.apache.org/repos/asf/excalibur/repository/js/jars/js.jar"
+          dest="${jbs.repository.local}/js/jars/js.jar"/>
+	<get src="http://svn.apache.org/repos/asf/excalibur/repository/js/licenses/LICENSE.html"
+          dest="${jbs.repository.local}/js/licenses/LICENSE.html"/>
 
         <!-- the checks should be rather redundant as copy should fail, but
              lets just be real sure as people have reported problems... -->
