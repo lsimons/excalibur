@@ -75,6 +75,13 @@
       <url>http://xml.apache.org/xerces2-j/</url>
     </dependency>
 
+    <!-- other dependencies -->
+
+    <dependency>
+      <id>commons-logging</id>
+      <version>1.0.4</version>
+    </dependency>
+
   </dependencies>
   
 </project>
