@@ -384,11 +384,24 @@ public final class FileUtil
             throw new IOException( message );
         }
 
+        // Make sure that any opened streams are always closed.
         final FileInputStream input = new FileInputStream( source );
-        final FileOutputStream output = new FileOutputStream( destination );
-        IOUtil.copy( input, output );
-        IOUtil.shutdownStream( input );
-        IOUtil.shutdownStream( output );
+        try
+        {
+            final FileOutputStream output = new FileOutputStream( destination );
+            try
+            {
+                IOUtil.copy( input, output );
+            }
+            finally
+            {
+                IOUtil.shutdownStream( output );
+            }
+        }
+        finally
+        {
+            IOUtil.shutdownStream( input );
+        }
 
         if( source.length() != destination.length() )
         {
