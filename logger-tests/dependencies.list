@@ -17,4 +17,4 @@ excalibur-pool-api - - - - runtime,inherit=runtime
 excalibur-pool-impl - - - - runtime,inherit=runtime
 excalibur-pool-instrumented - - - - runtime,inherit=runtime
 excalibur-instrument - - - - runtime,inherit=runtime
-excalibur-i18n 1.2.0-dev - - - runtime,inherit=runtime
+excalibur-i18n - - - - runtime,inherit=runtime

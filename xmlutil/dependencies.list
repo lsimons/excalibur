@@ -3,9 +3,9 @@
 # artifact-id version groupid repository gumpid gumpopts
 #
 saxon 6.5.3 - - - runtime,inherit=runtime
-saxon7 7.9.1 - - - runtime,inherit=runtime
-saxon7-jdom 7.9.1 saxon7 - - runtime,inherit=runtime
-saxon7-sql 7.9.1 saxon7 - - runtime,inherit=runtime
+saxon7 7.9.1 - http://svn.apache.org/repos/asf/excalibur/repository - runtime,inherit=runtime
+saxon7-jdom 7.9.1 saxon7 http://svn.apache.org/repos/asf/excalibur/repository - runtime,inherit=runtime
+saxon7-sql 7.9.1 saxon7 http://svn.apache.org/repos/asf/excalibur/repository - runtime,inherit=runtime
 xml-resolver 1.1 - - - runtime,inherit=runtime
 avalon-framework 4.1.5 framework http://www.apache.org/dist/avalon - runtime,inherit=runtime
 excalibur-logger - - - - runtime,inherit=runtime
@@ -24,7 +24,7 @@ saxpath 1.0-FCS - - - runtime,inherit=runtime
 jaxen 1.0-FCS-full - - - runtime,inherit=runtime
 commons-collections 2.1 - - - runtime,inherit=runtime
 excalibur-testcase - - - - runtime,inherit=runtime
-excalibur-i18n 1.2.0-dev - - - runtime,inherit=runtime
+excalibur-i18n - - - - runtime,inherit=runtime
 jtidy 4aug2000r7-dev - - - runtime,inherit=runtime
 excalibur-fortress-container-api - - - - runtime,inherit=runtime
 excalibur-fortress-meta - - - - runtime,inherit=runtime

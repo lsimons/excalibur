@@ -27,25 +27,27 @@
                                       instrument-manager/altrmi
                                       instrument-manager/http
                                       instrument-client
-                                      datasource
-                                      sourceresolve
-                                      store
-                                      xmlutil
-                                      monitor
 
                                       component/
                                       component-examples/instrument-manager/
                                       testcase/
                                       component-tests/
 
+                                      fortress/container-api/
+                                      fortress/meta/
+
+                                      datasource
+                                      sourceresolve
+                                      store
+                                      xmlutil
+                                      monitor
+
                                       logger-tests/
 
-                                      fortress/container-api/
                                       fortress/container-impl/
                                       fortress/bean/
                                       fortress/container-test/
                                       fortress/migration/
-                                      fortress/meta/
                                       fortress/examples/
                             "/>
     <filelist id="subprojects.filelist" dir="." files="${subprojects}"/>
