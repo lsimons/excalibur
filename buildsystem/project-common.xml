@@ -2,11 +2,11 @@
 
 <project>
   <pomVersion>3</pomVersion>
-  <name>Avalon Legacy - Excalibur</name>
+  <name>Excalibur</name>
   <organization>
     <name>The Apache Software Foundation</name>
-    <url>http://avalon.apache.org/</url>
-    <logo>http://avalon.apache.org/images/apache-avalon-logo.png</logo>
+    <url>http://excalibur.apache.org/</url>
+    <logo>http://excalibur.apache.org/logo.gif</logo>
   </organization>
   <inceptionYear>1997</inceptionYear>
 
@@ -21,11 +21,11 @@
   <package>org.apache.avalon</package>
   <gumpRepositoryId>avalon-excalibur</gumpRepositoryId>
 
-  <url>http://avalon.apache.org/excalibur/</url>
+  <url>http://excalibur.apache.org/</url>
   <issueTrackingUrl>http://nagoya.apache.org/</issueTrackingUrl>
 
-  <siteAddress>avalon.apache.org</siteAddress>
-  <siteDirectory>${root.site.directory}/excalibur</siteDirectory>
+  <siteAddress>excalibur.apache.org</siteAddress>
+  <siteDirectory>${root.site.directory}</siteDirectory>
   <distributionDirectory></distributionDirectory>
 
   <repository>
@@ -35,16 +35,22 @@
 
   <mailingLists>
     <mailingList>
-      <name>Avalon Developer List</name>
-      <subscribe>dev-subscribe@avalon.apache.org</subscribe>
-      <unsubscribe>dev-unsubscribe@avalon.apache.org</unsubscribe>
-      <archive>http://nagoya.apache.org/eyebrowse/SummarizeList?listName=dev@avalon.apache.org</archive>
+      <name>Excalibur Developer List</name>
+      <subscribe>dev-subscribe@excalibur.apache.org</subscribe>
+      <unsubscribe>dev-unsubscribe@excalibur.apache.org</unsubscribe>
+      <archive>http://nagoya.apache.org/eyebrowse/SummarizeList?listName=dev@excalibur.apache.org</archive>
     </mailingList>
     <mailingList>
-      <name>Avalon User List</name>
-      <subscribe>users-subscribe@avalon.apache.org</subscribe>
-      <unsubscribe>users-unsubscribe@avalon.apache.org</unsubscribe>
-      <archive>http://nagoya.apache.org/eyebrowse/SummarizeList?listName=users@avalon.apache.org</archive>
+      <name>Excalibur User List</name>
+      <subscribe>user-subscribe@excalibur.apache.org</subscribe>
+      <unsubscribe>user-unsubscribe@excalibur.apache.org</unsubscribe>
+      <archive>http://nagoya.apache.org/eyebrowse/SummarizeList?listName=user@excalibur.apache.org</archive>
+    </mailingList>
+    <mailingList>
+      <name>Excalibur Commit List</name>
+      <subscribe>scm-subscribe@excalibur.apache.org</subscribe>
+      <unsubscribe>scm-unsubscribe@excalibur.apache.org</unsubscribe>
+      <archive>http://nagoya.apache.org/eyebrowse/SummarizeList?listName=scm@excalibur.apache.org</archive>
     </mailingList>
   </mailingLists>
 
@@ -158,7 +164,7 @@
 
   <build>
 
-    <nagEmailAddress>dev@avalon.apache.org</nagEmailAddress>
+    <nagEmailAddress>dev@excalibur.apache.org</nagEmailAddress>
     <sourceDirectory>${basedir}/src/java</sourceDirectory>
     <unitTestSourceDirectory>${basedir}/src/test</unitTestSourceDirectory>
     <integrationUnitTestSourceDirectory/>
