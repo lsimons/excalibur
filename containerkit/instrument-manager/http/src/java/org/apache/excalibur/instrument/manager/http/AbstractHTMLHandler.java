@@ -211,8 +211,8 @@ public abstract class AbstractHTMLHandler
         out.println( "<br>" );
         out.print( "<font size='-1' color='#888888'>" );
         out.print( "<center>" );
-        out.print( "<a href='http://avalon.apache.org/excalibur/index.html'>" );
-        out.print( "Avalon Instrument Manager HTTP Client" );
+        out.print( "<a href='http://excalibur.apache.org/instrument/html-client.html'>" );
+        out.print( "Excalibur Instrument - HTTP Client" );
         out.print( "</a><br>" );
         out.print( "Copyright&copy; 2002-2004 The Apache Software Foundation.  All rights reserved." );
         out.print( "</center>" );
