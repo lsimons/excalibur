@@ -9,7 +9,7 @@
     <property name="subprojects" value="
                                       ecm/
                                       ecm-examples/instrument-manager/
-                                      ecm-tests/
+                                      ecm-test/
 
                                       fortress1-api/
                                       fortress1-meta/
