@@ -123,4 +123,17 @@ public final class LEAwareComponentHandler
     {
         ContainerUtil.dispose( m_componentHandler );
     }
+
+    /**
+     * Human readable string message
+     */
+    public String toString()
+    {
+        final StringBuffer msg = new StringBuffer( super.toString() )
+                   .append( " [" )
+                   .append( m_componentHandler.toString() )
+                   .append( "]" );
+
+        return msg.toString();
+    }
 }
