@@ -34,7 +34,7 @@ import org.xml.sax.ext.LexicalHandler;
  * @version CVS $Revision: 1.4 $ $Date: 2004/02/28 11:47:20 $
  */
 public class ContentHandlerWrapper
-    implements ContentHandler
+    implements ContentHandler, LexicalHandler
 {
     /** The current {@link ContentHandler}. */
     private ContentHandler m_contentHandler;

@@ -33,7 +33,7 @@ public class ContentHandlerProxy
     implements ContentHandler
 {
     /** The current {@link ContentHandler}. */
-    private final ContentHandler m_contentHandler;
+    private ContentHandler m_contentHandler;
 
     /**
      * Create a new <code>ContentHandlerWrapper</code> instance.
@@ -43,6 +43,24 @@ public class ContentHandlerProxy
         m_contentHandler = contentHandler;
     }
 
+    /**
+     * Create a new <code>ContentHandlerWrapper</code> instance.
+     * If you use this constructor, you have to set the content handler
+     * by calling {@link #setContentHandler(ContentHandler)}. Otherwise
+     * you get an NPE during streaming
+     */
+    public ContentHandlerProxy(  )
+    {
+    }
+
+    /**
+     * Set the lexical handler
+     */
+    public void setContentHandler( final ContentHandler contentHandler ) 
+    {
+        m_contentHandler = contentHandler;
+    }
+    
     /**
      * Receive an object for locating the origin of SAX document events.
      */

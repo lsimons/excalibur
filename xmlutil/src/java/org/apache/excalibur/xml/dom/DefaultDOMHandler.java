@@ -21,6 +21,7 @@ import javax.xml.transform.sax.TransformerHandler;
 
 import org.apache.excalibur.xml.sax.ContentHandlerWrapper;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 /**
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
@@ -30,18 +31,34 @@ public class DefaultDOMHandler
     extends ContentHandlerWrapper
     implements DOMHandler
 {
-    private final Document m_document;
+    private final DOMResult m_result;
 
     public DefaultDOMHandler( TransformerHandler handler,
                               Document document )
     {
         super( handler, handler );
-        m_document = document;
-        handler.setResult( new DOMResult( m_document ) );
+        if ( document == null )
+        {
+            m_result = new DOMResult();
+        }
+        else
+        {
+            m_result = new DOMResult( document );
+        }
+        handler.setResult( m_result );
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.excalibur.xml.dom.DOMHandler#getDocument()
+     */
     public Document getDocument()
     {
-        return m_document;
+        if ((m_result == null) || (m_result.getNode()==null))  {
+            return null;
+        } else if (m_result.getNode().getNodeType() == Node.DOCUMENT_NODE) {
+            return ( (Document)m_result.getNode() );
+        } else {
+            return ( m_result.getNode().getOwnerDocument() );
+        }
     }
 }

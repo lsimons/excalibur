@@ -45,10 +45,29 @@ public class XMLConsumerProxy
 
     /**
      * Create a new <code>XMLConsumerProxy</code> instance.
+     * If you use this constructor, you have to set the content handler
+     * by calling {@link #setContentHandler(ContentHandler)} and the
+     * lexical handler by calling {@link #setLexicalHandler(LexicalHandler)}. 
+     * Otherwise you get an NPE during streaming.
+     */
+    public XMLConsumerProxy()
+    {       
+    }
+        
+    /**
+     * Create a new <code>XMLConsumerProxy</code> instance.
      */
     public XMLConsumerProxy( final XMLConsumer xmlConsumer )
     {
         this( xmlConsumer, xmlConsumer );
+    }
+
+    /**
+     * Set the lexical handler
+     */
+    public void setLexicalHandler( final LexicalHandler lexicalHandler ) 
+    {
+        m_lexicalHandler = lexicalHandler;
     }
 
     /**
