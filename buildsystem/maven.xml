@@ -163,7 +163,7 @@ limitations under the License.
         <j:set var="url" value="scp://${host}"/>
         
         <j:set var="version" value="${pom.currentVersion}"/>
-        <j:set var="isRC" value="${version.indexOf('RC') != '-1'}"/>
+        <j:set var="isRC" value="${version.indexOf('RC') != '-1' || version.indexOf('dev') != '-1'}"/>
         
         <j:if test="${isRC == true}">
             <j:set var="deployBase" value="/home/${user}/public_html/dist"/>
