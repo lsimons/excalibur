@@ -21,6 +21,7 @@ limitations under the License.
 
   <id>excalibur-pool-impl</id>
   <name>Excalibur Pool Implementation</name>
+  <version>2.0.0</version>
   <shortDescription>Excalibur Pool Implementation</shortDescription>
   
   <dependencies>

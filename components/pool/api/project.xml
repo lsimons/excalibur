@@ -21,6 +21,7 @@ limitations under the License.
 
   <id>excalibur-pool-api</id>
   <name>Excalibur Pool API</name>
+  <version>2.0.0</version>
   <shortDescription>Excalibur Pool API</shortDescription>
 
   <dependencies>
