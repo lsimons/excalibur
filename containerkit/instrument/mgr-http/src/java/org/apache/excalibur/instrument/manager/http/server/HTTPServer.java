@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -67,8 +68,10 @@ public class HTTPServer
     /** DateFormat used when generating log file names.  Only use when synchronized. */
     private SimpleDateFormat m_dayFormat = new SimpleDateFormat( "yyyy-MM-dd" );
     
-    /** DateFormat used when generating log entries.  Only use when synchronized. */
-    private SimpleDateFormat m_logTimeFormat = new SimpleDateFormat( "dd/MMM/yyyy:HH:mm:ss Z" );
+    /** DateFormat used when generating log entries.  Only use when synchronized.
+     *   The US Locale is set because other locales do not correctly show the month. */
+    private SimpleDateFormat m_logTimeFormat =
+        new SimpleDateFormat( "dd/MMM/yyyy:HH:mm:ss Z", Locale.US );
     
     /** Number of requests. */
     private CounterInstrument m_instrumentRequests;
