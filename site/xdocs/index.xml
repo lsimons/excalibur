@@ -26,6 +26,60 @@
 
         <section name="What is excalibur?">
 
+            <p>
+                Excalibur is an <a href="http://www.opensource.org/">open source</a> software
+                project of <a href="http://www.apache.org/">The Apache Software Foundation</a>.
+                Our primary product is a lightweight, embeddable
+                <a href="http://www.martinfowler.com/articles/injection.html">Inversion of Control</a>
+                <em>container</em> named <a href="fortress/index.html">Fortress</a> that is written
+                in <a href="http://java.sun.com/">java</a>.
+            </p>
+
+            <p>
+                Inversion of control, also known as the hollywood principle ("don't call us,
+                we'll call you") is a simple put powerful concept. The idea is that we
+                don't "wire up" all the pieces that make up an application (the "components") by
+                writing lots of this-component-uses-that-one-like-so code, nor do we use some
+                kind of lookup directory (like
+                <a href="http://java.sun.com/products/jndi/">JNDI</a>, for example) where each component
+                decides what components to interact with itself. Instead, we instruct a smart piece
+                of software, the container, to <em>tell</em> the components how to interact.
+            </p>
+
+            <p>
+                Fortress (and also its predecessor, "ECM") is such a container. It is
+                <em>lightweight</em>, by which we mean that it doesn't need a lot of resources,
+                take a lot of disk or memory, or impose all sorts of demans on its environment. Fortress
+                is also <em>embeddable</em>, by which we mean that you can use fortress inside just
+                about every java environment. More concretely, you can use it as the basis of a
+                large standalone development platform (like the
+                <a href="http://www.keelframework.org/">Keel</a> project), at the core of a
+                servlet-based web application (like
+                <a href="http://cocoon.apache.org/">Cocoon</a>) or even as the basis of a GUI
+                application (like
+                <a href="http://projects.d-haven.org/modules/mydownloads/singlefile.php?cid=2&amp;lid=2">GuiApp</a>).
+            </p>
+
+            <p>
+                Fortress knows how to manage components that have been developed using a
+                rigid <em>lifecycle</em> contract called
+                <a href="http://wiki.apache.org/excalibur/AvalonFramework">Avalon-Framework</a>.
+                In the next upcoming release, fortress will also be able to manage ordinary
+                javabeans, and support for other kinds of Inversion of Control are planned.
+            </p>
+
+            <p>
+                Besides providing fortress, excalibur also provides a small library of very
+                useful <a href="http://excalibur.apache.org/component-list.html">components</a>.
+                We also distribute some of the libraries used to build fortress (and some
+                other containers) seperately. This selection of libraries is called
+                <a href="http://excalibur.apache.org/containerkit.html">containerkit</a>.
+            </p>
+
+        </section>
+
+        <section name="So why is excalibur an interesting project?">
+
             <p>Here's a few partial answers.</p>
 
             <p>
