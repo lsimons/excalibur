@@ -227,6 +227,7 @@ public class InstrumentedResourceLimitingPool
         if( m_disposed ) throw new IllegalStateException( "Already Disposed" );
 
         Poolable poolable;
+        int readySize;
         synchronized( m_semaphore )
         {
             // If trimming is enabled then trim if it is time
@@ -377,6 +378,8 @@ public class InstrumentedResourceLimitingPool
                     }
                 }
             }
+            
+            readySize = getReadySizeSync();
         }
 
         if( getLogger().isDebugEnabled() )
@@ -386,10 +389,7 @@ public class InstrumentedResourceLimitingPool
 
         // Notify the InstrumentManager
         m_getsInstrument.increment();
-        if( m_readySizeInstrument.isActive() )
-        {
-            m_readySizeInstrument.setValue( getReadySize() );
-        }
+        m_readySizeInstrument.setValue( readySize );
 
         return poolable;
     }
@@ -407,6 +407,7 @@ public class InstrumentedResourceLimitingPool
             ( (Recyclable)poolable ).recycle();
         }
 
+        int readySize;
         synchronized( m_semaphore )
         {
             if( m_size <= m_max )
@@ -452,14 +453,13 @@ public class InstrumentedResourceLimitingPool
 
                 permanentlyRemovePoolable( poolable );
             }
+            
+            readySize = getReadySizeSync();
         }
 
         // Notify the InstrumentManager
         m_putsInstrument.increment();
-        if( m_readySizeInstrument.isActive() )
-        {
-            m_readySizeInstrument.setValue( getReadySize() );
-        }
+        m_readySizeInstrument.setValue( readySize );
     }
 
     /*---------------------------------------------------------------
@@ -476,6 +476,8 @@ public class InstrumentedResourceLimitingPool
         m_disposed = true;
 
         // Any Poolables in the m_ready list need to be disposed of
+        int size;
+        int readySize;
         synchronized( m_semaphore )
         {
             // Remove objects in the ready list.
@@ -510,17 +512,14 @@ public class InstrumentedResourceLimitingPool
                 getLogger().debug( "There were " + m_size
                                    + " outstanding objects when the pool was disposed." );
             }
-
-            // Notify the InstrumentManager
-            if( m_sizeInstrument.isActive() )
-            {
-                m_sizeInstrument.setValue( getSize() );
-            }
-            if( m_readySizeInstrument.isActive() )
-            {
-                m_readySizeInstrument.setValue( getReadySize() );
-            }
+            
+            size = getSize();
+            readySize = getReadySizeSync();
         }
+
+        // Notify the InstrumentManager
+        m_sizeInstrument.setValue( size );
+        m_readySizeInstrument.setValue( readySize );
     }
 
     /*---------------------------------------------------------------
@@ -610,6 +609,8 @@ public class InstrumentedResourceLimitingPool
 
     /**
      * Returns the total number of Poolables created by the pool.  Includes active and ready.
+     *
+     * @return The total size.
      */
     public int getSize()
     {
@@ -618,12 +619,25 @@ public class InstrumentedResourceLimitingPool
 
     /**
      * Returns the number of available Poolables waiting in the pool.
+     * Only called when synchronized.
+     *
+     * @return The ready size.
+     */
+    private int getReadySizeSync()
+    {
+        return m_readySize + m_oldReadySize;
+    }
+    
+    /**
+     * Returns the number of available Poolables waiting in the pool.
+     *
+     * @return The ready size.
      */
     public int getReadySize()
     {
         synchronized( m_semaphore )
         {
-            return m_readySize + m_oldReadySize;
+            return getReadySizeSync();
         }
     }
 
@@ -642,11 +656,8 @@ public class InstrumentedResourceLimitingPool
 
         // Notify the InstrumentManager
         m_createsInstrument.increment();
-        if( m_sizeInstrument.isActive() )
-        {
-            // The size is incremented after this call in case an error is thrown.
-            m_sizeInstrument.setValue( getSize() + 1 );
-        }
+        // The size is incremented after this call in case an error is thrown.
+        m_sizeInstrument.setValue( getSize() + 1 );
 
         return (Poolable)obj;
     }
@@ -668,10 +679,7 @@ public class InstrumentedResourceLimitingPool
 
             // Notify the InstrumentManager
             m_decommissionsInstrument.increment();
-            if( m_sizeInstrument.isActive() )
-            {
-                m_sizeInstrument.setValue( getSize() );
-            }
+            m_sizeInstrument.setValue( getSize() );
         }
         catch( Exception e )
         {
