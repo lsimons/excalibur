@@ -69,17 +69,6 @@ public class DefaultInstrumentManagerImpl
     implements Configurable, Initializable, Disposable, DefaultInstrumentManager,
         Instrumentable, Runnable
 {
-    public static final String INSTRUMENT_TOTAL_MEMORY = "total-memory";
-    public static final String INSTRUMENT_FREE_MEMORY = "free-memory";
-    public static final String INSTRUMENT_MEMORY = "memory";
-    public static final String INSTRUMENT_ACTIVE_THREAD_COUNT = "active-thread-count";
-    public static final String INSTRUMENT_REGISTRATIONS = "instrumentable-registrations";
-    public static final String INSTRUMENT_INSTRUMENTABLES = "instrumentables";
-    public static final String INSTRUMENT_INSTRUMENTS = "instruments";
-    public static final String INSTRUMENT_SAMPLES = "samples";
-    public static final String INSTRUMENT_LEASED_SAMPLES = "leased-samples";
-    public static final String INSTRUMENT_LEASE_REQUESTS = "lease-requests";
-    
     /** The name used to identify this InstrumentManager. */
     private String m_name;
 
@@ -170,6 +159,12 @@ public class DefaultInstrumentManagerImpl
     /** Instrument used to track the number of lease requests. */
     private CounterInstrument m_leaseRequestsInstrument;
     
+    /** Instrument used to track the number of state saves performed. */
+    private CounterInstrument m_stateSavesInstrument;
+    
+    /** Instrument used to track the time it takes to save the state. */
+    private ValueInstrument m_stateSaveTimeInstrument;
+    
     /** State Version. */
     private int m_stateVersion;
 
@@ -195,16 +190,18 @@ public class DefaultInstrumentManagerImpl
     public DefaultInstrumentManagerImpl()
     {
         // Initialize the Instrumentable elements.
-        m_totalMemoryInstrument = new ValueInstrument( INSTRUMENT_TOTAL_MEMORY );
-        m_freeMemoryInstrument = new ValueInstrument( INSTRUMENT_FREE_MEMORY );
-        m_memoryInstrument = new ValueInstrument( INSTRUMENT_MEMORY );
-        m_activeThreadCountInstrument = new ValueInstrument( INSTRUMENT_ACTIVE_THREAD_COUNT );
-        m_registrationsInstrument = new CounterInstrument( INSTRUMENT_REGISTRATIONS );
-        m_instrumentablesInstrument = new ValueInstrument( INSTRUMENT_INSTRUMENTABLES );
-        m_instrumentsInstrument = new ValueInstrument( INSTRUMENT_INSTRUMENTS );
-        m_samplesInstrument = new ValueInstrument( INSTRUMENT_SAMPLES );
-        m_leasedSamplesInstrument = new ValueInstrument( INSTRUMENT_LEASED_SAMPLES );
-        m_leaseRequestsInstrument = new CounterInstrument( INSTRUMENT_LEASE_REQUESTS );
+        m_totalMemoryInstrument = new ValueInstrument( "total-memory" );
+        m_freeMemoryInstrument = new ValueInstrument( "free-memory" );
+        m_memoryInstrument = new ValueInstrument( "memory" );
+        m_activeThreadCountInstrument = new ValueInstrument( "active-thread-count" );
+        m_registrationsInstrument = new CounterInstrument( "instrumentable-registrations" );
+        m_instrumentablesInstrument = new ValueInstrument( "instrumentables" );
+        m_instrumentsInstrument = new ValueInstrument( "instruments" );
+        m_samplesInstrument = new ValueInstrument( "samples" );
+        m_leasedSamplesInstrument = new ValueInstrument( "leased-samples" );
+        m_leaseRequestsInstrument = new CounterInstrument( "lease-requests" );
+        m_stateSavesInstrument = new CounterInstrument( "state-saves" );
+        m_stateSaveTimeInstrument = new ValueInstrument( "state-save-time" );
     }
 
     /*---------------------------------------------------------------
@@ -748,7 +745,9 @@ public class DefaultInstrumentManagerImpl
             m_instrumentsInstrument,
             m_samplesInstrument,
             m_leasedSamplesInstrument,
-            m_leaseRequestsInstrument
+            m_leaseRequestsInstrument,
+            m_stateSavesInstrument,
+            m_stateSaveTimeInstrument
         };
     }
 
@@ -1146,6 +1145,9 @@ public class DefaultInstrumentManagerImpl
         {
             getLogger().warn( "Unable to save the Instrument Manager state", e );
         }
+        
+        m_stateSavesInstrument.increment();
+        m_stateSaveTimeInstrument.setValue( (int)( System.currentTimeMillis() - now ) );
     }
 
     /**
