@@ -18,8 +18,6 @@ package org.apache.avalon.excalibur.logger;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.avalon.excalibur.i18n.ResourceManager;
-import org.apache.avalon.excalibur.i18n.Resources;
 import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
@@ -38,9 +36,6 @@ public class DefaultLogTargetManager
     extends AbstractLogEnabled
     implements LogTargetManager, LogTargetFactoryManageable, Configurable
 {
-    private static final Resources REZ =
-        ResourceManager.getPackageResources( DefaultLogTargetManager.class );
-
     /** Map for ID to LogTarget mapping */
     final private Map m_targets = new HashMap();
 
@@ -78,7 +73,7 @@ public class DefaultLogTargetManager
     {
         if( null == m_factoryManager )
         {
-            final String message = REZ.getString( "target.error.null-target-factory" );
+            final String message = "LogTargetFactory not received.";
             throw new ConfigurationException( message );
         }
 
@@ -89,14 +84,16 @@ public class DefaultLogTargetManager
             final LogTargetFactory logTargetFactory = m_factoryManager.getLogTargetFactory( targetName );
             if( logTargetFactory == null )
             {
-                final String message = REZ.getString( "target.error.missing", targetName );
+                final String message =
+                    "Factory definition for '" + targetName +
+                    "' missing from logger configuration.";
                 throw new ConfigurationException( message );
             }
             final LogTarget logTarget = logTargetFactory.createTarget( confs[ i ] );
             final String targetId = confs[ i ].getAttribute( "id" );
             if( getLogger().isDebugEnabled() )
             {
-                final String message = REZ.getString( "target.notice.add", targetId );
+                final String message = "Added new LogTarget of id " + targetId;
                 getLogger().debug( message );
             }
             m_targets.put( targetId, logTarget );

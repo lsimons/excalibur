@@ -18,11 +18,10 @@ package org.apache.avalon.excalibur.logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
-import org.apache.avalon.excalibur.i18n.ResourceManager;
-import org.apache.avalon.excalibur.i18n.Resources;
+import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
@@ -32,13 +31,12 @@ import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.logger.AvalonFormatter;
 import org.apache.avalon.framework.logger.LogKitLogger;
-import org.apache.avalon.framework.activity.Disposable;
 import org.apache.log.Hierarchy;
 import org.apache.log.LogTarget;
 import org.apache.log.Logger;
 import org.apache.log.Priority;
-import org.apache.log.util.Closeable;
 import org.apache.log.output.io.FileTarget;
+import org.apache.log.util.Closeable;
 
 /**
  * A {@link LoggerManager} that supports the old &lt;logs version="1.0"/&gt;
@@ -51,9 +49,6 @@ public class SimpleLogKitManager
     extends AbstractLogEnabled
     implements LoggerManager, Contextualizable, Configurable, Disposable
 {
-    private static final Resources REZ =
-        ResourceManager.getPackageResources( SimpleLogKitManager.class );
-
     private static final String DEFAULT_FORMAT =
         "%7.7{priority} %23.23{time:yyyy-MM-dd' 'HH:mm:ss.SSS} [%8.8{category}] (%{context}): "
         + "%{message}\n%{throwable}";
@@ -191,7 +186,8 @@ public class SimpleLogKitManager
             catch( final IOException ioe )
             {
                 final String message =
-                    REZ.getString( "target.nocreate", name, file, ioe.getMessage() );
+                    "Error creating LogTarget named \"" + name + "\" for file " +
+                    file + ". (Reason: " + ioe.getMessage() + ").";
                 throw new ConfigurationException( message, ioe );
             }
 
@@ -224,21 +220,27 @@ public class SimpleLogKitManager
             final LogTarget logTarget = (LogTarget)targets.get( target );
             if( null == target )
             {
-                final String message = REZ.getString( "unknown-target", target, name );
+                final String message =
+                    "Unable to locate LogTarget named \"" + target +
+                    "\" for Logger named \"" + name + "\".";
                 throw new ConfigurationException( message );
             }
 
             final Priority priority = Priority.getPriorityForName( priorityName );
             if( !priority.getName().equals( priorityName ) )
             {
-                final String message = REZ.getString( "unknown-priority", priorityName, name );
+                final String message =
+                    "Unknown priority \"" + priorityName + "\" for Logger named \"" +
+                    name + "\".";
                 throw new ConfigurationException( message );
             }
 
             if( getLogger().isDebugEnabled() )
             {
                 final String message =
-                    REZ.getString( "category-create", name, target, priorityName );
+                    "Creating a log category named \"" + name +
+                    "\" that writes to \"" + target + "\" target at priority \"" +
+                    priorityName + "\".";
                 getLogger().debug( message );
             }
 
