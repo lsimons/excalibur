@@ -19,7 +19,9 @@ package org.apache.excalibur.instrument.manager.http.server;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
@@ -28,6 +30,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -52,8 +55,30 @@ public class HTTPServer
     /** Optimized array of the handler list that lets us avoid synchronization */
     private HTTPURLHandler[] m_handlerArray;
     
+    /** Access log file name.  Null if not configured. */
+    private String m_accessLogFile;
+    
+    /** The currently open log file.  May be null. */
+    private File m_currentLogFile;
+    
+    /** The currently open log PrintWriter. */
+    private PrintWriter m_currentLogWriter;
+    
+    /** DateFormat used when generating log file names.  Only use when synchronized. */
+    private SimpleDateFormat m_dayFormat = new SimpleDateFormat( "yyyy-MM-dd" );
+    
+    /** DateFormat used when generating log entries.  Only use when synchronized. */
+    private SimpleDateFormat m_logTimeFormat = new SimpleDateFormat( "dd/MMM/yyyy:HH:mm:ss Z" );
+    
     /** Number of requests. */
     private CounterInstrument m_instrumentRequests;
+    
+    /** Number of response bytes sent to the client.  Includes all bytes, not
+     *   only the content. */
+    private CounterInstrument m_instrumentResponseBytes;
+    
+    /** Number of request bytes received from the client. */
+    private CounterInstrument m_instrumentRequestBytes;
     
     /*---------------------------------------------------------------
      * Constructors
@@ -70,11 +95,36 @@ public class HTTPServer
         super( port, bindAddress );
         
         addInstrument( m_instrumentRequests = new CounterInstrument( "requests" ) );
+        addInstrument( m_instrumentResponseBytes = new CounterInstrument( "response-bytes" ) );
+        addInstrument( m_instrumentRequestBytes = new CounterInstrument( "request-bytes" ) );
     }
     
     /*---------------------------------------------------------------
      * AbstractSocketServer Methods
      *-------------------------------------------------------------*/
+    
+    /**
+     * Stops the server.
+     *
+     * @throws Exception If there are any problems stopping the component.
+     */
+    public void stop()
+        throws Exception
+    {
+        super.stop();
+        
+        // Close the logger if it is open.
+        synchronized( this )
+        {
+            if ( m_currentLogWriter != null )
+            {
+                m_currentLogWriter.close();
+                m_currentLogWriter = null;
+                m_currentLogFile = null;
+            }
+        }
+    }
+    
     /**
      * Handle a newly connected socket.  The implementation need not
      *  worry about closing the socket.
@@ -89,10 +139,12 @@ public class HTTPServer
                 + Thread.currentThread().getName() );
         }
         
+        String ip = socket.getInetAddress().getHostAddress();
+        
         try
         {
             // As long as we have valid requests, keep the connection open.
-            while ( handleRequest( socket.getInputStream(), socket.getOutputStream() )
+            while ( handleRequest( socket.getInputStream(), socket.getOutputStream(), ip )
                 && !isStopping() )
             {
             }
@@ -120,6 +172,20 @@ public class HTTPServer
     /*---------------------------------------------------------------
      * Methods
      *-------------------------------------------------------------*/
+    
+    /**
+     * Access log file name.  Null if not configured.
+     *  If the log file name contains the string "yyyy_mm_dd" then that
+     *  token will be replaced with the current day and the file will
+     *  be rolled each day at midnight.
+     *
+     * @param accessLogFile Name of the log file or null if disabled.
+     */
+    public void setAccessLogFile( String accessLogFile )
+    {
+        m_accessLogFile = accessLogFile;
+    }
+    
     /**
      * Registers a new HTTP URL Handler with the server.
      *
@@ -134,7 +200,91 @@ public class HTTPServer
         }
     }
     
-    private boolean handleRequest( InputStream is, OutputStream os )
+    private void logAccessEvent( String ip,
+                                 String method,
+                                 String url,
+                                 int errorCode,
+                                 int contentLength,
+                                 String referrer,
+                                 String userAgent )
+    {
+        if ( m_accessLogFile == null )
+        {
+            return;
+        }
+        
+        Date now = new Date();
+        
+        synchronized( this )
+        {
+            File file;
+            int datePos = m_accessLogFile.indexOf( "yyyy_mm_dd" );
+            if ( datePos >= 0 )
+            {
+                StringBuffer sb = new StringBuffer();
+                if ( datePos > 0 )
+                {
+                    sb.append( m_accessLogFile.substring( 0, datePos ) );
+                }
+                sb.append( m_dayFormat.format( now ) );
+                if ( datePos + 10 < m_accessLogFile.length() )
+                {
+                    sb.append( m_accessLogFile.substring( datePos + 10 ) );
+                }
+                
+                file = new File( sb.toString() );
+            }
+            else
+            {
+                file = new File( m_accessLogFile );
+            }
+            
+            if ( ( m_currentLogFile == null ) || ( !m_currentLogFile.equals( file ) ) )
+            {
+                // Open a new log file.
+                if ( m_currentLogWriter != null )
+                {
+                    m_currentLogWriter.close();
+                }
+                try
+                {
+                    m_currentLogWriter = new PrintWriter( new FileWriter( file ) );
+                    m_currentLogFile = file;
+                }
+                catch ( IOException e )
+                {
+                    getLogger().warn( "Unable to open: " + m_currentLogFile );
+                    m_currentLogWriter = null;
+                    m_currentLogFile = null;
+                    return;
+                }
+            }
+            
+            // Now log the entry.
+            StringBuffer sb = new StringBuffer();
+            sb.append( ip );
+            sb.append( " - - [" );
+            sb.append( m_logTimeFormat.format( now ) );
+            sb.append( "] \"" );
+            sb.append( method );
+            sb.append( " " );
+            sb.append( url );
+            sb.append( "\" " );
+            sb.append( errorCode );
+            sb.append( " " );
+            sb.append( contentLength );
+            sb.append( " \"" );
+            sb.append( referrer );
+            sb.append( "\" \"" );
+            sb.append( userAgent );
+            sb.append( "\"" );
+            
+            m_currentLogWriter.println( sb.toString() );
+            m_currentLogWriter.flush();
+        }
+    }
+    
+    private boolean handleRequest( InputStream is, OutputStream os, String ip )
         throws IOException
     {
         // We only support the GET method and know nothing of headers so this is easy.
@@ -150,14 +300,40 @@ public class HTTPServer
             // EOF
             return false;
         }
-        
-        // Read any headers until we get a blank line
-        String header;
-        do
+            
+        String referrer = "-";
+        String userAgent = "-";
+        int requestBytes = request.getBytes().length + 1;
+        try
         {
-            header = r.readLine();
+            // Read any headers until we get a blank line
+            String header;
+            do
+            {
+                header = r.readLine();
+                if ( header != null )
+                {
+                    if ( header.startsWith( "User-Agent: " ) )
+                    {
+                        userAgent = header.substring( 12 );
+                    }
+                    else if ( header.startsWith( "Referer: " ) )
+                    {
+                        referrer = header.substring( 9 );
+                    }
+                    
+                    requestBytes += header.getBytes().length + 1;
+                }
+            }
+            while ( ( header != null ) && ( header.length() > 0 ) );
         }
-        while ( ( header != null ) && ( header.length() > 0 ) );
+        finally
+        {
+            if ( requestBytes > 0 )
+            {
+                m_instrumentRequestBytes.increment( requestBytes );
+            }
+        }
         
         if ( getLogger().isDebugEnabled() )
         {
@@ -171,12 +347,15 @@ public class HTTPServer
         ByteArrayOutputStream hbos = new ByteArrayOutputStream();
         PrintWriter out = new PrintWriter( hbos );
         
+        String method = "ERROR";
+        String url = "";
+        
         // Parse the header to make sure it is valid.
         StringTokenizer st = new StringTokenizer( request, " " );
         if ( st.countTokens() == 3 )
         {
-            String method = st.nextToken();
-            String url = st.nextToken();
+            method = st.nextToken();
+            url = st.nextToken();
             String version = st.nextToken();
             
             if ( method.equals( "GET" ) && version.startsWith( "HTTP/" ) )
@@ -272,13 +451,21 @@ public class HTTPServer
                             
                             // Write the contents of the headers.
                             out.flush();
-                            os.write( hbos.toByteArray() );
+                            byte[] responseBytes = hbos.toByteArray();
+                            os.write( responseBytes );
                             
                             // Write out the actual data directly to the stream.
                             os.write( contents, 0, contents.length );
                             
                             // Flush the stream and we are done.
                             os.flush();
+                            
+                            // Record the total number of bytes sent to the client.
+                            m_instrumentResponseBytes.increment(
+                                responseBytes.length + contents.length );
+                            
+                            // Log the request.
+                            logAccessEvent( ip, method, url, 302, contents.length, referrer, userAgent );
                             
                             // Do not close the output stream as it may be reused.
                             
@@ -313,13 +500,21 @@ public class HTTPServer
                             
                             // Write the contents of the headers.
                             out.flush();
-                            os.write( hbos.toByteArray() );
+                            byte[] responseBytes = hbos.toByteArray();
+                            os.write( responseBytes );
                             
                             // Write out the actual data directly to the stream.
                             os.write( contents, 0, contents.length );
                             
                             // Flush the stream and we are done.
                             os.flush();
+                            
+                            // Record the total number of bytes sent to the client.
+                            m_instrumentResponseBytes.increment(
+                                responseBytes.length + contents.length );
+                            
+                            // Log the request.
+                            logAccessEvent( ip, method, url, 200, contents.length, referrer, userAgent );
                             
                             // Do not close the output stream as it may be reused.
                             
@@ -359,8 +554,15 @@ public class HTTPServer
         
         // Write the contents of the headers.
         out.flush();
-        os.write( hbos.toByteArray() );
+        byte[] responseBytes = hbos.toByteArray();
+        os.write( responseBytes );
         os.flush();
+        
+        // Record the total number of bytes sent to the client.
+        m_instrumentResponseBytes.increment( responseBytes.length );
+        
+        // Log the request.
+        logAccessEvent( ip, method, url, 404, 0, referrer, userAgent );
         
         return false;
     }

@@ -270,6 +270,26 @@ public abstract class AbstractHTTPURLHandler
         }
     }
     
+    public int[] getIntegerParameters( Map params, String name, int defaultValue )
+    {
+        String[] values = getParameters( params, name );
+        int[] iValues = new int[values.length];
+        
+        for ( int i = 0; i < values.length; i++ )
+        {
+            try
+            {
+                iValues[i] = Integer.parseInt( values[i] );
+            }
+            catch ( NumberFormatException e )
+            {
+                iValues[i] = defaultValue;
+            }
+        }
+        
+        return iValues;
+    }
+    
     public long[] getLongParameters( Map params, String name, long defaultValue )
     {
         String[] values = getParameters( params, name );

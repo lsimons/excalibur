@@ -64,7 +64,6 @@ public class SampleChartHandler
     /**
      * Creates a new SampleChartHandler.
      *
-     * @param path The path handled by this handler.
      * @param manager Reference to the instrument manager interface.
      * @param width Default image width.
      * @param height Default image height.

@@ -41,8 +41,7 @@ public class XMLSnapshotsHandler
     /**
      * Creates a new XMLSnapshotsHandler.
      *
-     * @param path The path handled by this handler.
-     * @param contentType The content type.
+     * @param manager Reference to the DefaultInstrumentManager.
      */
     public XMLSnapshotsHandler( DefaultInstrumentManager manager )
     {
@@ -67,7 +66,7 @@ public class XMLSnapshotsHandler
         boolean packed = ( getParameter( parameters, "packed", null ) != null );
         boolean compact = ( getParameter( parameters, "compact", null ) != null );
         
-        if ( ( baseTimes.length == 0 ) && ( baseTimes.length > 0 ) )
+        if ( ( baseTimes.length == 0 ) && ( names.length > 0 ) )
         {
             baseTimes = new long[baseTimes.length];
         }
@@ -106,7 +105,7 @@ public class XMLSnapshotsHandler
             outputLine( out, "", packed, "<samples/>" );
         }
     }
-            
+    
     /*---------------------------------------------------------------
      * Methods
      *-------------------------------------------------------------*/

@@ -85,7 +85,7 @@ public abstract class AbstractXMLHandler
             + "name=\"" + makeSafeAttribute( manager.getName() ) + "\" "
             + "description=\"" + makeSafeAttribute( manager.getDescription() ) + "\" "
             + "state-version=\"" + manager.getStateVersion() + "\" "
-            + "read-only=\"" + readOnly + "\">" );
+            + "batched-updates=\"true\" read-only=\"" + readOnly + "\">" );
         
         String childIndent = indent + INDENT;
         

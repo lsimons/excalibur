@@ -166,9 +166,12 @@ public class InstrumentManagerHTTPConnector
         
         m_readOnly = configuration.getAttributeAsBoolean( "read-only", false );
         
+        String accessLogFile = configuration.getAttribute( "access-log", null );
+        
         m_httpServer = new HTTPServer( m_port, m_bindAddr );
         m_httpServer.enableLogging( getLogger().getChildLogger( "server" ) );
         m_httpServer.setInstrumentableName( "server" );
+        m_httpServer.setAccessLogFile( accessLogFile );
         addChildInstrumentable( m_httpServer );
     }
 
@@ -198,7 +201,11 @@ public class InstrumentManagerHTTPConnector
                 initAndRegisterHandler(
                     new XMLSampleLeaseHandler( m_manager, this ), nameBase + "sample-lease" );
                 initAndRegisterHandler(
+                    new XMLSampleLeasesHandler( m_manager, this ), nameBase + "sample-leases" );
+                initAndRegisterHandler(
                     new XMLCreateSampleHandler( m_manager, this ), nameBase + "create-sample" );
+                initAndRegisterHandler(
+                    new XMLCreateSamplesHandler( m_manager, this ), nameBase + "create-samples" );
                 initAndRegisterHandler(	new XMLGCHandler( m_manager ), nameBase + "gc" );
             }
         }
@@ -217,6 +224,7 @@ public class InstrumentManagerHTTPConnector
                 nameBase + "sample" );
             initAndRegisterHandler( new SampleChartHandler(
                 m_manager, m_chartWidth, m_chartHeight, m_antialias ), "sample-chart" );
+            initAndRegisterHandler( new FavIconHandler(), "favicon" );
             
             if ( !m_readOnly )
             {

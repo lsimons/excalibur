@@ -30,9 +30,10 @@ import java.util.Map;
  */
 public interface HTTPURLHandler
 {
-    String CONTENT_TYPE_TEXT_HTML  = "text/html";
-    String CONTENT_TYPE_TEXT_XML   = "text/xml";
-    String CONTENT_TYPE_IMAGE_JPEG = "image/jpeg";
+    String CONTENT_TYPE_TEXT_HTML    = "text/html";
+    String CONTENT_TYPE_TEXT_XML     = "text/xml";
+    String CONTENT_TYPE_IMAGE_JPEG   = "image/jpeg";
+    String CONTENT_TYPE_IMAGE_X_ICON = "image/x-icon";
     
     /**
      * Returns the path handled by this handler.
