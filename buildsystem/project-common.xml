@@ -319,6 +319,7 @@
                     <include>**/*.jpg</include>
                     <include>**/*.png</include>
                     <include>**/*.gif</include>
+                    <include>**/*.ico</include>
                     <include>**/*.dtd</include>
                     <include>**/*.properties</include>
                     <include>**/*.xinfo</include>
