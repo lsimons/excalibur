@@ -7,7 +7,6 @@
     
     <!-- the ordering is important! :-D -->
     <property name="subprojects" value="
-                                      compatibility
                                       instrument
                                       i18n
                                       configuration
