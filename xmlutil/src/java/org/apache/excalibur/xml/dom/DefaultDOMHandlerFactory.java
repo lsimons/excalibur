@@ -16,13 +16,10 @@
  */
 package org.apache.excalibur.xml.dom;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 
-import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.component.Component;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.thread.ThreadSafe;
@@ -35,21 +32,9 @@ import org.w3c.dom.Document;
  */
 public class DefaultDOMHandlerFactory
     extends AbstractLogEnabled
-    implements DOMHandlerFactory, Initializable, Component, ThreadSafe
+    implements DOMHandlerFactory, Component, ThreadSafe
 {
     private final SAXTransformerFactory m_transformerFactory = (SAXTransformerFactory)TransformerFactory.newInstance();
-    private final DocumentBuilderFactory m_documentBuilderFactory = DocumentBuilderFactory.newInstance();
-    private DocumentBuilder m_documentBuilder;
-
-    /* (non-Javadoc)
-     * @see org.apache.avalon.framework.activity.Initializable#initialize()
-     */
-    public void initialize()
-        throws Exception
-    {
-        m_documentBuilderFactory.setNamespaceAware( true );
-        m_documentBuilder = m_documentBuilderFactory.newDocumentBuilder();
-    }
 
     /* (non-Javadoc)
      * @see org.apache.excalibur.xml.dom.DOMHandlerFactory#createDOMHandler()
@@ -57,8 +42,6 @@ public class DefaultDOMHandlerFactory
     public DOMHandler createDOMHandler()
         throws Exception
     {
-        final TransformerHandler transformerHandler =
-            m_transformerFactory.newTransformerHandler();
         return createDOMHandler( null );
     }
 
