@@ -28,13 +28,13 @@ import org.xml.sax.ext.LexicalHandler;
  * its {@link XMLConsumer}s interface.
  * <br>
  *
- * @deprecated Moved to org.apache.excalibur.xml.sax package. Modified to be 
- * thread safe.
+ * Modified to be thread safe.
+ * 
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  * @version CVS $Revision: 1.4 $ $Date: 2004/02/28 11:47:20 $
  */
 public class ContentHandlerWrapper
-    extends AbstractXMLConsumer
+    implements ContentHandler
 {
     /** The current {@link ContentHandler}. */
     private ContentHandler m_contentHandler;
