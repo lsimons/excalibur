@@ -70,7 +70,7 @@ public interface SourceResolver
      * (String, String, Map)}.
      * 
      * @return the resolved source object.
-     * @throws MalformetURLException if <code>location</code> is malformed.
+     * @throws MalformedURLException if <code>location</code> is malformed.
      * @throws IOException if the source couldn't be created for some other reason.
      */
     Source resolveURI( String location )
@@ -87,7 +87,7 @@ public interface SourceResolver
      * @param parameters - Additional parameters for the URI. The parameters
      *                     are specific to the used scheme.
      * @return the resolved source object.
-     * @throws MalformetURLException if <code>location</code> is malformed.
+     * @throws MalformedURLException if <code>location</code> is malformed.
      * @throws IOException if the source couldn't be created for some other reason.
      */
     Source resolveURI( String location,

@@ -52,7 +52,7 @@ public final class ExpiresValidity
     }
 
     /**
-     * This method is never invoked as {@link #isValid} can always perform
+     * This method is never invoked as {@link #isValid()} can always perform
      * the complete check.
      * 
      * @see org.apache.excalibur.source.SourceValidity#isValid(SourceValidity)
