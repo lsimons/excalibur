@@ -65,7 +65,6 @@ public final class Component
     private final Vertex m_vertex;
     private final List m_dependencyNames;
     private final List m_serviceNames;
-    private final DocletTag[] m_otherAttributes;
 
     /**
      * Initialize a service with the type name.
@@ -85,8 +84,7 @@ public final class Component
         m_vertex = new Vertex( this );
         m_dependencyNames = new ArrayList( 10 );
         m_serviceNames = new ArrayList( 10 );
-        m_otherAttributes = m_javaClass.getTags();
-
+        
         final DocletTag[] tags = javaClass.getTagsByName( TAG_SERVICE );
         for ( int t = 0; t < tags.length; t++ )
         {
@@ -376,28 +374,34 @@ public final class Component
         {
             writer = new PrintWriter( new FileOutputStream( output ) );
 
-            for (int i = 0; i < m_otherAttributes.length; i++)
+            DocletTag[] tags = m_javaClass.getTags();
+
+            for (int i = 0; i < tags.length; i++)
             {
-                DocletTag tag = m_otherAttributes[i];
-                writer.print( tag.getName() );
-                writer.print( " [" );
-                String[] parameters = tag.getParameters();
-                boolean separator = false;
-                for (int j = 0; j < parameters.length; j++)
-                {
-                    String parameter = parameters[j];
-                    writer.print( parameter );
-                    if (!separator)
-                    {
-                        separator = true;
-                    }
-                    else
-                    {
-                        writer.print( ';' );
-                    }
-                }
-                writer.println( ']' );
+                DocletTag tag = tags[i];
+                writeDocletTag( writer, null, tag );
             }
+
+            // TODO: Do we need to inspect super classes?
+            final JavaMethod[] methods = m_javaClass.getMethods();
+        
+            for ( int i = 0; i < methods.length; i++ )
+            {
+                JavaMethod method = methods[i];
+                tags = method.getTags();
+                
+                if (tags.length == 0)
+                {
+                    continue;
+                }
+                
+                for (int j = 0; j < tags.length; j++)
+                {
+                    DocletTag tag = tags[j];
+                    writeDocletTag( writer, method, tag );
+                }
+            }
+
         }
         finally
         {
@@ -406,6 +410,49 @@ public final class Component
                 writer.close();
             }
         }
+    }
+    
+    private void writeDocletTag( PrintWriter writer, JavaMethod method, DocletTag tag )
+        throws IOException
+    {
+        if (method != null)
+        {
+            writer.print( '{' );
+            writer.print( method.getReturns().getValue() );
+            writer.print( ' ' );
+            writer.print( method.getName() );
+            writer.print( '(' );
+            JavaParameter[] params = method.getParameters();
+            for (int i = 0; i < params.length; i++)
+            {
+                JavaParameter param = params[i];
+                writer.print( param.getType().getValue() );
+                
+                if ( i + 1 < params.length )
+                {
+                    writer.print( ',' );
+                }
+            }
+            writer.print( ")} " );
+        }
+        writer.print( tag.getName() );
+        writer.print( " [" );
+        String[] parameters = tag.getParameters();
+        boolean separator = false;
+        for (int j = 0; j < parameters.length; j++)
+        {
+            String parameter = parameters[j];
+            writer.print( parameter );
+            if (!separator)
+            {
+                separator = true;
+            }
+            else
+            {
+                writer.print( ';' );
+            }
+        }
+        writer.println( ']' );
     }
 
     private String stripQuotes( final String value )

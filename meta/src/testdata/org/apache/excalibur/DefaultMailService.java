@@ -25,6 +25,9 @@ package org.apache.excalibur;
  */
 public class DefaultMailService implements MailService
 {
+    /**
+     * @excalibur.passthrought
+     */
     public void sendMail( String to, String from, String message )
     {
     }
