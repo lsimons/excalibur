@@ -24,12 +24,14 @@
     <body>
         <section name="XML Client">
             <p>
-                The HTTP Connector provides a way to connect the Instrument Manager using
-                HTTP requests to obtain XML descriptions of the contents of the file.
-                Used correctly, this interface provides a powerful and efficient way to
-                work with the Instrument Manager.
+                The HTTP Connector makes it possible for remote applications to connect
+                to an Instrument Manager.  The connector is capable of serving both
+                HTML and XML formatted content which makes it possible to monitor
+                and manipulate the Instruments registered with the Instrument Manager.
             </p>
             <p>
+                Used correctly, this interface provides a powerful and efficient way to
+                work with the Instrument Manager.
                 The Swing based <a href="java-client.html">Java client</a> makes use of
                 the XML interface to communicate with the Instrument Manager.
             </p>
@@ -112,7 +114,7 @@
                         <td><a href="xml-client-snapshots.html">Sample Snapshots</a></td>
                         <td>/snapshots.xml</td>
                         <td>
-                            The Sample Snapshots URL work simmilar to the Sample Snapshot URL
+                            The Sample Snapshots URL work similar to the Sample Snapshot URL
                             except that it makes it possible to request snapshots for several
                             Samples in a single request.
                         </td>
