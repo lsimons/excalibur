@@ -36,13 +36,14 @@ import javax.swing.JComponent;
  * Draws a nice pretty chart given a set of data.
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
- * @version CVS $Revision: 1.6 $ $Date: 2004/04/05 16:18:05 $
- * @since 4.1
  */
 public class LineChart
     extends JComponent
     implements MouseListener, MouseMotionListener
 {
+    /** Stores the time-zone offset for this JVM. */
+    private static long m_zoneOffset;
+    
     private Color m_lineColor = Color.red;
     private Color m_lightLineColor = new Color( 255, 128, 128 );
     private Color m_lightGridColor = new Color( 192, 192, 192 );
@@ -97,6 +98,15 @@ public class LineChart
     private boolean m_mousePressed;
     private int m_mouseX;
     private int m_mouseY;
+
+    /*---------------------------------------------------------------
+     * Static Initializer
+     *-------------------------------------------------------------*/
+    static
+    {
+        Calendar now = Calendar.getInstance();
+        m_zoneOffset = now.get( Calendar.ZONE_OFFSET );
+    }
 
     /*---------------------------------------------------------------
      * Constructor
@@ -398,7 +408,7 @@ public class LineChart
             // Calculate a base time for drawing the vertical lines.
             long baseTime = ( ( m_time - m_values.length * m_sampleInterval ) /
                 ( m_sampleInterval * m_lineSampleInterval ) ) *
-                ( m_sampleInterval * m_lineSampleInterval );
+                ( m_sampleInterval * m_lineSampleInterval ) - m_zoneOffset;
 
             // Draw each of the lines.
             int verticalLineNumber = 0;
