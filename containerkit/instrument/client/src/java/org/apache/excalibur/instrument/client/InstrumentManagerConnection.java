@@ -385,7 +385,10 @@ public abstract class InstrumentManagerConnection
         getTreeModel().refreshModel();
         
         // Handle the leased samples.
-        handleLeasedSamples();
+        if ( isConnected() )
+        {
+            handleLeasedSamples();
+        }
     }
 
     /**
@@ -955,5 +958,13 @@ public abstract class InstrumentManagerConnection
                 }
             }
         } );
+    }
+    
+    /**
+     * Returns a string representation of the connection.
+     */
+    public String toString()
+    {
+        return getClass().getName() + " : " + getKey();
     }
 }
