@@ -33,6 +33,9 @@ import org.apache.excalibur.instrument.manager.InstrumentableDescriptor;
 public class HTMLInstrumentManagerHandler
     extends AbstractHTMLHandler
 {
+    /** Reference to the connector. */
+    private InstrumentManagerHTTPConnector m_connector;
+    
     /*---------------------------------------------------------------
      * Constructors
      *-------------------------------------------------------------*/
@@ -40,10 +43,14 @@ public class HTMLInstrumentManagerHandler
      * Creates a new HTMLInstrumentManagerHandler.
      *
      * @param manager Reference to the DefaultInstrumentManager.
+     * @param connector The InstrumentManagerHTTPConnector.
      */
-    public HTMLInstrumentManagerHandler( DefaultInstrumentManager manager )
+    public HTMLInstrumentManagerHandler( DefaultInstrumentManager manager,
+                                         InstrumentManagerHTTPConnector connector )
     {
         super( "/instrument-manager.html", manager );
+        
+        m_connector = connector;
     }
     
     /*---------------------------------------------------------------
@@ -82,7 +89,12 @@ public class HTMLInstrumentManagerHandler
         startTable( out );
         tableRow( out, 0, "Name", getInstrumentManager().getName() );
         tableRow( out, 0, "Description", getInstrumentManager().getDescription() );
-        tableRow( out, 0, "GC", gcLabel );
+        
+        if ( !m_connector.isReadOnly() )
+        {
+            tableRow( out, 0, "GC", gcLabel );
+        }
+        
         endTable( out );
         
         InstrumentableDescriptor[] instrumentables =

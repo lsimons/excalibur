@@ -142,5 +142,34 @@ public interface DefaultInstrumentManager
      * Invokes garbage collection.
      */
     void invokeGarbageCollection();
+    
+    /**
+     * Returns the current number of leased samples.
+     *
+     * @return The current number of leased samples.
+     */
+    int getLeaseSampleCount();
+    
+    /**
+     * Returns the maximum number of leased samples that will be approved.
+     *
+     * @return The maximum number of leased samples.
+     */
+    int getMaxLeasedSamples();
+    
+    /**
+     * Returns the maximum size of a leased sample.
+     *
+     * @return The maximum size of a leased sample.
+     */
+    int getMaxLeasedSampleSize();
+    
+    /**
+     * Returns the maximum number of milliseconds that a lease will be granted
+     *  for.
+     *
+     * @return The maximum lease length.
+     */
+    long getMaxLeasedSampleLease();
 }
 

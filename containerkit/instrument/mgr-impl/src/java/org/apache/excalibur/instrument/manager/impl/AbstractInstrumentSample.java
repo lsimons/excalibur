@@ -309,7 +309,15 @@ abstract class AbstractInstrumentSample
      */
     public long extendLease( long lease )
     {
-        m_instrumentProxy.getInstrumentableProxy().getInstrumentManager().incrementLeaseRequests();
+        DefaultInstrumentManagerImpl manager =
+            m_instrumentProxy.getInstrumentableProxy().getInstrumentManager();
+        
+        // Make sure that the requested lease is valid.
+        lease = Math.max( 1, Math.min( lease, manager.getMaxLeasedSampleLease() ) );
+        
+        // Since the lease already exists, we know that we can always renew it.
+        
+        manager.incrementLeaseRequests();
         
         synchronized( this )
         {

@@ -337,9 +337,10 @@ public class HTTPServer
         
         // If we get here then the request failed.  Always return 404 for now.
         // Write the response.
-        out.println( "HTTP/1.1 404 Not found" );
+        out.println( "HTTP/1.1 404 Not Found" );
         out.println( "Date: " + new Date() );
         out.println( "Server: Avalon Instrument Manager HTTP Connector" );
+        out.println( "Content-Type: text/plain; charset=UTF-8" );
         out.println( "" );
         out.println( "The Requested page does not exist" );
         if ( error !=  null )

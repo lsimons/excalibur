@@ -79,6 +79,22 @@ public class InstrumentManagerHTTPConnector
     /** Antialias flag for images. */
     private boolean m_antialias;
     
+    /** The maximum number of leased samples which will be allowed.  This is
+     *   important to prevent denial of service attacks using connectors. */
+    private int m_maxLeasedSamples;
+    
+    /** The maximum size of a leased sample.  This is important to prevent
+     *   denial of service attacks using connectors. */
+    private int m_maxLeasedSampleSize;
+    
+    /** The maximum amount of time that a lease will be granted for.  This is
+     *   important to prevent denial of service attacks using connectors. */
+    private long m_maxLeasedSampleLease;
+    
+    /** True if the connector should only provide read-only access to the
+     *   Instrument Manager. */
+    private boolean m_readOnly;
+    
     private HTTPServer m_httpServer;
 
     /*---------------------------------------------------------------
@@ -132,7 +148,23 @@ public class InstrumentManagerHTTPConnector
         
         m_chartWidth = configuration.getAttributeAsInteger( "chart-width", 600 );
         m_chartHeight = configuration.getAttributeAsInteger( "chart-height", 120 );
-        m_antialias = configuration.getAttributeAsBoolean( "antialias", true );
+        m_antialias = configuration.getAttributeAsBoolean( "antialias", false );
+        
+        // Get configuration values which limit the leases that can be made.
+        //  Make sure that none are any less restrictive than the InstrumentManager.
+        int maxSamples = m_manager.getMaxLeasedSamples();
+        m_maxLeasedSamples = Math.min( maxSamples, configuration.getAttributeAsInteger(
+            "max-leased-samples", maxSamples ) );
+        
+        int maxSize = m_manager.getMaxLeasedSampleSize();
+        m_maxLeasedSampleSize = Math.min( maxSize, configuration.getAttributeAsInteger(
+            "max-leased-sample-size", maxSize ) );
+        
+        long maxLease = m_manager.getMaxLeasedSampleLease();
+        m_maxLeasedSampleLease = Math.min( maxLease, 1000L * configuration.getAttributeAsInteger(
+            "max-leased-sample-lease", (int)( maxLease / 1000 ) ) );
+        
+        m_readOnly = configuration.getAttributeAsBoolean( "read-only", false );
         
         m_httpServer = new HTTPServer( m_port, m_bindAddr );
         m_httpServer.enableLogging( getLogger().getChildLogger( "server" ) );
@@ -151,40 +183,51 @@ public class InstrumentManagerHTTPConnector
         {
             // XML
             String nameBase = "xml-";
-            initAndRegisterHandler(
-                new XMLInstrumentManagerHandler( m_manager ), nameBase + "instrument-manager" );
-            initAndRegisterHandler(
-                new XMLInstrumentableHandler( m_manager ), nameBase + "instrumentable" );
-            initAndRegisterHandler(
-                new XMLInstrumentHandler( m_manager ), nameBase + "instrument" );
+            initAndRegisterHandler( new XMLInstrumentManagerHandler( m_manager, this ),
+                nameBase + "instrument-manager" );
+            initAndRegisterHandler( new XMLInstrumentableHandler( m_manager ),
+                nameBase + "instrumentable" );
+            initAndRegisterHandler(	new XMLInstrumentHandler( m_manager ),
+                nameBase + "instrument" );
             initAndRegisterHandler( new XMLSampleHandler( m_manager ), nameBase + "sample" );
-            initAndRegisterHandler(
-                new XMLSampleLeaseHandler( m_manager ), nameBase + "sample-lease" );
-            initAndRegisterHandler(
-                new XMLCreateSampleHandler( m_manager ), nameBase + "create-sample" );
             initAndRegisterHandler(	new XMLSnapshotHandler( m_manager ), nameBase + "snapshot" );
             initAndRegisterHandler(	new XMLSnapshotsHandler( m_manager ), nameBase + "snapshots" );
-            initAndRegisterHandler(	new XMLGCHandler( m_manager ), nameBase + "gc" );
+            
+            if ( !m_readOnly )
+            {
+                initAndRegisterHandler(
+                    new XMLSampleLeaseHandler( m_manager, this ), nameBase + "sample-lease" );
+                initAndRegisterHandler(
+                    new XMLCreateSampleHandler( m_manager, this ), nameBase + "create-sample" );
+                initAndRegisterHandler(	new XMLGCHandler( m_manager ), nameBase + "gc" );
+            }
         }
         
         if ( m_html )
         {
             // HTML
             String nameBase = "html-";
-            initAndRegisterHandler(
-                new HTMLInstrumentManagerHandler( m_manager ), nameBase + "instrument-manager" );
-            initAndRegisterHandler(
-                new HTMLInstrumentableHandler( m_manager ), nameBase + "instrumentable" );
-            initAndRegisterHandler(
-                new HTMLInstrumentHandler( m_manager ), nameBase + "instrument" );
-            initAndRegisterHandler( new HTMLSampleHandler( m_manager ), nameBase + "sample" );
-            initAndRegisterHandler(
-                new HTMLSampleLeaseHandler( m_manager ), nameBase + "sample-lease" );
-            initAndRegisterHandler(
-                new HTMLCreateSampleHandler( m_manager ), nameBase + "create-sample" );
+            initAndRegisterHandler( new HTMLInstrumentManagerHandler( m_manager, this ),
+                nameBase + "instrument-manager" );
+            initAndRegisterHandler( new HTMLInstrumentableHandler( m_manager ),
+                nameBase + "instrumentable" );
+            initAndRegisterHandler( new HTMLInstrumentHandler( m_manager, this ),
+                nameBase + "instrument" );
+            initAndRegisterHandler( new HTMLSampleHandler( m_manager, this ),
+                nameBase + "sample" );
             initAndRegisterHandler( new SampleChartHandler(
                 m_manager, m_chartWidth, m_chartHeight, m_antialias ), "sample-chart" );
-            initAndRegisterHandler(	new HTMLGCHandler( m_manager ), nameBase + "gc" );
+            
+            if ( !m_readOnly )
+            {
+                initAndRegisterHandler(
+                    new HTMLSampleLeaseHandler( m_manager, this ), nameBase + "sample-lease" );
+                initAndRegisterHandler(
+                    new HTMLCreateSampleHandler( m_manager, this ), nameBase + "create-sample" );
+                initAndRegisterHandler(	new HTMLGCHandler( m_manager ), nameBase + "gc" );
+            }
+        
+            // The root handler must be registered last as it will handle any URL.
             initAndRegisterHandler( new HTMLRootHandler( m_manager ), nameBase + "root" );
         }
         
@@ -204,6 +247,48 @@ public class InstrumentManagerHTTPConnector
     /*---------------------------------------------------------------
      * Methods
      *-------------------------------------------------------------*/
+    /**
+     * Returns the maximum number of leased samples that will be approved.
+     *
+     * @return The maximum number of leased samples.
+     */
+    int getMaxLeasedSamples()
+    {
+        return m_maxLeasedSamples;
+    }
+    
+    /**
+     * Returns the maximum size of a leased sample.
+     *
+     * @return The maximum size of a leased sample.
+     */
+    int getMaxLeasedSampleSize()
+    {
+        return m_maxLeasedSampleSize;
+    }
+    
+    /**
+     * Returns the maximum number of milliseconds that a lease will be granted
+     *  for.
+     *
+     * @return The maximum lease length.
+     */
+    long getMaxLeasedSampleLease()
+    {
+        return m_maxLeasedSampleLease;
+    }
+    
+    /**
+     * True if the connector should only provide read-only access to the
+     *   Instrument Manager.
+     *
+     * @return The read-only flag.
+     */
+    boolean isReadOnly()
+    {
+        return m_readOnly;
+    }
+    
     private void initAndRegisterHandler( AbstractHTTPURLHandler handler, String name )
         throws Exception
     {

@@ -262,7 +262,9 @@ public abstract class AbstractHTMLHandler
         endTable( out );
     }
     
-    protected void outputInstrumentSamples( PrintWriter out, InstrumentSampleDescriptor[] descs )
+    protected void outputInstrumentSamples( PrintWriter out,
+                                            InstrumentSampleDescriptor[] descs,
+                                            boolean readOnly )
         throws IOException
     {
         startTable( out );
@@ -297,10 +299,14 @@ public abstract class AbstractHTMLHandler
                 String renewUrl =
                     "sample-lease.html?name=" + urlEncode( desc.getName() ) + "&instrument=true&lease=";
                 
-                value = new Date( desc.getLeaseExpirationTime() ).toString()
-                    + " (Renew <a href='" + renewUrl + "600000'>10min</a>, "
-                    + "<a href='" + renewUrl + "3600000'>1hr</a>, "
-                    + "<a href='" + renewUrl + "86400000'>1day</a>)";
+                value = new Date( desc.getLeaseExpirationTime() ).toString();
+                if ( !readOnly )
+                {
+                    value = value
+                        + " (Renew <a href='" + renewUrl + "600000'>10min</a>, "
+                        + "<a href='" + renewUrl + "3600000'>1hr</a>, "
+                        + "<a href='" + renewUrl + "86400000'>1day</a>)";
+                }
                 
                 // Make the text red if it is about to expire.
                 if ( desc.getLeaseExpirationTime() - System.currentTimeMillis() < 300000 )

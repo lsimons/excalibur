@@ -35,6 +35,9 @@ import org.apache.excalibur.instrument.manager.NoSuchInstrumentSampleException;
 public class XMLSampleLeaseHandler
     extends AbstractXMLHandler
 {
+    /** Reference to the connector. */
+    private InstrumentManagerHTTPConnector m_connector;
+    
     /*---------------------------------------------------------------
      * Constructors
      *-------------------------------------------------------------*/
@@ -42,10 +45,14 @@ public class XMLSampleLeaseHandler
      * Creates a new XMLSampleLeaseHandler.
      *
      * @param manager Reference to the DefaultInstrumentManager.
+     * @param connector The InstrumentManagerHTTPConnector.
      */
-    public XMLSampleLeaseHandler( DefaultInstrumentManager manager )
+    public XMLSampleLeaseHandler( DefaultInstrumentManager manager,
+                                  InstrumentManagerHTTPConnector connector )
     {
         super( "/sample-lease.xml", manager );
+        
+        m_connector = connector;
     }
     
     /*---------------------------------------------------------------
@@ -74,6 +81,16 @@ public class XMLSampleLeaseHandler
         {
             throw new FileNotFoundException(
                 "The specified instrument does not exist: " + name );
+        }
+        
+        // The instrument manager will do its own tests of the lease, but the
+        //  restrictions on this connector may be stronger so they must be tested
+        //  here as well.
+        lease = Math.max( 1, Math.min( lease, m_connector.getMaxLeasedSampleLease() ) );
+        
+        if ( getInstrumentManager().getLeaseSampleCount() >= m_connector.getMaxLeasedSamples() )
+        {
+            lease = 1;
         }
         
         // Renew the lease

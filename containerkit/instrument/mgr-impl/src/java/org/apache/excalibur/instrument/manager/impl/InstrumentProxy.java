@@ -729,9 +729,14 @@ public class InstrumentProxy
                                              long sampleLease,
                                              int sampleType )
     {
-        getLogger().debug("Create new sample for " + m_name + ": interval=" + sampleInterval +
+        getLogger().debug( "Create new sample for " + m_name + ": interval=" + sampleInterval +
             ", size=" + sampleSize + ", lease=" + sampleLease + ", type=" +
             InstrumentSampleUtils.getInstrumentSampleTypeName( sampleType ) );
+        
+        DefaultInstrumentManagerImpl manager = m_instrumentableProxy.getInstrumentManager();
+        
+        // Make sure the sampleSize is valid.
+        sampleSize = Math.max( 1, Math.min( sampleSize, manager.getMaxLeasedSampleSize() ) );
         
         // Generate a name for the new sample
         String sampleName = InstrumentSampleUtils.generateFullInstrumentSampleName(
@@ -750,18 +755,36 @@ public class InstrumentProxy
             else
             {
                 // The new sample needs to be created.
+                
+                // Make sure the lease is valid.
+                boolean expired = false;
+                sampleLease =
+                    Math.max( 1, Math.min( sampleLease, manager.getMaxLeasedSampleLease() ) );
+                if ( ( manager.getLeaseSampleCount() >= manager.getMaxLeasedSamples() )
+                    || ( sampleLease == 1 ) )
+                {
+                    // Unable to grant any more leases.  We always need to return a lease
+                    //  object, but return one which expires immediately.
+                    sampleLease = 1;
+                    expired = true;
+                }
+                
                 instrumentSample = InstrumentSampleFactory.getInstrumentSample(
                     this, sampleType, sampleName, sampleInterval, sampleSize,
                     sampleDescription, sampleLease );
                 instrumentSample.enableLogging( getLogger() );
                 
-                m_instrumentableProxy.getInstrumentManager().incrementLeaseRequests();
-                
-                addInstrumentSample( instrumentSample );
-                
-                // Register the new sample with the InstrumentManager
-                getInstrumentableProxy().getInstrumentManager().
-                    registerLeasedInstrumentSample( instrumentSample );
+                // Do not bother registering expired dummy leases.
+                if ( !expired )
+                {
+                    m_instrumentableProxy.getInstrumentManager().incrementLeaseRequests();
+                    
+                    addInstrumentSample( instrumentSample );
+                    
+                    // Register the new sample with the InstrumentManager
+                    getInstrumentableProxy().getInstrumentManager().
+                        registerLeasedInstrumentSample( instrumentSample );
+                }
             }
         }
         

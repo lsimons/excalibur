@@ -32,18 +32,24 @@ import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
 public class XMLInstrumentManagerHandler
     extends AbstractXMLHandler
 {
+    /** Reference to the connector. */
+    private InstrumentManagerHTTPConnector m_connector;
+    
     /*---------------------------------------------------------------
      * Constructors
      *-------------------------------------------------------------*/
     /**
      * Creates a new XMLInstrumentManagerHandler.
      *
-     * @param path The path handled by this handler.
-     * @param contentType The content type.
+     * @param manager Reference to the DefaultInstrumentManager.
+     * @param connector The InstrumentManagerHTTPConnector.
      */
-    public XMLInstrumentManagerHandler( DefaultInstrumentManager manager )
+    public XMLInstrumentManagerHandler( DefaultInstrumentManager manager,
+                                        InstrumentManagerHTTPConnector connector )
     {
         super( "/instrument-manager.xml", manager );
+        
+        m_connector = connector;
     }
     
     /*---------------------------------------------------------------
@@ -63,7 +69,8 @@ public class XMLInstrumentManagerHandler
         boolean recurse = ( getParameter( parameters, "recurse", null ) != null );
         
         out.println( InstrumentManagerHTTPConnector.XML_BANNER );
-        outputInstrumentManager( out, getInstrumentManager(), "", recurse, packed );
+        outputInstrumentManager(
+            out, getInstrumentManager(), "", recurse, packed, m_connector.isReadOnly() );
     }
             
     /*---------------------------------------------------------------

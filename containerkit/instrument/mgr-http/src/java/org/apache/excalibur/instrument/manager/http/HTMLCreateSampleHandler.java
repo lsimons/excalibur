@@ -36,6 +36,9 @@ import org.apache.excalibur.instrument.manager.NoSuchInstrumentException;
 public class HTMLCreateSampleHandler
     extends AbstractHTMLHandler
 {
+    /** Reference to the connector. */
+    private InstrumentManagerHTTPConnector m_connector;
+    
     /*---------------------------------------------------------------
      * Constructors
      *-------------------------------------------------------------*/
@@ -43,10 +46,14 @@ public class HTMLCreateSampleHandler
      * Creates a new HTMLCreateSampleHandler.
      *
      * @param manager Reference to the DefaultInstrumentManager.
+     * @param connector The InstrumentManagerHTTPConnector.
      */
-    public HTMLCreateSampleHandler( DefaultInstrumentManager manager )
+    public HTMLCreateSampleHandler( DefaultInstrumentManager manager,
+                                    InstrumentManagerHTTPConnector connector )
     {
         super( "/create-sample.html", manager );
+        
+        m_connector = connector;
     }
     
     /*---------------------------------------------------------------
@@ -87,6 +94,17 @@ public class HTMLCreateSampleHandler
             {
                 throw new HTTPRedirect( "instrument-manager.html" );
             }
+        }
+        
+        // The instrument manager will do its own tests of the lease, but the
+        //  restrictions on this connector may be stronger so they must be tested
+        //  here as well.
+        size = Math.max( 1, Math.min( size, m_connector.getMaxLeasedSampleSize() ) );
+        lease = Math.max( 1, Math.min( lease, m_connector.getMaxLeasedSampleLease() ) );
+        
+        if ( getInstrumentManager().getLeaseSampleCount() >= m_connector.getMaxLeasedSamples() )
+        {
+            lease = 1;
         }
         
         // Register the new lease

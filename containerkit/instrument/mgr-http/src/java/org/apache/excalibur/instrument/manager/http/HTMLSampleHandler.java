@@ -37,6 +37,9 @@ import org.apache.excalibur.instrument.manager.NoSuchInstrumentSampleException;
 public class HTMLSampleHandler
     extends AbstractHTMLHandler
 {
+    /** Reference to the connector. */
+    private InstrumentManagerHTTPConnector m_connector;
+    
     /*---------------------------------------------------------------
      * Constructors
      *-------------------------------------------------------------*/
@@ -44,10 +47,14 @@ public class HTMLSampleHandler
      * Creates a new HTMLSampleHandler.
      *
      * @param manager Reference to the DefaultInstrumentManager.
+     * @param connector The InstrumentManagerHTTPConnector.
      */
-    public HTMLSampleHandler( DefaultInstrumentManager manager )
+    public HTMLSampleHandler( DefaultInstrumentManager manager,
+                              InstrumentManagerHTTPConnector connector )
     {
         super( "/sample.html", manager );
+        
+        m_connector = connector;
     }
     
     /*---------------------------------------------------------------
@@ -129,10 +136,14 @@ public class HTMLSampleHandler
             String renewUrl = "sample-lease.html?name=" + urlEncode( desc.getName() )
                 + ( chart == null ? "" : "&chart=true" ) + "&lease=";
             
-            String value = new Date( desc.getLeaseExpirationTime() ).toString()
-                    + " (Renew <a href='" + renewUrl + "600000'>10min</a>, "
+            String value = new Date( desc.getLeaseExpirationTime() ).toString();
+            
+            if ( !m_connector.isReadOnly() )
+            {
+                value = value + " (Renew <a href='" + renewUrl + "600000'>10min</a>, "
                     + "<a href='" + renewUrl + "3600000'>1hr</a>, "
                     + "<a href='" + renewUrl + "86400000'>1day</a>)";
+            }
             
             // Make the text red if it is about to expire.
             if ( desc.getLeaseExpirationTime() - System.currentTimeMillis() < 300000 )

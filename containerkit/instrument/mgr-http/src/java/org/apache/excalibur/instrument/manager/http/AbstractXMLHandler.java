@@ -77,13 +77,15 @@ public abstract class AbstractXMLHandler
                                             DefaultInstrumentManager manager,
                                             String indent,
                                             boolean recurse,
-                                            boolean packed )
+                                            boolean packed,
+                                            boolean readOnly )
         throws IOException
     {
         outputLine( out, indent, packed, "<instrument-manager "
             + "name=\"" + makeSafeAttribute( manager.getName() ) + "\" "
             + "description=\"" + makeSafeAttribute( manager.getDescription() ) + "\" "
-            + "state-version=\"" + manager.getStateVersion() + "\">" );
+            + "state-version=\"" + manager.getStateVersion() + "\" "
+            + "read-only=\"" + readOnly + "\">" );
         
         String childIndent = indent + INDENT;
         

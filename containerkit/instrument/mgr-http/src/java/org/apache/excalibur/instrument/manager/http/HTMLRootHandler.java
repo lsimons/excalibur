@@ -17,6 +17,7 @@
 
 package org.apache.excalibur.instrument.manager.http;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
@@ -59,7 +60,21 @@ public class HTMLRootHandler
     public void doGet( String path, Map parameters, PrintWriter out )
         throws IOException
     {
-        throw new HTTPRedirect( "instrument-manager.html" );
+        // Do not catch XML requests.
+        if ( path.endsWith( ".xml" ) )
+        {
+            throw new FileNotFoundException( "The Requested page does not exist" );
+        }
+        
+        if ( path.indexOf( '/', 1 ) >= 0 )
+        {
+            // Found a slash after the base, so we are in a subdirectory.
+            throw new HTTPRedirect( "../instrument-manager.html" );
+        }
+        else
+        {
+            throw new HTTPRedirect( "instrument-manager.html" );
+        }
     }
 }
 

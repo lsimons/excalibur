@@ -813,7 +813,7 @@ public class LineChart
         // Draw the frame
         paintFrame( g, chartLeft, chartTop, chartWidth, chartHeight );
         
-        if( ( chartWidth > 0 ) && ( chartHeight > 0 ) )
+        if( ( chartWidth > 0 ) && ( chartHeight > 0 ) && ( m_values.length > 1 ) )
         {
             // Draw the the values that make up the data of the chart.
             paintValues( g, chartLeft, chartTop, chartWidth, chartHeight );

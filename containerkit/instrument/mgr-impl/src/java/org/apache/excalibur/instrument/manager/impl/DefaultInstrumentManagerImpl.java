@@ -75,6 +75,18 @@ public class DefaultInstrumentManagerImpl
     /** The description of this InstrumentManager. */
     private String m_description;
     
+    /** The maximum number of leased samples which will be allowed.  This is
+     *   important to prevent denial of service attacks using connectors. */
+    private int m_maxLeasedSamples;
+    
+    /** The maximum size of a leased sample.  This is important to prevent
+     *   denial of service attacks using connectors. */
+    private int m_maxLeasedSampleSize;
+    
+    /** The maximum amount of time that a lease will be granted for.  This is
+     *   important to prevent denial of service attacks using connectors. */
+    private long m_maxLeasedSampleLease;
+    
     /** Configuration for the InstrumentManager */
     private Configuration m_configuration;
     
@@ -238,6 +250,14 @@ public class DefaultInstrumentManagerImpl
             // Look for a configured name and description
             m_name = configuration.getChild( "name" ).getValue( "instrument-manager" );
             m_description = configuration.getChild( "description" ).getValue( m_name );
+            
+            // Get configuration values which limit the leases that can be made.
+            m_maxLeasedSamples =
+                configuration.getChild( "max-leased-samples" ).getValueAsInteger( 256 );
+            m_maxLeasedSampleSize =
+                configuration.getChild( "max-leased-sample-size" ).getValueAsInteger( 2048 );
+            m_maxLeasedSampleLease = 1000L *
+                configuration.getChild( "max-leased-sample-lease" ).getValueAsInteger( 86400 );
             
             // Configure the instrumentables.
             Configuration instrumentablesConf = configuration.getChild( "instrumentables" );
@@ -688,6 +708,47 @@ public class DefaultInstrumentManagerImpl
     public void invokeGarbageCollection()
     {
         System.gc();
+    }
+    
+    /**
+     * Returns the current number of leased samples.
+     *
+     * @return The current number of leased samples.
+     */
+    public int getLeaseSampleCount()
+    {
+        return m_leasedSampleCount;
+    }
+    
+    /**
+     * Returns the maximum number of leased samples that will be approved.
+     *
+     * @return The maximum number of leased samples.
+     */
+    public int getMaxLeasedSamples()
+    {
+        return m_maxLeasedSamples;
+    }
+    
+    /**
+     * Returns the maximum size of a leased sample.
+     *
+     * @return The maximum size of a leased sample.
+     */
+    public int getMaxLeasedSampleSize()
+    {
+        return m_maxLeasedSampleSize;
+    }
+    
+    /**
+     * Returns the maximum number of milliseconds that a lease will be granted
+     *  for.
+     *
+     * @return The maximum lease length.
+     */
+    public long getMaxLeasedSampleLease()
+    {
+        return m_maxLeasedSampleLease;
     }
     
     /*---------------------------------------------------------------
