@@ -30,8 +30,8 @@
     <distributionDirectory></distributionDirectory>
 
     <repository>
-        <connection>scm:cvs:pserver:anoncvs@cvs.apache.org:/home/cvspublic:avalon-excalibur</connection>
-        <url>http://cvs.apache.org/viewcvs/avalon-excalibur/</url>
+        <!-- broken in rc3 <connection>scm:svn:https://svn.apache.org/repos/asf/excalibur/</connection>-->
+        <url>https://svn.apache.org/repos/asf/excalibur/</url>
     </repository>
 
     <mailingLists>

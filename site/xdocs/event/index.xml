@@ -27,7 +27,7 @@
         asynchronous command processing, and the interfaces to support
         event based programming.  Event is heavily influenced by Matt
         Welsh's work with the
-                <a href="http://www.cs.berkeley.edu/~mdw/proj/seda/" target="_new">
+                <a href="http://www.eecs.harvard.edu/~mdw/proj/seda/" target="_new">
         SEDA architecture</a>.
         We forked the portion of his SandStorm server that had to do with
         event processing.  From there we cleaned up the API and made it as

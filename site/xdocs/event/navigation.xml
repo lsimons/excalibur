@@ -21,7 +21,6 @@
     <title>Apache Excalibur</title>
 
     <body>
-
         <links>
             <item name="Apache" href="http://apache.org/"/>
             <item name="Excalibur" href="http://excalibur.apache.org/"/>
@@ -37,6 +36,10 @@
             <item name="Javadocs" href="http://avalon.apache.org/excalibur/api/"/>
             <item name="Download" href="http://avalon.apache.org/download.cgi"/>
             <item name="Issue Tracking" href="/jira.html"/>
+            <item name="Miscellaneous" href="misc.html" collapse="true">
+                <item name="Where's my documentation???" href="/no-docs-available.html"/>
+                <item name="No CVS" href="/cvs-usage.html"/>
+            </item>
         </menu>
 
         <menu name="Component documentation">
@@ -61,7 +64,7 @@
                 <item name="CLI" href="fortress/cli.html"/>
                 <item name="Swing" href="fortress/swing.html"/>
                 <item name="Servlet" href="fortress/servlet.html"/>
-                <item name="Lifecycle Extensions" href="fortress/lifecycle-extensions.html"/>
+                <item name="Lifecycle Extensions" href="lifecycle/index.html"/>
                 <item name="Design Notes" href="fortress/design-notes.html"/>
             </item>
             <item name="i18n" href="i18n.html"/>
@@ -77,10 +80,10 @@
             <item name="Thread" href="thread.html"/>
         </menu>
 
-        <menu name="Miscellaneous">
+        <menu name="Miscellaneous" href="misc.html" collapse="true">
             <item name="Where's my documentation???" href="/no-docs-available.html"/>
+            <item name="No CVS" href="/cvs-usage.html"/>
         </menu>
-
     </body>
 
 </project>
