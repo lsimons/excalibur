@@ -24,24 +24,23 @@ import java.util.List;
 
 
 /**
- * The ThreadSafeComponentHandler to make sure components are initialized
- * and destroyed correctly.
+ * The PerThreadComponentHandler implements a singleton with a slight difference:
+ * one single instance per thread.
  *
- * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
- * @version CVS $Revision: 1.9 $ $Date: 2004/02/28 15:16:25 $
+ * @author <a href="mailto:dev@excalibur.apache.org">Excalibur Development Team</a>
  * @since 4.0
  */
 public final class PerThreadComponentHandler
     extends AbstractComponentHandler
 {
-    private ThreadLocalComponent m_instance;
-    private List m_instances;
+    private static ThreadLocal m_slot;
+    private static List m_instances;
 
     public void initialize()
         throws Exception
     {
         super.initialize();
-        m_instance = new ThreadLocalComponent( this );
+        m_slot = new ThreadLocal();
         m_instances = Collections.synchronizedList(new LinkedList());
     }
 
@@ -51,13 +50,28 @@ public final class PerThreadComponentHandler
     protected Object doGet()
         throws Exception
     {
-        final Object instance = m_instance.get();
-        if ( null == instance )
+        synchronized(m_slot)
         {
-            throw new IllegalStateException( "Instance is unavailable" );
-        }
+            Map map = (Map) m_slot.get();
 
-        return instance;
+            if (map == null)
+            {
+                Object instance = null;
+                map = new HashMap();
+                m_slot.set(map);
+            }
+		
+            Object instance = map.get( super.m_factory );
+
+            if (instance == null)
+            {
+                instance = newComponent();
+                map.put( super.m_factory, instance );
+                m_instances.add(instance);
+            }
+
+            return instance;
+        }
     }
 
     protected void doDispose()
@@ -68,32 +82,8 @@ public final class PerThreadComponentHandler
             disposeComponent( it.next() );
             it.remove();
         }
-        m_instance = null;
+        m_slot = null;
         m_instances = null;
     }
-
-    private static final class ThreadLocalComponent
-        extends ThreadLocal
-    {
-        private final PerThreadComponentHandler m_handler;
-
-        protected ThreadLocalComponent( final PerThreadComponentHandler handler )
-        {
-            m_handler = handler;
-        }
-
-        protected Object initialValue()
-        {
-            try
-            {
-                Object component = m_handler.newComponent();
-                m_handler.m_instances.add(component);
-                return component;
-            }
-            catch ( final Exception e )
-            {
-                return null;
-            }
-        }
-    }
 }
+
