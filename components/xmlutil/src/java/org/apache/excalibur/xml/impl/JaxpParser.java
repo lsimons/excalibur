@@ -187,7 +187,7 @@ public final class JaxpParser
         m_stopOnWarning = params.getParameterAsBoolean( "stop-on-warning", true );
         m_stopOnRecoverableError = params.getParameterAsBoolean( "stop-on-recoverable-error", true );
         m_dropDtdComments = params.getParameterAsBoolean( "drop-dtd-comments", false );
-        m_resolverHint = params.getParameterAsString( "resolver-hint", null );
+        m_resolverHint = params.getParameter( "resolver-hint", null );
 
         // Get the SAXFactory
         final String saxParserFactoryName = params.getParameter( "sax-parser-factory",
