@@ -42,8 +42,10 @@
                 <a href="http://issues.apache.org/jira">ASF JIRA</a> modules:
             </p>
             <ul>
-                <li><a href="http://nagoya.apache.org/jira/secure/BrowseProject.jspa?id=10428">Excalibur Components</a></li>
-                <li><a href="http://nagoya.apache.org/jira/secure/BrowseProject.jspa?id=10420">Excalibur Fortress</a></li>
+                <li><a 
+href="http://issues.apache.org/jira/secure/BrowseProject.jspa?id=10428">Excalibur Components</a></li>
+                <li><a 
+href="http://issues.apache.org/jira/secure/BrowseProject.jspa?id=10420">Excalibur Fortress</a></li>
             </ul>
 
             <p>

@@ -105,8 +105,8 @@ def processAll( files )
     <description>Apache Excalibur</description>
 
     <reports>
-      <report>maven-clover-plugin</report>
-      <report>maven-junit-report-plugin</report>
+      <!--<report>maven-clover-plugin</report>
+      <report>maven-junit-report-plugin</report>-->
       <report>maven-javadoc-plugin</report>
     </reports>
 
