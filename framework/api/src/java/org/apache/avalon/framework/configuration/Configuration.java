@@ -285,6 +285,17 @@ public interface Configuration
     float getAttributeAsFloat( String paramName ) throws ConfigurationException;
 
     /**
+     * Return the <code>double</code> value of the specified parameter contained
+     * in this node.
+     *
+     * @param paramName The name of the parameter you ask the value of.
+     * @return double value of attribute
+     * @throws ConfigurationException If no parameter with that name exists.
+     *                                   or if conversion to <code>double</code> fails.
+     */
+    double getAttributeAsDouble( String paramName ) throws ConfigurationException;
+
+    /**
      * Return the <code>boolean</code> value of the specified parameter contained
      * in this node.
      *
@@ -319,6 +330,14 @@ public interface Configuration
      * @throws ConfigurationException If conversion to <code>float</code> fails.
      */
     float getValueAsFloat() throws ConfigurationException;
+
+    /**
+     * Return the <code>double</code> value of the node.
+     *
+     * @return the value of the node.
+     * @throws ConfigurationException If conversion to <code>double</code> fails.
+     */
+    double getValueAsDouble() throws ConfigurationException;
 
     /**
      * Return the <code>boolean</code> value of the node.
@@ -379,6 +398,17 @@ public interface Configuration
      *          if none specified.
      */
     float getValueAsFloat( float defaultValue );
+
+    /**
+     * Returns the value of the configuration element as a <code>double</code>.
+     * If the configuration value is not set, the default value will be
+     * used.
+     *
+     * @param defaultValue The default value desired.
+     * @return float value of the <code>Configuration</code>, or default
+     *          if none specified.
+     */
+    double getValueAsDouble( double defaultValue );
 
     /**
      * Returns the value of the configuration element as a <code>boolean</code>.
@@ -442,6 +472,19 @@ public interface Configuration
      *          the value is not set.
      */
     float getAttributeAsFloat( String name, float defaultValue );
+
+    /**
+     * Returns the value of the attribute specified by its name as a
+     * <code>double</code>, or the default value if no attribute by
+     * that name exists or is empty.
+     *
+     * @param name The name of the attribute you ask the value of.
+     * @param defaultValue The default value desired.
+     * @return float value of attribute. It will return the default
+     *          value if the named attribute does not exist, or if
+     *          the value is not set.
+     */
+    double getAttributeAsDouble( String name, double defaultValue );
 
     /**
      * Returns the value of the attribute specified by its name as a

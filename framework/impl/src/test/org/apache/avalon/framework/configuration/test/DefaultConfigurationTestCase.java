@@ -155,13 +155,15 @@ public final class DefaultConfigurationTestCase extends TestCase
         DefaultConfiguration config = new DefaultConfiguration( "root", "0:0", "http://root", "root" );
         config.setAttribute( "integer", 12 );
         config.setAttribute( "long", 8000000000L );
-        config.setAttribute( "float", 1.23f );
+        config.setAttribute( "float", 1.2345679f );
+        config.setAttribute( "double", 1.2345678901234567 );
         config.setAttribute( "boolean", true );
         config.setAttribute( "string", "string" );
         
         assertEquals( "12", config.getAttribute("integer") );
         assertEquals( "8000000000", config.getAttribute("long") );
-        assertEquals( 1.23, config.getAttributeAsFloat("float"), 0.01 );
+        assertEquals( 1.2345679f, config.getAttributeAsFloat("float"), 0 );
+        assertEquals( 1.2345678901234567, config.getAttributeAsDouble("double"), 0 );
         assertEquals( "string", config.getAttribute("string") );
         assertEquals( "true", config.getAttribute("boolean") );
         

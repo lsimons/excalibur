@@ -60,6 +60,13 @@ public interface MutableConfiguration extends Configuration
     public void setValue( final float value );
     
     /**
+     * Set the value of this <code>Configuration</code> object to the specified double.
+     *
+     * @param value a <code>double</code> value
+     */
+    public void setValue( final double value );
+    
+    /**
      * Set the value of the specified attribute to the specified string.
      *
      * @param name name of the attribute to set
@@ -98,6 +105,14 @@ public interface MutableConfiguration extends Configuration
      * @param value an <code>float</code> value
      */
     public void setAttribute( final String name, final float value );
+    
+    /**
+     * Set the value of the specified attribute to the specified double.
+     *
+     * @param name name of the attribute to set
+     * @param value an <code>double</code> value
+     */
+    public void setAttribute( final String name, final double value );
     
     /**
      * Add a child <code>Configuration</code> to this configuration element.

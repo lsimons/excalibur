@@ -397,6 +397,16 @@ public class DefaultConfiguration
     }    
     
     /**
+     * Set the value of this <code>Configuration</code> object to the specified double.
+     *
+     * @param value a <code>double</code> value
+     */
+    public void setValue( final double value )
+    {
+        setValue( String.valueOf( value ) );
+    }    
+    
+    /**
      * Set the value of the specified attribute to the specified string.
      *
      * @param name name of the attribute to set
@@ -463,6 +473,17 @@ public class DefaultConfiguration
      * @param value an <code>float</code> value
      */
     public void setAttribute( final String name, final float value )
+    {
+        setAttribute( name, String.valueOf( value ) );
+    }
+    
+    /**
+     * Set the value of the specified attribute to the specified double.
+     *
+     * @param name name of the attribute to set
+     * @param value an <code>double</code> value
+     */
+    public void setAttribute( final String name, final double value )
     {
         setAttribute( name, String.valueOf( value ) );
     }

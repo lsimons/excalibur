@@ -205,6 +205,48 @@ public abstract class AbstractConfiguration
     }
 
     /**
+     * Returns the value of the configuration element as a <code>double</code>.
+     *
+     * @throws ConfigurationException if an error occurs
+     * @return the value
+     */
+    public double getValueAsDouble()
+        throws ConfigurationException
+    {
+        final String value = getValue().trim();
+        try
+        {
+            return Double.parseDouble( value );
+        }
+        catch( final Exception nfe )
+        {
+            final String message =
+                "Cannot parse the value \"" + value
+                + "\" as a double in the configuration element \""
+                + getName() + "\" at " + getLocation();
+            throw new ConfigurationException( message );
+        }
+    }
+
+    /**
+     * Returns the value of the configuration element as a <code>double</code>.
+     *
+     * @param defaultValue the default value to return if value malformed or empty
+     * @return the value
+     */
+    public double getValueAsDouble( final double defaultValue )
+    {
+        try
+        {
+            return getValueAsDouble();
+        }
+        catch( final ConfigurationException ce )
+        {
+            return ( defaultValue );
+        }
+    }
+
+    /**
      * Returns the value of the configuration element as a <code>boolean</code>.
      *
      * @throws ConfigurationException if an error occurs
@@ -443,6 +485,52 @@ public abstract class AbstractConfiguration
         try
         {
             return getAttributeAsFloat( name );
+        }
+        catch( final ConfigurationException ce )
+        {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * Returns the value of the attribute specified by its name as a
+     * <code>double</code>.
+     *
+     * @param name the name of the attribute
+     * @throws ConfigurationException if an error occurs
+     * @return the value
+     */
+    public double getAttributeAsDouble( final String name )
+        throws ConfigurationException
+    {
+        final String value = getAttribute( name );
+        try
+        {
+            return Double.parseDouble( value );
+        }
+        catch( final Exception e )
+        {
+            final String message =
+                "Cannot parse the value \"" + value
+                + "\" as a double in the attribute \""
+                + name + "\" at " + getLocation();
+            throw new ConfigurationException( message );
+        }
+    }
+
+    /**
+     * Returns the value of the attribute specified by its name as a
+     * <code>double</code>.
+     *
+     * @param name the name of the attribute
+     * @param defaultValue the default value to return if value malformed or empty
+     * @return the value
+     */
+    public double getAttributeAsDouble( final String name, final double defaultValue )
+    {
+        try
+        {
+            return getAttributeAsDouble( name );
         }
         catch( final ConfigurationException ce )
         {
