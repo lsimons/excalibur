@@ -54,53 +54,68 @@ public class DefaultComponentFactory
     extends AbstractDualLogEnabled
     implements ObjectFactory, Disposable, ThreadSafe
 {
-    /** The class which this <code>ComponentFactory</code>
+    /**
+     * The class which this <code>ComponentFactory</code>
      * should create.
      */
     private Class m_componentClass;
 
-    /** The Context for the component
+    /**
+     * The Context for the component
      */
     private Context m_context;
 
-    /** The component manager for this component.
+    /**
+     * The component manager for this component.
      */
     private ComponentManager m_componentManager;
 
-    /** The service manager for this component
+    /**
+     * The service manager for this component
      */
     private WrapperServiceManager m_serviceManager;
     
-    /** The configuration for this component.
+    /**
+     * The configuration for this component.
      */
     private Configuration m_configuration;
 
-    /** The RoleManager for child ComponentSelectors
+    /**
+     * The RoleManager for child ComponentSelectors
      */
     private RoleManager m_roles;
 
-    /** The LogkitLoggerManager for child ComponentSelectors
+    /**
+     * The LogkitLoggerManager for child ComponentSelectors
      */
     private LogkitLoggerManager m_loggerManager;
 
-    /** Components created by this factory, and their associated ComponentLocator
-     *  proxies, if they are Composables.  These must be seperate maps in case
-     *  a component falls into more than one category, which they often do.
+    /**
+     * Components created by this factory, and their associated ComponentLocator
+     * proxies, if they are Composables.  These must be seperate maps in case
+     * a component falls into more than one category, which they often do.
      */
     private final Map m_componentProxies = Collections.synchronizedMap(new HashMap());
 
-    /** Instrument Manager to register objects created by this factory with (May be null). */
+    /**
+     * Instrument Manager to register objects created by this factory with
+     * (may be null).
+     */
     private InstrumentManager m_instrumentManager;
 
-    /** Instrumentable Name assigned to objects created by this factory. */
+    /**
+     * Instrumentable Name assigned to objects created by this factory.
+     */
     private String m_instrumentableName;
 
     private ComponentProxyGenerator m_proxyGenerator;
     private String m_role;
 
+
     /*---------------------------------------------------------------
      * Constructors
      *-------------------------------------------------------------*/
+
     /**
      * Construct a new component factory for the specified component.
      *
