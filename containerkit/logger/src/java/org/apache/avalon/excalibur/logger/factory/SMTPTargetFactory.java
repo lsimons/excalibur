@@ -50,6 +50,21 @@ import org.apache.log.output.net.SMTPOutputLogTarget;
  * &lt;/smtp&gt;
  * </pre>
  *
+ * The Factory will look for a javax.mail.Session instance in the Context using
+ *  the specified context-key.   If your needs are simple, then it is also possible
+ *  to define a Session within the configuration by replacing the context-key
+ *  attribute with a session child element as follows:
+ * <p>
+ * <pre>
+ * &lt;session&gt;
+ *   &lt;parameter name="mail.host" value="mail.tanukisoftware.com"/&gt;
+ * &lt;/session&gt;
+ * </pre>
+ * The Session is created by calling Session.getInstance, providing a Properties
+ *  object whose values are defined in the above block.  Any valid name value
+ *  pair can be specified.
+ * <p>
+ *
  * <dl>
  *  <dt>&lt;format&gt;</dt>
  *  <dd>
