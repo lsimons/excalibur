@@ -16,11 +16,10 @@
  limitations under the License.
 -->
 <project>
-    <extend>${basedir}/../buildsystem/project-common.xml</extend>
+    <extend>${basedir}/../project-common.xml</extend>
 
     <name>Excalibur Monitor</name>
     <id>excalibur-monitor</id>
-    <currentVersion>1.1</currentVersion>
     <inceptionYear>1997</inceptionYear>
     <shortDescription>Avalon Excalibur's resource management code allows you to be notified when a resource has changed.</shortDescription>
     <description>

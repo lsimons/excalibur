@@ -17,11 +17,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <project>
+  <extend>${basedir}/../project-common.xml</extend>
 
   <name>Excalibur Thread</name>
   <groupId>excalibur-thread</groupId>
   <id>excalibur-thread</id>
-  <currentVersion>2.0.0</currentVersion>
   <inceptionYear>2000</inceptionYear>
 
 </project>

@@ -16,11 +16,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <project>
-    <extend>${basedir}/../buildsystem/project-common.xml</extend>
+    <extend>${basedir}/../project-common.xml</extend>
 
     <name>Excalibur Store</name>
     <id>excalibur-store</id>
-    <currentVersion>1.1</currentVersion>
     <inceptionYear>1997</inceptionYear>
     <shortDescription>a way to store named objects without caring where or how they are stored.</shortDescription>
     <description>

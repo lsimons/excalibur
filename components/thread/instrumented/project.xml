@@ -18,12 +18,11 @@
 
 <project>
 
-  <extend>${basedir}/../../buildsystem/project-common.xml</extend>
+  <extend>${basedir}/../../project-common.xml</extend>
 
   <groupId>excalibur-thread</groupId>
   <id>excalibur-thread-instrumented</id>
   <name>Excalibur Thread Instrumented Implementation</name>
-  <currentVersion>2.0.0</currentVersion>
   <package>org.apache.avalon.excalibur.thread</package>
   <inceptionYear>2001</inceptionYear>
   <shortDescription>Excalibur Threads Instrumented Implementation</shortDescription>

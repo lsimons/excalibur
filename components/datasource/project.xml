@@ -16,11 +16,10 @@
  limitations under the License.
 -->
 <project>
-    <extend>${basedir}/../buildsystem/project-common.xml</extend>
+    <extend>${basedir}/../project-common.xml</extend>
 
     <name>Excalibur Datasource</name>
     <id>excalibur-datasource</id>
-    <currentVersion>1.2.2-dev</currentVersion>
     <inceptionYear>2003</inceptionYear>
     <shortDescription>Excalibur's Datasourc component</shortDescription>
     <description>

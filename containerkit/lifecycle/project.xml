@@ -17,11 +17,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <project>
+  <extend>${basedir}/../project-common.xml</extend>
 
   <name>Excalibur Lifecycle</name>
   <groupId>excalibur-lifecycle</groupId>
   <id>excalibur-lifecycle</id>
-  <currentVersion>1.1.0</currentVersion>
   <inceptionYear>2000</inceptionYear>
 
 </project>
