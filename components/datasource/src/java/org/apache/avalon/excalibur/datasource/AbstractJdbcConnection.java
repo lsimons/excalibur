@@ -1,16 +1,16 @@
-/* 
+/*
  * Copyright 2002-2004 The Apache Software Foundation
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at 
- * 
+ * You may obtain a copy of the License at
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed  under the  License is distributed on an "AS IS" BASIS,
  * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
  * implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -51,9 +51,11 @@ public class AbstractJdbcConnection
         implements PoolSettable, Disposable, ProxiedJdbcConnection
 {
     protected Connection m_connection;
+    protected boolean m_autoCommit;
+
     private Object m_proxy;
     protected Pool m_pool;
-    
+
     /** The maximum time since a connection was last used before it will be pinged. */
     protected int m_testAge;
     protected PreparedStatement m_testStatement;
@@ -191,6 +193,14 @@ public class AbstractJdbcConnection
         return m_connection;
     }
 
+    /**
+     * @see org.apache.avalon.excalibur.datasource.PoolSettable#setAutoCommit
+     * @todo this method only stores the auto commit flag but does not modify the connection.  Should it?
+     */
+    public void setAutoCommit(boolean autoCommit){
+        m_autoCommit = autoCommit;
+    }
+
     public boolean isClosed()
             throws SQLException
     {
@@ -200,7 +210,7 @@ public class AbstractJdbcConnection
         }
 
         long age = System.currentTimeMillis() - m_lastUsed;
-        
+
         // If the connection has not been used for for longer than the keep alive age,
         //  then make sure it is still alive.
         if ( ( m_testStatement != null ) && ( age > m_testAge ) )
@@ -238,7 +248,7 @@ public class AbstractJdbcConnection
             // Always mark the time the connection was placed back in the pool
             //  as its last used time.
             m_lastUsed = System.currentTimeMillis();
-            
+
             try
             {
                 clearAllocatedStatements();
