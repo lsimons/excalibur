@@ -52,17 +52,26 @@ public final class JTidyHTMLParser extends AbstractLogEnabled
     private Tidy m_tidy;
     private Properties m_properties;
 
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.service.Serviceable#service(org.apache.avalon.framework.service.ServiceManager)
+     */
     public void service( ServiceManager serviceManager ) throws ServiceException
     {
         m_serializer = (DOMSerializer) serviceManager.lookup( DOMSerializer.ROLE );
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
+     */
     public void configure( Configuration configuration ) throws ConfigurationException
     {
         final Parameters parameters = Parameters.fromConfiguration( configuration );
         m_properties = Parameters.toProperties( parameters );
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.activity.Initializable#initialize()
+     */
     public void initialize() throws Exception
     {
         m_tidy = new Tidy();
@@ -75,6 +84,9 @@ public final class JTidyHTMLParser extends AbstractLogEnabled
         m_tidy.setConfigurationFromProps( m_properties );
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.excalibur.xml.sax.SAXParser#parse(org.xml.sax.InputSource, org.xml.sax.ContentHandler, org.xml.sax.ext.LexicalHandler)
+     */
     public void parse( InputSource in,
                        ContentHandler contentHandler,
                        LexicalHandler lexicalHandler )
@@ -84,12 +96,8 @@ public final class JTidyHTMLParser extends AbstractLogEnabled
         m_serializer.serialize( document, contentHandler, lexicalHandler );
     }
     
-    /**
-     * Parse the {@link InputSource} and send
-     * SAX events to the consumer.
-     * Attention: the consumer can  implement the
-     * {@link LexicalHandler} as well.
-     * The parse should take care of this.
+    /* (non-Javadoc)
+     * @see org.apache.excalibur.xml.sax.SAXParser#parse(org.xml.sax.InputSource, org.xml.sax.ContentHandler)
      */
     public void parse( InputSource in, ContentHandler consumer )
         throws SAXException, IOException

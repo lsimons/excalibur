@@ -48,14 +48,22 @@ import org.xml.sax.SAXException;
 public final class DefaultXMLizer extends AbstractLogEnabled
         implements XMLizer, Serviceable, Configurable, ThreadSafe, Component
 {
+    /** The service manager */
     private ServiceManager m_serviceManager;
+    /** Mapping between mime-type and role for a SAXParser handling the mime-type */
     private Map m_mimeTypes = new HashMap();
 
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.service.Serviceable#service(org.apache.avalon.framework.service.ServiceManager)
+     */
     public void service( ServiceManager serviceManager ) throws ServiceException
     {
         m_serviceManager = serviceManager;
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.configuration.Configurable#configure(org.apache.avalon.framework.configuration.Configuration)
+     */
     public void configure( Configuration configuration ) throws ConfigurationException
     {
         final Configuration[] parsers = configuration.getChildren("parser");
@@ -76,11 +84,8 @@ public final class DefaultXMLizer extends AbstractLogEnabled
         }
     }
 
-    /**
-     * Generates SAX events from the given input stream
-     * @param stream    the data
-     * @param mimeType  the mime-type for the data
-     * @param systemID  the URI defining the data (this is optional and can be null)
+    /* (non-Javadoc)
+     * @see org.apache.excalibur.xmlizer.XMLizer#toSAX(java.io.InputStream, java.lang.String, java.lang.String, org.xml.sax.ContentHandler)
      */
     public void toSAX( final InputStream stream,
                        final String mimeType,
