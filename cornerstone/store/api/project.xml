@@ -13,8 +13,8 @@
   <dependencies>
 
     <dependency>
-      <groupId>excalibur-framework</groupId>
-      <artifactId>excalibur-framework-api</artifactId>
+      <groupId>avalon-framework</groupId>
+      <artifactId>avalon-framework-api</artifactId>
       <version>4.3-dev</version>
     </dependency>
 
