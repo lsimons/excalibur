@@ -19,6 +19,6 @@ excalibur-logger - - - - runtime,inherit=runtime
 excalibur-sourceresolve - - - - runtime,inherit=runtime
 excalibur-lifecycle-api - - - - runtime,inherit=runtime
 excalibur-lifecycle-impl - - - - runtime,inherit=runtime
-excalibur-i18n 1.2.0-dev - - - runtime,inherit=runtime
+excalibur-i18n - - - - runtime,inherit=runtime
 excalibur-pool-api - - - - runtime,inherit=runtime
 excalibur-pool-impl - - - - runtime,inherit=runtime
