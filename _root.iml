@@ -10,8 +10,6 @@
       <sourceFolder url="file://$MODULE_DIR$/component-tests/src/test" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/component/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/component/src/test" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/configuration/src/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/configuration/src/test" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/datasource/examples/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/datasource/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/datasource/src/test" isTestSource="true" />
