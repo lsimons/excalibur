@@ -29,6 +29,7 @@
             <ul>
                 <li><a href="/cvs-usage.html">we don't use cvs</a></li>
                 <li><a href="/no-docs-available.html">we know we need more docs</a></li>
+                <li><a href="http://wiki.apache.org/excalibur/NightlyBuild">we build our software automatically...</a></li>
             </ul>
 
         </section>

@@ -39,6 +39,7 @@
             <item name="Miscellaneous" href="misc.html" collapse="true">
                 <item name="Where's my documentation???" href="/no-docs-available.html"/>
                 <item name="No CVS" href="/cvs-usage.html"/>
+                <item name="Nightly builds" href="http://wiki.apache.org/excalibur/NightlyBuild"/>
             </item>
         </menu>
 
