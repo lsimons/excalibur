@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project>
+
+  <extend>${basedir}/../project.xml</extend>
+
+  <id>cornerstone-store-api</id>
+  <name>Cornerstone Store API</name>
+  <package>org.apache.avalon.cornerstone.services.store</package>
+  <inceptionYear>2001</inceptionYear>
+  <shortDescription>Cornerstone Store API</shortDescription>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>avalon-framework</groupId>
+      <artifactId>avalon-framework-api</artifactId>
+      <version>4.3-dev</version>
+    </dependency>
+
+  </dependencies>
+  
+</project>
