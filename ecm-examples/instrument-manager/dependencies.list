@@ -4,7 +4,7 @@
 #
 avalon-logkit 2.0 - - - runtime,inherit=runtime
 avalon-framework 4.1.5 framework http://www.apache.org/dist/avalon - runtime,inherit=runtime
-excalibur-component - - - - runtime,inherit=runtime
+excalibur-ecm - - - - runtime,inherit=runtime
 excalibur-logger - - - - runtime,inherit=runtime
 excalibur-instrument - - - - runtime,inherit=runtime
 excalibur-instrument-spi - - - - runtime,inherit=runtime

@@ -3,8 +3,8 @@
 # artifact-id version groupid repository gumpid gumpopts
 #
 avalon-framework 4.1.5 - - - runtime,inherit=runtime
-excalibur-fortress-container-api - - - - runtime,inherit=runtime
-excalibur-fortress-meta - - - - runtime,inherit=runtime
+excalibur-fortress1-api - - - - runtime,inherit=runtime
+excalibur-fortress1-meta - - - - runtime,inherit=runtime
 avalon-logkit 2.0 - - - runtime,inherit=runtime
 commons-collections 2.1 - - - runtime,inherit=runtime
 commons-beanutils 1.6.1 - - - runtime,inherit=runtime

@@ -2,8 +2,8 @@
 #
 # artifact-id version groupid repository gumpid gumpopts
 #
-excalibur-fortress-container-api - - - - runtime,inherit=runtime
-excalibur-fortress-container-impl - - - - runtime,inherit=runtime
+excalibur-fortress1-api - - - - runtime,inherit=runtime
+excalibur-fortress1-impl - - - - runtime,inherit=runtime
 avalon-framework 4.1.5 - - - runtime,inherit=runtime
 excalibur-logger - - - - runtime,inherit=runtime
 excalibur-event-api - - - - runtime,inherit=runtime

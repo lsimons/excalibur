@@ -2,9 +2,9 @@
 #
 # artifact-id version groupid repository gumpid gumpopts
 #
-excalibur-fortress-container-api - - - - runtime,inherit=runtime
-excalibur-fortress-container-impl - - - - runtime,inherit=runtime
-excalibur-fortress-meta - - - - runtime,inherit=runtime
+excalibur-fortress1-api - - - - runtime,inherit=runtime
+excalibur-fortress1-impl - - - - runtime,inherit=runtime
+excalibur-fortress1-meta - - - - runtime,inherit=runtime
 avalon-framework 4.1.5 framework http://www.apache.org/dist/avalon - runtime,inherit=runtime
 avalon-logkit 2.0 - - - runtime,inherit=runtime
 commons-collections 2.1 - - - runtime,inherit=runtime
