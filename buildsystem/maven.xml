@@ -70,6 +70,23 @@ limitations under the License.
             </ant:exec>
         </define:tag>
         
+        <define:tag name="get-license-bin">
+          <ant:mkdir dir="${maven.dist.bin.assembly.dir}"/>
+          <ant:get src="http://svn.apache.org/repos/asf/excalibur/trunk/LICENSE.txt" dest="${maven.dist.bin.assembly.dir}/LICENSE.txt"/>
+          <ant:get src="http://svn.apache.org/repos/asf/excalibur/trunk/NOTICE.txt" dest="${maven.dist.bin.assembly.dir}/NOTICE.txt"/>
+        </define:tag>
+        
+        <define:tag name="get-license-src">
+          <ant:mkdir dir="${maven.dist.src.assembly.dir}"/>
+          <ant:get src="http://svn.apache.org/repos/asf/excalibur/trunk/LICENSE.txt" dest="${maven.dist.src.assembly.dir}/LICENSE.txt"/>
+          <ant:get src="http://svn.apache.org/repos/asf/excalibur/trunk/NOTICE.txt" dest="${maven.dist.src.assembly.dir}/NOTICE.txt"/>
+        </define:tag>
+        
+        <define:tag name="get-license-jar">
+          <ant:mkdir dir="${maven.build.dest}/META-INF"/>
+          <ant:get src="http://svn.apache.org/repos/asf/excalibur/trunk/LICENSE.txt" dest="${maven.build.dest}/META-INF/LICENSE.txt"/>
+          <ant:get src="http://svn.apache.org/repos/asf/excalibur/trunk/NOTICE.txt" dest="${maven.build.dest}/META-INF/NOTICE.txt"/>
+        </define:tag>
         
     </define:taglib>
     
@@ -81,6 +98,18 @@ limitations under the License.
             <ant:arg line="copy -m &quot;${tagMsg}&quot; ${repoBase}/trunk ${repoBase}/tags/${tagName}"/>
         </ant:exec>
     </goal>
+
+    <preGoal name="dist:build-src">
+       <excalibur:get-license-src/>
+    </preGoal>
+    
+    <preGoal name="dist:build-bin">
+       <excalibur:get-license-bin/>
+    </preGoal>
+    
+    <preGoal name="jar:jar">
+       <excalibur:get-license-jar/>
+    </preGoal>
     
     <postGoal name="dist:build-src">
         <excalibur:gpg name="${pom.artifactId}-${pom.currentVersion}-src.zip"
@@ -163,7 +192,7 @@ limitations under the License.
         <j:set var="url" value="scp://${host}"/>
         
         <j:set var="version" value="${pom.currentVersion}"/>
-        <j:set var="isRC" value="${version.indexOf('RC') != '-1'}"/>
+        <j:set var="isRC" value="${version.indexOf('RC') != '-1' || version.indexOf('dev') != '-1'}"/>
         
         <j:if test="${isRC == true}">
             <j:set var="deployBase" value="/home/${user}/public_html/dist"/>
