@@ -542,6 +542,7 @@ $artifact [$version [$group [$repository]]]
             defaultRepository = project.getProperty("jbs.repository.default");
             localRepository = project.getProperty("jbs.repository.local");
 
+            dependencyFile = dependencyFile.replaceAll( "  +", " " );
             dependencies = dependencyFile.split( "(\n|\r|\r\n)" );
 
             hash = new Character("#".charAt(0));
@@ -692,6 +693,7 @@ $artifact $version [$group [$repository]]
             localRepository = project.getProperty("jbs.repository.local");
             libDir = project.getProperty("jbs.build.dist.lib.dir");
 
+            dependencyFile = dependencyFile.replaceAll( "  +", " " );
             dependencies = dependencyFile.split( "(\n|\r|\r\n)" );
 
             hash = new Character("#".charAt(0));
@@ -800,6 +802,7 @@ $artifact $version [$group [$repository [$gumpproject [$gumpopts]]]]
             localRepository = project.getProperty("jbs.repository.local");
             libDir = project.getProperty("jbs.build.dist.lib.dir");
 
+            dependencyFile = dependencyFile.replaceAll( "  +", " " );
             dependencies = dependencyFile.split( "(\n|\r|\r\n)" );
 
             hash = new Character("#".charAt(0));
