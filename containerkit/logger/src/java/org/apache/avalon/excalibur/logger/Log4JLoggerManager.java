@@ -16,7 +16,6 @@
  */
 package org.apache.avalon.excalibur.logger;
 
-import org.apache.avalon.framework.logger.Log4JLogger;
 import org.apache.avalon.framework.logger.Logger;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.spi.LoggerRepository;

@@ -18,9 +18,9 @@ package org.apache.avalon.excalibur.logger.log4j;
 
 import org.apache.avalon.framework.logger.Logger;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
+import org.apache.avalon.excalibur.logger.Log4JLogger;
 import org.apache.avalon.excalibur.logger.LoggerManager;
 import org.apache.log4j.spi.LoggerRepository;
-import org.apache.avalon.framework.logger.Log4JLogger;
 
 /**
  * This class sits on top of an existing Log4J Hierarchy
