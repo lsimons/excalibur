@@ -306,6 +306,7 @@ public class HTTPServer
             
         String referrer = "-";
         String userAgent = "-";
+        String host = null;
         int requestBytes = request.getBytes().length + 1;
         try
         {
@@ -314,6 +315,7 @@ public class HTTPServer
             do
             {
                 header = r.readLine();
+                getLogger().debug( "Header: " + header );
                 if ( header != null )
                 {
                     if ( header.startsWith( "User-Agent: " ) )
@@ -323,6 +325,10 @@ public class HTTPServer
                     else if ( header.startsWith( "Referer: " ) )
                     {
                         referrer = header.substring( 9 );
+                    }
+                    else if ( header.startsWith( "Host: " ) )
+                    {
+                        host = header.substring( 6 );
                     }
                     
                     requestBytes += header.getBytes().length + 1;
@@ -426,13 +432,55 @@ public class HTTPServer
                         }
                         catch ( HTTPRedirect e )
                         {
+                            // To avoid breaking some clients (including some versions of Java)
+                            //  we need to only send redirects to absolute URLs.  We can only do
+                            //  this if the client gave us a Host: header to work with however.
+                            String redirectPath = e.getPath();
+                            if ( ( host != null ) && ( redirectPath.indexOf( "://" ) < 0 ) )
+                            {
+                                // No protocol so add it.
+                                StringBuffer sb = new StringBuffer();
+                                sb.append( "http://" );
+                                sb.append( host );
+                                if ( redirectPath.startsWith( "." ) )
+                                {
+                                    // Relative path, so we need to give it a starting point.
+                                    int slashPos = path.lastIndexOf( '/' );
+                                    String subpath;
+                                    if ( slashPos > 0 )
+                                    {
+                                        subpath = path.substring( 0, slashPos + 1 );
+                                    }
+                                    else
+                                    {
+                                        subpath = "/";
+                                    }
+                                    sb.append( subpath );
+                                }
+                                else if ( !redirectPath.startsWith( "/" ) )
+                                {
+                                    sb.append( "/" );
+                                }
+                                sb.append( redirectPath );
+                                
+                                redirectPath = sb.toString();
+                            }
+                            
                             if ( getLogger().isDebugEnabled() )
                             {
-                                getLogger().debug( "Redirect to: " + e.getPath() );
+                                if ( redirectPath.equals( e.getPath() ) )
+                                {
+                                    getLogger().debug( "Redirect to: " + redirectPath );
+                                }
+                                else
+                                {
+                                    getLogger().debug(
+                                        "Redirect to: " + e.getPath() + " -> " + redirectPath );
+                                }
                             }
                             
                             byte[] contents = ( "<html><head><title>302 Found</title></head><body>"
-                                + "The document has moved <a href='" + e.getPath() + "'>here</a>"
+                                + "The document has moved <a href='" + redirectPath + "'>here</a>"
                                 + "</body></html>" ).getBytes( handler.getEncoding() );
                                 
                             // Write the response.
@@ -440,7 +488,7 @@ public class HTTPServer
                             out.println( "Date: " + new Date() );
                             out.println( "Server: Avalon Instrument Manager HTTP Connector" );
                             out.println( "Content-Length: " + contents.length );
-                            out.println( "Location: " + e.getPath() );
+                            out.println( "Location: " + redirectPath );
                             out.println( "Keep-Alive: timeout=" + ( getSoTimeout() / 1000 ) );
                             out.println( "Connection: Keep-Alive" );
                             out.println( "Content-Type: " + handler.getContentType() );
@@ -468,7 +516,8 @@ public class HTTPServer
                                 responseBytes.length + contents.length );
                             
                             // Log the request.
-                            logAccessEvent( ip, method, url, 302, contents.length, referrer, userAgent );
+                            logAccessEvent(
+                                ip, method, url, 302, contents.length, referrer, userAgent );
                             
                             // Do not close the output stream as it may be reused.
                             
