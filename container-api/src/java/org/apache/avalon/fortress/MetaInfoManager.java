@@ -55,4 +55,12 @@ public interface MetaInfoManager
      * @return the proper {@link MetaInfoEntry}
      */
     MetaInfoEntry getMetaInfoForClassname( String classname );
+    
+    /**
+     * Pending
+     * 
+     * @param classname
+     * @return
+     */
+    ExtendedMetaInfo getExtendedMetaInfo( String classname );
 }

@@ -17,11 +17,14 @@
 
 package org.apache.avalon.fortress.impl.role;
 
+import org.apache.avalon.fortress.ExtendedMetaInfo;
 import org.apache.avalon.fortress.MetaInfoEntry;
 import org.apache.avalon.fortress.MetaInfoManager;
 import org.apache.avalon.fortress.RoleManager;
+import org.apache.avalon.fortress.attributes.AttributeInfo;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +38,8 @@ import java.util.Properties;
  */
 public abstract class AbstractMetaInfoManager extends AbstractLogEnabled implements MetaInfoManager
 {
+    protected final static ExtendedMetaInfo EMPTY_EXTENDED_META_INFO;
+    
     /**
      * The classloader used to load and check roles and components.
      */
@@ -54,6 +59,11 @@ public abstract class AbstractMetaInfoManager extends AbstractLogEnabled impleme
      * Parent <code>MetaInfoManager</code> for nested resolution.
      */
     private final MetaInfoManager m_parent;
+
+    static
+    {
+        EMPTY_EXTENDED_META_INFO = new ExtendedMetaInfo( new AttributeInfo[0], Collections.EMPTY_MAP );
+    }
 
     /**
      * Default constructor--this RoleManager has no parent.
@@ -184,6 +194,16 @@ public abstract class AbstractMetaInfoManager extends AbstractLogEnabled impleme
         {
             return null;
         }
+    }
+    
+    /**
+     * Pending
+     * 
+     * @see org.apache.avalon.fortress.MetaInfoManager#getExtendedMetaInfo(java.lang.String)
+     */
+    public ExtendedMetaInfo getExtendedMetaInfo( final String classname )
+    {
+        return EMPTY_EXTENDED_META_INFO;
     }
 
     /**

@@ -31,7 +31,6 @@ import org.apache.avalon.fortress.MetaInfoManager;
  */
 public final class ECMMetaInfoManager extends AbstractMetaInfoManager
 {
-
     /**
      * Create a ECMMetaInfoManager.
      */
@@ -92,6 +91,5 @@ public final class ECMMetaInfoManager extends AbstractMetaInfoManager
         props.setProperty("x-avalon.lifestyle", lifestyle); 
         props.setProperty("x-avalon.name", role + '/' + hint);
         super.addComponent(role, className, props, new ArrayList());
-        
     }
 }

@@ -91,6 +91,7 @@ public class DefaultContainer
         throws ConfigurationException
     {
         interpretProxy( config.getAttribute("proxy-type", "discover") );
+        addHookComponents( config );
         addComponents( config );
     }
 
@@ -121,11 +122,22 @@ public class DefaultContainer
         }
     }
 
+    /**
+     * Allows implementations to register components before any 
+     * user component.
+     * 
+     * @param config Configuration representing the contents in xconf file
+     * @throws ConfigurationException
+     */
+    protected void addHookComponents(final Configuration config) throws ConfigurationException
+    {
+    }
+
 	/**
 	 * Iterates throught nodes, which represent components, adding the 
 	 * component/configuration data to container.
 	 * 
-	 * @param config Configuration representing the content in xconf file
+	 * @param config Configuration representing the contents in xconf file
 	 * @throws ConfigurationException
 	 */
 	protected void addComponents(final Configuration config) throws ConfigurationException
@@ -137,14 +149,8 @@ public class DefaultContainer
 			final Configuration element = elements[i];
 			final String hint = element.getAttribute( "id", null );
 			
-			if ( null == hint )
-			{
-				// Only components with an id attribute are treated as components.
-				getLogger().debug( "Ignoring configuration for component, " + element.getName()
-					+ ", because the id attribute is missing." );
-			}
-			else
-			{
+            if (isValidComponent( element, hint ))
+            {
 				final String classname = getClassname( element );
 				final int activation = getActivation( element );
 				final ComponentHandlerMetaData metaData =
@@ -161,6 +167,32 @@ public class DefaultContainer
 			}
 		}
 	}
+
+    /**
+     * Checks if the necessary information was included in the component configuration.
+     * In other words, whether it has a valid 'id' or not.
+     * 
+     * @param config Component configuration node
+     * @param id name
+     * @return true if the registration can proceed.
+     * @throws ConfigurationException
+     */
+    protected boolean isValidComponent( final Configuration config, final String id )
+        throws ConfigurationException
+    {
+        boolean isValid = true;
+        
+        if ( null == id )
+        {
+            // Only components with an id attribute are treated as components.
+            getLogger().debug( "Ignoring configuration for component, " + config.getName()
+                + ", because the id attribute is missing." );
+            
+            isValid = false;
+        }
+        
+        return isValid;
+    }
 
     /**
      * Retrieve the classname for component configuration.

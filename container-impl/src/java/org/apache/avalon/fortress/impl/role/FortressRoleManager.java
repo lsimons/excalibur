@@ -27,7 +27,7 @@ import org.apache.avalon.framework.activity.Initializable;
  * @version CVS $Revision: 1.11 $ $Date: 2004/02/28 15:16:25 $
  */
 public final class FortressRoleManager
-    extends org.apache.avalon.fortress.impl.role.AbstractRoleManager
+    extends AbstractRoleManager
     implements Initializable
 {
     /**

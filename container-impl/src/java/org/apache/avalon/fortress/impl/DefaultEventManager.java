@@ -29,7 +29,7 @@ import org.apache.avalon.fortress.MetaInfoEntry;
 /**
  * Default implementation of EventManager
  * 
- * @author <a href="mailto:dev@excalibur.apache.org">Excalibur Team</a>
+ * @author <a href="mailto:dev@excalibur.apache.org">Excalibur Development Team</a>
  */
 public class DefaultEventManager implements EventManager
 {
