@@ -44,6 +44,16 @@ JBS is now being installed into ${jbs.home}...
         </echo>
     </target>
 
+    <target name="jbs:error" unless="install.success">
+        <fail>
+=======================================================================
+ Error installing!
+=======================================================================
+ Please see the above output for details, correct the error, then try
+ again.
+        </fail>
+    </target>
+
     <target name="jbs:install">
         <property name="jbs.home" value="${user.home}/.jbs"/>
         <property name="jbs.work" value="${jbs.home}/work"/>
@@ -54,52 +64,47 @@ JBS is now being installed into ${jbs.home}...
 
         <mkdir dir="${jbs.home}"/>
         <mkdir dir="${jbs.work}"/>
-        <mkdir dir="${jbs.backup}"/>
-        <move todir="${jbs.backup}">
-            <fileset dir="${jbs.home}" defaultexcludes="no">
-                <exclude name="backup"/>
-                <exclude name="backup/**"/>
-            </fileset>
-        </move>
 
         <get src="http://svn.apache.org/repos/asf/excalibur/trunk/buildsystem/jbs/install/jbs-current.tgz"
           dest="${jbs.work}/jbs-current.tgz"/>
-        <untar src="${jbs.work}/jbs-current.tgz" dest="${jbs.home}"/>
+        <untar src="${jbs.work}/jbs-current.tgz" dest="${jbs.home}" compression="gzip"/>
 
-        <mkdir dir="${jbs.repository.local}/bsh"/>
-        <mkdir dir="${jbs.repository.local}/bsh/jars"/>
-        <mkdir dir="${jbs.repository.local}/bsh/licenses"/>
+        <mkdir dir="${jbs.repository.local}/bsf"/>
+        <mkdir dir="${jbs.repository.local}/bsf/jars"/>
+        <mkdir dir="${jbs.repository.local}/bsf/licenses"/>
         <mkdir dir="${jbs.repository.local}/js"/>
         <mkdir dir="${jbs.repository.local}/js/jars"/>
         <mkdir dir="${jbs.repository.local}/js/licenses"/>
 
-	<get src="http://svn.apache.org/repos/asf/excalibur/repository/bsh/jars/bsh-2.0b1.jar"
-          dest="${jbs.repository.local}/bsh/jars/bsh-2.0b1.jar"/>
-	<get src="http://svn.apache.org/repos/asf/excalibur/repository/bsh/licenses/LICENSE.txt"
-          dest="${jbs.repository.local}/bsh/licenses/LICENSE.txt"/>
-	<get src="http://svn.apache.org/repos/asf/excalibur/repository/bsh/licenses/LICENSE-alternative.txt"
-          dest="${jbs.repository.local}/bsh/licenses/LICENSE-alternative.txt"/>
+	<get src="http://svn.apache.org/repos/asf/excalibur/repository/bsf/jars/bsf-2.3.0.jar"
+          dest="${jbs.repository.local}/bsf/jars/bsf-2.3.0.jar"/>
+	<get src="http://svn.apache.org/repos/asf/excalibur/repository/bsf/licenses/LICENSE.txt"
+          dest="${jbs.repository.local}/bsf/licenses/LICENSE.txt"/>
 	<get src="http://svn.apache.org/repos/asf/excalibur/repository/js/jars/js.jar"
           dest="${jbs.repository.local}/js/jars/js.jar"/>
 	<get src="http://svn.apache.org/repos/asf/excalibur/repository/js/licenses/LICENSE.html"
           dest="${jbs.repository.local}/js/licenses/LICENSE.html"/>
 
-        <!-- the checks should be rather redundant as copy should fail, but
-             lets just be real sure as people have reported problems... -->
-
-        <copy todir="${ant.home}/lib" file="${jbs.repository.local}/bsf/jars/bsf-2.3.0.jar"/>
+        <copy todir="${ant.home}/lib" file="${jbs.repository.local}/bsf/jars/bsf-2.3.0.jar" failonerror="false"/>
         <available file="${ant.home}/lib/bsf-2.3.0.jar" property="bsf.installed.successfully"/>
         <antcall target="bsf.required"/>
 
-        <copy todir="${ant.home}/lib" file="${jbs.repository.local}/js/jars/js.jar"/>
+        <copy todir="${ant.home}/lib" file="${jbs.repository.local}/js/jars/js.jar" failonerror="false"/>
         <available file="${ant.home}/lib/js.jar" property="js.installed.successfully"/>
         <antcall target="js.required"/>
 
+        <condition property="install.success">
+          <and>
+            <available file="${ant.home}/lib/bsf-2.3.0.jar"/>
+            <available file="${ant.home}/lib/js.jar"/>
+          </and>
+        </condition>
+        <antcall target="jbs:error"/>
         <antcall target="jbs:done"/>
     </target>
 
     <target name="bsf.required" unless="bsf.installed.successfully">
-        <fail>=======================================================================
+        <echo>=======================================================================
                       ERROR installing!
 
   JBS requires the script task to be available.
@@ -111,11 +116,11 @@ JBS is now being installed into ${jbs.home}...
   jar into your ant lib directory manually, which should be
 
             ${ant.home}/lib
-=======================================================================</fail>
+=======================================================================</echo>
     </target>
 
     <target name="js.required" unless="js.installed.successfully">
-        <fail>=======================================================================
+        <echo>=======================================================================
                       ERROR installing!
 
   JBS requires the script task to be available.
@@ -127,7 +132,7 @@ JBS is now being installed into ${jbs.home}...
   jar into your ant lib directory manually, which should be
 
             ${ant.home}/lib
-=======================================================================</fail>
+=======================================================================</echo>
     </target>
 
 </project>
