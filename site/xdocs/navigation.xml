@@ -75,7 +75,19 @@
             <item name="Instrument" href="/instrument/index.html" collapse="true">
                 <item name="Overview" href="/instrument/index.html"/>
                 <item name="HTML Based Client" href="/instrument/html-client.html"/>
-                <item name="XML Based Client" href="/instrument/xml-client.html"/>
+                <item name="XML Based Client" href="/instrument/xml-client.html" collapse="true">
+                    <item name="Instrument Manager" href="/instrument/xml-client-instrument-manager.html"/>
+                    <item name="Instrumentable" href="/instrument/xml-client-instrumentable.html"/>
+                    <item name="Instrument" href="/instrument/xml-client-instrument.html"/>
+                    <item name="Sample" href="/instrument/xml-client-sample.html"/>
+                    <item name="Snapshot" href="/instrument/xml-client-snapshot.html"/>
+                    <item name="Snapshots" href="/instrument/xml-client-snapshots.html"/>
+                    <item name="Create Sample" href="/instrument/xml-client-create-sample.html"/>
+                    <item name="Create Samples" href="/instrument/xml-client-create-samples.html"/>
+                    <item name="Sample Lease" href="/instrument/xml-client-sample-lease.html"/>
+                    <item name="Sample Leases" href="/instrument/xml-client-sample-leases.html"/>
+                    <item name="Invoke GC" href="/instrument/xml-client-gc.html"/>
+                </item>
                 <item name="Java Swing Client" href="/instrument/java-client.html"/>
                 <item name="Configuration" href="/instrument/configuration.html"/>
                 <item name="Component Integration" href="/instrument/component.html"/>
