@@ -35,6 +35,12 @@ import org.xml.sax.ext.LexicalHandler;
 /**
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  * @version CVS $Revision: 1.4 $ $Date: 2004/02/28 11:47:20 $
+ * 
+ * @avalon.component
+ * @avalon.service type=org.apache.excalibur.xml.sax.SAXParser
+ * @avalon.service type=org.apache.excalibur.xml.dom.DOMParser
+ * @x-avalon.info name=xerces-parser
+ * @x-avalon.lifestyle type=singleton
  */
 public final class XercesParser
     extends AbstractLogEnabled

@@ -46,6 +46,11 @@ import org.xml.sax.SAXException;
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  * @version CVS $Id: DefaultEntityResolver.java,v 1.4 2004/02/28 11:47:36 cziegeler Exp $
+ * 
+ * @avalon.component
+ * @avalon.service type=EntityResolver
+ * @x-avalon.info name=default-entity-resolver
+ * @x-avalon.lifestyle type=singleton
  */
 public class DefaultEntityResolver extends AbstractLogEnabled
   implements EntityResolver,

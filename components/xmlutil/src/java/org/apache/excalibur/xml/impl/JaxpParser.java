@@ -86,6 +86,10 @@ import org.xml.sax.ext.LexicalHandler;
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  * @version CVS $Revision: 1.7 $ $Date: 2004/03/28 18:56:45 $
  * @avalon.component
+ * @avalon.service type=SAXParser
+ * @avalon.service type=DOMParser
+ * @x-avalon.info name=jaxp-parser
+ * @x-avalon.lifestyle type=poolable
  */
 public final class JaxpParser
     extends AbstractLogEnabled
