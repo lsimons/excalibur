@@ -30,14 +30,14 @@
         avalon containers.  It boasts asynchronous management of your
         component instances, high scalability, easier maintenance of
         your code, and easy embedding into various environments like
-        servlet engines.  Fortress replaces the older 
+        servlet engines.  Fortress replaces the older
 	Excalibur Component Manager (ECM) container.
             </p>
         </section>
         <section name="Fortress 1.1">
             <p>
         Fortress 1.1 has been released and includes a number of bug fixes.  See the
-                <a href="http://avalon.apache.org/download.cgi">download</a> section to get
+                <a href="http://excalibur.apache.org/download.cgi">download</a> section to get
 	the latest source and binary distributions.
             </p>
         </section>

@@ -35,7 +35,7 @@
             <item name="Wiki" href="http://wiki.apache.org/excalibur/"/>
             <item name="FAQ" href="http://wiki.apache.org/excalibur/FrequentlyAskedQuestions"/>
             <item name="Javadocs" href="http://excalibur.apache.org/apidocs/"/>
-            <item name="Download" href="http://avalon.apache.org/download.cgi"/>
+            <item name="Download" href="/download.cgi"/>
             <item name="Issue Tracking" href="/issue-tracking.html"/>
             <item name="Miscellaneous" href="misc.html" collapse="true">
                 <item name="Where's my documentation???" href="/no-docs-available.html"/>
