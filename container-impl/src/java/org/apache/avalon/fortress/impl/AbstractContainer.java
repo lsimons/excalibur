@@ -19,6 +19,7 @@ package org.apache.avalon.fortress.impl;
 
 import org.apache.avalon.excalibur.logger.LoggerManager;
 import org.apache.avalon.fortress.Container;
+import org.apache.avalon.fortress.EventManager;
 import org.apache.avalon.fortress.MetaInfoEntry;
 import org.apache.avalon.fortress.MetaInfoManager;
 import org.apache.avalon.fortress.impl.extensions.InstrumentableCreator;
@@ -109,6 +110,8 @@ public abstract class AbstractContainer
     protected List m_components = new ArrayList( 10 );
 
     protected List m_shutDownOrder;
+    
+    protected EventManager m_eventManager;
 
     private ProxyManager m_proxyManager;
 
@@ -162,6 +165,21 @@ public abstract class AbstractContainer
         {
             m_classLoader = Thread.currentThread().getContextClassLoader();
         }
+    }
+
+    /**
+     * Pending
+     * 
+     * @return
+     */
+    public EventManager getEventManager()
+    {
+        if (m_eventManager == null)
+        {
+            m_eventManager = new DefaultEventManager(); 
+        }
+        
+        return m_eventManager;
     }
 
     /**

@@ -424,12 +424,12 @@ public final class ComponentFactory extends AbstractLogEnabledInstrumentable imp
 
     protected Object raiseComponentCreatedEvent( final Object newInstance )
     {
-        return m_container.getEventManager().fireComponentCreated( newInstance );
+        return m_container.getEventManager().fireComponentCreated( m_metaEntry, newInstance );
     }
 
     protected void raiseComponentDestroyedEvent( final Object newInstance )
     {
-        m_container.getEventManager().fireComponentDestroyed( newInstance );
+        m_container.getEventManager().fireComponentDestroyed( m_metaEntry, newInstance );
     }
 
     /**

@@ -39,37 +39,42 @@ import org.d_haven.mpool.ObjectFactory;
  * @author <a href="mailto:dev@avalon.apache.org">The Avalon Team</a>
  * @version CVS $ Revision: 1.1 $
  */
-public class DefaultECMContainer extends DefaultContainer {
-
+public class DefaultECMContainer extends DefaultContainer
+{
     /**
      * Retrieve the role for the component.
      *
      * @param config the component configuration
      * @return the class name
      */
-    private String getRole( final Configuration config )
-    throws ConfigurationException {
+    private String getRole(final Configuration config) throws ConfigurationException
+    {
         final String className;
 
-        if ( "component".equals( config.getName() ) )
+        if ("component".equals(config.getName()))
         {
-            className = config.getAttribute( "role" );
+            className = config.getAttribute("role");
         }
         else
         {
-            final MetaInfoEntry roleEntry = m_metaManager.getMetaInfoForShortName( config.getName() );
-            if ( null == roleEntry )
+            final MetaInfoEntry roleEntry = m_metaManager.getMetaInfoForShortName(config.getName());
+            if (null == roleEntry)
             {
 
-                final String message = "No class found matching configuration name " +
-                        "[name: " + config.getName() + ", location: " + config.getLocation() + "]";
-                throw new ConfigurationException( message );
+                final String message =
+                    "No class found matching configuration name "
+                        + "[name: "
+                        + config.getName()
+                        + ", location: "
+                        + config.getLocation()
+                        + "]";
+                throw new ConfigurationException(message);
             }
 
             Iterator roleIterator = roleEntry.getRoles();
-            if ( roleIterator.hasNext() )
+            if (roleIterator.hasNext())
             {
-                className = (String)roleIterator.next();
+                className = (String) roleIterator.next();
             }
             else
             {
@@ -86,29 +91,34 @@ public class DefaultECMContainer extends DefaultContainer {
      * @param config the component configuration
      * @return the class name
      */
-    protected String getClassname( final Configuration config )
-    throws ConfigurationException {
+    protected String getClassname(final Configuration config) throws ConfigurationException
+    {
         final String className;
 
-        if ( "component".equals( config.getName() ) )
+        if ("component".equals(config.getName()))
         {
-            className = config.getAttribute( "class" );
+            className = config.getAttribute("class");
         }
         else
         {
-            if ( config.getAttribute("class", null) != null )
+            if (config.getAttribute("class", null) != null)
             {
                 className = config.getAttribute("class");
             }
             else
             {
-                final MetaInfoEntry roleEntry = m_metaManager.getMetaInfoForShortName( config.getName() );
-                if ( null == roleEntry )
+                final MetaInfoEntry roleEntry = m_metaManager.getMetaInfoForShortName(config.getName());
+                if (null == roleEntry)
                 {
 
-                    final String message = "No class found matching configuration name " +
-                        "[name: " + config.getName() + ", location: " + config.getLocation() + "]";
-                    throw new ConfigurationException( message );
+                    final String message =
+                        "No class found matching configuration name "
+                            + "[name: "
+                            + config.getName()
+                            + ", location: "
+                            + config.getLocation()
+                            + "]";
+                    throw new ConfigurationException(message);
                 }
 
                 className = roleEntry.getComponentClass().getName();
@@ -124,32 +134,31 @@ public class DefaultECMContainer extends DefaultContainer {
      * @param conf The configuration
      * @throws ConfigurationException if the coniguration is invalid
      */
-    public void configure( Configuration conf )
-    throws ConfigurationException {
-        this.interpretProxy( conf.getAttribute("proxy-type", this.getDefaultProxyType()) );
+    public void configure(Configuration conf) throws ConfigurationException
+    {
+        interpretProxy(conf.getAttribute("proxy-type", this.getDefaultProxyType()));
 
         final Configuration[] elements = conf.getChildren();
-        for ( int i = 0; i < elements.length; i++ )
+        for (int i = 0; i < elements.length; i++)
         {
             final Configuration element = elements[i];
 
             // figure out Role
-            String role = getRole( element );
-            if ( role.endsWith("Selector") )
+            String role = getRole(element);
+            if (role.endsWith("Selector"))
             {
-                processSelector(role.substring(0, role.length()-8), element );
+                processSelector(role.substring(0, role.length() - 8), element);
             }
             else
             {
-
                 // get the implementation
-                final String className = getClassname( element );
+                final String className = getClassname(element);
 
                 final int pos = role.indexOf('/');
                 final String hint;
-                if ( pos != -1 )
+                if (pos != -1)
                 {
-                    hint = role.substring(pos+1);
+                    hint = role.substring(pos + 1);
                     role = role.substring(0, pos);
                 }
                 else
@@ -158,7 +167,7 @@ public class DefaultECMContainer extends DefaultContainer {
                 }
 
                 final String shortName;
-                if ( "component".equals( element.getName() ))
+                if ("component".equals(element.getName()))
                 {
                     shortName = null;
                 }
@@ -167,12 +176,12 @@ public class DefaultECMContainer extends DefaultContainer {
                     shortName = element.getName();
                 }
 
-                this.addComponent(role, hint, shortName, className, element );
+                this.addComponent(role, hint, shortName, className, element);
             }
 
-            if ( getLogger().isDebugEnabled() )
+            if (getLogger().isDebugEnabled())
             {
-                getLogger().debug( "Configuration processed for: " + role );
+                getLogger().debug("Configuration processed for: " + role);
             }
         }
     }
@@ -186,10 +195,11 @@ public class DefaultECMContainer extends DefaultContainer {
      * @return the component handler
      * @throws Exception if unable to provide a componenthandler
      */
-    private ComponentHandler getComponentHandler( final String classname,
-                                                  final Class  handlerClass,
-                                                  final ComponentHandlerMetaData metaData)
-            throws Exception
+    private ComponentHandler getComponentHandler(
+        final String classname,
+        final Class handlerClass,
+        final ComponentHandlerMetaData metaData)
+        throws Exception
     {
         final Configuration configuration = metaData.getConfiguration();
 
@@ -198,150 +208,141 @@ public class DefaultECMContainer extends DefaultContainer {
 
         try
         {
-            final ObjectFactory factory =
-                    createObjectFactory( classname, configuration );
+            final ObjectFactory factory = createObjectFactory(classname, configuration, null);
 
             // create the appropriate handler instance
-            final ComponentHandler targetHandler =
-                    (ComponentHandler) handlerClass.newInstance();
+            final ComponentHandler targetHandler = (ComponentHandler) handlerClass.newInstance();
 
             // do the handler lifecycle
-            ContainerUtil.enableLogging( targetHandler, getLogger() );
-            ContainerUtil.contextualize( targetHandler, m_context );
-            final DefaultServiceManager serviceManager =
-                    new DefaultServiceManager( getServiceManager() );
-            serviceManager.put( ObjectFactory.class.getName(), factory );
+            ContainerUtil.enableLogging(targetHandler, getLogger());
+            ContainerUtil.contextualize(targetHandler, m_context);
+            final DefaultServiceManager serviceManager = new DefaultServiceManager(getServiceManager());
+            serviceManager.put(ObjectFactory.class.getName(), factory);
             serviceManager.makeReadOnly();
 
-            ContainerUtil.service( targetHandler, serviceManager );
-            ContainerUtil.configure( targetHandler, configuration );
-            ContainerUtil.initialize( targetHandler );
+            ContainerUtil.service(targetHandler, serviceManager);
+            ContainerUtil.configure(targetHandler, configuration);
+            ContainerUtil.initialize(targetHandler);
 
-            if ( targetHandler instanceof Instrumentable )
+            if (targetHandler instanceof Instrumentable)
             {
                 final Instrumentable instrumentable = (Instrumentable) targetHandler;
                 final String name = instrumentable.getInstrumentableName();
-                m_instrumentManager.registerInstrumentable( instrumentable, name );
+                m_instrumentManager.registerInstrumentable(instrumentable, name);
             }
 
             // no other lifecycle stages supported for ComponentHandler;
             // ComponentHandler is not a "true" avalon component
 
-            handler = new LEAwareComponentHandler( targetHandler, m_extManager, m_context );
+            handler = new LEAwareComponentHandler(targetHandler, m_extManager, m_context);
         }
-        catch ( final Exception e )
+        catch (final Exception e)
         {
             // if anything went wrong, the component cannot be worked with
             // and it cannot be added into the impl, so don't provide
             // a handler
-            if ( getLogger().isDebugEnabled() )
+            if (getLogger().isDebugEnabled())
             {
-                final String message =
-                        "Could not create the handler for the '" +
-                        classname + "' component.";
-                getLogger().debug( message, e );
+                final String message = "Could not create the handler for the '" + classname + "' component.";
+                getLogger().debug(message, e);
             }
             throw e;
         }
 
-        if ( getLogger().isDebugEnabled() )
+        if (getLogger().isDebugEnabled())
         {
-            final String message =
-                    "Component " + classname +
-                    " uses handler " + handlerClass.getName();
-            getLogger().debug( message );
+            final String message = "Component " + classname + " uses handler " + handlerClass.getName();
+            getLogger().debug(message);
         }
 
         // we're still here, so everything went smooth. Register the handler
         // and return it
-        final ComponentHandlerEntry entry =
-                new ComponentHandlerEntry( handler, metaData );
-        m_components.add( entry );
+        final ComponentHandlerEntry entry = new ComponentHandlerEntry(handler, metaData);
+        m_components.add(entry);
 
         return handler;
     }
 
-    protected Class getComponentHandlerClass(final String defaultClassName, final String shortName )
-        throws Exception
+    protected Class getComponentHandlerClass(final String defaultClassName, final String shortName) throws Exception
     {
-        if ( shortName == null )
+        if (shortName == null)
         {
             String handlerClassName = null;
 
             Class clazz;
             try
             {
-                clazz = m_classLoader.loadClass( defaultClassName );
+                clazz = m_classLoader.loadClass(defaultClassName);
 
-                if ( ThreadSafe.class.isAssignableFrom( clazz ) )
+                if (ThreadSafe.class.isAssignableFrom(clazz))
                 {
                     handlerClassName = MetaInfoEntry.THREADSAFE_HANDLER;
                 }
-                else if ( Service.isClassPoolable(clazz) )
+                else if (Service.isClassPoolable(clazz))
                 {
                     handlerClassName = MetaInfoEntry.POOLABLE_HANDLER;
                 }
-                else if ( SingleThreaded.class.isAssignableFrom( clazz) )
+                else if (SingleThreaded.class.isAssignableFrom(clazz))
                 {
                     handlerClassName = MetaInfoEntry.FACTORY_HANDLER;
                 }
             }
-            catch ( final Exception e )
+            catch (final Exception e)
             {
-                final String message =
-                    "Unable to load class " + defaultClassName + ". Using dfault component handler.";
-                getLogger().warn( message );
+                final String message = "Unable to load class " + defaultClassName + ". Using dfault component handler.";
+                getLogger().warn(message);
             }
 
             // Don't know, use default
-            if ( handlerClassName == null )
+            if (handlerClassName == null)
             {
                 handlerClassName = MetaInfoEntry.THREADSAFE_HANDLER;
             }
-            return m_classLoader.loadClass( handlerClassName ) ;
+            return m_classLoader.loadClass(handlerClassName);
         }
         else
         {
-            final MetaInfoEntry roleEntry = m_metaManager.getMetaInfoForShortName( shortName );
-            if ( null == roleEntry )
+            final MetaInfoEntry roleEntry = m_metaManager.getMetaInfoForShortName(shortName);
+            if (null == roleEntry)
             {
 
-                final String message = "No class found matching configuration name " +
-                        "[name: " + shortName + "]";
-                throw new ConfigurationException( message );
+                final String message = "No class found matching configuration name " + "[name: " + shortName + "]";
+                throw new ConfigurationException(message);
             }
 
             return roleEntry.getHandlerClass();
         }
     }
 
-    protected void processSelector(String role, Configuration config)
-        throws ConfigurationException
+    protected void processSelector(String role, Configuration config) throws ConfigurationException
     {
         final String selectorRole = role + "Selector";
         FortressServiceSelector fss = new FortressServiceSelector(this, selectorRole);
         Map hintMap = createHintMap();
-        hintMap.put( DEFAULT_ENTRY, fss );
-        hintMap.put( SELECTOR_ENTRY,
-                    new FortressServiceSelector( this, selectorRole ) );
-        m_mapper.put( selectorRole, hintMap );
+        hintMap.put(DEFAULT_ENTRY, fss);
+        hintMap.put(SELECTOR_ENTRY, new FortressServiceSelector(this, selectorRole));
+        m_mapper.put(selectorRole, hintMap);
 
         final Configuration[] children = config.getChildren();
-        if ( children != null )
+        if (children != null)
         {
-            for(int i=0; i<children.length; i++)
+            for (int i = 0; i < children.length; i++)
             {
                 final Configuration element = children[i];
                 final String hint = element.getAttribute("name");
                 final String className = element.getAttribute("class");
 
-                if ( m_metaManager instanceof ECMMetaInfoManager )
+                if (m_metaManager instanceof ECMMetaInfoManager)
                 {
                     try
                     {
-                        ((ECMMetaInfoManager)m_metaManager).addSelectorComponent(role, hint, className, getComponentHandlerClass(className, null).getName());
+                        ((ECMMetaInfoManager) m_metaManager).addSelectorComponent(
+                            role,
+                            hint,
+                            className,
+                            getComponentHandlerClass(className, null).getName());
                     }
-                    catch (ConfigurationException ce )
+                    catch (ConfigurationException ce)
                     {
                         throw ce;
                     }
@@ -350,75 +351,71 @@ public class DefaultECMContainer extends DefaultContainer {
                         throw new ConfigurationException("Unable to add selector component.", e);
                     }
                 }
-                addComponent(role, hint, null, className, element );
+                addComponent(role, hint, null, className, element);
             }
         }
     }
 
-    protected void addComponent(final String role,
-                                String hint,
-                                String shortName,
-                                final String className,
-                                final Configuration element)
+    protected void addComponent(
+        final String role,
+        String hint,
+        String shortName,
+        final String className,
+        final Configuration element)
         throws ConfigurationException
     {
         final int activation = ComponentHandlerMetaData.ACTIVATION_BACKGROUND;
 
         // Fortress requires a hint, so we just give it one :) (if missing)
-        final String metaDataHint = element.getAttribute( "id", element.getLocation() );
+        final String metaDataHint = element.getAttribute("id", element.getLocation());
 
-        if ( hint == null )
+        if (hint == null)
         {
             hint = metaDataHint;
         }
 
         final ComponentHandlerMetaData metaData =
-            new ComponentHandlerMetaData( metaDataHint, className, element, activation );
+            new ComponentHandlerMetaData(metaDataHint, className, element, activation);
 
         try
         {
-
-            if ( DEFAULT_ENTRY.equals( metaData.getName() ) ||
-                    SELECTOR_ENTRY.equals( metaData.getName() ) )
+            if (DEFAULT_ENTRY.equals(metaData.getName()) || SELECTOR_ENTRY.equals(metaData.getName()))
             {
-                throw new IllegalArgumentException( "Using a reserved id name" + metaData.getName() );
+                throw new IllegalArgumentException("Using a reserved id name" + metaData.getName());
             }
 
             // create a handler for the combo of Role+MetaData
             final ComponentHandler handler =
-                    getComponentHandler( className,
-                                         getComponentHandlerClass( className, shortName),
-                                         metaData );
+                getComponentHandler(className, getComponentHandlerClass(className, shortName), metaData);
 
             // put the role into our role mapper. If the role doesn't exist
             // yet, just stuff it in as DEFAULT_ENTRY. If it does, we create a
             // ServiceSelector and put that in as SELECTOR_ENTRY.
-            Map hintMap = (Map) m_mapper.get( role );
+            Map hintMap = (Map) m_mapper.get(role);
 
             // Initialize the hintMap if it doesn't exist yet.
-            if ( null == hintMap )
+            if (null == hintMap)
             {
                 hintMap = createHintMap();
-                hintMap.put( DEFAULT_ENTRY, handler );
-                hintMap.put( SELECTOR_ENTRY,
-                        new FortressServiceSelector( this, role ) );
-                m_mapper.put( role, hintMap );
+                hintMap.put(DEFAULT_ENTRY, handler);
+                hintMap.put(SELECTOR_ENTRY, new FortressServiceSelector(this, role));
+                m_mapper.put(role, hintMap);
             }
 
-            hintMap.put( hint, handler );
+            hintMap.put(hint, handler);
 
-            if ( element.getAttributeAsBoolean( "default", false ) )
+            if (element.getAttributeAsBoolean("default", false))
             {
-                hintMap.put( DEFAULT_ENTRY, handler );
+                hintMap.put(DEFAULT_ENTRY, handler);
             }
         }
-        catch ( ConfigurationException ce )
+        catch (ConfigurationException ce)
         {
             throw ce;
         }
-        catch ( Exception e )
+        catch (Exception e)
         {
-            throw new ConfigurationException( "Could not add component", e );
+            throw new ConfigurationException("Could not add component", e);
         }
     }
 
@@ -427,7 +424,8 @@ public class DefaultECMContainer extends DefaultContainer {
      * This method can be overwritten in subclasses to provide a different
      * default proxy type.
      */
-    protected String getDefaultProxyType() {
+    protected String getDefaultProxyType()
+    {
         return "none";
     }
 }

@@ -19,6 +19,7 @@ package org.apache.avalon.fortress.impl.lookup.test;
 
 import junit.framework.TestCase;
 import org.apache.avalon.fortress.Container;
+import org.apache.avalon.fortress.EventManager;
 import org.apache.avalon.fortress.impl.AbstractContainer;
 import org.apache.avalon.fortress.impl.lookup.FortressServiceManager;
 import org.apache.avalon.fortress.impl.lookup.FortressServiceSelector;
@@ -100,6 +101,11 @@ class TestContainer implements Container
     public void setExpectedHint( Object hint )
     {
         m_hint = hint;
+    }
+
+    public EventManager getEventManager()
+    {
+        return null;
     }
 
     public Object get( String key, Object hint ) throws ServiceException

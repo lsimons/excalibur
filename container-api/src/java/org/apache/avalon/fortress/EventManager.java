@@ -18,29 +18,41 @@
 package org.apache.avalon.fortress;
 
 /**
- * Pending
+ * Holds the events subscribers and allows the container to 
+ * raise the events.
  * 
+ * @author <a href="mailto:dev@excalibur.apache.org">Excalibur Team</a>
  */
 public interface EventManager
 {
+    /**
+     * Adds an event subscriber
+     * 
+     * @param listener ContainerListener implementation
+     */
 	void addListener( ContainerListener listener );
     
+    /**
+     * Removes an event subscriber
+     * 
+     * @param listener ContainerListener implementation
+     */
     void removeListener( ContainerListener listener );
 
     /**
-     * Pending
+     * Raises the ComponentCreated event to susbcribers
      * 
-     * @param newInstance
-     * @return
+     * @param entry Collection of information about the component
+     * @param newInstance instance that has been created.
+     * @return the instance itself or a wrapped one
      */
-    Object fireComponentCreated(Object newInstance);
+    Object fireComponentCreated( MetaInfoEntry entry, Object newInstance );
 
     /**
-     * Pending
+     * Raises the ComponentDestroyed event to susbcribers
      * 
-     * @param newInstance
+     * @param entry Collection of information about the component
+     * @param newInstance instance that has been released.
      */
-    void fireComponentDestroyed(Object newInstance);
-    
-    
+    void fireComponentDestroyed( MetaInfoEntry entry, Object newInstance );
 }

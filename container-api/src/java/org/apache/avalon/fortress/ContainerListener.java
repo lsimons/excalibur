@@ -18,25 +18,27 @@
 package org.apache.avalon.fortress;
 
 /**
- * Pending
+ * Listener to allow hooks into Container
  * 
+ * @author <a href="mailto:dev@excalibur.apache.org">Excalibur Team</a>
  */
 public interface ContainerListener
 {
     /**
-     * Pending
+     * Signalizes that a component instance has been created.
+     * The original or a wrapped instance must be returned by the implementation
      * 
-     * @param entry
-     * @param instance
-     * @return
+     * @param entry Collection of information about the component
+     * @param instance The created instance
+     * @return the old or new instance
      */
 	Object componentCreated( MetaInfoEntry entry, Object instance );
 	
     /**
-     * Pending
+     * Signalizes that a component instance has been destroyed.
      * 
-     * @param entry
-     * @param instance
+     * @param entry Collection of information about the component
+     * @param instance The instance being destroyed
      */
 	void componentDestroyed( MetaInfoEntry entry, Object instance );
 }
