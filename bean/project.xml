@@ -80,6 +80,16 @@ Bean for working with Avalon-Fortress.
             <version>2.0</version>
         </dependency>
         <dependency>
+            <groupId>d-haven</groupId>
+            <artifactId>d-haven-managed-pool</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>d-haven</groupId>
+            <artifactId>d-haven-event</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
             <id>commons-collections</id>
             <version>2.1</version>
         </dependency>
