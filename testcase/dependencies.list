@@ -1,9 +1,0 @@
-# Dependencies
-#
-# artifact-id version groupid repository gumpid gumpopts
-#
-avalon-logkit 2.0 - - - runtime,inherit=runtime
-avalon-framework 4.1.4 framework http://www.apache.org/dist/avalon - runtime,inherit=runtime
-excalibur-logger - - - - runtime,inherit=runtime
-excalibur-component - - - - runtime,inherit=runtime
-junit 3.8 - - - runtime,inherit=runtime
