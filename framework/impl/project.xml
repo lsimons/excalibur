@@ -25,9 +25,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>avalon-framework</groupId>
-      <artifactId>avalon-framework-api</artifactId>
-      <version>4.2-dev</version>
+      <groupId>excalibur-framework</groupId>
+      <artifactId>excalibur-framework-api</artifactId>
+      <version>4.3-dev</version>
     </dependency>
     
     <dependency>

@@ -24,13 +24,13 @@
     <!-- avalon dependencies -->
 
     <dependency>
-      <groupId>avalon-framework</groupId>
-      <artifactId>avalon-framework-api</artifactId>
+      <groupId>excalibur-framework</groupId>
+      <artifactId>excalibur-framework-api</artifactId>
       <version>4.3-dev</version>
     </dependency>
     <dependency>
-      <groupId>avalon-framework</groupId>
-      <artifactId>avalon-framework-impl</artifactId>
+      <groupId>excalibur-framework</groupId>
+      <artifactId>excalibur-framework-impl</artifactId>
       <version>4.3-dev</version>
     </dependency>
 
