@@ -21,5 +21,6 @@ limitations under the License.
     <groupId>excalibur-framework</groupId>
     <currentVersion>4.3-dev</currentVersion>
     <inceptionYear>1997</inceptionYear>
+    <package>org.apache.avalon.framework</package>
 
 </project>

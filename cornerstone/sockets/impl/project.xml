@@ -4,48 +4,21 @@
 
   <extend>${basedir}/../project.xml</extend>
 
-  <id>cornerstone-connection-impl</id>
-  <name>Cornerstone Connection Manager Implementation</name>
-
-  <!-- 
-  bump to SNAPSHOT in anticipation of a 2.0 release due to 
-  link to excalibur threads API (without deprricated content) and the 
-  transfer of factory classes from the api to the implementation.
-  -->
-
-  <package>org.apache.avalon.cornerstone</package>
+  <id>cornerstone-sockets-impl</id>
+  <name>Cornerstone Socket Manager Implementation</name>
+  <package>org.apache.avalon.cornerstone.blocks.sockets</package>
 
   <inceptionYear>2001</inceptionYear>
-  <shortDescription>Cornerstone Connections</shortDescription>
+  <shortDescription>Cornerstone Sockets</shortDescription>
 
   <dependencies>
 
-    <!-- cornerstone api dependencies -->
-
-    <dependency>
-      <groupId>cornerstone-connection</groupId>
-      <artifactId>cornerstone-connection-api</artifactId>
-      <version>2.1-dev</version>
-    </dependency>
+    <!-- cornerstone dependencies -->
 
     <dependency>
       <groupId>cornerstone-sockets</groupId>
       <artifactId>cornerstone-sockets-api</artifactId>
       <version>2.1-dev</version>
-    </dependency>
-
-    <dependency>
-      <groupId>cornerstone-threads</groupId>
-      <artifactId>cornerstone-threads-api</artifactId>
-      <version>2.1-dev</version>
-    </dependency>
-
-    <!-- excalibur api dependencies -->
-
-    <dependency>
-      <groupId>excalibur-thread</groupId>
-      <artifactId>excalibur-thread-api</artifactId>
-      <version>2.0.0</version>
     </dependency>
 
     <!-- avalon dependencies -->

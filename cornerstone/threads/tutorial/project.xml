@@ -4,22 +4,16 @@
 
   <extend>${basedir}/../project.xml</extend>
 
-  <id>cornerstone-connection-api</id>
-  <name>Cornerstone Connection API</name>
+  <id>cornerstone-threads-tutorial</id>
+  <name>Cornerstone Threads Tutorial</name>
+  <package>org.apache.avalon.cornerstone.threads.tutorial</package>
 
-  <package>org.apache.avalon.cornerstone.services.connection</package>
   <inceptionYear>2001</inceptionYear>
-  <shortDescription>Cornerstone Connection API</shortDescription>
-  
+  <shortDescription>Cornerstone Threads</shortDescription>
+
   <dependencies>
 
     <!-- cornerstone api dependencies -->
-
-    <dependency>
-      <groupId>cornerstone-sockets</groupId>
-      <artifactId>cornerstone-sockets-api</artifactId>
-      <version>2.1-dev</version>
-    </dependency>
 
     <dependency>
       <groupId>cornerstone-threads</groupId>
@@ -27,7 +21,7 @@
       <version>2.1-dev</version>
     </dependency>
 
-    <!-- excalibur api dependencies -->
+    <!-- avalon dependencies -->
 
     <dependency>
       <groupId>avalon-framework</groupId>
@@ -35,10 +29,13 @@
       <version>4.3-dev</version>
     </dependency>
     <dependency>
-      <groupId>excalibur-pool</groupId>
-      <artifactId>excalibur-pool-api</artifactId>
-      <version>2.0.0</version>
+      <groupId>avalon-framework</groupId>
+      <artifactId>avalon-framework-impl</artifactId>
+      <version>4.3-dev</version>
     </dependency>
+
+    <!-- excalibur dependencies -->
+
     <dependency>
       <groupId>excalibur-thread</groupId>
       <artifactId>excalibur-thread-api</artifactId>

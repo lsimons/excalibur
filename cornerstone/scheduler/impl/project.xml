@@ -4,33 +4,21 @@
 
   <extend>${basedir}/../project.xml</extend>
 
-  <id>cornerstone-connection-impl</id>
-  <name>Cornerstone Connection Manager Implementation</name>
+  <id>cornerstone-scheduler-impl</id>
+  <name>Cornerstone Scheduler Implementation</name>
 
-  <!-- 
-  bump to SNAPSHOT in anticipation of a 2.0 release due to 
-  link to excalibur threads API (without deprricated content) and the 
-  transfer of factory classes from the api to the implementation.
-  -->
-
-  <package>org.apache.avalon.cornerstone</package>
+  <package>org.apache.avalon.cornerstone.blocks.scheduler</package>
 
   <inceptionYear>2001</inceptionYear>
-  <shortDescription>Cornerstone Connections</shortDescription>
+  <shortDescription>Cornerstone Scheduler</shortDescription>
 
   <dependencies>
 
     <!-- cornerstone api dependencies -->
 
     <dependency>
-      <groupId>cornerstone-connection</groupId>
-      <artifactId>cornerstone-connection-api</artifactId>
-      <version>2.1-dev</version>
-    </dependency>
-
-    <dependency>
-      <groupId>cornerstone-sockets</groupId>
-      <artifactId>cornerstone-sockets-api</artifactId>
+      <groupId>cornerstone-scheduler</groupId>
+      <artifactId>cornerstone-scheduler-api</artifactId>
       <version>2.1-dev</version>
     </dependency>
 

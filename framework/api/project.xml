@@ -20,7 +20,6 @@
 
     <name>Excalibur Framework API</name>
     <id>excalibur-framework-api</id>
-    <inceptionYear>1997</inceptionYear>
     <shortDescription>Excalibur Framework API</shortDescription>
     <package>org.apache.avalon.framework</package>
 
