@@ -20,6 +20,8 @@
 
   <name>Excalibur Lifecycle Extension API</name>
   <id>excalibur-lifecycle-api</id>
+  <currentVersion>1.1.0</currentVersion>
+
   <shortDescription>Excalibur Lifecycle Extension API</shortDescription>
   <description>Excalibur Lifecycle Extension API</description>
 

@@ -20,6 +20,8 @@
 
   <name>Excalibur Lifecycle Extension Impl</name>
   <id>excalibur-lifecycle-impl</id>
+  <currentVersion>1.1.0</currentVersion>
+
   <shortDescription>Excalibur Lifecycle Extension Implementation</shortDescription>
   <description>Excalibur Lifecycle Extension Implementation</description>
 
