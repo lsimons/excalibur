@@ -2,6 +2,6 @@
 #
 # artifact-id version groupid repository gumpid gumpopts
 #
-excalibur-lifecycle-api 1.1 excalibur-lifecycle - - runtime,inherit=runtime
+excalibur-lifecycle-api - excalibur-lifecycle - - runtime,inherit=runtime
 avalon-framework-api 4.1.5 avalon-framework - - runtime,inherit=runtime
 avalon-framework-impl 4.1.5 avalon-framework - - runtime,inherit=runtime
