@@ -25,6 +25,8 @@ import org.xml.sax.SAXException;
  * This class is an utility class proxying a SAX version 2.0
  * {@link ContentHandler} and forwarding the events to it.
  * <br>
+ * If you are interested in lexical events as well, use the
+ * {@link XMLConsumerProxy} instead.
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  * @version CVS $Revision: 1.4 $ $Date: 2004/02/28 11:47:20 $

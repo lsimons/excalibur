@@ -28,8 +28,9 @@ import org.xml.sax.ext.LexicalHandler;
  * its {@link XMLConsumer}s interface.
  * <br>
  *
- * Modified to be thread safe.
- * 
+ * @deprecated Use one of the replacement classes {@link ContentHandlerProxy} or
+ *             {@link XMLConsumerProxy}
+ *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  * @version CVS $Revision: 1.4 $ $Date: 2004/02/28 11:47:20 $
  */
