@@ -530,9 +530,19 @@ abstract class AbstractInstrumentSample
             return null;
         }
 
+        boolean update;
+        int value;
+        long time;
+
+        DefaultConfiguration state = new DefaultConfiguration( "sample", "-" );
         synchronized( this )
         {
-            DefaultConfiguration state = new DefaultConfiguration( "sample", "-" );
+            // Always update the sample so its state will be correct when saved.
+            long now = System.currentTimeMillis();
+            update = update( now );
+            value = getValueInner();
+            time = m_time;
+            
             state.setAttribute( "type",
                                 InstrumentSampleUtils.getInstrumentSampleTypeName( getType() ) );
             state.setAttribute( "interval", Long.toString( m_interval ) );
@@ -562,9 +572,14 @@ abstract class AbstractInstrumentSample
             state.addChild( samples );
 
             saveState( state );
-
-            return state;
         }
+
+        if ( update )
+        {
+            updateListeners( value, time );
+        }
+
+        return state;
     }
 
     /**
