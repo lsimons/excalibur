@@ -87,9 +87,6 @@ public class DefaultInstrumentManagerImpl
      *   important to prevent denial of service attacks using connectors. */
     private long m_maxLeasedSampleLease;
     
-    /** Configuration for the InstrumentManager */
-    private Configuration m_configuration;
-    
     /** List of configured connectors. */
     private ArrayList m_connectors = new ArrayList();
 
@@ -245,8 +242,6 @@ public class DefaultInstrumentManagerImpl
 
         synchronized( m_semaphore )
         {
-            m_configuration = configuration;
-
             // Look for a configured name and description
             m_name = configuration.getChild( "name" ).getValue( "instrument-manager" );
             m_description = configuration.getChild( "description" ).getValue( m_name );
