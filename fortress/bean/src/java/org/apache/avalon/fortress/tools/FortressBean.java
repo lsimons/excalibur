@@ -193,6 +193,7 @@ public class FortressBean implements Initializable, LogEnabled, Serviceable, Dis
             } catch (InterruptedException e) {
                 //ignore
             }
+            
             System.exit(0);
         }
     }
