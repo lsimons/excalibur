@@ -25,22 +25,49 @@
     <body>
         <section name="Introduction">
             <p>
-        A very common problem is resolving a source, which means
-        finding a source using a URI.
+        A very common problem that you have to face in nearly every application
+        is resolving a source, which means finding a resource using a URI. Of
+        course after you located the resource, you want to do something with it,
+        like reading or writing or getting some meta information about it.
             </p>
             <p>
-        The source resolver of Avalon Excalibur is a component
-        helping you in this task. It resolves sources from a given
-        URI. The URI can use all available protocols of the JRE.
-        In addition own protocols can be plugged-in. So using
-        the standard protocols like HTTP, FTP or file can be handled
-        in the same way, like dealing with custom, self-build
-        protocols such as myxmldatabase://root/documents/test.xml.
+        Of course, the JRE already provides some mechanisms and classes to deal
+        with resources. For example the <code>java.io.*</code> package provides
+        a lot of useful classes to deal with files stored on the local file
+        system. The <code>java.net.*</code> package provides similar functionality
+        if you want to deal with remote resources via http or ftp. In addition
+        there are various third party libraries, like the 
+        <a href="http://jakarta.apache.org/commons/httpclient/">Jakarta Commons HttpClient</a>
+        library that deal with this topic as well.
             </p>
             <p>
-        The main advantage in comparisson to the mechanisms provided
+        But all these approaches have three problems:
+            </p>
+            <ul>
+                <li>No unified interface - you have to distinguish between access
+                    of local resources and remote resources.</li>
+                <li>Not suitable for web applications if it comes to extending the
+                    supported protocols.</li>
+            </ul>
+            <p>
+        Out of these problems the idea of the source resolver has been born. It
+        provides a unique interface to any resource, being it a local file or
+        a distant resource on an ftp server. And it is possible to provide
+        your own application specific protocols in a multi application friendly
+        way.
+            </p>
+            <p>
+        The source resolver of Apache Excalibur is a useful component
+        that resolves resources from a given URI. The URI can use all 
+        available protocols of the JRE, like HTTP, FTP, FILE etc..
+        In addition own protocols, like <code>myxmldatabase://root/documents/test.xml</code>
+        can be plugged-in and then be used in the same way, "usual"
+        resources (files etc.) are accessed.
+            </p>
+            <p>
+        The main advantage in comparison to the mechanisms provided
         by the JRE is that the source resolver can be used without
-        any problems with web application servers. Each web
+        any problems within web application servers. Each web
         application can use it's own configured version of this
         component avoiding any possible conflicts between these
         applications.
@@ -80,8 +107,9 @@
             </p>
         </section>
         <section name="Projects">
-            <p>You can see the source resolving in action in the Apache Cocoon
-        project.
+            <p>You can see the source resolving in action in the 
+            <a href="http://cocoon.apache.org">Apache Cocoon</a>
+            project and in <a href="../fortress/index.html">Fortress</a>.
             </p>
         </section>
     </body>
