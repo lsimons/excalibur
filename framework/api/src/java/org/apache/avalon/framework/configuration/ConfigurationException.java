@@ -94,7 +94,7 @@ public class ConfigurationException
 
         if (null != m_config)
         {
-            message.append("@");
+            message.append(" @");
             message.append(m_config.getLocation());
         }
 
