@@ -59,6 +59,16 @@ public class HTMLInstrumentManagerHandler
     public void doGet( String path, Map parameters, PrintWriter out )
         throws IOException
     {
+        long oldMemory = getLongParameter( parameters, "oldMemory", 0 );
+        long newMemory = getLongParameter( parameters, "newMemory", 0 );
+        
+        String gcLabel = "<a href='gc.html'>Perform Garbage Collection</a>";
+        if ( ( oldMemory != 0 ) && ( newMemory != 0 ) )
+        {
+            gcLabel = gcLabel + " (Freed: " + ( oldMemory - newMemory ) + "bytes.  "
+                + "Now " + newMemory + " bytes.";
+        }
+        
         // This is the root
         out.println( "<html>" );
         out.println( "<head><title>" + getInstrumentManagerClient().getDescription()
@@ -66,11 +76,13 @@ public class HTMLInstrumentManagerHandler
         out.println( "<body>" );
         
         breadCrumbs( out, false );
+
         
         out.println( "<h2>Instrument Manager</h2>" );
         startTable( out );
         tableRow( out, 0, "Name", getInstrumentManagerClient().getName() );
         tableRow( out, 0, "Description", getInstrumentManagerClient().getDescription() );
+        tableRow( out, 0, "GC", gcLabel );
         endTable( out );
         
         InstrumentableDescriptor[] instrumentables =

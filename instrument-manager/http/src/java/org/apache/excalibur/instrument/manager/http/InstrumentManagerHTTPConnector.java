@@ -148,8 +148,13 @@ public class InstrumentManagerHTTPConnector
             initAndRegisterHandler(
                 new XMLInstrumentHandler( client ), nameBase + "instrument" );
             initAndRegisterHandler( new XMLSampleHandler( client ), nameBase + "sample" );
+            initAndRegisterHandler(
+                new XMLSampleLeaseHandler( client ), nameBase + "sample-lease" );
+            initAndRegisterHandler(
+                new XMLCreateSampleHandler( client ), nameBase + "create-sample" );
             initAndRegisterHandler(	new XMLSnapshotHandler( client ), nameBase + "snapshot" );
             initAndRegisterHandler(	new XMLSnapshotsHandler( client ), nameBase + "snapshots" );
+            initAndRegisterHandler(	new XMLGCHandler( client ), nameBase + "gc" );
         }
         
         if ( m_html )
@@ -168,6 +173,7 @@ public class InstrumentManagerHTTPConnector
             initAndRegisterHandler(
                 new HTMLCreateSampleHandler( client ), nameBase + "create-sample" );
             initAndRegisterHandler( new SampleChartHandler( client ), "sample-chart" );
+            initAndRegisterHandler(	new HTMLGCHandler( client ), nameBase + "gc" );
             initAndRegisterHandler( new HTMLRootHandler( client ), nameBase + "root" );
         }
         
