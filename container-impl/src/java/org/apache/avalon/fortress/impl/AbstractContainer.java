@@ -336,7 +336,7 @@ public abstract class AbstractContainer
      * @return the component handler
      * @throws Exception if unable to provide a componenthandler
      */
-    private ComponentHandler getComponentHandler( final MetaInfoEntry metaEntry,
+    protected ComponentHandler getComponentHandler( final MetaInfoEntry metaEntry,
                                                   final ComponentHandlerMetaData metaData )
             throws Exception
     {
@@ -348,7 +348,7 @@ public abstract class AbstractContainer
         try
         {
             final ObjectFactory factory =
-                    createObjectFactory( classname, configuration );
+                    createObjectFactory( classname, configuration, metaEntry );
 
             // create the appropriate handler instance
             final ComponentHandler targetHandler =
@@ -420,7 +420,8 @@ public abstract class AbstractContainer
      * @throws ClassNotFoundException if the specified class does not exist
      */
     protected ObjectFactory createObjectFactory( final String classname,
-                                                 final Configuration configuration )
+                                                 final Configuration configuration,
+                                                 final MetaInfoEntry metaEntry )
             throws Exception
     {
         if ( m_componentContext == null )
@@ -436,7 +437,8 @@ public abstract class AbstractContainer
         final ComponentFactory componentFactory =
                 new ComponentFactory( clazz, configuration,
                         m_serviceManager, m_componentContext,
-                        m_loggerManager, m_extManager );
+                        m_loggerManager, m_extManager, metaEntry, this );
+                        
         return getProxyManager().getWrappedObjectFactory( componentFactory );
     }
 

@@ -86,7 +86,7 @@ public class DefaultECMContainer extends DefaultContainer {
      * @param config the component configuration
      * @return the class name
      */
-    private String getClassname( final Configuration config )
+    protected String getClassname( final Configuration config )
     throws ConfigurationException {
         final String className;
 

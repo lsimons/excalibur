@@ -22,7 +22,7 @@ package org.apache.avalon.fortress.impl.handler;
  * The desire for a ComponentHandler is to manage the instances of a
  * Component.
  *
- * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
+ * @author <a href="mailto:dev@excalibur.apache.org">Excalibur Development Team</a>
  * @version CVS $Revision: 1.8 $ $Date: 2004/02/28 15:16:25 $
  * @since 4.0
  */
@@ -42,8 +42,7 @@ public interface ComponentHandler
      *
      * @exception Exception if unable to prepare handler
      */
-    void prepareHandler()
-        throws Exception;
+    void prepareHandler() throws Exception;
 
     /**
      * Gets the current reference to a Component according to the policy of

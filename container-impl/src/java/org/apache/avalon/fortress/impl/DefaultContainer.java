@@ -91,35 +91,7 @@ public class DefaultContainer
         throws ConfigurationException
     {
         interpretProxy( config.getAttribute("proxy-type", "discover") );
-
-        final Configuration[] elements = config.getChildren();
-        for ( int i = 0; i < elements.length; i++ )
-        {
-            final Configuration element = elements[i];
-            final String hint = element.getAttribute( "id", null );
-            if ( null == hint )
-            {
-                // Only components with an id attribute are treated as components.
-                getLogger().debug( "Ignoring configuration for component, " + element.getName()
-                    + ", because the id attribute is missing." );
-            }
-            else
-            {
-                final String classname = getClassname( element );
-                final int activation = getActivation( element );
-                final ComponentHandlerMetaData metaData =
-                    new ComponentHandlerMetaData( hint, classname, element, activation );
-
-                try
-                {
-                    addComponent( metaData );
-                }
-                catch ( Exception e )
-                {
-                    throw new ConfigurationException( "Could not add component", e );
-                }
-            }
-        }
+        addComponents( config );
     }
 
     /**
@@ -149,13 +121,54 @@ public class DefaultContainer
         }
     }
 
+	/**
+	 * Iterates throught nodes, which represent components, adding the 
+	 * component/configuration data to container.
+	 * 
+	 * @param config Configuration representing the content in xconf file
+	 * @throws ConfigurationException
+	 */
+	protected void addComponents(final Configuration config) throws ConfigurationException
+	{
+		final Configuration[] elements = config.getChildren();
+		
+		for ( int i = 0; i < elements.length; i++ )
+		{
+			final Configuration element = elements[i];
+			final String hint = element.getAttribute( "id", null );
+			
+			if ( null == hint )
+			{
+				// Only components with an id attribute are treated as components.
+				getLogger().debug( "Ignoring configuration for component, " + element.getName()
+					+ ", because the id attribute is missing." );
+			}
+			else
+			{
+				final String classname = getClassname( element );
+				final int activation = getActivation( element );
+				final ComponentHandlerMetaData metaData =
+					new ComponentHandlerMetaData( hint, classname, element, activation );
+        
+				try
+				{
+					addComponent( metaData );
+				}
+				catch ( Exception e )
+				{
+					throw new ConfigurationException( "Could not add component", e );
+				}
+			}
+		}
+	}
+
     /**
      * Retrieve the classname for component configuration.
      *
      * @param config the component configuration
      * @return the class name
      */
-    private String getClassname( final Configuration config )
+    protected String getClassname( final Configuration config )
         throws ConfigurationException
     {
         final String className;
@@ -202,7 +215,7 @@ public class DefaultContainer
      * @throws ConfigurationException if the handler specifies an unknown
      *                                activation policy
      */
-    private int getActivation( final Configuration component )
+	protected int getActivation( final Configuration component )
         throws ConfigurationException
     {
         final String activation = component.getAttribute( "activation", "background" );

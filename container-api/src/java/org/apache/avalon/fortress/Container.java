@@ -33,7 +33,7 @@ import org.apache.avalon.framework.service.ServiceException;
  * Container's internals, we currently feel that we have insufficient use case
  * information to determine the generic form of the container internals.</p>
  *
- * @author <a href="mailto:dev@avalon.apache.org">The Avalon Team</a>
+ * @author <a href="mailto:dev@excalibur.apache.org">The Excalibur Team</a>
  * @version CVS $Revision: 1.10 $ $Date: 2004/02/28 15:16:24 $
  * @see ContainerConstants for the contract surrounding the Container context
  * @see <a href="http://avalon.apache.org/framework/guide-cop-in-avalon.html">COP In Avalon</a>
@@ -75,5 +75,12 @@ public interface Container
      * @return true  if a reference to the role exists.
      */
     boolean has( String key, Object hint );
+    
+    /**
+     * Pending
+     * 
+     * @return
+     */
+    EventManager getEventManager();
 }
 
