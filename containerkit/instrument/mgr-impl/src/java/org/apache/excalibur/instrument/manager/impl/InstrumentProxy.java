@@ -17,6 +17,7 @@
 
 package org.apache.excalibur.instrument.manager.impl;
 
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -990,6 +991,59 @@ public class InstrumentProxy
         }
     }
     
+    /**
+     * Used to test whether or not any state information exists prior to
+     *  writeState() being called.  This process is not synchronized so it
+     *  is possible that the return value will no longer be accurate when
+     *  writeState is actually called.  For the purpose of writing the
+     *  state however this is accurate enough.
+     *
+     * @return True if state information exists which should be written to
+     *         a state file.
+     */
+    boolean hasState()
+    {
+        // Check samples.
+        InstrumentSample[] samples = getInstrumentSamples();
+        for ( int i = 0; i < samples.length; i++ )
+        {
+            InstrumentSample sample = samples[i];
+            if ( sample.hasState() )
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Writes the current state to a PrintWriter as XML.
+     *
+     * @param out The PrintWriter to which the state should be written.
+     */
+    void writeState( PrintWriter out )
+    {
+        // Open the node.
+        out.print( "<instrument name=\"" );
+        out.print( XMLUtil.getXMLSafeString( m_name ) );
+        out.println( "\">" );
+        
+        // Write out the states of any samples.
+        InstrumentSample[] samples = getInstrumentSamples();
+        for ( int i = 0; i < samples.length; i++ )
+        {
+            InstrumentSample sample = samples[i];
+            if ( sample.hasState() )
+            {
+                sample.writeState( out );
+            }
+        }
+        
+        // Close the node.
+        out.println( "</instrument>" );
+    }
+
     /**
      * Saves the current state into a Configuration.
      *

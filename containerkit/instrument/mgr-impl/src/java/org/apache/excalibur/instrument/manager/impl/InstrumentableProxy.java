@@ -17,6 +17,7 @@
 
 package org.apache.excalibur.instrument.manager.impl;
 
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -638,6 +639,81 @@ class InstrumentableProxy
 
             return m_instrumentDescriptorArray;
         }
+    }
+    
+    /**
+     * Used to test whether or not any state information exists prior to
+     *  writeState() being called.  This process is not synchronized so it
+     *  is possible that the return value will no longer be accurate when
+     *  writeState is actually called.  For the purpose of writing the
+     *  state however this is accurate enough.
+     *
+     * @return True if state information exists which should be written to
+     *         a state file.
+     */
+    boolean hasState()
+    {
+        // Check instruments first as they are "closer".
+        InstrumentProxy[] proxies = getInstrumentProxies();
+        for( int i = 0; i < proxies.length; i++ )
+        {
+            InstrumentProxy instrument = proxies[i];
+            if ( instrument.hasState() )
+            {
+                return true;
+            }
+        }
+        
+        // Check child instrumentables.
+        InstrumentableProxy[] childProxies = getChildInstrumentableProxies();
+        for( int i = 0; i < childProxies.length; i++ )
+        {
+            InstrumentableProxy instrumentable = childProxies[i];
+            if ( instrumentable.hasState() )
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Writes the current state to a PrintWriter as XML.
+     *
+     * @param out The PrintWriter to which the state should be written.
+     */
+    void writeState( PrintWriter out )
+    {
+        // Open the node.
+        out.print( "<instrumentable name=\"" );
+        out.print( XMLUtil.getXMLSafeString( m_name ) );
+        out.println( "\">" );
+        
+        // Write out the states of any child instrumentables.
+        InstrumentableProxy[] childProxies = getChildInstrumentableProxies();
+        for( int i = 0; i < childProxies.length; i++ )
+        {
+            InstrumentableProxy instrumentable = childProxies[i];
+            if ( instrumentable.hasState() )
+            {
+                instrumentable.writeState( out );
+            }
+        }
+        
+        // Write out the states of any instruments.
+        InstrumentProxy[] proxies = getInstrumentProxies();
+        for( int i = 0; i < proxies.length; i++ )
+        {
+            InstrumentProxy instrument = proxies[i];
+            if ( instrument.hasState() )
+            {
+                instrument.writeState( out );
+            }
+        }
+        
+        // Close the node.
+        out.println( "</instrumentable>" );
     }
 
     /**

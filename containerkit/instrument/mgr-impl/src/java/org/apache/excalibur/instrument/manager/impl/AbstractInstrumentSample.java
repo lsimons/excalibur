@@ -17,6 +17,7 @@
 
 package org.apache.excalibur.instrument.manager.impl;
 
+import java.io.PrintWriter;
 import java.util.StringTokenizer;
 import java.util.Calendar;
 
@@ -523,6 +524,110 @@ abstract class AbstractInstrumentSample
             }
         }
     }
+    
+    /**
+     * Used to test whether or not any state information exists prior to
+     *  writeState() being called.  This process is not synchronized so it
+     *  is possible that the return value will no longer be accurate when
+     *  writeState is actually called.  For the purpose of writing the
+     *  state however this is accurate enough.
+     *
+     * @return True if state information exists which should be written to
+     *         a state file.
+     */
+    public boolean hasState()
+    {
+        // If this sample is not configured and its lease time is 0, then it
+        //  is an artifact of a previous state file, so it should not be saved.
+        if( ( !isConfigured() ) && ( getLeaseExpirationTime() <= 0 ) )
+        {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Writes the current state to a PrintWriter as XML.
+     *
+     * @param out The PrintWriter to which the state should be written.
+     */
+    public void writeState( PrintWriter out )
+    {
+        // If this sample is not configured and its lease time is 0, then it
+        //  is an artifact of a previous state file, so it should not be saved.
+        if( ( !isConfigured() ) && ( getLeaseExpirationTime() <= 0 ) )
+        {
+            return;
+        }
+
+        boolean update;
+        int value;
+        long time;
+
+        synchronized( this )
+        {
+            // Always update the sample so its state will be correct when saved.
+            long now = System.currentTimeMillis();
+            update = update( now, false );
+            value = getValueInner();
+            time = m_time;
+            
+            // Open the node.
+            out.print( "<sample name=\"" );
+            out.print( XMLUtil.getXMLSafeString( m_name ) );
+            out.print( "\" type=\"" );
+            out.print( InstrumentSampleUtils.getInstrumentSampleTypeName( getType() ) );
+            out.print( "\" interval=\"" );
+            out.print( m_interval );
+            out.print( "\" size=\"" );
+            out.print( m_size );
+            out.print( "\" time=\"" );
+            out.print( m_time );
+            out.print( "\"" );
+            if( getLeaseExpirationTime() > 0 )
+            {
+                out.print( " lease-expiration=\"" );
+                out.print( getLeaseExpirationTime() );
+                out.print( "\"" );
+                
+                // If the sample is permanent then its description will be set in the configuration
+                //  file and does not need to be saved here as well.
+                out.print( " description=\"" );
+                out.print( XMLUtil.getXMLSafeString( m_description ) );
+                out.print( "\"" );
+            }
+
+            // Let subclasses add additional attributes.
+            writeStateAttributes( out );
+            
+            String history = getHistoryList();
+            
+            if ( history == null )
+            {
+                // No history.  Childless node.
+                out.println( "/>" );
+            }
+            else
+            {
+                // Have history.
+                out.println( ">" );
+                
+                // Save the history samples so that the newest is first.
+                out.print( "<history>" );
+                out.print( history );
+                out.println( "</history>" );
+                
+                // Close the node.
+                out.println( "</sample>" );
+            }
+        }
+
+        if ( update )
+        {
+            updateListeners( value, time );
+        }
+    }
 
     /**
      * Saves the current state into a Configuration.
@@ -570,10 +675,14 @@ abstract class AbstractInstrumentSample
             // Let subclasses add additional attributes.
             saveState( state );
 
-            // Save the history samples so that the newest is first.
-            DefaultConfiguration samples = new DefaultConfiguration( "history", "-" );
-            samples.setValue( getHistoryList() );
-            state.addChild( samples );
+            String history = getHistoryList();
+            if ( history != null )
+            {
+                // Save the history samples so that the newest is first.
+                DefaultConfiguration samples = new DefaultConfiguration( "history", "-" );
+                samples.setValue( history );
+                state.addChild( samples );
+            }
         }
 
         if ( update )
@@ -614,52 +723,61 @@ abstract class AbstractInstrumentSample
             // Set the history index.
             m_historyIndex = 0;
 
+            int[] sampleValues;
+            
             // Read in the samples, don't trust that the number will be correct.
             //  First sample is the current value, following sames go back in
             //   time from newest to oldest.
-            Configuration history = state.getChild( "history" );
-
-            String compactSamples = history.getValue();
-
-            // Sample values are stored in newest to oldest order.
-            StringTokenizer st = new StringTokenizer( compactSamples, "," );
-            int[] sampleValues = new int[ st.countTokens() ];
-
-            for( int i = 0; i < sampleValues.length; i++ )
+            Configuration history = state.getChild( "history", false );
+            if ( history == null )
             {
-                try
+                // No history was saved.
+                sampleValues = new int[0];
+            }
+            else
+            {
+                String compactSamples = history.getValue();
+    
+                // Sample values are stored in newest to oldest order.
+                StringTokenizer st = new StringTokenizer( compactSamples, "," );
+                sampleValues = new int[ st.countTokens() ];
+    
+                for( int i = 0; i < sampleValues.length; i++ )
                 {
-                    sampleValues[ i ] = Integer.parseInt( st.nextToken() );
-                }
-                catch( NumberFormatException e )
-                {
-                    throw new ConfigurationException( "The compact sample data could not be " +
-                                                      "loaded, because of a number format problem, for InstrumentSample: " +
-                                                      m_name );
+                    try
+                    {
+                        sampleValues[ i ] = Integer.parseInt( st.nextToken() );
+                    }
+                    catch( NumberFormatException e )
+                    {
+                        throw new ConfigurationException( "The compact sample data could not be " +
+                                                          "loaded, because of a number format problem, for InstrumentSample: " +
+                                                          m_name );
+                    }
                 }
             }
-
+            
             // Get the current value
             int value;
             if( sampleValues.length > 0 )
             {
                 value = sampleValues[ 0 ];
-
-                for( int i = 0; i < m_size - 1; i++ )
-                {
-                    if( i < sampleValues.length - 1 )
-                    {
-                        m_historyOld[ m_size - 2 - i ] = sampleValues[ i + 1 ];
-                    }
-                    else
-                    {
-                        m_historyOld[ m_size - 2 - i ] = 0;
-                    }
-                }
             }
             else
             {
                 value = 0;
+            }
+            
+            for( int i = 0; i < m_size - 1; i++ )
+            {
+                if( i < sampleValues.length - 1 )
+                {
+                    m_historyOld[ m_size - 2 - i ] = sampleValues[ i + 1 ];
+                }
+                else
+                {
+                    m_historyOld[ m_size - 2 - i ] = 0;
+                }
             }
 
             loadState( value, state );
@@ -725,6 +843,15 @@ abstract class AbstractInstrumentSample
             m_historyOld[i] = fillValue;
             m_historyNew[i] = fillValue;
         }
+    }
+    
+    /**
+     * Allow subclasses to add information into the saved state.
+     *
+     * @param out PrintWriter to write to.
+     */
+    protected void writeStateAttributes( PrintWriter out )
+    {
     }
 
     /**
@@ -895,11 +1022,28 @@ abstract class AbstractInstrumentSample
      * <p>
      * Should only be called after an update when synchronized.
      *
-     * @return The history values.
+     * @return The history values or null if they are all 0.
      */
     private String getHistoryList()
     {
         int[] history = getHistorySnapshot();
+        
+        // Before we bother building up a string, see if it would be empty, start with the end
+        //  as that is the most likely place to find a value.
+        boolean found = false;
+        for ( int i = history.length - 1; i >= 0; i-- )
+        {
+            if ( history[i] != 0 )
+            {
+                found = true;
+                break;
+            }
+        }
+        
+        if ( !found )
+        {
+            return null;
+        }
 
         // Build up a string of the sample points.
         StringBuffer sb = new StringBuffer();

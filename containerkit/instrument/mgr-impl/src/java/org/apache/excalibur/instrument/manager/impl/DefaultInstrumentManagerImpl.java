@@ -17,12 +17,14 @@
 
 package org.apache.excalibur.instrument.manager.impl;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -951,62 +953,90 @@ public class DefaultInstrumentManagerImpl
     {
         long now = System.currentTimeMillis();
         getLogger().debug( "Saving Instrument Manager state to: " + stateFile.getAbsolutePath() );
-
-        // First save the state to an in memory stream to shorten the
-        //  period of time needed to write the data to disk.  This makes it
-        //  less likely that the files will be left in a corrupted state if
-        //  the JVM dies at the wrong time.
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        byte[] data;
-        try
-        {
-            saveStateToStream( os );
-            data = os.toByteArray();
-        }
-        finally
-        {
-            os.close();
-        }
         
-        // If the specified file exists, then rename it before we start writing.
-        //  This makes it possible to recover from some errors.
-        File renameFile = null;
+        // To make corruption as unlikely as possible, write the state file to a
+        //  temporary file.  Only overwrite the previous state file when complete.
+        File tempFile = new File( stateFile.getAbsolutePath() + "." + now + ".temp" );
         boolean success = false;
-        if( stateFile.exists() )
-        {
-            renameFile = new File( stateFile.getAbsolutePath() + "." + now + ".backup" );
-            stateFile.renameTo( renameFile );
-        }
-        
-        // Write the data to the new file.
-        FileOutputStream fos = new FileOutputStream( stateFile );
+        FileOutputStream fos = new FileOutputStream( tempFile );
         try
         {
-            fos.write( data );
+            saveStateToStream( fos );
             success = true;
         }
         finally
         {
             fos.close();
             
-            if ( !success )
-            {
-                // Make sure that part of the file does not exist.
-                stateFile.delete();
-            }
-            
-            // Handle the backup file.
-            if ( renameFile != null )
+            File renameFile = null;
+            try
             {
                 if ( success )
                 {
-                    // No longer need the backup.
-                    renameFile.delete();
+                    // Rename the old state file first of all.
+                    if ( stateFile.exists() )
+                    {
+                        renameFile =
+                            new File( stateFile.getAbsolutePath() + "." + now + ".backup" );
+                        if ( !stateFile.renameTo( renameFile ) )
+                        {
+                            throw new IOException(
+                                "Unable to rename the old instrument state file from '"
+                                + stateFile.getAbsolutePath() + "' to '"
+                                + renameFile.getAbsolutePath() + "'" );
+                        }
+                    }
+                    
+                    // Now rename the new temp state file to the final name.
+                    if ( !tempFile.renameTo( stateFile ) )
+                    {
+                        if ( renameFile != null )
+                        {
+                            // Attempt to restore the old state file.
+                            if ( !renameFile.renameTo( stateFile ) )
+                            {
+                                // Failed for some reason.
+                                getLogger().error(
+                                    "Unable to save the instrument state.  The last known state "
+                                    + "file is backed up as: " + renameFile.getAbsolutePath() );
+                                
+                                // Clear the rename file so it does not get deleted.
+                                renameFile = null;
+                            }
+                        }
+                        
+                        throw new IOException(
+                            "Unable to rename the new instrument state file from '"
+                            + tempFile.getAbsolutePath() + "' to '"
+                            + stateFile.getAbsolutePath() + "'" );
+                    }
+                    else
+                    {
+                        // Temp fle renamed, so clear its name.
+                        tempFile = null;
+                    }
                 }
-                else
+            }
+            finally
+            {
+                // Delete the temp file if it still exists.
+                if ( ( tempFile != null ) && tempFile.exists() )
                 {
-                    // Need to replace the backup.
-                    renameFile.renameTo( stateFile );
+                    if ( !tempFile.delete() )
+                    {
+                        getLogger().warn( "Unable to delete temporary state file: "
+                            + tempFile.getAbsolutePath() );
+                    }
+                }
+                
+                // Delete the rename file if it still exists.
+                if ( ( renameFile != null ) && renameFile.exists() )
+                {
+                    if ( !renameFile.delete() )
+                    {
+                        getLogger().warn( "Unable to delete temporary state file: "
+                            + renameFile.getAbsolutePath() );
+                    }
                 }
             }
         }
@@ -1025,12 +1055,49 @@ public class DefaultInstrumentManagerImpl
     public void saveStateToStream( OutputStream os )
         throws Exception
     {
+        // We used to create a big Configuration object and then write it to an output
+        //  stream.   While that worked, on applications with lots of samples, it
+        //  could result in very large Configuration objects that would cause a large
+        //  spike in memory usage when the state was saved.
+        // The new method writes directly to the file thus avoiding the need for any
+        //  significant amount of memory.
+        PrintWriter out = new PrintWriter( new OutputStreamWriter( os, "UTF-8" ) );
+        
+        // Output the XML headers and main node.
+        out.println( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" );
+        out.println( "<instrument-manager-state>" );
+
+        InstrumentableProxy[] instrumentableProxies = m_instrumentableProxyArray;
+        if( instrumentableProxies == null )
+        {
+            instrumentableProxies = updateInstrumentableProxyArray();
+        }
+        
+        for( int i = 0; i < instrumentableProxies.length; i++ )
+        {
+            InstrumentableProxy instrumentable = instrumentableProxies[i];
+            if ( instrumentable.hasState() )
+            {
+                instrumentable.writeState( out );
+            }
+        }
+    
+        // Close off the main node.
+        out.println( "</instrument-manager-state>" );
+        
+        // We don't want to close the writer here or it will close the underlying stream
+        //  Do the next best thing by flushing to make sure that nothing is left unflushed
+        //  in writer buffers.
+        out.flush();
+        
+        /*
         Configuration stateConfig = saveStateToConfiguration();
 
         // Ride on top of the Configuration classes to save the state.
         DefaultConfigurationSerializer serializer = new DefaultConfigurationSerializer();
         serializer.setIndent( true );
         serializer.serialize( os, stateConfig );
+        */
     }
 
     /**

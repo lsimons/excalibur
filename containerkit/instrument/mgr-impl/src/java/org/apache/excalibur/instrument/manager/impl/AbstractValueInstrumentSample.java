@@ -17,6 +17,8 @@
 
 package org.apache.excalibur.instrument.manager.impl;
 
+import java.io.PrintWriter;
+
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
@@ -132,6 +134,22 @@ abstract class AbstractValueInstrumentSample
     protected int getFillValue()
     {
         return m_lastValue;
+    }
+    
+    /**
+     * Allow subclasses to add information into the saved state.
+     *
+     * @param out PrintWriter to write to.
+     */
+    protected void writeStateAttributes( PrintWriter out )
+    {
+        super.writeStateAttributes( out );
+        
+        out.print( " value-count=\"" );
+        out.print( m_valueCount );
+        out.print( "\" last-value=\"" );
+        out.print( m_lastValue );
+        out.print( "\"" );
     }
     
     /**

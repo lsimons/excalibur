@@ -17,6 +17,8 @@
 
 package org.apache.excalibur.instrument.manager.impl;
 
+import java.io.PrintWriter;
+
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.logger.LogEnabled;
@@ -187,6 +189,25 @@ interface InstrumentSample
      *                 InstrumentSample.
      */
     void removeInstrumentSampleListener( InstrumentSampleListener listener );
+    
+    /**
+     * Used to test whether or not any state information exists prior to
+     *  writeState() being called.  This process is not synchronized so it
+     *  is possible that the return value will no longer be accurate when
+     *  writeState is actually called.  For the purpose of writing the
+     *  state however this is accurate enough.
+     *
+     * @return True if state information exists which should be written to
+     *         a state file.
+     */
+    boolean hasState();
+    
+    /**
+     * Writes the current state to a PrintWriter as XML.
+     *
+     * @param out The PrintWriter to which the state should be written.
+     */
+    void writeState( PrintWriter out );
     
     /**
      * Saves the current state into a Configuration.

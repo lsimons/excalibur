@@ -17,6 +17,8 @@
 
 package org.apache.excalibur.instrument.manager.impl;
 
+import java.io.PrintWriter;
+
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
@@ -88,6 +90,20 @@ class MeanValueInstrumentSample
         super.advanceToNextSample( reset );
         
         m_valueTotal = 0;
+    }
+    
+    /**
+     * Allow subclasses to add information into the saved state.
+     *
+     * @param out PrintWriter to write to.
+     */
+    protected void writeStateAttributes( PrintWriter out )
+    {
+        super.writeStateAttributes( out );
+        
+        out.print( " value-total=\"" );
+        out.print( m_valueTotal );
+        out.print( "\"" );
     }
     
     /**
