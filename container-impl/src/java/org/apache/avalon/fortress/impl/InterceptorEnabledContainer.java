@@ -23,7 +23,9 @@ import org.apache.avalon.fortress.util.CompositeException;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.container.ContainerUtil;
+import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
+import org.apache.avalon.framework.context.DefaultContext;
 
 /**
  * InterceptorEnabledContainer extends the default container behavior
@@ -65,6 +67,19 @@ public class InterceptorEnabledContainer extends DefaultContainer
     ///
     /// DefaultContainer's overrides
     /// 
+
+    /**
+     * Pending
+     * 
+     * @see org.apache.avalon.fortress.impl.AbstractContainer#provideComponentContext(org.apache.avalon.framework.context.Context)
+     */
+    protected Context provideComponentContext(Context parent) throws Exception
+    {
+        DefaultContext context = new DefaultContext( parent );
+        context.put( "container", this );
+        context.makeReadOnly();
+        return context;
+    }
     
     /**
      * Avoid the registration of interceptorManager configuration node. 
@@ -136,10 +151,19 @@ public class InterceptorEnabledContainer extends DefaultContainer
     {
         InterceptorManager manager = createInterceptorManager();
         ContainerUtil.configure( manager, m_managerConfiguration );
+        m_manager = manager;
     }
     
     protected InterceptorManager createInterceptorManager() throws ContextException
     {
-        return new DefaultInterceptorManager( m_context );
+        try
+        {
+            return new DefaultInterceptorManager( provideComponentContext( m_context ) );
+        }
+        catch(Exception ex)
+        {
+            throw new ContextException( "Error creating context for InterceptorManager", ex );
+        }
     }
+
 }

@@ -108,7 +108,7 @@ public class DefaultInterceptorManagerTestCase extends TestCase
         config.setContextDirectory( "./" );
         config.setWorkDirectory( "./" );
         
-        final String BASE = "resource://org/apache/avalon/fortress/impl/interceptor/test/components/";
+        final String BASE = "resource://org/apache/avalon/fortress/test/data/";
         config.setContainerConfiguration( BASE + "test1.xconf" );
         config.setLoggerManagerConfiguration( BASE + "test1.xlog" );
 

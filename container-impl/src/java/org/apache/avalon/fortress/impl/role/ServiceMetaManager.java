@@ -21,7 +21,7 @@ import org.apache.avalon.fortress.ExtendedMetaInfo;
 import org.apache.avalon.fortress.MetaInfoEntry;
 import org.apache.avalon.fortress.MetaInfoManager;
 import org.apache.avalon.fortress.RoleManager;
-import org.apache.avalon.fortress.attributes.AttributeInfo;
+import org.apache.avalon.fortress.attributes.qdox.QDoxSerializer;
 import org.apache.avalon.fortress.util.Service;
 import org.apache.avalon.framework.activity.Initializable;
 
@@ -84,18 +84,8 @@ import java.util.*;
  */
 public final class ServiceMetaManager extends AbstractMetaInfoManager implements Initializable
 {
-
-        /**
-         * Pending
-         * 
-         * @param stream
-         * @param entry
-         */
-        public static void buildExtendedMeta(InputStream stream, MetaInfoEntry entry)
-        {
-            // TODO Auto-generated method stub
-            
-        }
+    private final Map m_class2ExtendedInfo = new HashMap();
+    
     /**
      * Create a ServiceMetaManager.
      */
@@ -280,18 +270,26 @@ public final class ServiceMetaManager extends AbstractMetaInfoManager implements
         {
             final InputStream stream =
                 getLoader().getResourceAsStream( getAttributesFile( implementation ) );
+                
+            if (stream == null)
+            {
+                // Backward compatibility: do nothing
+                return;
+            }
 
             MetaInfoEntry entry = getMetaInfoForClassname( implementation );
             
-            AttributeDigester.buildExtendedMeta( stream, entry );
+            ExtendedMetaInfo extendedInfo = 
+                QDoxSerializer.instance().deserialize( stream, entry.getComponentClass() );
             
             stream.close();
+            
+            registerExtendedInfo( implementation, extendedInfo );
         }
         catch ( IOException ioe )
         {
             getLogger().error( "Could not load meta information for " +
                 implementation + ", skipping this class." );
-            return;
         }
     }
     
@@ -334,6 +332,11 @@ public final class ServiceMetaManager extends AbstractMetaInfoManager implements
         return entry;
     }
 
+    private void registerExtendedInfo( final String classname, final ExtendedMetaInfo extendedInfo )
+    {
+        m_class2ExtendedInfo.put( classname, extendedInfo );
+    }
+
     /**
      * Read entries in a list file and add them all to the provided Set.
      *
@@ -359,113 +362,6 @@ public final class ServiceMetaManager extends AbstractMetaInfoManager implements
         finally
         {
             reader.close();
-        }
-    }
-    
-    public static class AttributeDigester 
-    {
-        /**
-         * Pending
-         * 
-         * @param stream
-         * @param entry
-         */
-        public static ExtendedMetaInfo buildExtendedMeta(InputStream stream, MetaInfoEntry entry)
-            throws IOException
-        {
-            ExtendedMetaInfo metaInfo = null;
-            
-            final BufferedReader reader = new BufferedReader( new InputStreamReader( stream ) );
-            
-            final List classAttrs = new ArrayList();
-            final Map method2Attributes = new HashMap();
-            
-            String line = null;
-            while( ( line = reader.readLine() ) != null )
-            {
-                if (line.length() == 0)
-                {
-                    continue;
-                }
-                
-                if (line.charAt(0) != '{')
-                {
-                    classAttrs.add( buildClassAttribute( line, entry ) );
-                }
-                else
-                {
-                    buildMethodAttribute( line, entry );
-                }
-            }
-            
-            AttributeInfo[] classAttributes = (AttributeInfo[]) 
-                classAttrs.toArray( new AttributeInfo[0] );
-            
-            metaInfo = new ExtendedMetaInfo( classAttributes, methodAttributes );
-            
-            reader.close(); 
-        }
-
-        private static AttributeInfo buildMethodAttribute( final String line, final MetaInfoEntry entry )
-        {
-            final Map mapProperties = new TreeMap( String.CASE_INSENSITIVE_ORDER ); 
-
-            int propInitIndex = line.indexOf( '[' );
-            int propEndIndex  = line.indexOf( ']' );
-
-            final String attName = line.substring(0, propInitIndex - 1);
-            final String properties = line.substring(propInitIndex, propEndIndex - 1).trim();
-            
-            StringTokenizer tokenizer = new StringTokenizer( properties, "," );
-            while(tokenizer.hasMoreTokens())
-            {
-                final String property =  tokenizer.nextToken();
-                final int equalIndex = property.indexOf( '=' );
-                
-                String key = property;
-                String value = "";
-                
-                if ( equalIndex != -1 )
-                {
-                    key = property.substring( 0, equalIndex );
-                    value = property.substring( equalIndex + 1 );
-                }
-
-                mapProperties.put( key, value );
-            }
-            
-            return new AttributeInfo( attName, mapProperties );
-        }
-
-        private static AttributeInfo buildClassAttribute( final String line, final MetaInfoEntry entry )
-        {
-            final Map mapProperties = new TreeMap( String.CASE_INSENSITIVE_ORDER ); 
-
-            int propInitIndex = line.indexOf( '[' );
-            int propEndIndex  = line.indexOf( ']' );
-
-            final String attName = line.substring(0, propInitIndex - 1);
-            final String properties = line.substring(propInitIndex, propEndIndex - 1).trim();
-            
-            StringTokenizer tokenizer = new StringTokenizer( properties, "," );
-            while(tokenizer.hasMoreTokens())
-            {
-                final String property =  tokenizer.nextToken();
-                final int equalIndex = property.indexOf( '=' );
-                
-                String key = property;
-                String value = "";
-                
-                if ( equalIndex != -1 )
-                {
-                    key = property.substring( 0, equalIndex );
-                    value = property.substring( equalIndex + 1 );
-                }
-
-                mapProperties.put( key, value );
-            }
-            
-            return new AttributeInfo( attName, mapProperties );
         }
     }
 }

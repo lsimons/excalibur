@@ -103,7 +103,7 @@ public final class ComponentFactory extends AbstractLogEnabledInstrumentable imp
     private ClassInfo m_classinfo;
 
     /** Use the dynamic configuration */
-    private final boolean m_useDynamicCreation = true;
+    private final boolean m_useDynamicCreation = false;
 
     /**
      * Construct a new component factory for the specified component.

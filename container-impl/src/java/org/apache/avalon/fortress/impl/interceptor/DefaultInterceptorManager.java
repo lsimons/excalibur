@@ -232,7 +232,7 @@ public class DefaultInterceptorManager
     {
         Interceptor tail = createTailInterceptor( interceptors );
         
-        for (int i = interceptors.length; i >= 0; i--)
+        for (int i = interceptors.length - 1; i >= 0; i--)
         {
             Interceptor last = interceptors[i];
             last.init( tail );

@@ -24,7 +24,6 @@ import org.apache.avalon.fortress.RoleManager;
 import org.apache.avalon.fortress.attributes.AttributeInfo;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +61,7 @@ public abstract class AbstractMetaInfoManager extends AbstractLogEnabled impleme
 
     static
     {
-        EMPTY_EXTENDED_META_INFO = new ExtendedMetaInfo( new AttributeInfo[0], Collections.EMPTY_MAP );
+        EMPTY_EXTENDED_META_INFO = new ExtendedMetaInfo( new AttributeInfo[0] );
     }
 
     /**

@@ -28,5 +28,8 @@ limitations under the License.
     <component4 id="component4"
         logger="component4"
         activation="startup"/>
+    <customerDAO id="customerDAO"
+        logger="customerDAO"
+        activation="lazy"/>
 </test>
 

@@ -18,9 +18,13 @@
 package org.apache.avalon.fortress;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.avalon.fortress.attributes.AttributeInfo;
+import org.apache.avalon.fortress.attributes.AttributeLevel;
 
 /**
  * Pending
@@ -29,13 +33,34 @@ import org.apache.avalon.fortress.attributes.AttributeInfo;
  */
 public class ExtendedMetaInfo
 {
+    private static final AttributeInfo[] EMPTY = new AttributeInfo[0]; 
+    
     private final AttributeInfo[] m_classAttributes;
     private final Map m_method2Attributes;
     
-    public ExtendedMetaInfo( AttributeInfo[] classAttributes, final Map method2Attributes )
-    { 
-        m_classAttributes = classAttributes;
-        m_method2Attributes = method2Attributes;
+    public ExtendedMetaInfo( AttributeInfo[] attributes )
+    {
+        final List classLevel = new ArrayList();
+        m_method2Attributes = new HashMap(); 
+        
+        for (int i = 0; i < attributes.length; i++)
+        {
+            final AttributeInfo attribute = attributes[i];
+            
+            if (attribute.getAttributeLevel() == AttributeLevel.ClassLevel)
+            {
+                classLevel.add( attribute );
+            }
+            else if (attribute.getAttributeLevel() == AttributeLevel.MethodLevel)
+            {
+                if (attribute.getMethod() != null)
+                {
+                    associateMethodAttribute( attribute );
+                }
+            }
+        }
+        
+        m_classAttributes = (AttributeInfo[]) classLevel.toArray( new AttributeInfo[0] );
     }
     
     public AttributeInfo[] getClassAttributes()
@@ -45,6 +70,31 @@ public class ExtendedMetaInfo
     
     public AttributeInfo[] getAttributesForMethod( final Method method )
     {
-        return (AttributeInfo[]) m_method2Attributes.get( method );
+        List attributes = obtainAttributeList( method );
+        
+        if (attributes == null)
+        {
+            return EMPTY;
+        }
+        
+        return (AttributeInfo[]) attributes.toArray( new AttributeInfo[0] );
+    }
+    
+    private void associateMethodAttribute( AttributeInfo attribute )
+    {
+        List attrs = obtainAttributeList( attribute.getMethod() );
+        
+        if (attrs == null)
+        {
+            attrs = new ArrayList();
+            m_method2Attributes.put( attribute.getMethod(), attrs );
+        }
+        
+        attrs.add( attribute );
+    }
+
+    private List obtainAttributeList( final Method method )
+    {
+        return (List) m_method2Attributes.get( method );
     }
 }

@@ -17,6 +17,7 @@
 
 package org.apache.avalon.fortress.impl.role;
 
+import org.apache.avalon.fortress.ExtendedMetaInfo;
 import org.apache.avalon.fortress.MetaInfoEntry;
 import org.apache.avalon.fortress.MetaInfoManager;
 import org.apache.avalon.fortress.RoleEntry;
@@ -88,5 +89,16 @@ public final class Role2MetaInfoManager implements MetaInfoManager
         {
             return null != m_parent ? m_parent.getMetaInfoForClassname( classname ) : null;
         }
+    }
+
+    /**
+     * Pending
+     * 
+     * @see org.apache.avalon.fortress.MetaInfoManager#getExtendedMetaInfo(java.lang.String)
+     */
+    public ExtendedMetaInfo getExtendedMetaInfo(String classname)
+    {
+        return null != m_parent ? 
+            m_parent.getExtendedMetaInfo( classname ) : AbstractMetaInfoManager.EMPTY_EXTENDED_META_INFO;
     }
 }
