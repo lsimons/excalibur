@@ -83,13 +83,13 @@ easy embedding into various environments like servlet engines.
             <version>1.2</version>
         </dependency>
         <dependency>
-            <groupId>event</groupId>
-            <artifactId>event</artifactId>
+            <groupId>d-haven</groupId>
+            <artifactId>d-haven-event</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>managed-pool</groupId>
-            <artifactId>managed-pool</artifactId>
+            <groupId>d-haven</groupId>
+            <artifactId>d-haven-managed-pool</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
