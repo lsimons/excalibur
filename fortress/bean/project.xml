@@ -139,7 +139,7 @@ Bean for working with Avalon-Fortress.
         </dependency>
         <dependency>
             <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils-core</artifactId>
+            <artifactId>commons-beanutils</artifactId>
             <version>1.7.0</version>
         </dependency>
         
