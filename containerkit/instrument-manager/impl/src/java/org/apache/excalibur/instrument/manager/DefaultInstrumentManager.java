@@ -307,13 +307,6 @@ public class DefaultInstrumentManager
                     className = "org.apache.excalibur.instrument.manager.http."
                         + "InstrumentManagerHTTPConnector";
                 }
-                else if ( className.equals( "altrmi" ) )
-                {
-                    // Don't use InstrumentManagerAltrmiConnector.class.getName() because
-                    //  the class is optional for the build.
-                    className = "org.apache.excalibur.instrument.manager.altrmi."
-                        + "InstrumentManagerAltrmiConnector";
-                }
                 
                 // Look for the connector class and create an instance.
                 try
