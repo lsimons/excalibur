@@ -500,6 +500,7 @@ public final class SourceUtil
                                           "' is not writeable");
             }
             
+            IOException firstE = null;
             ModifiableSource modDestination = (ModifiableSource)destination;
             try
             {
@@ -515,14 +516,16 @@ public final class SourceUtil
                         }
                         catch ( IOException e )
                         {
+                            // Remebver the original exception in case there are problems closing
+                            //  any streams.
+                            firstE = e;
+                            
+                            // If possible, cancel the destination.
                             if ( modDestination.canCancel( out ) )
                             {
                                 modDestination.cancel( out );
                                 out = null;
                             }
-                            
-                            // Rethrow the exception.  It will be recaught below.
-                            throw e;
                         }
                     }
                     finally
@@ -539,10 +542,19 @@ public final class SourceUtil
                     in.close();
                 }
             } catch (IOException ioe) {
+                if ( firstE == null )
+                {
+                    firstE = ioe;
+                }
+            }
+            
+            // If there were any problems then wrap the original exception in a SourceException.
+            if ( firstE != null )
+            {
                 throw new SourceException("Could not copy source '"+
                                           source.getURI()+"' to '"+
                                           destination.getURI()+"' :"+
-                                          ioe.getMessage(), ioe);
+                                          firstE.getMessage(), firstE);
             }
         }
     }
