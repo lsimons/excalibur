@@ -33,11 +33,6 @@ limitations under the License.
     <package>org.apache.excalibur</package>
 
     <dependencies>
-
-        <dependency>
-            <id>saxon</id>
-            <version>6.5.3</version>
-        </dependency>
         
         <dependency>
             <artifactId>saxon7</artifactId>
