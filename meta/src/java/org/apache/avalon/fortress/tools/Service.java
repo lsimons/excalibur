@@ -29,7 +29,7 @@ import java.util.Set;
  * Encapsulate the Service information, and encapsulate all the
  * logic to serialize the service.
  *
- * @author <a href="mailto:dev@avalon.apache.org">The Avalon Team</a>
+ * @author <a href="mailto:dev@excalibur.apache.org">Excalibur Team</a>
  * @version CVS $Revision: 1.1 $ $Date: 2004/04/02 08:29:44 $
  */
 public final class Service
