@@ -20,7 +20,6 @@ limitations under the License.
   <extend>${basedir}/../project-common.xml</extend>
 
   <id>excalibur-pool-impl</id>
-  <currentVersion>2.0.0</currentVersion>
 
   <name>Excalibur Pool Implementation</name>
   <shortDescription>Excalibur Pool Implementation</shortDescription>

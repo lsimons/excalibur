@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <project>
-  <extend>project-common.xml</extend>
+  <extend>${basedir}/project-common.xml</extend>
 
   <name>Excalibur Pool</name>
   <id>excalibur-pool</id>
