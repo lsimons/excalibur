@@ -596,7 +596,7 @@ public final class SourceUtil
     /**
      * Absolutizes URIs whereby the authority part is considered to be a part of the path.
      * This special kind of URIs is used in the Apache Cocoon project for the cocoon and context protocols.
-     * This method is internally used by {@link #absolutize}.
+     * This method is internally used by {@link #absolutize(String, String, boolean, boolean)}.
      */
     private static String absolutizeWithoutAuthority(String[] url1Parts, String[] url2Parts)
     {
@@ -668,7 +668,7 @@ public final class SourceUtil
 
     /**
      * Assembles an URL from the given URL parts, each of these parts can be null.
-     * Used internally by {@link #absolutize}.
+     * Used internally by {@link #absolutize(String, String, boolean, boolean)}.
      */
     private static String makeUrl(String scheme, String authority, String path, String query, String fragment)
     {

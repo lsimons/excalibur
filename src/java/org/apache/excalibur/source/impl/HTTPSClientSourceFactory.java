@@ -127,7 +127,7 @@ public class HTTPSClientSourceFactory extends HTTPClientSourceFactory
      *
      * @param className class name to instantiate
      * @return instantiated class
-     * @exception Exception if an error occurs
+     * @exception ParameterException if an error occurs
      */
     private Object getInstance( final String className )
         throws ParameterException
