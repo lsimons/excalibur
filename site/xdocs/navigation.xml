@@ -72,6 +72,16 @@
 
         <menu name="Containerkit">
             <item name="Overview" href="/containerkit.html"/>
+            <item name="Instrument" href="/instrument/index.html" collapse="true">
+                <item name="Overview" href="/instrument/index.html"/>
+                <item name="HTML Based Client" href="/instrument/html-client.html"/>
+                <item name="XML Based Client" href="/instrument/xml-client.html"/>
+                <item name="Java Swing Client" href="/instrument/java-client.html"/>
+                <item name="Configuration" href="/instrument/configuration.html"/>
+                <item name="Component Integration" href="/instrument/component.html"/>
+                <item name="Container Integration" href="/instrument/container.html"/>
+                <item name="Advanced Features" href="/instrument/manager.html"/>
+            </item>
             <item name="Lifecycle" href="/lifecycle/index.html" collapse="true">
                 <item name="Overview" href="/lifecycle/index.html"/>
                 <item name="Extensions" href="/lifecycle/extension.html"/>
