@@ -84,11 +84,11 @@
       
       <subsection name="Jar Repository">
         <p>
-	 All Excalibur jars can also be found in the 
-	 <a href="http://www.ibiblio.org/maven">iBiblio.org</a>
-	 repository for use with <a href="http://maven.apache.org">Maven</a>
-	 and other repository-aware applications.
-	</p>
+          All Excalibur jars can also be found in the 
+          <a href="http://www.ibiblio.org/maven">iBiblio.org</a>
+          repository for use with <a href="http://maven.apache.org">Maven</a>
+          and other repository-aware applications.
+        </p>
       </subsection>
 
       </section>
@@ -103,12 +103,12 @@
             <th>Source</th>
             <th>Jars</th>
           </tr>
-	  <tr>
+      <tr>
             <td><a href="[preferred]/excalibur/XXX"></a></td>
-	    <td><a href="[preferred]/excalibur/XXX/binaries">binaries</a></td>
-	    <td><a href="[preferred]/excalibur/XXX/source">source</a></td>
-	    <td><a href="[preferred]/excalibur/XXX/jars">jars</a></td>
-	  </tr>
+        <td><a href="[preferred]/excalibur/XXX/binaries">binaries</a></td>
+        <td><a href="[preferred]/excalibur/XXX/source">source</a></td>
+        <td><a href="[preferred]/excalibur/XXX/jars">jars</a></td>
+      </tr>
         </table>
       </subsection>
  
@@ -224,10 +224,10 @@
             <td><a href="[preferred]/excalibur/excalibur-fortress-servlet/jars">jars</a></td>
           </tr>
           <tr>
-            <td><a href="[preferred]/excalibur/excalibur-instrument-altrmi">excalibur-instrument-altrmi</a></td>
-            <td><a href="[preferred]/excalibur/excalibur-instrument-altrmi/binaries">binaries</a></td>
-            <td><a href="[preferred]/excalibur/excalibur-instrument-altrmi/source">source</a></td>
-            <td><a href="[preferred]/excalibur/excalibur-instrument-altrmi/jars">jars</a></td>
+            <td><a href="[preferred]/excalibur/excalibur-instrument-api">excalibur-instrument-api</a></td>
+            <td><a href="[preferred]/excalibur/excalibur-instrument-api/binaries">binaries</a></td>
+            <td><a href="[preferred]/excalibur/excalibur-instrument-api/source">source</a></td>
+            <td><a href="[preferred]/excalibur/excalibur-instrument-api/jars">jars</a></td>
           </tr>
           <tr>
             <td><a href="[preferred]/excalibur/excalibur-instrument-client">excalibur-instrument-client</a></td>
@@ -236,28 +236,22 @@
             <td><a href="[preferred]/excalibur/excalibur-instrument-client/jars">jars</a></td>
           </tr>
           <tr>
-            <td><a href="[preferred]/excalibur/excalibur-instrument-http">excalibur-instrument-http</a></td>
-            <td><a href="[preferred]/excalibur/excalibur-instrument-http/binaries">binaries</a></td>
-            <td><a href="[preferred]/excalibur/excalibur-instrument-http/source">source</a></td>
-            <td><a href="[preferred]/excalibur/excalibur-instrument-http/jars">jars</a></td>
+            <td><a href="[preferred]/excalibur/excalibur-instrument-mgr-http">excalibur-instrument-mgr-http</a></td>
+            <td><a href="[preferred]/excalibur/excalibur-instrument-mgr-http/binaries">binaries</a></td>
+            <td><a href="[preferred]/excalibur/excalibur-instrument-mgr-http/source">source</a></td>
+            <td><a href="[preferred]/excalibur/excalibur-instrument-mgr-http/jars">jars</a></td>
           </tr>
           <tr>
-            <td><a href="[preferred]/excalibur/excalibur-instrument-impl">excalibur-instrument-impl</a></td>
-            <td><a href="[preferred]/excalibur/excalibur-instrument-impl/binaries">binaries</a></td>
-            <td><a href="[preferred]/excalibur/excalibur-instrument-impl/source">source</a></td>
-            <td><a href="[preferred]/excalibur/excalibur-instrument-impl/jars">jars</a></td>
+            <td><a href="[preferred]/excalibur/excalibur-instrument-mgr-api">excalibur-instrument-mgr-api</a></td>
+            <td><a href="[preferred]/excalibur/excalibur-instrument-mgr-api/binaries">binaries</a></td>
+            <td><a href="[preferred]/excalibur/excalibur-instrument-mgr-api/source">source</a></td>
+            <td><a href="[preferred]/excalibur/excalibur-instrument-mgr-api/jars">jars</a></td>
           </tr>
           <tr>
-            <td><a href="[preferred]/excalibur/excalibur-instrument-spi">excalibur-instrument-spi</a></td>
-            <td><a href="[preferred]/excalibur/excalibur-instrument-spi/binaries">binaries</a></td>
-            <td><a href="[preferred]/excalibur/excalibur-instrument-spi/source">source</a></td>
-            <td><a href="[preferred]/excalibur/excalibur-instrument-spi/jars">jars</a></td>
-          </tr>
-          <tr>
-            <td><a href="[preferred]/excalibur/excalibur-instrument">excalibur-instrument</a></td>
-            <td><a href="[preferred]/excalibur/excalibur-instrument/binaries">binaries</a></td>
-            <td><a href="[preferred]/excalibur/excalibur-instrument/source">source</a></td>
-            <td><a href="[preferred]/excalibur/excalibur-instrument/jars">jars</a></td>
+            <td><a href="[preferred]/excalibur/excalibur-instrument-mgr-impl">excalibur-instrument-mgr-impl</a></td>
+            <td><a href="[preferred]/excalibur/excalibur-instrument-mgr-impl/binaries">binaries</a></td>
+            <td><a href="[preferred]/excalibur/excalibur-instrument-mgr-impl/source">source</a></td>
+            <td><a href="[preferred]/excalibur/excalibur-instrument-mgr-impl/jars">jars</a></td>
           </tr>
           <tr>
             <td><a href="[preferred]/excalibur/excalibur-javadocs">excalibur-javadocs</a></td>
@@ -367,7 +361,7 @@
             <td><a href="[preferred]/excalibur/excalibur-xmlutil/source">source</a></td>
             <td><a href="[preferred]/excalibur/excalibur-xmlutil/jars">jars</a></td>
           </tr>          
-	</table>
+    </table>
 
       <subsection name="Verify Releases" >
         <p>
