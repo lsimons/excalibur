@@ -16,11 +16,15 @@
  */
 package org.apache.avalon.excalibur.logger;
 
+import org.apache.avalon.excalibur.logger.log4j.Log4JConfigurator;
 import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.ConfigurationUtil;
-import org.apache.log4j.xml.DOMConfigurator;
+import org.apache.avalon.framework.context.Context;
+import org.apache.avalon.framework.context.ContextException;
+import org.apache.avalon.framework.context.Contextualizable;
+import org.apache.log4j.LogManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -35,15 +39,25 @@ import org.w3c.dom.NodeList;
  */
 public class Log4JConfLoggerManager
     extends Log4JLoggerManager
-    implements Configurable
+    implements Configurable, Contextualizable
 {
+    private Context m_context;
+    
+
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
+     */
+    public void contextualize(Context context) throws ContextException
+    {
+        m_context = context;
+    }
+    
     /**
      * Work around a weird compilation problem. Can not call
      * the constructor from fortress/ContextManager, get a
      * file org\apache\log4j\spi\LoggerRepository.class not found
      *         new Log4JConfLoggerManager( lmDefaultLoggerName, lmLoggerName );
      */
-
     public static Log4JConfLoggerManager newInstance( final String prefix,
             final String switchToCategory )
     {
@@ -75,6 +89,8 @@ public class Log4JConfLoggerManager
         }
 
         document.appendChild( newElement );
-        DOMConfigurator.configure( newElement );
+        
+        Log4JConfigurator configurator = new Log4JConfigurator(m_context);
+        configurator.doConfigure( newElement, LogManager.getLoggerRepository());
     }
 }

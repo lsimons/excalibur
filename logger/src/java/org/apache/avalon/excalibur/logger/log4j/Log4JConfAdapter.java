@@ -20,10 +20,12 @@ import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.ConfigurationUtil;
+import org.apache.avalon.framework.context.Context;
+import org.apache.avalon.framework.context.ContextException;
+import org.apache.avalon.framework.context.Contextualizable;
 import org.apache.log4j.Hierarchy;
 import org.apache.log4j.Level;
 import org.apache.log4j.spi.RootCategory;
-import org.apache.log4j.xml.DOMConfigurator;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -50,8 +52,20 @@ import org.w3c.dom.NodeList;
  * @version CVS $Revision: 1.4 $ $Date: 2004/03/10 13:54:51 $
  * @since 4.0
  */
-public class Log4JConfAdapter extends Log4JAdapter implements Configurable
+public class Log4JConfAdapter extends Log4JAdapter 
+implements Configurable, Contextualizable
 {
+    private Context m_context;
+    
+    
+    /* (non-Javadoc)
+     * @see org.apache.avalon.framework.context.Contextualizable#contextualize(org.apache.avalon.framework.context.Context)
+     */
+    public void contextualize(Context context) throws ContextException 
+    {
+        m_context = context;
+    }
+    
     /**
      * This constructor creates a completely independent
      * Log4J hierarchy. If you want to log to an existing
@@ -92,7 +106,7 @@ public class Log4JConfAdapter extends Log4JAdapter implements Configurable
          * We want our own hierarchy to be configured, so we shall
          * be a bit more elaborate then just calling configure().
          */
-        final DOMConfigurator domConfigurator = new DOMConfigurator();
+        final Log4JConfigurator domConfigurator = new Log4JConfigurator( m_context );
         domConfigurator.doConfigure( newElement, m_hierarchy );
     }
 }
