@@ -92,8 +92,11 @@
     </developer>
     <developer>
       <name>Leif Mortenson</name>
-      <id>fede</id>
+      <id>leif</id>
       <email>leif@apache.org</email>
+      <organization>Tanuki Software Inc.</organization>
+      <url>http://www.tanukisoftware.com</url>
+      <timezone>+9</timezone>
     </developer>
     <developer>
       <name>Stefano Mazzocchi</name>
