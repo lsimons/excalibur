@@ -100,7 +100,7 @@ Bean for working with Avalon-Fortress.
         <dependency>
             <groupId>avalon-logkit</groupId>
             <artifactId>avalon-logkit</artifactId>
-            <version>2.0</version>
+            <version>2.0.1</version>
         </dependency>
         <dependency>
             <id>qdox</id>
