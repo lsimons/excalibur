@@ -1,0 +1,12 @@
+excalibur-*
+avalon-excalibur.jar
+build
+ant.properties
+*.ipr
+*.iws
+.classpath
+.project
+*.log
+*log.txt
+*.iml
+target

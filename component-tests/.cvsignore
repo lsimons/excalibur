@@ -1,0 +1,6 @@
+build
+data
+lib
+ant.properties
+target
+*.iml

@@ -1,0 +1,4 @@
+target
+velocity.log
+maven.log
+*.iml
