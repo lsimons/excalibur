@@ -1,77 +1,50 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 
- Copyright 2004 The Apache Software Foundation
- Licensed  under the  Apache License,  Version 2.0  (the "License");
- you may not use  this file  except in  compliance with the License.
- You may obtain a copy of the License at 
- 
-   http://www.apache.org/licenses/LICENSE-2.0
- 
- Unless required by applicable law or agreed to in writing, software
- distributed  under the  License is distributed on an "AS IS" BASIS,
- WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
- implied.
-  
- See the License for the specific language governing permissions and
- limitations under the License.
--->
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
 <project>
-    <extend>${basedir}/../project-common.xml</extend>
 
-    <name>Cornerstone Connection API</name>
-    <id>cornerstone-connection-api</id>
-    <inceptionYear>1997</inceptionYear>
-    <shortDescription>Cornerstone Connection API</shortDescription>
-    <package>org.apache.avalon.cornerstone.services.connection</package>
+  <extend>${basedir}/../project.xml</extend>
 
-    <dependencies>
+  <id>cornerstone-connection-api</id>
+  <name>Cornerstone Connection API</name>
+
+  <package>org.apache.avalon.cornerstone.services.connection</package>
+  <inceptionYear>2001</inceptionYear>
+  <shortDescription>Cornerstone Connection API</shortDescription>
+  
+  <dependencies>
+
     <!-- cornerstone api dependencies -->
 
     <dependency>
       <groupId>cornerstone-sockets</groupId>
       <artifactId>cornerstone-sockets-api</artifactId>
-      <version>1.0</version>
+      <version>2.1-dev</version>
     </dependency>
 
     <dependency>
       <groupId>cornerstone-threads</groupId>
       <artifactId>cornerstone-threads-api</artifactId>
-      <version>1.0</version>
+      <version>2.1-dev</version>
     </dependency>
 
     <!-- excalibur api dependencies -->
 
     <dependency>
-      <id>excalibur-thread</id>
-      <version>1.1.1</version>
-    </dependency>
-
-    <!-- avalon dependencies -->
-
-    <dependency>
       <groupId>avalon-framework</groupId>
       <artifactId>avalon-framework-api</artifactId>
-      <version>4.1.5</version>
+      <version>4.3-dev</version>
     </dependency>
     <dependency>
-      <groupId>avalon-framework</groupId>
-      <artifactId>avalon-framework-impl</artifactId>
-      <version>4.1.5</version>
+      <groupId>excalibur-pool</groupId>
+      <artifactId>excalibur-pool-api</artifactId>
+      <version>2.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>excalibur-thread</groupId>
+      <artifactId>excalibur-thread-api</artifactId>
+      <version>2.0.0</version>
     </dependency>
 
-    <!-- pre JDK 1.4 dependencies -->
-
-    <dependency>
-      <id>xml-apis</id>
-      <version>1.0.b2</version>
-      <url>http://xml.apache.org/xerces2-j/</url>
-    </dependency>
-
-    <dependency>
-      <id>xerces</id>
-      <version>2.2.1</version>
-      <url>http://xml.apache.org/xerces2-j/</url>
-    </dependency>    
-</dependencies>
-
+  </dependencies>
+  
 </project>
