@@ -25,7 +25,6 @@ import java.util.HashMap;
 import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.logger.Logger;
 
@@ -1042,37 +1041,6 @@ public class InstrumentProxy
         
         // Close the node.
         out.println( "</instrument>" );
-    }
-
-    /**
-     * Saves the current state into a Configuration.
-     *
-     * @return The state as a Configuration.  Returns null if the configuration
-     *         would not contain any information.
-     */
-    Configuration saveState()
-    {
-        boolean empty = true;
-        DefaultConfiguration state = new DefaultConfiguration( "instrument", "-" );
-        state.setAttribute( "name", m_name );
-        
-        InstrumentSample[] samples = getInstrumentSamples();
-        for ( int i = 0; i < samples.length; i++ )
-        {
-            Configuration childState = samples[i].saveState();
-            if ( childState != null )
-            {
-                state.addChild( childState );
-                empty = false;
-            }
-        }
-        
-        // Only return a state if it contains information.
-        if ( empty )
-        {
-            state = null;
-        }
-        return state;
     }
     
     /**

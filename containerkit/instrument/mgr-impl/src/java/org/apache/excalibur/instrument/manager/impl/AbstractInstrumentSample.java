@@ -23,7 +23,6 @@ import java.util.Calendar;
 
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 
 import org.apache.excalibur.instrument.manager.InstrumentSampleDescriptor;
@@ -630,70 +629,6 @@ abstract class AbstractInstrumentSample
     }
 
     /**
-     * Saves the current state into a Configuration.
-     *
-     * @return The state as a Configuration.  Returns null if the configuration
-     *         would not contain any information.
-     */
-    public final Configuration saveState()
-    {
-        // If this sample is not configured and its lease time is 0, then it
-        //  is an artifact of a previous state file, so it should not be saved.
-        if( ( !isConfigured() ) && ( getLeaseExpirationTime() <= 0 ) )
-        {
-            return null;
-        }
-
-        boolean update;
-        int value;
-        long time;
-
-        DefaultConfiguration state = new DefaultConfiguration( "sample", "-" );
-        synchronized( this )
-        {
-            // Always update the sample so its state will be correct when saved.
-            long now = System.currentTimeMillis();
-            update = update( now, false );
-            value = getValueInner();
-            time = m_time;
-            
-            state.setAttribute( "type",
-                                InstrumentSampleUtils.getInstrumentSampleTypeName( getType() ) );
-            state.setAttribute( "interval", Long.toString( m_interval ) );
-            state.setAttribute( "size", Integer.toString( m_size ) );
-
-            state.setAttribute( "time", Long.toString( m_time ) );
-            if( getLeaseExpirationTime() > 0 )
-            {
-                state.setAttribute( "lease-expiration", Long.toString( getLeaseExpirationTime() ) );
-                
-                // If the sample is permanent then its description will be set in the configuration
-                //  file and does not need to be saved here as well.
-                state.setAttribute( "description", m_description );
-            }
-
-            // Let subclasses add additional attributes.
-            saveState( state );
-
-            String history = getHistoryList();
-            if ( history != null )
-            {
-                // Save the history samples so that the newest is first.
-                DefaultConfiguration samples = new DefaultConfiguration( "history", "-" );
-                samples.setValue( history );
-                state.addChild( samples );
-            }
-        }
-
-        if ( update )
-        {
-            updateListeners( value, time );
-        }
-
-        return state;
-    }
-
-    /**
      * Loads the state into the InstrumentSample.
      *
      * @param state Configuration object to load state from.
@@ -851,15 +786,6 @@ abstract class AbstractInstrumentSample
      * @param out PrintWriter to write to.
      */
     protected void writeStateAttributes( PrintWriter out )
-    {
-    }
-
-    /**
-     * Allow subclasses to add information into the saved state.
-     *
-     * @param state State configuration.
-     */
-    protected void saveState( DefaultConfiguration state )
     {
     }
 

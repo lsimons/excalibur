@@ -25,7 +25,6 @@ import java.util.HashMap;
 import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 
 import org.apache.excalibur.instrument.manager.InstrumentableDescriptor;
@@ -714,50 +713,6 @@ class InstrumentableProxy
         
         // Close the node.
         out.println( "</instrumentable>" );
-    }
-
-    /**
-     * Saves the current state into a Configuration.
-     *
-     * @return The state as a Configuration.  Returns null if the configuration
-     *         would not contain any information.
-     */
-    Configuration saveState()
-    {
-        boolean empty = true;
-        DefaultConfiguration state = new DefaultConfiguration( "instrumentable", "-" );
-        state.setAttribute( "name", m_name );
-
-        // Save the child Instrumentables
-        InstrumentableProxy[] childProxies = getChildInstrumentableProxies();
-        for( int i = 0; i < childProxies.length; i++ )
-        {
-            Configuration childState = childProxies[ i ].saveState();
-            if ( childState != null )
-            {
-                empty = false;
-                state.addChild( childState );
-            }
-        }
-
-        // Save the direct Instruments
-        InstrumentProxy[] proxies = getInstrumentProxies();
-        for( int i = 0; i < proxies.length; i++ )
-        {
-            Configuration childState = proxies[ i ].saveState();
-            if ( childState != null )
-            {
-                empty = false;
-                state.addChild( childState );
-            }
-        }
-
-        // Only return a state if it contains information.
-        if ( empty )
-        {
-            state = null;
-        }
-        return state;
     }
 
     /**

@@ -210,14 +210,6 @@ interface InstrumentSample
     void writeState( PrintWriter out );
     
     /**
-     * Saves the current state into a Configuration.
-     *
-     * @return The state as a Configuration.  Returns null if the configuration
-     *         would not contain any information.
-     */
-    Configuration saveState();
-    
-    /**
      * Loads the state into the InstrumentSample.
      *
      * @param state Configuration object to load state from.

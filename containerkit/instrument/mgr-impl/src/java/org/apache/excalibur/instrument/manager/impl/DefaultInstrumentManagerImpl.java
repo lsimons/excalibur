@@ -36,9 +36,7 @@ import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
-import org.apache.avalon.framework.configuration.DefaultConfigurationSerializer;
 import org.apache.avalon.framework.container.ContainerUtil;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.logger.Logger;
@@ -1089,42 +1087,6 @@ public class DefaultInstrumentManagerImpl
         //  Do the next best thing by flushing to make sure that nothing is left unflushed
         //  in writer buffers.
         out.flush();
-        
-        /*
-        Configuration stateConfig = saveStateToConfiguration();
-
-        // Ride on top of the Configuration classes to save the state.
-        DefaultConfigurationSerializer serializer = new DefaultConfigurationSerializer();
-        serializer.setIndent( true );
-        serializer.serialize( os, stateConfig );
-        */
-    }
-
-    /**
-     * Returns the Instrument Manager's state as a Configuration object.
-     *
-     * @return The Instrument Manager's state as a Configuration object.
-     */
-    public Configuration saveStateToConfiguration()
-    {
-        DefaultConfiguration state = new DefaultConfiguration( "instrument-manager-state", "-" );
-
-        InstrumentableProxy[] instrumentableProxies = m_instrumentableProxyArray;
-        if( instrumentableProxies == null )
-        {
-            instrumentableProxies = updateInstrumentableProxyArray();
-        }
-
-        for( int i = 0; i < instrumentableProxies.length; i++ )
-        {
-            Configuration childState = instrumentableProxies[ i ].saveState();
-            if ( childState != null )
-            {
-                state.addChild( childState );
-            }
-        }
-
-        return state;
     }
 
     /*---------------------------------------------------------------

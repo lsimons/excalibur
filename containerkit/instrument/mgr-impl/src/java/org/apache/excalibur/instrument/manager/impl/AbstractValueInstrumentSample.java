@@ -21,7 +21,6 @@ import java.io.PrintWriter;
 
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.avalon.framework.configuration.DefaultConfiguration;
 
 import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
 import org.apache.excalibur.instrument.manager.ValueInstrumentListener;
@@ -150,19 +149,6 @@ abstract class AbstractValueInstrumentSample
         out.print( "\" last-value=\"" );
         out.print( m_lastValue );
         out.print( "\"" );
-    }
-    
-    /**
-     * Allow subclasses to add information into the saved state.
-     *
-     * @param state State configuration.
-     */
-    protected void saveState( DefaultConfiguration state )
-    {
-        super.saveState( state );
-        
-        state.setAttribute( "value-count", Integer.toString( m_valueCount ) );
-        state.setAttribute( "last-value", Integer.toString( m_lastValue ) );
     }
     
     /**
