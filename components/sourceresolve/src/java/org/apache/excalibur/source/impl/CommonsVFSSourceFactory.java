@@ -32,7 +32,7 @@ import org.apache.excalibur.source.SourceFactory;
  * 
  * @avalon.component
  * @avalon.service type=SourceFactory
- * @x-avalon.info name=file-source
+ * @x-avalon.info name=commons-vfs-source
  * @x-avalon.lifestyle type=singleton
  * 
  * @author <a href="mailto:crafterm@apache.org">Marcus Crafter</a>
