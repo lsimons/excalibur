@@ -66,12 +66,18 @@ public final class PriorityFilterTargetFactory
     {
         final String loglevel = configuration.getAttribute( "log-level", "INFO" );
         getLogger().debug( "loglevel is " + loglevel );
-        final PriorityFilteringTarget filter = new PriorityFilteringTarget( Priority.getPriorityForName( loglevel ) );
+        
+        final boolean closeWrappedTargets =
+            configuration.getAttributeAsBoolean( "close-wrapped-targets", true );
+        
+        final PriorityFilteringTarget filter = new PriorityFilteringTarget(
+            Priority.getPriorityForName( loglevel ), closeWrappedTargets );
 
         final Configuration[] configs = configuration.getChildren();
         for( int i = 0; i < configs.length; i++ )
         {
-            final LogTargetFactory factory = m_logTargetFactoryManager.getLogTargetFactory( configs[ i ].getName() );
+            final LogTargetFactory factory =
+                m_logTargetFactoryManager.getLogTargetFactory( configs[ i ].getName() );
 
             if( null == factory )
             {
@@ -79,7 +85,8 @@ public final class PriorityFilterTargetFactory
                                                   + "' at " + configs[ i ].getLocation() );
             }
 
-            getLogger().debug( "creating target " + configs[ i ].getName() + ": " + configs[ i ].toString() );
+            getLogger().debug(
+                "creating target " + configs[ i ].getName() + ": " + configs[ i ].toString() );
             final LogTarget logtarget = factory.createTarget( configs[ i ] );
             filter.addTarget( logtarget );
         }
