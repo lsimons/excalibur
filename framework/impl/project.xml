@@ -33,24 +33,39 @@
         <dependency>
             <id>xml-apis</id>
             <version>2.0.2</version>
+            <properties note="Only required if not provided by JVM.">
+                <optional>true</optional>
+            </properties>
         </dependency>
         <dependency>
             <groupId>xml-apis</groupId>
             <artifactId>xmlParserAPIs</artifactId>
             <version>2.0.2</version>
+            <properties note="Only required if not provided by JVM.">
+                <optional>true</optional>
+            </properties>
         </dependency>
         <dependency>
             <id>xerces</id>
             <version>2.4.0</version>
+            <properties note="Only required if not provided by JVM.">
+                <optional>true</optional>
+            </properties>
         </dependency>
         <dependency>
             <id>xalan</id>
             <version>2.5.1</version>
+            <properties note="Only required if not provided by JVM.">
+                <optional>true</optional>
+            </properties>
         </dependency>
         
         <dependency>
             <id>log4j</id>
             <version>1.2.7</version>
+            <properties note="Only required if log4j features are used.">
+                <optional>true</optional>
+            </properties>
         </dependency>
         <dependency>
             <groupId>avalon-logkit</groupId>
@@ -60,6 +75,9 @@
         <dependency>
             <id>junit</id>
             <version>3.8.1</version>
+            <properties note="Only required by tests.">
+                <build>true</build>
+            </properties>
         </dependency>
     </dependencies>
 </project>
