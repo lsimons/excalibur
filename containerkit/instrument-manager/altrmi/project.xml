@@ -19,9 +19,9 @@
 
   <extend>${basedir}/../project-common.xml</extend>
 
-  <name>Excalibur Instrument Manager AltRMI Implementation</name>
+  <name>Excalibur Instrument Manager AltRMI Connector</name>
   <id>excalibur-instrument-altrmi</id>
-  <shortDescription>Excalibur Instrument Manager AltRMI Implementation</shortDescription>
+  <shortDescription>Excalibur Instrument Manager AltRMI Connector</shortDescription>
 
   <dependencies>
     <dependency>
