@@ -32,9 +32,6 @@ import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
 class MaximumValueInstrumentSample
     extends AbstractValueInstrumentSample
 {
-    /** Last value set to the sample for use for sample periods where no value is set. */
-    private int m_lastValue;
-    
     /*---------------------------------------------------------------
      * Constructors
      *-------------------------------------------------------------*/
@@ -73,74 +70,6 @@ class MaximumValueInstrumentSample
     }
     
     /*---------------------------------------------------------------
-     * AbstractInstrumentSample Methods
-     *-------------------------------------------------------------*/
-    /**
-     * The current sample has already been stored.  Reset the current sample
-     *  and move on to the next.
-     * <p>
-     * Should only be called when synchronized.
-     */
-    protected void advanceToNextSample()
-    {
-        // Reset the value count and set the value to the last known value.
-        m_value = m_lastValue;
-        m_valueCount = 0;
-    }
-
-    /**
-     * Returns the value to use for filling in the buffer when time is skipped.
-     * <p>
-     * Should only be called when synchronized.
-     */
-    protected int getFillValue()
-    {
-        return m_lastValue;
-    }
-    
-    /**
-     * Allow subclasses to add information into the saved state.
-     *
-     * @param state State configuration.
-     */
-    protected void saveState( DefaultConfiguration state )
-    {
-        super.saveState( state );
-        
-        state.setAttribute( "last-value", Integer.toString( m_lastValue ) );
-    }
-    
-    /**
-     * Used to load the state, called from AbstractInstrumentSample.loadState();
-     * <p>
-     * Should only be called when synchronized.
-     *
-     * @param value Current value loaded from the state.
-     * @param state Configuration object to load state from.
-     *
-     * @throws ConfigurationException If there were any problems loading the
-     *                                state.
-     */
-    protected void loadState( int value, Configuration state )
-        throws ConfigurationException
-    {
-        super.loadState( value, state );
-        
-        m_lastValue = state.getAttributeAsInteger( "last-value" );
-    }
-    
-    /**
-     * Called after a state is loaded if the sample period is not the same
-     *  as the last period saved.
-     */
-    protected void postSaveNeedsReset()
-    {
-        super.postSaveNeedsReset();
-        
-        m_lastValue = 0;
-    }
-    
-    /*---------------------------------------------------------------
      * AbstractValueInstrumentSample Methods
      *-------------------------------------------------------------*/
     /**
@@ -158,7 +87,7 @@ class MaximumValueInstrumentSample
         
         synchronized(this)
         {
-            update = update( time );
+            update = update( time, false );
             
             // Always store the last value to use for samples where a value is not set.
             m_lastValue = value;

@@ -42,6 +42,9 @@ abstract class AbstractValueInstrumentSample
     /** The number of times that the value has been changed in this sample period. */
     protected int m_valueCount;
     
+    /** Last value set to the sample for use for sample periods where no value is set. */
+    protected int m_lastValue;
+    
     /*---------------------------------------------------------------
      * Constructors
      *-------------------------------------------------------------*/
@@ -103,6 +106,35 @@ abstract class AbstractValueInstrumentSample
      * AbstractInstrumentSample Methods
      *-------------------------------------------------------------*/
     /**
+     * The current sample has already been stored.  Reset the current sample
+     *  and move on to the next.
+     * <p>
+     * Should only be called when synchronized.
+     *
+     * @param reset True if the next sample should be reset.
+     */
+    protected void advanceToNextSample( boolean reset )
+    {
+        // Reset the value count and set the value to the last known value.
+        if ( reset )
+        {
+            m_lastValue = 0;
+        }
+        m_value = m_lastValue;
+        m_valueCount = 0;
+    }
+
+    /**
+     * Returns the value to use for filling in the buffer when time is skipped.
+     * <p>
+     * Should only be called when synchronized.
+     */
+    protected int getFillValue()
+    {
+        return m_lastValue;
+    }
+    
+    /**
      * Allow subclasses to add information into the saved state.
      *
      * @param state State configuration.
@@ -112,6 +144,7 @@ abstract class AbstractValueInstrumentSample
         super.saveState( state );
         
         state.setAttribute( "value-count", Integer.toString( m_valueCount ) );
+        state.setAttribute( "last-value", Integer.toString( m_lastValue ) );
     }
     
     /**
@@ -130,16 +163,7 @@ abstract class AbstractValueInstrumentSample
     {
         m_value = value;
         m_valueCount = state.getAttributeAsInteger( "value-count" );
-    }
-    
-    /**
-     * Called after a state is loaded if the sample period is not the same
-     *  as the last period saved.
-     */
-    protected void postSaveNeedsReset()
-    {
-        m_value = 0;
-        m_valueCount = 0;
+        m_lastValue = state.getAttributeAsInteger( "last-value" );
     }
     
     /*---------------------------------------------------------------

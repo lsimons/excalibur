@@ -109,8 +109,10 @@ class CounterInstrumentSample
      *  and move on to the next.
      * <p>
      * Should only be called when synchronized.
+     *
+     * @param reset True if the next sample should be reset.
      */
-    protected void advanceToNextSample()
+    protected void advanceToNextSample( boolean reset )
     {
         // Counts do not propagate, so always reset the count to 0.
         m_count = 0;
@@ -141,15 +143,6 @@ class CounterInstrumentSample
         throws ConfigurationException
     {
         m_count = value;
-    }
-    
-    /**
-     * Called after a state is loaded if the sample period is not the same
-     *  as the last period saved.
-     */
-    protected void postSaveNeedsReset()
-    {
-        m_count = 0;
     }
     
     /*---------------------------------------------------------------
@@ -184,7 +177,7 @@ class CounterInstrumentSample
         
         synchronized(this)
         {
-            update( time );
+            update( time, false );
             
             m_count += count;
             

@@ -249,7 +249,7 @@ abstract class AbstractInstrumentSample
         synchronized( this )
         {
             long now = System.currentTimeMillis();
-            update = update( now );
+            update = update( now, false );
             value = getValueInner();
             time = m_time;
         }
@@ -275,7 +275,7 @@ abstract class AbstractInstrumentSample
         synchronized( this )
         {
             long now = System.currentTimeMillis();
-            update = update( now );
+            update = update( now, false );
             value = getValueInner();
             time = m_time;
         }
@@ -344,7 +344,7 @@ abstract class AbstractInstrumentSample
     public void expire()
     {
         // Update to the time that we expire at.
-        update( m_leaseExpirationTime );
+        update( m_leaseExpirationTime, false );
 
         m_expired = true;
     }
@@ -359,7 +359,7 @@ abstract class AbstractInstrumentSample
         synchronized( this )
         {
             long time = System.currentTimeMillis();
-            update( time );
+            update( time, false );
 
             return new InstrumentSampleSnapshot(
                 m_name,
@@ -548,7 +548,7 @@ abstract class AbstractInstrumentSample
         {
             // Always update the sample so its state will be correct when saved.
             long now = System.currentTimeMillis();
-            update = update( now );
+            update = update( now, false );
             value = getValueInner();
             time = m_time;
             
@@ -594,6 +594,10 @@ abstract class AbstractInstrumentSample
      */
     public final void loadState( Configuration state ) throws ConfigurationException
     {
+        boolean update;
+        int sampleValue;
+        long sampleTime;
+        
         synchronized( this )
         {
             // Set the time
@@ -659,14 +663,12 @@ abstract class AbstractInstrumentSample
             }
 
             loadState( value, state );
-
-            if( calculateSampleTime( System.currentTimeMillis() ) > savedTime )
-            {
-                // The sample period changed since the save.
-                //  This will usually happen, but not always for long
-                //  intervals.
-                postSaveNeedsReset();
-            }
+            
+            // Always cause update to synch the sample with the current system time.
+            long now = System.currentTimeMillis();
+            update = update( now, true );
+            sampleValue = getValueInner();
+            sampleTime = m_time;
 
             if( m_leaseExpirationTime > 0 )
             {
@@ -678,6 +680,11 @@ abstract class AbstractInstrumentSample
         }
 
         stateChanged();
+        
+        if ( update )
+        {
+            updateListeners( sampleValue, sampleTime );
+        }
     }
 
     /*---------------------------------------------------------------
@@ -744,12 +751,6 @@ abstract class AbstractInstrumentSample
         throws ConfigurationException;
 
     /**
-     * Called after a state is loaded if the sample period is not the same
-     *  as the last period saved.
-     */
-    protected abstract void postSaveNeedsReset();
-
-    /**
      * Calculates the time of the sample which contains the specified time.
      *
      * @param time Time whose sample time is requested.
@@ -778,8 +779,10 @@ abstract class AbstractInstrumentSample
      *  and move on to the next.
      * <p>
      * Should only be called when synchronized.
+     *
+     * @param reset True if the next sample should be reset.
      */
-    protected abstract void advanceToNextSample();
+    protected abstract void advanceToNextSample( boolean reset );
 
     /**
      * Returns the value to use for filling in the buffer when time is skipped.
@@ -794,10 +797,11 @@ abstract class AbstractInstrumentSample
      * Should only be called when synchronized.
      *
      * @param time The time to which the InstrumentSample should be brought up to date.
+     * @param reset True if the next sample should be reset if an advance is necessary.
      *
      * @return True if listeners should be notified.
      */
-    protected boolean update( long time )
+    protected boolean update( long time, boolean reset )
     {
         //System.out.println("update(" + time + ")");
         // If the lease has already expired, then do nothing
@@ -813,7 +817,7 @@ abstract class AbstractInstrumentSample
             if( time - m_time >= m_maxAge )
             {
                 // The history is too old, reset the sample.
-                advanceToNextSample();
+                advanceToNextSample( reset );
                 init( getFillValue() );
             }
             else
@@ -826,7 +830,7 @@ abstract class AbstractInstrumentSample
 
                     // Advance to the next sample.
                     m_time += m_interval;
-                    advanceToNextSample();
+                    advanceToNextSample( reset );
                     m_historyIndex++;
 
                     if( m_historyIndex >= m_size - 1 )

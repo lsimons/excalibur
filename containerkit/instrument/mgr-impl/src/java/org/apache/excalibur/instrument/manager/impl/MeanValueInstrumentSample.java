@@ -80,23 +80,14 @@ class MeanValueInstrumentSample
      *  and move on to the next.
      * <p>
      * Should only be called when synchronized.
+     *
+     * @param reset True if the next sample should be reset.
      */
-    protected void advanceToNextSample()
+    protected void advanceToNextSample( boolean reset )
     {
-        // Leave the value as is so that it will propagate to the next sample
-        //  if needed.  But reset the value count so that new values will not
-        //  be affected by the old.
-        m_valueCount = 0;
-    }
-
-    /**
-     * Returns the value to use for filling in the buffer when time is skipped.
-     * <p>
-     * Should only be called when synchronized.
-     */
-    protected int getFillValue()
-    {
-        return m_value;
+        super.advanceToNextSample( reset );
+        
+        m_valueTotal = 0;
     }
     
     /**
@@ -130,17 +121,6 @@ class MeanValueInstrumentSample
         m_valueTotal = state.getAttributeAsLong( "value-total" );
     }
     
-    /**
-     * Called after a state is loaded if the sample period is not the same
-     *  as the last period saved.
-     */
-    protected void postSaveNeedsReset()
-    {
-        super.postSaveNeedsReset();
-        
-        m_valueTotal = 0;
-    }
-    
     /*---------------------------------------------------------------
      * AbstractValueInstrumentSample Methods
      *-------------------------------------------------------------*/
@@ -158,7 +138,10 @@ class MeanValueInstrumentSample
         
         synchronized(this)
         {
-            update( time );
+            update( time, false );
+            
+            // Always store the last value to use for samples where a value is not set.
+            m_lastValue = value;
             
             if ( m_valueCount > 0 )
             {
