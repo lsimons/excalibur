@@ -18,13 +18,27 @@
 package org.apache.excalibur.instrument;
 
 /**
- * An InstrumentManager which doesn't do anything.
+ * An InstrumentManager which doesn't do anything.  This can be useful for
+ *  container development when a true InstrumentManager is not wanted or
+ *  needed.
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  * @version $Id: NoopInstrumentManager.java,v 1.4 2004/02/28 11:47:28 cziegeler Exp $
  */
-public class NoopInstrumentManager implements InstrumentManager
+public class NoopInstrumentManager
+    implements InstrumentManager
 {
+    /**
+     * Instrumentable to be registered with the instrument manager.  Should be
+     *  called whenever an Instrumentable is created.  The '.' character is
+     *  used to denote a child Instrumentable and can be used to register the
+     *  instrumentable at a specific point in an instrumentable hierarchy.
+     *
+     * @param instrumentable Instrumentable to register with the InstrumentManager.
+     * @param instrumentableName The name to use when registering the Instrumentable.
+     *
+     * @throws Exception If there were any problems registering the Instrumentable.
+     */
     public void registerInstrumentable( Instrumentable instrumentable, String instrumentableName )
     {
         // do nothing
