@@ -18,6 +18,7 @@
 package org.apache.excalibur.instrument.client;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -39,6 +40,8 @@ public class MenuBar
     extends JMenuBar
 {
     protected InstrumentClientFrame m_frame;
+    
+    boolean m_showUnconfigured = true;
 
     private JMenu m_menuFile;
 
@@ -58,10 +61,7 @@ public class MenuBar
 
         add( buildFileMenu() );
         add( buildInstrumentManagerMenu() );
-        
-        // Build the options menu so its defaults are used, but don't use it for now.
-        buildOptionsMenu();
-        
+        add( buildOptionsMenu() );
         add( buildWindowMenu() );
     }
 
@@ -243,7 +243,7 @@ public class MenuBar
     {
         managerMenu.removeAll();
 
-        boolean showAll = m_menuItemShowUnconfigured.getState();
+        boolean showAll = m_showUnconfigured;
 
         // Delete
         Action deleteAction = new AbstractAction( "Delete" )
@@ -330,7 +330,7 @@ public class MenuBar
     {
         instrumentableMenu.removeAll();
 
-        boolean showAll = m_menuItemShowUnconfigured.getState();
+        boolean showAll = m_showUnconfigured;
         
         // Child Instrumentables
         InstrumentableData[] children = instrumentable.getInstrumentables();
@@ -445,7 +445,7 @@ public class MenuBar
     {
         instrumentMenu.removeAll();
 
-        boolean showAll = m_menuItemShowUnconfigured.getState();
+        boolean showAll = m_showUnconfigured;
 
         // Create Sample
         Action createAction = new AbstractAction( "Create Sample..." )
@@ -500,12 +500,47 @@ public class MenuBar
         m_menuOptions = new LargeMenu( "Options" );
         m_menuOptions.setMnemonic( 'O' );
 
+        m_menuOptions.addMenuListener( new MenuListener()
+        {
+            public void menuSelected( MenuEvent event )
+            {
+                rebuildOptionsMenu();
+            }
+
+            public void menuDeselected( MenuEvent event )
+            {
+            }
+
+            public void menuCanceled( MenuEvent event )
+            {
+            }
+        } );
+        
+        /*
         // Show Unconfigured Profilables option
         m_menuItemShowUnconfigured =
             new JCheckBoxMenuItem( "Show Unconfigured Instruments", true );
         m_menuOptions.add( m_menuItemShowUnconfigured );
+        */
 
         return m_menuOptions;
+    }
+
+    protected void rebuildOptionsMenu()
+    {
+        m_menuOptions.removeAll();
+        
+        final JCheckBoxMenuItem antialias =
+            new JCheckBoxMenuItem( "Antialias", m_frame.isAntialias() );
+        antialias.setMnemonic( 'a' );
+        antialias.addActionListener( new ActionListener()
+            {
+                public void actionPerformed( ActionEvent event )
+                {
+                    m_frame.setAntialias( antialias.getState() );
+                }
+            } );
+        m_menuOptions.add( antialias );
     }
 
     private JMenu buildWindowMenu()

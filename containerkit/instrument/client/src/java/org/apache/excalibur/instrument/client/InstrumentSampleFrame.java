@@ -277,50 +277,58 @@ class InstrumentSampleFrame
         {
             // Once per 10 seconds.
             hInterval = (int)( 10000 / interval );
-            format = "{2}:{3}:{4}";
-            detailFormat = "{0}/{1} {2}:{3}:{4}.{5}";
+            format = "{3}:{4}:{5}";
+            detailFormat = "{1}/{2} {3}:{4}:{5}.{6}";
         }
         else if( interval < 60000 )
         {
             // Once per minute.
             hInterval = (int)( 60000 / interval );
-            format = "{2}:{3}:{4}";
-            detailFormat = "{0}/{1} {2}:{3}:{4}";
+            format = "{3}:{4}:{5}";
+            detailFormat = "{1}/{2} {3}:{4}:{5}";
         }
         else if( interval < 600000 )
         {
             // Once per 10 minutes
             hInterval = (int)( 600000 / interval );
-            format = "{0}/{1} {2}:{3}";
-            detailFormat = "{0}/{1} {2}:{3}";
+            format = "{1}/{2} {3}:{4}";
+            detailFormat = "{1}/{2} {3}:{4}";
         }
         else if( interval < 3600000 )
         {
             // Once per hour.
             hInterval = (int)( 3600000 / interval );
-            format = "{0}/{1} {2}:{3}";
-            detailFormat = "{0}/{1} {2}:{3}";
+            format = "{1}/{2} {3}:{4}";
+            detailFormat = "{1}/{2} {3}:{4}";
         }
         else if( interval < 86400000 )
         {
             // Once per day.
             hInterval = (int)( 86400000 / interval );
-            format = "{0}/{1}";
-            detailFormat = "{0}/{1} {2}:{3}";
+            format = "{1}/{2}";
+            detailFormat = "{1}/{2} {3}:{4}";
+        }
+        else if( interval < 604800000 )
+        {
+            // Once per week.
+            hInterval = (int)( 604800000 / interval );
+            format = "{0}/{1}/{2}";
+            detailFormat = "{0}/{1}/{2}";
         }
         else
         {
             // Default to every 10 points.
             hInterval = 10;
-            format = "{0}/{1} {2}:{3}";
-            detailFormat = "{0}/{1} {2}:{3}";
+            format = "{0}/{1}/{2}";
+            detailFormat = "{0}/{1}/{2}";
         }
 
         // Make sure that the content pane is empty.
         getContentPane().removeAll();
             
         // Actually create the chart and add it to the content pane
-        m_lineChart = new LineChart( hInterval, interval, format, detailFormat, 20 );
+        m_lineChart = new LineChart(
+            hInterval, interval, format, detailFormat, 20, getFrame().isAntialias() );
         getContentPane().add( m_lineChart );
     }
     
@@ -425,6 +433,11 @@ class InstrumentSampleFrame
         }
         else
         {
+            if ( m_lineChart != null )
+            {
+                m_lineChart.setAntialias( getFrame().isAntialias() );
+            }
+            
             // Request a snapshot from the connection
             InstrumentSampleSnapshotData snapshot =
                 m_connection.getSampleSnapshot( m_instrumentSampleName );

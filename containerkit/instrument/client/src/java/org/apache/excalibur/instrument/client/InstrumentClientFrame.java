@@ -82,6 +82,8 @@ class InstrumentClientFrame
     private JSplitPane m_splitPane;
     private MenuBar m_menuBar;
     private StatusBar m_statusBar;
+    
+    private boolean m_antialias;
 
     private File m_desktopFile;
     private File m_desktopFileDir;
@@ -302,6 +304,8 @@ class InstrumentClientFrame
                 frameState.getAttributeAsInteger( "divider-location" ) );
             m_splitPane.setLastDividerLocation(
                 frameState.getAttributeAsInteger( "last-divider-location" ) );
+            // Antialias.
+            m_antialias = frameState.getAttributeAsBoolean( "antialias", false );
         }
         catch ( ConfigurationException e )
         {
@@ -580,6 +584,8 @@ class InstrumentClientFrame
         // Split Pane state
         frameState.setAttribute( "divider-location", Integer.toString( m_splitPane.getDividerLocation() ) );
         frameState.setAttribute( "last-divider-location", Integer.toString( m_splitPane.getLastDividerLocation() ) );
+        // Antialias
+        frameState.setAttribute( "antialias", Boolean.toString( m_antialias ) );
         // Add frame state
         state.addChild( frameState );
         
@@ -670,6 +676,15 @@ class InstrumentClientFrame
         int screenHeight = screenSize.height;
         setLocation( screenWidth / 20, screenHeight / 20 );
         setSize( screenWidth * 9 / 10, screenHeight * 8 / 10 );
+    }
+    
+    boolean isAntialias()
+    {
+        return m_antialias;
+    }
+    void setAntialias( boolean antialias )
+    {
+        m_antialias = antialias;
     }
 
     void updateConnectionTab( InstrumentManagerConnection connection )
