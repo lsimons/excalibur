@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.apache.excalibur.instrument.manager.test.impl;
+package org.apache.excalibur.instrument.manager.impl.test;
 
 import junit.framework.TestCase;
 
