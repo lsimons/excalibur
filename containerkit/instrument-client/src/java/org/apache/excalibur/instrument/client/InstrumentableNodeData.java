@@ -19,8 +19,6 @@ package org.apache.excalibur.instrument.client;
 
 import javax.swing.ImageIcon;
 
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentableDescriptor;
-
 /**
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  */
@@ -41,8 +39,7 @@ class InstrumentableNodeData
      *   file but is no longer used. */
     private static final ImageIcon m_iconInstrumentableOld;
     
-    private InstrumentableDescriptor m_descriptor;
-    private InstrumentManagerConnection m_connection;
+    private InstrumentableData m_data;
     
     private boolean m_configured;
     private boolean m_registered;
@@ -67,11 +64,9 @@ class InstrumentableNodeData
     /*---------------------------------------------------------------
      * Constructors
      *-------------------------------------------------------------*/
-    InstrumentableNodeData( InstrumentableDescriptor descriptor,
-                            InstrumentManagerConnection connection )
+    InstrumentableNodeData( InstrumentableData data )
     {
-        m_descriptor = descriptor;
-        m_connection = connection;
+        m_data = data;
         
         update();
     }
@@ -138,9 +133,9 @@ class InstrumentableNodeData
     /*---------------------------------------------------------------
      * Methods
      *-------------------------------------------------------------*/
-    InstrumentableDescriptor getDescriptor()
+    InstrumentableData getData()
     {
-        return m_descriptor;
+        return m_data;
     }
     
     boolean isConfigured()
@@ -160,17 +155,16 @@ class InstrumentableNodeData
     boolean update()
     {
         boolean changed = false;
-        changed |= update( m_descriptor.getName(), m_descriptor.getDescription(),
-            m_descriptor.getStateVersion() );
+        changed |= update( m_data.getName(), m_data.getDescription(), m_data.getStateVersion() );
         
-        boolean newConfigured = m_descriptor.isConfigured();
+        boolean newConfigured = m_data.isConfigured();
         if ( newConfigured != m_configured )
         {
             changed = true;
             m_configured = newConfigured;
         }
         
-        boolean newRegistered = m_descriptor.isRegistered();
+        boolean newRegistered = m_data.isRegistered();
         if ( newRegistered != m_registered )
         {
             changed = true;
@@ -179,5 +173,4 @@ class InstrumentableNodeData
         
         return changed;
     }
-
 }

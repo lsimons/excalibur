@@ -18,6 +18,8 @@
 package org.apache.excalibur.instrument.client;
 
 import java.awt.Component;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -31,10 +33,8 @@ import javax.swing.JTextField;
 class ConnectDialog
     extends AbstractTabularOptionDialog
 {
-    private JTextField m_hostField;
-    private String m_host;
-    private JTextField m_portField;
-    private int m_port;
+    private JTextField m_urlField;
+    private URL m_url;
     
     /*---------------------------------------------------------------
      * Constructors
@@ -60,7 +60,7 @@ class ConnectDialog
      */
     protected String getMessage()
     {
-        return "Please enter the host and port of the InstrumentManager to connect to.";
+        return "Please enter the url of the InstrumentManager to connect to.";
     }
     
     /**
@@ -70,38 +70,19 @@ class ConnectDialog
      */
     protected boolean validateFields()
     {
-        // Check the host.
-        String host = m_hostField.getText().trim();
-        if ( host.length() == 0 )
-        {
-            JOptionPane.showMessageDialog( this, "Please enter a valid host name or IP address.",
-                "Invalid host", JOptionPane.ERROR_MESSAGE );
-            return false;
-        }
-        m_host = host;
-        
-        // Check the port.
-        boolean portOk = true;
-        int port = 0;
+        // Check the URL.
+        URL url;
         try
         {
-            port = Integer.parseInt( m_portField.getText().trim() );
+            url = new URL( m_urlField.getText().trim() );
         }
-        catch ( NumberFormatException e )
+        catch ( MalformedURLException e )
         {
-            portOk = false;
-        }
-        if ( ( port < 0 ) || ( port > 65535 ) )
-        {
-            portOk = false;
-        }
-        if ( !portOk )
-        {
-            JOptionPane.showMessageDialog( this, "Please enter a valid port. (1-65535)",
-                "Invalid port", JOptionPane.ERROR_MESSAGE );
+            JOptionPane.showMessageDialog( this, "Please enter a valid url: " + e.getMessage(),
+                "Invalid URL", JOptionPane.ERROR_MESSAGE );
             return false;
         }
-        m_port = port;
+        m_url = url;
         
         return true;
     }
@@ -119,8 +100,7 @@ class ConnectDialog
     {
         return new String[]
         {
-            "Host:",
-            "Port:"
+            "URL:"
         };
     }
     
@@ -131,15 +111,12 @@ class ConnectDialog
      */
     protected Component[] getMainPanelComponents()
     {
-        m_hostField = new JTextField();
-        m_hostField.setColumns( 20 );
-        m_portField = new JTextField();
-        m_portField.setColumns( 6 );
+        m_urlField = new JTextField();
+        m_urlField.setColumns( 30 );
         
         return new Component[]
         {
-            m_hostField,
-            m_portField
+            m_urlField
         };
     }
         
@@ -147,45 +124,24 @@ class ConnectDialog
      * Methods
      *-------------------------------------------------------------*/
     /**
-     * Sets the initial host to be shown in the host TextField.
+     * Sets the initial URL to be shown in the URL TextField.
      *
-     * @param host The initial host.
+     * @param url The initial URL.
      */
-    void setHost( String host )
+    void setURL( URL url )
     {
-        m_host = host;
-        m_hostField.setText( host );
+        m_url = url;
+        m_urlField.setText( url.toExternalForm() );
     }
     
     /**
-     * Returns the host set in the dialog.
+     * Returns the URL set in the dialog.
      *
-     * @return The host.
+     * @return The URL.
      */
-    String getHost()
+    URL getURL()
     {
-        return m_host;
-    }
-    
-    /**
-     * Sets the initial port to be shown in the port TextField.
-     *
-     * @param port The initial port.
-     */
-    void setPort( int port )
-    {
-        m_port = port;
-        m_portField.setText( Integer.toString( port ) );
-    }
-    
-    /**
-     * Returns the port set in the dialog.
-     *
-     * @return The port.
-     */
-    int getPort()
-    {
-        return m_port;
+        return m_url;
     }
 }
 

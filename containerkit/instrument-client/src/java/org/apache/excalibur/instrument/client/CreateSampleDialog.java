@@ -17,18 +17,25 @@
 
 package org.apache.excalibur.instrument.client;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.event.ActionEvent;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  *
@@ -39,11 +46,16 @@ import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClien
 class CreateSampleDialog
     extends AbstractTabularOptionDialog
 {
-    private InstrumentDescriptor m_instrumentDescriptor;
+    private int m_instrumentType;
     private JTextField m_instrumentNameField;
     private JTextField m_instrumentDescriptionField;
     private JTextField m_sampleDescriptionField;
     private String m_sampleDescription;
+    
+    /** Remembers the last default description so we can tell whether or not the
+     *   user has modified the description manually. */
+    private String m_lastDefaultDescription;
+    
     private JTextField m_intervalField;
     private long m_interval;
     private JTextField m_sizeField;
@@ -66,17 +78,34 @@ class CreateSampleDialog
      * Creates a new CreateSampleDialog.
      *
      * @param frame Frame which owns the dialog.
+     * @param name Name of the instrument.
+     * @param description Description of the instrument.
+     * @param type Type of the instrument.
      */
-    CreateSampleDialog( InstrumentClientFrame frame, InstrumentDescriptor instrumentDescriptor )
+    CreateSampleDialog( InstrumentClientFrame frame,
+                        String name,
+                        String description,
+                        int type )
     {
         super( frame, "Create Instrument Sample",
             AbstractOptionDialog.BUTTON_OK | AbstractOptionDialog.BUTTON_CANCEL );
         
-        m_instrumentDescriptor = instrumentDescriptor;
-        m_instrumentNameField.setText( m_instrumentDescriptor.getName() );
-        m_instrumentDescriptionField.setText( m_instrumentDescriptor.getDescription() );
+        m_instrumentType = type;
+        m_instrumentNameField.setText( name );
+        m_instrumentDescriptionField.setText( description );
         
         buildSampleTypeComponent();
+
+        // Set the default values.
+        setInterval( 1000 );
+        setSampleCount( 600 );  // 10 minutes of history
+        setLeaseTime( 600 );
+        setMaintainLease( true );
+        
+        m_lastDefaultDescription =
+            InstrumentSampleUtils.getDefaultDescriptionForType( m_sampleType, m_interval );
+        setSampleDescription( m_lastDefaultDescription );
+        
         pack();
     }
     
@@ -95,116 +124,12 @@ class CreateSampleDialog
     
     /**
      * Goes through and validates the fields in the dialog.
-     *
+     * 
      * @return True if the fields were Ok.
      */
     protected boolean validateFields()
     {
-        // Check the description.
-        String description = m_sampleDescriptionField.getText().trim();
-        if ( description.length() == 0 )
-        {
-            JOptionPane.showMessageDialog( this, "Please enter a valid description.",
-                "Invalid description", JOptionPane.ERROR_MESSAGE );
-            return false;
-        }
-        m_sampleDescription = description;
-        
-        // Check the interval.
-        boolean intervalOk = true;
-        long interval = 0;
-        try
-        {
-            interval = Long.parseLong( m_intervalField.getText().trim() );
-        }
-        catch ( NumberFormatException e )
-        {
-            intervalOk = false;
-        }
-        if ( ( interval < 100 ) || ( interval > 24 * 60 * 60 * 1000 ) )
-        {
-            intervalOk = false;
-        }
-        if ( !intervalOk )
-        {
-            JOptionPane.showMessageDialog( this, "Please enter a valid interval. (100ms - 24hrs, 86400000)",
-                "Invalid interval", JOptionPane.ERROR_MESSAGE );
-            return false;
-        }
-        m_interval = interval;
-        
-        // Check the size.
-        boolean sizeOk = true;
-        int size = 0;
-        try
-        {
-            size = Integer.parseInt( m_sizeField.getText().trim() );
-        }
-        catch ( NumberFormatException e )
-        {
-            sizeOk = false;
-        }
-        if ( ( size < 1 ) || ( size > 2048 ) )
-        {
-            sizeOk = false;
-        }
-        if ( !sizeOk )
-        {
-            JOptionPane.showMessageDialog( this, "Please enter a valid size. (1 - 2048)",
-                "Invalid size", JOptionPane.ERROR_MESSAGE );
-            return false;
-        }
-        m_size = size;
-        
-        // Check the leaseTime.
-        boolean leaseTimeOk = true;
-        int leaseTime = 0;
-        try
-        {
-            leaseTime = Integer.parseInt( m_leaseTimeField.getText().trim() );
-        }
-        catch ( NumberFormatException e )
-        {
-            leaseTimeOk = false;
-        }
-        if ( ( leaseTime < 60 ) || ( leaseTime > ( size * interval / 1000 ) + 86400 ) )
-        {
-            leaseTimeOk = false;
-        }
-        if ( !leaseTimeOk )
-        {
-            JOptionPane.showMessageDialog( this, "Please enter a valid lease time. Must be " +
-                "between 1 minute (60) and 24 hours greater than the interval * size (" +
-                ( ( size * interval / 1000 ) + 86400 ) + ")",
-                "Invalid leaseTime", JOptionPane.ERROR_MESSAGE );
-            return false;
-        }
-        m_leaseTime = leaseTime * 1000L;
-        
-        // Store the sample type
-        if ( m_sampleTypeCounter.isSelected() )
-        {
-             m_sampleType = InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_COUNTER;
-        }
-        else if ( m_sampleTypeMaximum.isSelected() )
-        {
-             m_sampleType = InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MAXIMUM;
-        }
-        else if ( m_sampleTypeMean.isSelected() )
-        {
-             m_sampleType = InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MEAN;
-        }
-        else if ( m_sampleTypeMinimum.isSelected() )
-        {
-             m_sampleType = InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MINIMUM;
-        }
-        else
-        {
-            // Should never get here.
-            m_sampleType = -1;
-        }
-        
-        return true;
+        return validateFields( false );
     }
     
     /*---------------------------------------------------------------
@@ -238,6 +163,26 @@ class CreateSampleDialog
      */
     protected Component[] getMainPanelComponents()
     {
+        DocumentListener dl = new DocumentListener() {
+            public void changedUpdate( DocumentEvent event )
+            {
+            }
+            public void insertUpdate( DocumentEvent event )
+            {
+                CreateSampleDialog.this.validateFields( true );
+            }
+            public void removeUpdate( DocumentEvent event )
+            {
+                // When the description is replaced, a remove event is fired when its
+                //  value is "".  If we validate on that then we will go into an infinite
+                //  loop.
+                if ( m_sampleDescriptionField.getText().length() > 0 )
+                {
+                    CreateSampleDialog.this.validateFields( true );
+                }
+            }
+        };
+        
         m_instrumentNameField = new JTextField();
         m_instrumentNameField.setColumns( 40 );
         m_instrumentNameField.setEditable( false );
@@ -248,28 +193,51 @@ class CreateSampleDialog
         
         m_sampleDescriptionField = new JTextField();
         m_sampleDescriptionField.setColumns( 40 );
+        m_sampleDescriptionField.getDocument().addDocumentListener( dl );
         
         m_intervalField = new JTextField();
         m_intervalField.setColumns( 10 );
+        m_intervalField.getDocument().addDocumentListener( dl );
         
         m_sizeField = new JTextField();
         m_sizeField.setColumns( 4 );
+        m_sizeField.getDocument().addDocumentListener( dl );
         
         m_leaseTimeField = new JTextField();
         m_leaseTimeField.setColumns( 10 );
+        m_leaseTimeField.getDocument().addDocumentListener( dl );
         
         m_maintainLeaseCheckBox = new JCheckBox();
         
         m_sampleTypePanel = Box.createVerticalBox();
+        
+        // Create a series of buttons to help the users work efficiently
+        Box intervalBar = Box.createHorizontalBox();
+        intervalBar.add( m_intervalField );
+        intervalBar.add( Box.createHorizontalStrut( 20 ) );
+        intervalBar.add( createIntervalButton( "1 Second", 1000, 600, 600 ) );
+        intervalBar.add( Box.createHorizontalStrut( 5 ) );
+        intervalBar.add( createIntervalButton( "1 Minute", 60000, 1440, 86400 ) );
+        intervalBar.add( Box.createHorizontalStrut( 5 ) );
+        intervalBar.add( createIntervalButton( "1 Hour", 3600000, 672, 86400 ) );
+        
+        Box leaseTimeBar = Box.createHorizontalBox();
+        leaseTimeBar.add( m_leaseTimeField );
+        leaseTimeBar.add( Box.createHorizontalStrut( 20 ) );
+        leaseTimeBar.add( createLeaseTimeButton( "10 Minutes", 600 ) );
+        leaseTimeBar.add( Box.createHorizontalStrut( 5 ) );
+        leaseTimeBar.add( createLeaseTimeButton( "1 Hour", 3600 ) );
+        leaseTimeBar.add( Box.createHorizontalStrut( 5 ) );
+        leaseTimeBar.add( createLeaseTimeButton( "1 Day", 86400 ) );
         
         return new Component[]
         {
             m_instrumentNameField,
             m_instrumentDescriptionField,
             m_sampleDescriptionField,
-            m_intervalField,
+            intervalBar,
             m_sizeField,
-            m_leaseTimeField,
+            leaseTimeBar,
             m_maintainLeaseCheckBox,
             m_sampleTypePanel
         };
@@ -278,27 +246,69 @@ class CreateSampleDialog
     /*---------------------------------------------------------------
      * Methods
      *-------------------------------------------------------------*/
+    private JButton createIntervalButton( final String label,
+                                          final long interval,
+                                          final int size,
+                                          final long leaseTime )
+    {
+        Action action = new AbstractAction( label )
+        {
+            public void actionPerformed( ActionEvent event )
+            {
+                CreateSampleDialog.this.setInterval( interval );
+                CreateSampleDialog.this.setSampleCount( size );
+                CreateSampleDialog.this.setLeaseTime( leaseTime );
+            }
+        };
+        return new JButton( action );
+    }
+    
+    private JButton createLeaseTimeButton( final String label,
+                                           final long leaseTime )
+    {
+        Action action = new AbstractAction( label )
+        {
+            public void actionPerformed( ActionEvent event )
+            {
+                CreateSampleDialog.this.setLeaseTime( leaseTime );
+            }
+        };
+        return new JButton( action );
+    }
+    
     /**
      * Builds the sample type component.
      */
     private void buildSampleTypeComponent()
     {
+        ChangeListener cl = new ChangeListener()
+        {
+            public void stateChanged( ChangeEvent event )
+            {
+                if ( ((JRadioButton)event.getSource()).isSelected() )
+                {
+                    // Only validate on the selected value
+                    CreateSampleDialog.this.validateFields( true );
+                }
+            }
+        };
+        
         m_sampleTypeGroup = new ButtonGroup();
         m_sampleTypeCounter = new JRadioButton( "Count over each sample" );
         m_sampleTypeMaximum = new JRadioButton( "Maximum value over each sample" );
         m_sampleTypeMinimum = new JRadioButton( "Minumum value over each sample" );
         m_sampleTypeMean    = new JRadioButton( "Mean value over each sample" );
         
-        switch ( m_instrumentDescriptor.getType() )
+        switch ( m_instrumentType )
         {
-        case InstrumentManagerClient.INSTRUMENT_TYPE_COUNTER:
+        case InstrumentData.INSTRUMENT_TYPE_COUNTER:
             m_sampleTypePanel.add( m_sampleTypeCounter );
             m_sampleTypeGroup.add( m_sampleTypeCounter );
             
             m_sampleTypeCounter.setSelected( true );
-            m_sampleType = InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_COUNTER;
+            m_sampleType = InstrumentSampleElementData.INSTRUMENT_SAMPLE_TYPE_COUNTER;
             break;
-        case InstrumentManagerClient.INSTRUMENT_TYPE_VALUE:
+        case InstrumentData.INSTRUMENT_TYPE_VALUE:
             m_sampleTypePanel.add( m_sampleTypeMaximum );
             m_sampleTypeGroup.add( m_sampleTypeMaximum );
             
@@ -309,12 +319,19 @@ class CreateSampleDialog
             m_sampleTypeGroup.add( m_sampleTypeMean );
             
             m_sampleTypeMaximum.setSelected( true );
-            m_sampleType = InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MAXIMUM;
+            m_sampleType = InstrumentSampleElementData.INSTRUMENT_SAMPLE_TYPE_MAXIMUM;
             break;
         default:
             // Unknown Type
             break;
         }
+        
+        // Add the change listeners down here so the initialization does not cause
+        //  them to fire.
+        m_sampleTypeCounter.addChangeListener( cl );
+        m_sampleTypeMaximum.addChangeListener( cl );
+        m_sampleTypeMinimum.addChangeListener( cl );
+        m_sampleTypeMean.addChangeListener( cl );
     }
     
     /**
@@ -326,6 +343,9 @@ class CreateSampleDialog
     {
         m_sampleDescription = sampleDescription;
         m_sampleDescriptionField.setText( sampleDescription );
+        
+        // Validate the fields quietly to update other values correctly.
+        validateFields( true );
     }
     
     /**
@@ -347,6 +367,9 @@ class CreateSampleDialog
     {
         m_interval = interval;
         m_intervalField.setText( Long.toString( interval ) );
+        
+        // Validate the fields quietly to update other values correctly.
+        validateFields( true );
     }
     
     /**
@@ -431,23 +454,26 @@ class CreateSampleDialog
     {
         m_sampleType = type;
         
-        switch(type)
+        switch ( type )
         {
-        case InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_COUNTER:
+        case InstrumentSampleElementData.INSTRUMENT_SAMPLE_TYPE_COUNTER:
             m_sampleTypeCounter.setSelected( true );
             break;
-        case InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MAXIMUM:
+        case InstrumentSampleElementData.INSTRUMENT_SAMPLE_TYPE_MAXIMUM:
             m_sampleTypeMaximum.setSelected( true );
             break;
-        case InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MEAN:
+        case InstrumentSampleElementData.INSTRUMENT_SAMPLE_TYPE_MEAN:
             m_sampleTypeMean.setSelected( true );
             break;
-        case InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MINIMUM:
+        case InstrumentSampleElementData.INSTRUMENT_SAMPLE_TYPE_MINIMUM:
             m_sampleTypeMinimum.setSelected( true );
             break;
         default:
             break;
         }
+        
+        // Validate the fields quietly to update other values correctly.
+        validateFields( true );
     }
     
     /**
@@ -458,6 +484,166 @@ class CreateSampleDialog
     int getSampleType()
     {
         return m_sampleType;
+    }
+    
+    /**
+     * Goes through and validates the fields in the dialog.
+     *
+     * @param quiet True if problems should be ignored.
+     * 
+     * @return True if the fields were Ok.
+     */
+    private boolean validateFields( boolean quiet )
+    {
+        // Check the interval.
+        boolean intervalOk = true;
+        long interval = 0;
+        try
+        {
+            interval = Long.parseLong( m_intervalField.getText().trim() );
+        }
+        catch ( NumberFormatException e )
+        {
+            intervalOk = false;
+        }
+        if ( ( interval < 100 ) || ( interval > 24 * 60 * 60 * 1000 ) )
+        {
+            intervalOk = false;
+        }
+        if ( intervalOk )
+        {
+            m_interval = interval;
+            m_intervalField.setForeground( null );
+        }
+        else
+        {
+            m_intervalField.setForeground( Color.red );
+            if ( !quiet )
+            {
+                JOptionPane.showMessageDialog( this, "Please enter a valid interval. (100ms - 24hrs, 86400000)",
+                    "Invalid interval", JOptionPane.ERROR_MESSAGE );
+                return false;
+            }
+        }
+        
+        // Check the size.
+        boolean sizeOk = true;
+        int size = 0;
+        try
+        {
+            size = Integer.parseInt( m_sizeField.getText().trim() );
+        }
+        catch ( NumberFormatException e )
+        {
+            sizeOk = false;
+        }
+        if ( ( size < 1 ) || ( size > 2048 ) )
+        {
+            sizeOk = false;
+        }
+        if ( sizeOk )
+        {
+            m_size = size;
+            m_sizeField.setForeground( null );
+        }
+        else
+        {
+            m_sizeField.setForeground( Color.red );
+            if ( !quiet )
+            {
+                JOptionPane.showMessageDialog( this, "Please enter a valid size. (1 - 2048)",
+                    "Invalid size", JOptionPane.ERROR_MESSAGE );
+                return false;
+            }
+        }
+        
+        // Check the leaseTime.
+        boolean leaseTimeOk = true;
+        int leaseTime = 0;
+        try
+        {
+            leaseTime = Integer.parseInt( m_leaseTimeField.getText().trim() );
+        }
+        catch ( NumberFormatException e )
+        {
+            leaseTimeOk = false;
+        }
+        if ( ( leaseTime < 60 ) || ( leaseTime > ( size * interval / 1000 ) + 86400 ) )
+        {
+            leaseTimeOk = false;
+        }
+        if ( leaseTimeOk )
+        {
+            m_leaseTime = leaseTime * 1000L;
+            m_leaseTimeField.setForeground( null );
+        }
+        else
+        {
+            m_leaseTimeField.setForeground( Color.red );
+            if ( !quiet )
+            {
+                JOptionPane.showMessageDialog( this, "Please enter a valid lease time. Must be " +
+                    "between 1 minute (60) and 24 hours greater than the interval * size (" +
+                    ( ( size * interval / 1000 ) + 86400 ) + ")",
+                    "Invalid leaseTime", JOptionPane.ERROR_MESSAGE );
+                return false;
+            }
+        }
+        
+        // Store the sample type
+        if ( m_sampleTypeCounter.isSelected() )
+        {
+             m_sampleType = InstrumentSampleElementData.INSTRUMENT_SAMPLE_TYPE_COUNTER;
+        }
+        else if ( m_sampleTypeMaximum.isSelected() )
+        {
+             m_sampleType = InstrumentSampleElementData.INSTRUMENT_SAMPLE_TYPE_MAXIMUM;
+        }
+        else if ( m_sampleTypeMean.isSelected() )
+        {
+             m_sampleType = InstrumentSampleElementData.INSTRUMENT_SAMPLE_TYPE_MEAN;
+        }
+        else if ( m_sampleTypeMinimum.isSelected() )
+        {
+             m_sampleType = InstrumentSampleElementData.INSTRUMENT_SAMPLE_TYPE_MINIMUM;
+        }
+        else
+        {
+            // Should never get here.
+            m_sampleType = -1;
+        }
+        
+        // Update the default description
+        String newDefaultDescription =
+            InstrumentSampleUtils.getDefaultDescriptionForType( m_sampleType, m_interval );
+        
+        // Check the description.
+        String description = m_sampleDescriptionField.getText().trim();
+        if ( ( description.length() == 0 ) || ( description.equals( m_lastDefaultDescription ) ) )
+        {
+            if ( !description.equals( newDefaultDescription ) )
+            {
+                // Set the description to the default.
+                description = newDefaultDescription;
+                
+                // We can't change the description field directly because this is called from
+                //  its change listener.
+                final String setDesc = description;
+                SwingUtilities.invokeLater( new Runnable()
+                    {
+                        public void run()
+                        {
+                            CreateSampleDialog.this.m_sampleDescriptionField.setText( setDesc );
+                        }
+                    } );
+            }
+        }
+        m_sampleDescription = description;
+        
+        // Always remember the new default description
+        m_lastDefaultDescription = newDefaultDescription;
+        
+        return true;
     }
 }
 

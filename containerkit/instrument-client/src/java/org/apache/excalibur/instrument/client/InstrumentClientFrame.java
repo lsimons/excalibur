@@ -29,6 +29,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -50,8 +52,11 @@ import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
 import org.apache.avalon.framework.configuration.DefaultConfigurationSerializer;
+import org.apache.avalon.framework.container.ContainerUtil;
 import org.apache.avalon.framework.logger.LogEnabled;
 import org.apache.avalon.framework.logger.Logger;
+
+import org.apache.excalibur.instrument.client.http.HTTPInstrumentManagerConnection;
 
 /**
  *
@@ -63,8 +68,9 @@ class InstrumentClientFrame
     extends JFrame
     implements Runnable, InstrumentManagerConnectionListener, LogEnabled
 {
-    static final String SHUTDOWN_HOOK_NAME = "InstrumentClientShutdownHook";
+    protected static final String MEDIA_PATH = "org/apache/excalibur/instrument/client/media/";
     
+    static final String SHUTDOWN_HOOK_NAME = "InstrumentClientShutdownHook";
     
     private String m_title;
     
@@ -79,7 +85,6 @@ class InstrumentClientFrame
     
     private HashMap m_connections = new HashMap();
     private InstrumentManagerConnection[] m_connectionArray;
-
     
     /** Shutdown hook */
     private Thread m_hook;
@@ -100,15 +105,17 @@ class InstrumentClientFrame
         super();
 
         m_title = title;
-        
+    }
+    
+    public void initialize()
+    {
         init();
-
+        
         m_runner = new Thread( this, "InstrumentClientFrameRunner" );
         m_runner.start();
         
-        ClassLoader cl = InstrumentManagerTreeCellRenderer.class.getClassLoader();
-        setIconImage( new ImageIcon( cl.getResource(
-            NodeData.MEDIA_PATH + "client.gif") ).getImage() );
+        ClassLoader cl = this.getClass().getClassLoader();
+        setIconImage( new ImageIcon( cl.getResource( MEDIA_PATH + "client.gif") ).getImage() );
     }
     
     /*---------------------------------------------------------------
@@ -132,29 +139,23 @@ class InstrumentClientFrame
                     }
                 }
                 
-                // Check on the status of all of the connections (Avoid synchronization)
-                InstrumentManagerConnection[] connectionArray = getInstrumentManagerConnections();
-                for ( int i = 0; i < connectionArray.length; i++ )
+                // Update each of the InstrumentManagerConnections.
+                InstrumentManagerConnection[] connections = getConnections();
+                for ( int i = 0; i < connections.length; i++ )
                 {
-                    InstrumentManagerConnection connection = connectionArray[i];
-                    if ( connection.isClosed() )
+                    InstrumentManagerConnection connection = connections[i];
+                    connection.update();
+                    
+                    // Update the tab title.
+                    int tabIndex = m_connectionsPane.indexOfComponent( connection );
+                    if ( tabIndex >= 0 )
                     {
-                        // Connection is closed, try to open it.
-                        connection.tryOpen();
-                    }
-                    else
-                    {
-                        // Make sure that the connection is still open
-                        if ( connection.ping() )
-                        {
-                            // Still connected
-                            connection.handleLeasedSamples();
-                        }
+                        m_connectionsPane.setTitleAt( tabIndex, connection.getTabTitle() );
+                        m_connectionsPane.setToolTipTextAt( tabIndex, connection.getTabTooltip() );
                     }
                 }
-
-                // Update each of the ProfileSampleFrames.  This is kind of temporary
-                //  to get rid of the one thread per frame issue.
+                
+                // Update each of the InstrumentSampleFrames.
                 JInternalFrame[] frames = m_desktopPane.getAllFrames();
                 for( int i = 0; i < frames.length; i++ )
                 {
@@ -170,6 +171,19 @@ class InstrumentClientFrame
             {
                 // Should not get here, but we want to make sure that this never happens.
                 getLogger().error( "Unexpected error caught in InstrumentClientFrame runner:", t );
+                
+                // Avoid thrashing.
+                try
+                {
+                    Thread.sleep( 5000 );
+                }
+                catch ( InterruptedException e )
+                {
+                    if ( m_runner == null )
+                    {
+                        return;
+                    }
+                }
             }
         }
     }
@@ -190,7 +204,7 @@ class InstrumentClientFrame
         if ( tabIndex >= 0 )
         {
             m_connectionsPane.setTitleAt( tabIndex, connection.getTabTitle() );
-            m_connectionsPane.setToolTipTextAt( tabIndex, connection.getTitle() );
+            m_connectionsPane.setToolTipTextAt( tabIndex, connection.getTabTooltip() );
         }
     }
     
@@ -207,7 +221,7 @@ class InstrumentClientFrame
         if ( tabIndex >= 0 )
         {
             m_connectionsPane.setTitleAt( tabIndex, connection.getTabTitle() );
-            m_connectionsPane.setToolTipTextAt( tabIndex, connection.getTitle() );
+            m_connectionsPane.setToolTipTextAt( tabIndex, connection.getTabTooltip() );
         }
     }
     
@@ -230,8 +244,8 @@ class InstrumentClientFrame
         }
         
         connection.removeInstrumentManagerConnectionListener( this );
-        String key = connection.getHost() + ":" + connection.getPort();
-        synchronized (m_connections)
+        Object key = connection.getKey();
+        synchronized ( m_connections )
         {
             m_connections.remove( key );
             m_connectionArray = null;
@@ -279,7 +293,9 @@ class InstrumentClientFrame
             }
             catch( Exception e )
             {
-                showErrorDialog( "Unable to load desktop file.", e );
+                String msg = "Unable to load desktop file.";
+                getLogger().debug( msg, e );
+                showErrorDialog( msg, e );
             }
             updateTitle();
         }
@@ -372,6 +388,7 @@ class InstrumentClientFrame
             String msg = "Unable to fully load the frame state.";
             if ( showErrorDialog )
             {
+                getLogger().debug( msg, e );
                 showErrorDialog( msg, e );
             }
             else
@@ -388,32 +405,40 @@ class InstrumentClientFrame
         for( int i = 0; i < connConfs.length; i++ )
         {
             Configuration connConf = connConfs[ i ];
-            String host = connConf.getAttribute( "host" );
-            int port = connConf.getAttributeAsInteger( "port" );
-            String key = getInstrumentManagerConnectionKey( host, port );
-            
-            InstrumentManagerConnection connection;
-            synchronized (m_connections)
+            String tURL = connConf.getAttribute( "url" );
+            URL url;
+            try
             {
-                connection = (InstrumentManagerConnection)m_connections.get( key );
+                url = new URL( tURL );
+            }
+            catch ( MalformedURLException e )
+            {
+                throw new ConfigurationException( "Invalid url, '" + tURL + "'", e );
+            }
+            
+            InstrumentManagerConnection conn;
+            synchronized ( m_connections )
+            {
+                conn = (InstrumentManagerConnection)m_connections.get( url );
                 
-                if ( connection == null )
+                if ( conn == null )
                 {
-                    // Need to create a new connection.
-                    connection = createInstrumentManagerConnection( host, port );
+                    // Need to create a new connection
+                    conn = createConnection( url );
                 }
             }
             
             // Load the state into the connection.
             try
             {
-                connection.loadState( connConf );
+                conn.loadState( connConf );
             }
             catch ( ConfigurationException e )
             {
-                String msg = "Unable to fully load the state of connection, " + key;
+                String msg = "Unable to fully load the state of connection, " + conn.getKey();
                 if ( showErrorDialog )
                 {
+                    getLogger().debug( msg, e );
                     showErrorDialog( msg, e );
                 }
                 else
@@ -433,17 +458,26 @@ class InstrumentClientFrame
             if ( type.equals( InstrumentSampleFrame.FRAME_TYPE ) )
             {
                 // Figure out which connection the frame will belong to.
-                String host = frameConf.getAttribute( "host" );
-                int port = frameConf.getAttributeAsInteger( "port" );
-                InstrumentManagerConnection connection =
-                    getInstrumentManagerConnection( host, port );
+                String tURL = frameConf.getAttribute( "url" );
+                URL url;
+                try
+                {
+                    url = new URL( tURL );
+                }
+                catch ( MalformedURLException e )
+                {
+                    throw new ConfigurationException( "Invalid url, '" + tURL + "'", e );
+                }
+                
+                InstrumentManagerConnection connection = getConnection( url );
                 if ( connection == null )
                 {
                     // Connection not found.
                     String msg = "Sample frame not being loaded becase no connection to " +
-                        host + ":" + port + " exists.";
+                        url.toExternalForm() + " exists.";
                     if ( showErrorDialog )
                     {
+                        getLogger().debug( msg );
                         showErrorDialog( msg );
                     }
                     else
@@ -458,10 +492,12 @@ class InstrumentClientFrame
                     }
                     catch ( ConfigurationException e )
                     {
-                        String msg = "Unable to fully load the state of an inner frame for sample: " +
+                        String msg =
+                            "Unable to fully load the state of an inner frame for sample: " +
                             frameConf.getAttribute( "sample", "Sample name missing" );
                         if ( showErrorDialog )
                         {
+                            getLogger().debug( msg, e );
                             showErrorDialog( msg, e );
                         }
                         else
@@ -601,10 +637,10 @@ class InstrumentClientFrame
         state.addChild( frameState );
         
         // Save the state of any connections.
-        InstrumentManagerConnection[] connections = getInstrumentManagerConnections();
+        InstrumentManagerConnection[] connections = getConnections();
         for ( int i = 0; i < connections.length; i++ )
         {
-            state.addChild( connections[ i ].saveState() );
+            state.addChild( connections[i].saveState() );
         }
         
         // Save the state of any inner frames.
@@ -681,8 +717,12 @@ class InstrumentClientFrame
         Toolkit toolkit = getToolkit();
         Dimension screenSize = toolkit.getScreenSize();
         
-        setLocation( 20, 20 );
-        setSize( (int)(screenSize.width * 0.9), (int)(screenSize.height * 0.9) );
+        // Set the default size and location of the window.  This will be overridden
+        //  by whatever is stored in a state file if loaded.
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+        setLocation( screenWidth / 20, screenHeight / 20 );
+        setSize( screenWidth * 9 / 10, screenHeight * 8 / 10 );
     }
     
     private void updateTitle()
@@ -851,35 +891,27 @@ class InstrumentClientFrame
         reorganizeFrames( 1, count, openFrames );
     }
     
-    InstrumentManagerConnection[] getInstrumentManagerConnections()
+    InstrumentManagerConnection[] getConnections()
     {
         // Avoid synchronization when possible.
         InstrumentManagerConnection[] array = m_connectionArray;
         if ( array == null )
         {
-            array = updateInstrumentManagerConnectionArray();
+            synchronized ( m_connections )
+            {
+                m_connectionArray = new InstrumentManagerConnection[m_connections.size()];
+                m_connections.values().toArray( m_connectionArray );
+                array = m_connectionArray;
+            }
         }
         return array;
     }
     
-    private InstrumentManagerConnection[] updateInstrumentManagerConnectionArray()
+    InstrumentManagerConnection getConnection( URL url )
     {
-        synchronized (this)
+        synchronized ( m_connections )
         {
-            InstrumentManagerConnection[] array =
-                new InstrumentManagerConnection[ m_connections.size() ];
-            m_connections.values().toArray( array );
-            m_connectionArray = array;
-            return array;
-        }
-    }
-    
-    InstrumentManagerConnection getInstrumentManagerConnection( String host, int port )
-    {
-        String key = host + ":" + port;
-        synchronized (m_connections)
-        {
-            return (InstrumentManagerConnection)m_connections.get( key );
+            return (InstrumentManagerConnection)m_connections.get( url );
         }
     }
     
@@ -889,26 +921,30 @@ class InstrumentClientFrame
         {
             public void run()
             {
+                URL defaultURL;
+                try
+                {
+                    defaultURL = new URL( "http://localhost:15080" );
+                }
+                catch ( MalformedURLException e )
+                {
+                    // Should never happen.
+                    e.printStackTrace();
+                    return;
+                }
+                
                 ConnectDialog dialog = new ConnectDialog( InstrumentClientFrame.this );
-                dialog.setHost( "localhost" );
-                dialog.setPort( 15555 );
+                dialog.setURL( defaultURL );
                 dialog.show();
                 if ( dialog.getAction() == ConnectDialog.BUTTON_OK )
                 {
-                    openInstrumentManagerConnection( dialog.getHost(), dialog.getPort() );
+                    synchronized( m_connections )
+                    {
+                        createConnection( dialog.getURL() );
+                    }
                 }
             }
         } );
-    }
-    
-    /**
-     * Returns the key used to access connections in the connections map.
-     *
-     * @return The key used to access connections in the connections map.
-     */
-    private String getInstrumentManagerConnectionKey( String host, int port )
-    {
-        return host + ":" + port;
     }
     
     /**
@@ -916,72 +952,26 @@ class InstrumentClientFrame
      *  should never be called in the connection already exists.  Caller must
      *  ensure that m_connections is synchronized.
      *
-     * @param host Host of the connecton.
-     * @param port Port of the connecton.
+     * @param url URL of the connecton.
      *
      * @return The new InstrumentManagerConnection
      */
-    private InstrumentManagerConnection createInstrumentManagerConnection( String host, int port )
+    private InstrumentManagerConnection createConnection( URL url )
     {
-        String key = getInstrumentManagerConnectionKey( host, port );
-        InstrumentManagerConnection connection =
-            new InstrumentManagerConnection( this, host, port );
-        connection.enableLogging( getLogger() );
-        m_connections.put( key, connection );
+        InstrumentManagerConnection conn = new HTTPInstrumentManagerConnection( url );
+        ContainerUtil.enableLogging(
+            conn, getLogger().getChildLogger( url.getHost() + ":" + url.getPort() ) );
+        conn.setFrame( this );
+        conn.init();
+        m_connections.put( conn.getKey(), conn );
         m_connectionArray = null;
         
-        connection.addInstrumentManagerConnectionListener(
-            InstrumentClientFrame.this );
+        conn.addInstrumentManagerConnectionListener( this );
         
-        m_connectionsPane.add( connection.getTabTitle(), connection );
+        m_connectionsPane.add( conn.getTabTitle(), conn );
         
-        return connection;
+        return conn;
     }
-    
-    void openInstrumentManagerConnection( final String host, final int port )
-    {
-        SwingUtilities.invokeLater( new Runnable()
-        {
-            public void run()
-            {
-                String key = getInstrumentManagerConnectionKey( host, port );
-                synchronized (m_connections)
-                {
-                    InstrumentManagerConnection connection =
-                        (InstrumentManagerConnection)m_connections.get( key );
-                    if ( connection == null )
-                    {
-                        createInstrumentManagerConnection( host, port );
-                        
-                        return;
-                    }
-                }
-                
-                // If we get here show an error that the connection alreay exists.
-                //  Must be done outside the synchronization block.
-                showErrorDialog( "A connection to " + key + " already exists." );
-            }
-        } );
-    }
-    
-    /*
-    void openInstrumentSampleFrame( final InstrumentManagerConnection connection,
-                                    final InstrumentSampleDescriptor instrumentSampleDescriptor )
-    {
-        SwingUtilities.invokeLater( new Runnable()
-        {
-            public void run()
-            {
-                String sampleName = instrumentSampleDescriptor.getName();
-                InstrumentSampleFrame frame = new InstrumentSampleFrame( connection,
-                    sampleName, InstrumentClientFrame.this );
-
-                frame.addToDesktop( m_desktopPane );
-                frame.show();
-            }
-        } );
-    }
-    */
     
     private void showErrorDialog( String message )
     {
@@ -1024,14 +1014,10 @@ class InstrumentClientFrame
         }
         
         // Stop the runner.
-        m_runner.interrupt();
-        m_runner = null;
-        
-        // Close all connections cleanly.
-        InstrumentManagerConnection[] connections = getInstrumentManagerConnections();
-        for ( int i = 0; i < connections.length; i++ )
+        if ( m_runner != null )
         {
-            connections[i].delete();
+            m_runner.interrupt();
+            m_runner = null;
         }
         
         if ( !fallThrough )
@@ -1105,7 +1091,9 @@ class InstrumentClientFrame
             }
             catch( Exception e )
             {
-                showErrorDialog( "Unable to load desktop file.", e );
+                String msg = "Unable to load desktop file.";
+                getLogger().debug( msg, e );
+                showErrorDialog( msg, e );
             }
             updateTitle();
         }
@@ -1121,7 +1109,9 @@ class InstrumentClientFrame
             }
             catch( Exception e )
             {
-                showErrorDialog( "Unable to save desktop file.", e );
+                String msg = "Unable to save desktop file.";
+                getLogger().debug( msg, e );
+                showErrorDialog( msg, e );
             }
         }
         else
@@ -1187,7 +1177,9 @@ class InstrumentClientFrame
             }
             catch( Exception e )
             {
-                showErrorDialog( "Unable to save desktop file.", e );
+                String msg = "Unable to save desktop file.";
+                getLogger().debug( msg, e );
+                showErrorDialog( msg, e );
             }
             updateTitle();
         }

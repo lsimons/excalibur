@@ -93,6 +93,7 @@ public class Main
         InstrumentClientFrame client = new InstrumentClientFrame( "Instrument Client" );
         int logLevel = ( debug ? ConsoleLogger.LEVEL_DEBUG : ConsoleLogger.LEVEL_INFO );
         client.enableLogging( new ConsoleLogger( logLevel ) );
+        client.initialize();
         client.setDefaultStateFile( defaultStateFile );
         client.show();
     }

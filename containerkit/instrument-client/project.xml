@@ -38,54 +38,5 @@
             <id>avalon-framework</id>
             <version>4.1.4</version>
         </dependency>
-        <dependency>
-            <id>altrmi-common</id>
-            <version>0.9.6</version>
-            <groupId>altrmi</groupId>
-        </dependency>
-        <dependency>
-            <id>altrmi-client-interfaces</id>
-            <version>0.9.6</version>
-            <groupId>altrmi</groupId>
-        </dependency>
-        <dependency>
-            <id>altrmi-client-impl</id>
-            <version>0.9.6</version>
-            <groupId>altrmi</groupId>
-        </dependency>
-        <dependency>
-            <id>altrmi-generator</id>
-            <version>0.9.6</version>
-            <groupId>altrmi</groupId>
-        </dependency>
-        <dependency>
-            <groupId>excalibur-instrument</groupId>
-            <artifactId>excalibur-instrument</artifactId>
-            <version>1.2</version>
-        </dependency>
-        <dependency>
-            <groupId>excalibur-instrument</groupId>
-            <artifactId>excalibur-instrument-spi</artifactId>
-            <version>1.2</version>
-        </dependency>
-        <dependency>
-            <groupId>excalibur-instrument</groupId>
-            <artifactId>excalibur-instrument-impl</artifactId>
-            <version>1.2</version>
-        </dependency>
-
-        <dependency>
-            <!-- generation task only -->
-            <id>altrmi-server-interfaces</id>
-            <version>0.9.6</version>
-            <groupId>altrmi</groupId>
-        </dependency>
-        <dependency>
-            <!-- generation task only -->
-            <id>altrmi-server-impl</id>
-            <version>0.9.6</version>
-            <groupId>altrmi</groupId>
-        </dependency>
     </dependencies>
-
 </project>

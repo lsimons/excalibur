@@ -29,7 +29,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentSampleSnapshot;
 
 /**
  *
@@ -112,8 +111,7 @@ class InstrumentSampleFrame
     protected void getState( DefaultConfiguration stateConfig )
     {
         stateConfig.setAttribute( "type", FRAME_TYPE );
-        stateConfig.setAttribute( "host", m_connection.getHost() );
-        stateConfig.setAttribute( "port", Integer.toString( m_connection.getPort() ) );
+        stateConfig.setAttribute( "url", m_connection.getKey().toString() );
         stateConfig.setAttribute( "sample", m_instrumentSampleName );
     }
     
@@ -266,9 +264,9 @@ class InstrumentSampleFrame
     /**
      * Initializes the chart
      *
-     * @param snapshot InstrumentSampleSnapshot to use to initialize the chart.
+     * @param snapshot InstrumentSampleSnapshotData to use to initialize the chart.
      */
-    private void initChart( InstrumentSampleSnapshot snapshot )
+    private void initChart( InstrumentSampleSnapshotData snapshot )
     {
         // Decide on a line interval based on the interval of the sample.
         long interval = snapshot.getInterval();
@@ -326,7 +324,7 @@ class InstrumentSampleFrame
         getContentPane().add( m_lineChart );
     }
     
-    private void setStateSnapshot( InstrumentSampleSnapshot snapshot )
+    private void setStateSnapshot( InstrumentSampleSnapshotData snapshot )
     {
         if ( m_state != STATE_SNAPSHOT )
         {
@@ -420,36 +418,39 @@ class InstrumentSampleFrame
      */
     void update()
     {
-        // Request a snapshot from the connection
-        InstrumentSampleSnapshot snapshot =
-            m_connection.getInstrumentSampleSnapshot( m_instrumentSampleName );
-        if ( snapshot == null )
+        if ( m_connection.isDeleted() )
         {
-            // A sample was not available.  Why.
-            if ( m_connection.isDeleted() )
-            {
-                // The connection was closed and deleted.
-                hideFrame();
-            }
-            if ( m_connection.isClosed() )
-            {
-                // Connection was closed.
-                setStateDisconnected();
-            }
-            else if ( ( m_state == STATE_SNAPSHOT ) || ( m_state == STATE_EXPIRED ) )
-            {
-                // We were getting snapshots, then they stopped.  The sample expired.
-                setStateSampleExpired();
-            }
-            else
-            {
-                // Sample not found.
-                setStateSampleMissing();
-            }
+            // The connection was closed and deleted.
+            hideFrame();
         }
         else
         {
-            setStateSnapshot( snapshot );
+            // Request a snapshot from the connection
+            InstrumentSampleSnapshotData snapshot =
+                m_connection.getSampleSnapshot( m_instrumentSampleName );
+            if ( snapshot == null )
+            {
+                // A sample was not available.  Why.
+                if ( !m_connection.isConnected() )
+                {
+                    // Connection was closed.
+                    setStateDisconnected();
+                }
+                else if ( ( m_state == STATE_SNAPSHOT ) || ( m_state == STATE_EXPIRED ) )
+                {
+                    // We were getting snapshots, then they stopped.  The sample expired.
+                    setStateSampleExpired();
+                }
+                else
+                {
+                    // Sample not found.
+                    setStateSampleMissing();
+                }
+            }
+            else
+            {
+                setStateSnapshot( snapshot );
+            }
         }
     }
 }

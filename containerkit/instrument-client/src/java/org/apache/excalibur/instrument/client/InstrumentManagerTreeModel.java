@@ -27,10 +27,6 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentSampleDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentableDescriptor;
 
 /**
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
@@ -41,11 +37,10 @@ class InstrumentManagerTreeModel
 {
     private final InstrumentManagerConnection m_connection;
 
-    /** The last InstrumentManagerClient referenced.  Used to tell when it changes. */
-    private InstrumentManagerClient m_lastClient;
-
     /** The state version of the last client. */
     private int m_lastClientStateVersion;
+    
+    private boolean m_lastConnected = false;
 
     private DefaultMutableTreeNode m_root;
 
@@ -77,7 +72,7 @@ class InstrumentManagerTreeModel
      */
     public void opened( InstrumentManagerConnection connection )
     {
-        //getLogger.debug("InstrumentManagerTreeModel.opened(" + connection + ")");
+        getLogger().debug( "InstrumentManagerTreeModel.opened(" + connection + ")" );
         refreshModel();
     }
 
@@ -89,7 +84,7 @@ class InstrumentManagerTreeModel
      */
     public void closed( InstrumentManagerConnection connection )
     {
-        //getLogger.debug("InstrumentManagerTreeModel.closed(" + connection + ")");
+        getLogger().debug( "InstrumentManagerTreeModel.closed(" + connection + ")" );
         refreshModel();
     }
 
@@ -100,7 +95,7 @@ class InstrumentManagerTreeModel
      */
     public void deleted( InstrumentManagerConnection connection )
     {
-        //getLogger.debug("InstrumentManagerTreeModel.deleted(" + connection + ")");
+        getLogger().debug( "InstrumentManagerTreeModel.deleted(" + connection + ")" );
         refreshModel();
     }
 
@@ -416,9 +411,9 @@ class InstrumentManagerTreeModel
             // Extract the NodeData from the TreeNode
             InstrumentSampleNodeData sampleNodeData =
                 (InstrumentSampleNodeData)leasedSampleArray[i].getUserObject();
-            InstrumentSampleDescriptor sampleDescriptor = sampleNodeData.getDescriptor();
+            InstrumentSampleData sample = sampleNodeData.getData();
 
-            updateInstrumentSample( sampleDescriptor );
+            updateInstrumentSample( sample );
         }
     }
 
@@ -441,9 +436,9 @@ class InstrumentManagerTreeModel
                 // Update the Instrument containing the sample.
                 DefaultMutableTreeNode instrumentTreeNode =
                     (DefaultMutableTreeNode)leasedSampleArray[i].getParent();
-                InstrumentDescriptor instrumentDescriptor =
-                    ((InstrumentNodeData)instrumentTreeNode.getUserObject()).getDescriptor();
-                updateInstrument( instrumentDescriptor, instrumentTreeNode, -1 /*Force update*/ );
+                InstrumentData instrumentData =
+                    ((InstrumentNodeData)instrumentTreeNode.getUserObject()).getData();
+                updateInstrument( instrumentData, instrumentTreeNode, -1 /*Force update*/ );
             }
         }
     }
@@ -456,63 +451,38 @@ class InstrumentManagerTreeModel
     void refreshModel()
     {
         // Is the connection open or not?
-        InstrumentManagerClient client = m_connection.getInstrumentManagerClient();
-        if ( client == null )
+        if ( m_connection.isConnected() != m_lastConnected )
         {
-            if ( m_lastClient == null )
-            {
-                // Nothing to do
-            }
-            else
-            {
-                m_root.removeAllChildren();
-                m_elementMap.clear();
-                m_leasedSampleMap.clear();
-                m_leasedSampleArray = null;
-                m_lastClientStateVersion = -1;
-                fireTreeStructureChanged( new TreeModelEvent( this, m_root.getPath() ) );
-            }
+            m_root.removeAllChildren();
+            m_elementMap.clear();
+            m_leasedSampleMap.clear();
+            m_leasedSampleArray = null;
+            m_lastClientStateVersion = -1;
+            fireTreeStructureChanged( new TreeModelEvent( this, m_root.getPath() ) );
         }
-        else
+        
+        if ( m_connection.isConnected() )
         {
-            if ( client != m_lastClient )
-            {
-                // All data will change.
-                m_root.removeAllChildren();
-                m_elementMap.clear();
-                m_leasedSampleMap.clear();
-                m_leasedSampleArray = null;
-                m_lastClientStateVersion = -1;
-                fireTreeStructureChanged( new TreeModelEvent( this, new Object[] { m_root } ) );
-            }
-
             // Need to update the child nodes. (Root Instrumentables)
-            try
-            {
-                updateInstrumentModelClient( client, m_root, m_lastClientStateVersion );
-            }
-            catch ( org.apache.altrmi.client.InvocationException e )
-            {
-                System.out.println( "Error updating the Instrumentables on " +
-                    m_connection.getHost() + ":" + m_connection.getPort() + ": " +
-                    e.getMessage() );
-            }
+            updateInstrumentManagerData(
+                m_connection.getInstrumentManager(), m_root, m_lastClientStateVersion );
         }
-        m_lastClient = client;
+        
+        m_lastConnected = m_connection.isConnected();
     }
 
     /**
-     * Called to update the local view of the InstrumentManagerClient in the TreeeModel.
+     * Called to update the local view of the InstrumentManagerData in the TreeeModel.
      *
-     * @param client The InstrumentModelClient to use for the update.
+     * @param manager The InstrumentManagerData to use for the update.
      * @param roorTreeNode The TreeNode representing the client.
      * @param oldStateVersion The state version at the time of the last update.
      */
-    private void updateInstrumentModelClient( InstrumentManagerClient client,
+    private void updateInstrumentManagerData( InstrumentManagerData manager,
                                               DefaultMutableTreeNode rootTreeNode,
                                               int oldStateVersion )
     {
-        int stateVersion = client.getStateVersion();
+        int stateVersion = manager.getStateVersion();
         if ( stateVersion == oldStateVersion )
         {
             // Already up to date.
@@ -521,16 +491,16 @@ class InstrumentManagerTreeModel
 
         if ( getLogger().isDebugEnabled() )
         {
-            getLogger().debug( "update client(" + client.getName() + ") "
+            getLogger().debug( "update manager(" + manager.getName() + ") "
                 + "state new=" + stateVersion + ", old=" + oldStateVersion );
         }
 
         // The latest Instrumentables will be in the correct order.
-        InstrumentableDescriptor[] descriptors = client.getInstrumentableDescriptors();
+        InstrumentableData[] instrumentables = manager.getInstrumentables();
         int i;
-        for ( i = 0; i < descriptors.length; i++ )
+        for ( i = 0; i < instrumentables.length; i++ )
         {
-            InstrumentableDescriptor descriptor = descriptors[i];
+            InstrumentableData instrumentable = instrumentables[i];
             int oldInstrumentableStateVersion = -1;
             DefaultMutableTreeNode newChild = null;
             int childCount = rootTreeNode.getChildCount();
@@ -541,7 +511,7 @@ class InstrumentManagerTreeModel
                     DefaultMutableTreeNode oldChild =
                         (DefaultMutableTreeNode)rootTreeNode.getChildAt( i );
                     cmp = ((InstrumentableNodeData)oldChild.getUserObject()).getDescription().
-                        compareTo( descriptor.getDescription() );
+                        compareTo( instrumentable.getDescription() );
                     if ( cmp == 0 )
                     {
                         // This is the same object.
@@ -562,7 +532,7 @@ class InstrumentManagerTreeModel
                     {
                         // Need to insert a new node.
                         newChild = new DefaultMutableTreeNode(
-                            new InstrumentableNodeData( descriptor, m_connection ), true );
+                            new InstrumentableNodeData( instrumentable ), true );
                         rootTreeNode.insert( newChild, i );
                         fireTreeNodesInserted( new TreeModelEvent( this,
                             rootTreeNode.getPath(),new int[] { i }, new Object[] { newChild } ) );
@@ -588,7 +558,7 @@ class InstrumentManagerTreeModel
             {
                 // Append the new descriptor
                 newChild = new DefaultMutableTreeNode(
-                    new InstrumentableNodeData( descriptor, m_connection ), true );
+                    new InstrumentableNodeData( instrumentable ), true );
                 rootTreeNode.insert( newChild, i );
                 fireTreeNodesInserted( new TreeModelEvent( this, rootTreeNode.getPath(),
                     new int[] { i }, new Object[] { newChild } ) );
@@ -598,7 +568,7 @@ class InstrumentManagerTreeModel
                     getName(), newChild );
             }
 
-            updateInstrumentable( descriptor, newChild, oldInstrumentableStateVersion );
+            updateInstrumentable( instrumentable, newChild, oldInstrumentableStateVersion );
         }
         // Remove any remaining old nodes
         while ( i < rootTreeNode.getChildCount() )
@@ -618,17 +588,16 @@ class InstrumentManagerTreeModel
     }
 
     /**
-     * @param instrumentableDescriptor The descriptor of the Instrumentable to
-     *                                 update.
+     * @param instrumentableData The Instrumentable to update.
      * @param instrumentableTreeNode The tree node of the Instrumentable to
      *                               update.
      * @param oldStateVersion The state version at the time of the last update.
      */
-    private void updateInstrumentable( InstrumentableDescriptor instrumentableDescriptor,
+    private void updateInstrumentable( InstrumentableData instrumentableData,
                                        DefaultMutableTreeNode instrumentableTreeNode,
                                        int oldStateVersion )
     {
-        int stateVersion = instrumentableDescriptor.getStateVersion();
+        int stateVersion = instrumentableData.getStateVersion();
         if ( stateVersion == oldStateVersion )
         {
             // Already up to date.
@@ -637,20 +606,19 @@ class InstrumentManagerTreeModel
 
         if ( getLogger().isDebugEnabled() )
         {
-            getLogger().debug( "update instrumentable(" + instrumentableDescriptor.getName() + ") "
+            getLogger().debug( "update instrumentable(" + instrumentableData.getName() + ") "
                 + "state new=" + stateVersion + ", old=" + oldStateVersion );
         }
 
         // The latest Instrumentables will be in the correct order.
-        InstrumentableDescriptor[] descriptors =
-            instrumentableDescriptor.getChildInstrumentableDescriptors();
-        //System.out.println("Model.updateInstumentable() " + instrumentableDescriptor.getName() + " " + descriptors.length);
+        InstrumentableData[] childInstrumentables = instrumentableData.getInstrumentables();
+        //System.out.println("Model.updateInstumentable() " + instrumentableData.getName() + " " + childInstrumentables.length);
         int i;
-        for ( i = 0; i < descriptors.length; i++ )
+        for ( i = 0; i < childInstrumentables.length; i++ )
         {
-            InstrumentableDescriptor descriptor = descriptors[i];
+            InstrumentableData childInstrumentable = childInstrumentables[i];
             int oldInstrumentableStateVersion = -1;
-            //System.out.println("  " + descriptor.getName() );
+            //System.out.println("  " + childInstrumentable.getName() );
             DefaultMutableTreeNode newChild = null;
             int childCount = instrumentableTreeNode.getChildCount();
             if ( i < childCount )
@@ -662,7 +630,7 @@ class InstrumentManagerTreeModel
                     if ( oldChild.getUserObject() instanceof InstrumentableNodeData )
                     {
                         cmp = ((InstrumentableNodeData)oldChild.getUserObject()).getDescription().
-                            compareTo( descriptor.getDescription() );
+                            compareTo( childInstrumentable.getDescription() );
                     }
                     else
                     {
@@ -691,7 +659,7 @@ class InstrumentManagerTreeModel
                     {
                         // Need to insert a new node.
                         newChild = new DefaultMutableTreeNode(
-                            new InstrumentableNodeData( descriptor, m_connection ), true );
+                            new InstrumentableNodeData( childInstrumentable ), true );
                         instrumentableTreeNode.insert( newChild, i );
                         fireTreeNodesInserted( new TreeModelEvent( this,
                             instrumentableTreeNode.getPath(),new int[] { i },
@@ -719,7 +687,7 @@ class InstrumentManagerTreeModel
             {
                 // Append the new descriptor
                 newChild = new DefaultMutableTreeNode(
-                    new InstrumentableNodeData( descriptor, m_connection ), true );
+                    new InstrumentableNodeData( childInstrumentable ), true );
                 instrumentableTreeNode.insert( newChild, i );
                 fireTreeNodesInserted( new TreeModelEvent( this, instrumentableTreeNode.getPath(),
                     new int[] { i }, new Object[] { newChild } ) );
@@ -729,7 +697,7 @@ class InstrumentManagerTreeModel
                     getName(), newChild );
             }
 
-            updateInstrumentable( descriptor, newChild, oldInstrumentableStateVersion );
+            updateInstrumentable( childInstrumentable, newChild, oldInstrumentableStateVersion );
         }
         // Remove any remaining old Instrumentable nodes
         while ( i < instrumentableTreeNode.getChildCount() )
@@ -754,13 +722,13 @@ class InstrumentManagerTreeModel
 
 
         // The latest Instruments will be in the correct order.
-        InstrumentDescriptor[] instrumentDescriptors =
-            instrumentableDescriptor.getInstrumentDescriptors();
-        for ( i = descriptors.length; i < instrumentDescriptors.length + descriptors.length; i++ )
+        InstrumentData[] instruments =
+            instrumentableData.getInstruments();
+        for ( i = childInstrumentables.length; i < instruments.length + childInstrumentables.length; i++ )
         {
-            InstrumentDescriptor descriptor = instrumentDescriptors[i - descriptors.length];
+            InstrumentData instrument = instruments[i - childInstrumentables.length];
             int oldInstrumentStateVersion = -1;
-            //System.out.println("  " + descriptor.getName() );
+            //System.out.println("  " + instrument.getName() );
             DefaultMutableTreeNode newChild = null;
             int childCount = instrumentableTreeNode.getChildCount();
             if ( i < childCount )
@@ -772,7 +740,7 @@ class InstrumentManagerTreeModel
                     if ( oldChild.getUserObject() instanceof InstrumentNodeData )
                     {
                         cmp = ((InstrumentNodeData)oldChild.getUserObject()).getDescription().
-                            compareTo( descriptor.getDescription() );
+                            compareTo( instrument.getDescription() );
                     }
                     else
                     {
@@ -800,7 +768,7 @@ class InstrumentManagerTreeModel
                     {
                         // Need to insert a new node.
                         newChild = new DefaultMutableTreeNode(
-                            new InstrumentNodeData( descriptor, m_connection ), true );
+                            new InstrumentNodeData( instrument, m_connection ), true );
                         instrumentableTreeNode.insert( newChild, i );
                         fireTreeNodesInserted( new TreeModelEvent( this,
                             instrumentableTreeNode.getPath(),new int[] { i },
@@ -828,7 +796,7 @@ class InstrumentManagerTreeModel
             {
                 // Append the new descriptor
                 newChild = new DefaultMutableTreeNode(
-                    new InstrumentNodeData( descriptor, m_connection ), true );
+                    new InstrumentNodeData( instrument, m_connection ), true );
                 instrumentableTreeNode.insert( newChild, i );
                 fireTreeNodesInserted( new TreeModelEvent( this, instrumentableTreeNode.getPath(),
                     new int[] { i }, new Object[] { newChild } ) );
@@ -838,7 +806,7 @@ class InstrumentManagerTreeModel
                     getName(), newChild );
             }
 
-            updateInstrument( descriptor, newChild, oldInstrumentStateVersion );
+            updateInstrument( instrument, newChild, oldInstrumentStateVersion );
         }
         // Remove any remaining old Instrument nodes
         while ( i < instrumentableTreeNode.getChildCount() )
@@ -858,28 +826,28 @@ class InstrumentManagerTreeModel
     }
 
     /**
-     * @param instrumentDescriptor The descriptor of the Instrument to update.
+     * @param instrumentData The Instrument to update.
      */
-    void updateInstrument( InstrumentDescriptor instrumentDescriptor )
+    void updateInstrument( InstrumentData instrumentData )
     {
         // Find the tree node.
         DefaultMutableTreeNode instrumentTreeNode =
-            getInstrumentTreeNode( instrumentDescriptor.getName() );
+            getInstrumentTreeNode( instrumentData.getName() );
         if ( instrumentTreeNode != null )
         {
-            updateInstrument( instrumentDescriptor, instrumentTreeNode, -1 /* Force update */ );
+            updateInstrument( instrumentData, instrumentTreeNode, -1 /* Force update */ );
         }
     }
 
     /**
-     * @param instrumentDescriptor The descriptor of the Instrument to update.
+     * @param instrumentData The Instrument to update.
      * @param instrumentTreeNode The tree node of the Instrument to update.
      */
-    void updateInstrument( InstrumentDescriptor instrumentDescriptor,
+    void updateInstrument( InstrumentData instrumentData,
                            DefaultMutableTreeNode instrumentTreeNode,
                            int oldStateVersion )
     {
-        int stateVersion = instrumentDescriptor.getStateVersion();
+        int stateVersion = instrumentData.getStateVersion();
         if ( stateVersion == oldStateVersion )
         {
             // Already up to date.
@@ -888,37 +856,30 @@ class InstrumentManagerTreeModel
 
         if ( getLogger().isDebugEnabled() )
         {
-            getLogger().debug( "update instrument(" + instrumentDescriptor.getName() + ") "
+            getLogger().debug( "update instrument(" + instrumentData.getName() + ") "
                 + "state new=" + stateVersion + ", old=" + oldStateVersion );
         }
 
         // The latest Instrument Samples will be in the correct order.
-        InstrumentSampleDescriptor[] descriptors =
-            instrumentDescriptor.getInstrumentSampleDescriptors();
+        InstrumentSampleData[] samples =
+            instrumentData.getInstrumentSamples();
         //System.out.println("Model.updateInstument() " + instrumentDescriptor.getName() + " " + descriptors.length);
         int i;
-        for ( i = 0; i < descriptors.length; i++ )
+        for ( i = 0; i < samples.length; i++ )
         {
-            InstrumentSampleDescriptor descriptor = descriptors[i];
-            //System.out.println("  " + descriptor.getName() );
+            InstrumentSampleData sample = samples[i];
+            //System.out.println("  " + sample.getName() );
             DefaultMutableTreeNode newChild = null;
             int childCount = instrumentTreeNode.getChildCount();
             if ( i < childCount )
             {
                 int cmp;
                 do {
+                    // Old child will always be a sample
                     DefaultMutableTreeNode oldChild =
                         (DefaultMutableTreeNode)instrumentTreeNode.getChildAt( i );
-                    if ( oldChild.getUserObject() instanceof InstrumentSampleNodeData )
-                    {
-                        cmp = ((InstrumentSampleNodeData)oldChild.getUserObject()).
-                            getDescription().compareTo( descriptor.getDescription() );
-                    }
-                    else
-                    {
-                        // Always put Instrumentables before any other nodes.
-                        cmp = 1;
-                    }
+                    cmp = ((InstrumentSampleNodeData)oldChild.getUserObject()).
+                        getDescription().compareTo( sample.getDescription() );
 
                     if ( cmp == 0 )
                     {
@@ -938,8 +899,8 @@ class InstrumentManagerTreeModel
                     {
                         // Need to insert a new node.
                         newChild = new DefaultMutableTreeNode(
-                            new InstrumentSampleNodeData( instrumentDescriptor.getName(),
-                            descriptor, m_connection ), true );
+                            new InstrumentSampleNodeData( instrumentData.getName(),
+                            sample, m_connection ), true );
                         instrumentTreeNode.insert( newChild, i );
                         fireTreeNodesInserted( new TreeModelEvent( this,
                             instrumentTreeNode.getPath(),new int[] { i },
@@ -989,8 +950,8 @@ class InstrumentManagerTreeModel
             {
                 // Append the new descriptor
                 newChild = new DefaultMutableTreeNode(
-                    new InstrumentSampleNodeData( instrumentDescriptor.getName(), descriptor,
-                    m_connection ), true );
+                    new InstrumentSampleNodeData( instrumentData.getName(), sample, m_connection ),
+                    true );
                 instrumentTreeNode.insert( newChild, i );
                 fireTreeNodesInserted( new TreeModelEvent( this, instrumentTreeNode.getPath(),
                     new int[] { i }, new Object[] { newChild } ) );
@@ -1021,10 +982,6 @@ class InstrumentManagerTreeModel
             // Need to remove an old node.
             DefaultMutableTreeNode oldChild =
                 (DefaultMutableTreeNode)instrumentTreeNode.getChildAt( i );
-            if ( !( oldChild.getUserObject() instanceof InstrumentSampleNodeData ) )
-            {
-                break;
-            }
 
             instrumentTreeNode.remove( i );
             fireTreeNodesRemoved( new TreeModelEvent(
@@ -1045,26 +1002,24 @@ class InstrumentManagerTreeModel
     }
 
     /**
-     * @param sampleDescriptor The descriptor of the Instrument Sample to
-     *                         update.
+     * @param sampleData The Instrument Sample to update.
      */
-    void updateInstrumentSample( InstrumentSampleDescriptor sampleDescriptor )
+    void updateInstrumentSample( InstrumentSampleData sampleData )
     {
         // Find the tree node.
         DefaultMutableTreeNode sampleTreeNode =
-            getInstrumentSampleTreeNode( sampleDescriptor.getName() );
+            getInstrumentSampleTreeNode( sampleData.getName() );
         if ( sampleTreeNode != null )
         {
-            updateInstrumentSample( sampleDescriptor, sampleTreeNode );
+            updateInstrumentSample( sampleData, sampleTreeNode );
         }
     }
 
     /**
-     * @param sampleDescriptor The descriptor of the Instrument Sample to
-     *                         update.
+     * @param sampleData The Instrument Sample to update.
      * @param sampleTreeNode The tree node of the Instrument Sample to update.
      */
-    void updateInstrumentSample( InstrumentSampleDescriptor sampleDescriptor,
+    void updateInstrumentSample( InstrumentSampleData sampleData,
                                  DefaultMutableTreeNode sampleTreeNode )
     {
         // An update here should always lead to an event being fired.

@@ -25,10 +25,6 @@ import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
 
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentSampleDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentSampleUtils;
-
 /**
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  */
@@ -48,7 +44,7 @@ class InstrumentSampleNodeData
     private static final ImageIcon[][] m_icons = new ImageIcon[4][4];
     
     private String m_instrumentName;
-    private InstrumentSampleDescriptor m_descriptor;
+    private InstrumentSampleData m_data;
     private InstrumentManagerConnection m_connection;
     
     private boolean m_configured;
@@ -68,11 +64,6 @@ class InstrumentSampleNodeData
     /** Time interval of the sample points. */
     private long m_interval;
     
-    /** Sample Frame. */
-    /* Old
-    private InstrumentSampleFrame m_sampleFrame;
-    */
-    
     /*---------------------------------------------------------------
      * Class Initializer
      *-------------------------------------------------------------*/
@@ -89,16 +80,16 @@ class InstrumentSampleNodeData
     
     private static void loadTypeIcons( ClassLoader cl, int type, String prefix )
     {
-        m_icons[ type ][ ICON_SUBTYPE_CONF ] =
+        m_icons[type][ICON_SUBTYPE_CONF] =
             new ImageIcon( cl.getResource( prefix + "conf.gif") );
         
-        m_icons[ type ][ ICON_SUBTYPE_LEASE ] =
+        m_icons[type][ICON_SUBTYPE_LEASE] =
             new ImageIcon( cl.getResource( prefix + "lease.gif") );
         
-        m_icons[ type ][ ICON_SUBTYPE_MAINTAINED_LEASE ] =
+        m_icons[type][ICON_SUBTYPE_MAINTAINED_LEASE] =
             new ImageIcon( cl.getResource( prefix + "mlease.gif") );
         
-        m_icons[ type ][ ICON_SUBTYPE_OLD ] =
+        m_icons[type][ICON_SUBTYPE_OLD] =
             new ImageIcon( cl.getResource( prefix + "old.gif") );
     }
     
@@ -106,11 +97,11 @@ class InstrumentSampleNodeData
      * Constructors
      *-------------------------------------------------------------*/
     InstrumentSampleNodeData( String instrumentName,
-                              InstrumentSampleDescriptor descriptor,
+                              InstrumentSampleData data,
                               InstrumentManagerConnection connection )
     {
         m_instrumentName = instrumentName;
-        m_descriptor = descriptor;
+        m_data = data;
         m_connection = connection;
         
         update();
@@ -130,19 +121,19 @@ class InstrumentSampleNodeData
         int iconType;
         switch ( getType() )
         {
-        case InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_COUNTER:
+        case InstrumentSampleData.INSTRUMENT_SAMPLE_TYPE_COUNTER:
             iconType = ICON_TYPE_CNT;
             break;
             
-        case InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MAXIMUM:
+        case InstrumentSampleData.INSTRUMENT_SAMPLE_TYPE_MAXIMUM:
             iconType = ICON_TYPE_MAX;
             break;
             
-        case InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MEAN:
+        case InstrumentSampleData.INSTRUMENT_SAMPLE_TYPE_MEAN:
             iconType = ICON_TYPE_MEAN;
             break;
             
-        case InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MINIMUM:
+        case InstrumentSampleData.INSTRUMENT_SAMPLE_TYPE_MINIMUM:
             iconType = ICON_TYPE_MIN;
             break;
             
@@ -172,7 +163,7 @@ class InstrumentSampleNodeData
             iconSubtype = ICON_SUBTYPE_OLD;
         }
         
-        return m_icons[ iconType ][ iconSubtype ];
+        return m_icons[iconType][iconSubtype];
     }
     
     /**
@@ -185,7 +176,7 @@ class InstrumentSampleNodeData
         String text;
         switch ( getType() )
         {
-        case InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_COUNTER:
+        case InstrumentSampleData.INSTRUMENT_SAMPLE_TYPE_COUNTER:
             if ( isConfigured() )
             {
                 text = "Configured Counter Instrument Sample";
@@ -209,7 +200,7 @@ class InstrumentSampleNodeData
             }
             break;
             
-        case InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MAXIMUM:
+        case InstrumentSampleData.INSTRUMENT_SAMPLE_TYPE_MAXIMUM:
             if ( isConfigured() )
             {
                 text = "Configured Maximum Value Instrument Sample";
@@ -233,7 +224,7 @@ class InstrumentSampleNodeData
             }
             break;
             
-        case InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MEAN:
+        case InstrumentSampleData.INSTRUMENT_SAMPLE_TYPE_MEAN:
             if ( isConfigured() )
             {
                 text = "Configured Mean Value Instrument Sample";
@@ -257,7 +248,7 @@ class InstrumentSampleNodeData
             }
             break;
             
-        case InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MINIMUM:
+        case InstrumentSampleData.INSTRUMENT_SAMPLE_TYPE_MINIMUM:
             if ( isConfigured() )
             {
                 text = "Configured Minimum Value Instrument Sample";
@@ -303,7 +294,7 @@ class InstrumentSampleNodeData
         {
             public void actionPerformed( ActionEvent event )
             {
-                m_connection.viewSample( InstrumentSampleNodeData.this );
+                m_connection.viewSample( InstrumentSampleNodeData.this.getName() );
             }
         };
         JMenuItem viewItem = new JMenuItem( viewAction );
@@ -318,7 +309,8 @@ class InstrumentSampleNodeData
                 {
                     public void actionPerformed( ActionEvent event )
                     {
-                        m_connection.stopMaintainingSample( InstrumentSampleNodeData.this.getName() );
+                        m_connection.stopMaintainingSample(
+                            InstrumentSampleNodeData.this.getName() );
                     }
                 };
                 JMenuItem stopMaintainingItem = new JMenuItem( stopMaintainingAction );
@@ -333,9 +325,11 @@ class InstrumentSampleNodeData
                     {
                         // Need to show a dialog here.
                         long leaseDuration = 600000;
-                        String description = "Menu Generated: " + InstrumentSampleUtils.generateInstrumentSampleName( m_type, m_interval, m_size );
-                        
-                        m_connection.startMaintainingSample( m_instrumentName, m_type, m_interval, m_size, leaseDuration, description );
+                        String description = InstrumentSampleUtils.getDefaultDescriptionForType(
+                            m_type, m_interval );
+                        m_connection.startMaintainingSample(
+                            m_instrumentName, m_type, m_interval, m_size, leaseDuration,
+                            description );
                     }
                 };
                 JMenuItem startMaintainingItem = new JMenuItem( startMaintainingAction );
@@ -344,7 +338,7 @@ class InstrumentSampleNodeData
             }
         }
         
-        JMenuItem[] menuItemArray = new JMenuItem[ menuItems.size() ];
+        JMenuItem[] menuItemArray = new JMenuItem[menuItems.size()];
         menuItems.toArray( menuItemArray );
         
         return menuItemArray;
@@ -355,15 +349,15 @@ class InstrumentSampleNodeData
      */
     void select()
     {
-        m_connection.viewSample( this );
+        m_connection.viewSample( getName() );
     }
     
     /*---------------------------------------------------------------
      * Methods
      *-------------------------------------------------------------*/
-    InstrumentSampleDescriptor getDescriptor()
+    InstrumentSampleData getData()
     {
-        return m_descriptor;
+        return m_data;
     }
     
     boolean isConfigured()
@@ -399,38 +393,37 @@ class InstrumentSampleNodeData
     boolean update()
     {
         boolean changed = false;
-        changed |= update( m_descriptor.getName(), m_descriptor.getDescription(),
-            m_descriptor.getStateVersion() );
+        changed |= update( m_data.getName(), m_data.getDescription(), m_data.getStateVersion() );
         
-        boolean newConfigured = m_descriptor.isConfigured();
+        boolean newConfigured = m_data.isConfigured();
         if ( newConfigured != m_configured )
         {
             changed = true;
             m_configured = newConfigured;
         }
         
-        long newLeaseExpireTime = m_descriptor.getLeaseExpirationTime();
+        long newLeaseExpireTime = m_data.getLeaseExpirationTime();
         if ( newLeaseExpireTime != m_leaseExpireTime )
         {
             changed = true;
             m_leaseExpireTime = newLeaseExpireTime;
         }
         
-        int newType = m_descriptor.getType();
+        int newType = m_data.getType();
         if ( newType != m_type )
         {
             changed = true;
             m_type = newType;
         }
         
-        int newSize = m_descriptor.getSize();
+        int newSize = m_data.getSize();
         if ( newSize != m_size )
         {
             changed = true;
             m_size = newSize;
         }
         
-        long newInterval = m_descriptor.getInterval();
+        long newInterval = m_data.getInterval();
         if ( newInterval != m_interval )
         {
             changed = true;
@@ -471,16 +464,4 @@ class InstrumentSampleNodeData
     {
         return m_leaseDuration;
     }
-    
-    /* Old
-    void setInstrumentSampleFrame( InstrumentSampleFrame frame )
-    {
-        m_sampleFrame = frame;
-    }
-    
-    InstrumentSampleFrame getInstrumentSampleFrame()
-    {
-        return m_sampleFrame;
-    }
-    */
 }

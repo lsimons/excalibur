@@ -23,9 +23,6 @@ import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
 
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
-
 /**
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  */
@@ -60,7 +57,7 @@ class InstrumentNodeData
      *   file but is no longer used. */
     private static final ImageIcon m_iconInstrumentValOld;
     
-    private InstrumentDescriptor m_descriptor;
+    private InstrumentData m_data;
     private InstrumentManagerConnection m_connection;
     
     private boolean m_configured;
@@ -96,10 +93,10 @@ class InstrumentNodeData
     /*---------------------------------------------------------------
      * Constructors
      *-------------------------------------------------------------*/
-    InstrumentNodeData( InstrumentDescriptor descriptor,
+    InstrumentNodeData( InstrumentData data,
                         InstrumentManagerConnection connection )
     {
-        m_descriptor = descriptor;
+        m_data = data;
         m_connection = connection;
         
         update();
@@ -119,7 +116,7 @@ class InstrumentNodeData
         ImageIcon icon;
         switch ( getType() )
         {
-        case InstrumentManagerClient.INSTRUMENT_TYPE_COUNTER:
+        case InstrumentData.INSTRUMENT_TYPE_COUNTER:
             if ( isConfigured() && isRegistered() )
             {
                 icon = m_iconInstrumentCtrRegConf;
@@ -138,7 +135,7 @@ class InstrumentNodeData
             }
             break;
             
-        case InstrumentManagerClient.INSTRUMENT_TYPE_VALUE:
+        case InstrumentData.INSTRUMENT_TYPE_VALUE:
             if ( isConfigured() && isRegistered() )
             {
                 icon = m_iconInstrumentValRegConf;
@@ -175,7 +172,7 @@ class InstrumentNodeData
         String text;
         switch ( getType() )
         {
-        case InstrumentManagerClient.INSTRUMENT_TYPE_COUNTER:
+        case InstrumentData.INSTRUMENT_TYPE_COUNTER:
             if ( isConfigured() && isRegistered() )
             {
                 text = "Registered and Configured Counter Instrument";
@@ -194,7 +191,7 @@ class InstrumentNodeData
             }
             break;
             
-        case InstrumentManagerClient.INSTRUMENT_TYPE_VALUE:
+        case InstrumentData.INSTRUMENT_TYPE_VALUE:
             if ( isConfigured() && isRegistered() )
             {
                 text = "Registered and Configured Value Instrument";
@@ -235,7 +232,9 @@ class InstrumentNodeData
         {
             public void actionPerformed( ActionEvent event )
             {
-                m_connection.instrumentCreateSample( InstrumentNodeData.this.getDescriptor() );
+                // Display a dialog to ask the user what new sample to create.
+                InstrumentData data = InstrumentNodeData.this.getData();
+                m_connection.showCreateSampleDialog( data );
             }
         };
         JMenuItem createSampleItem = new JMenuItem( createSampleAction );
@@ -248,9 +247,9 @@ class InstrumentNodeData
     /*---------------------------------------------------------------
      * Methods
      *-------------------------------------------------------------*/
-    InstrumentDescriptor getDescriptor()
+    InstrumentData getData()
     {
-        return m_descriptor;
+        return m_data;
     }
     
     boolean isConfigured()
@@ -271,24 +270,23 @@ class InstrumentNodeData
     boolean update()
     {
         boolean changed = false;
-        changed |= update( m_descriptor.getName(), m_descriptor.getDescription(),
-            m_descriptor.getStateVersion() );
+        changed |= update( m_data.getName(), m_data.getDescription(), m_data.getStateVersion() );
         
-        boolean newConfigured = m_descriptor.isConfigured();
+        boolean newConfigured = m_data.isConfigured();
         if ( newConfigured != m_configured )
         {
             changed = true;
             m_configured = newConfigured;
         }
         
-        boolean newRegistered = m_descriptor.isRegistered();
+        boolean newRegistered = m_data.isRegistered();
         if ( newRegistered != m_registered )
         {
             changed = true;
             m_registered = newRegistered;
         }
         
-        int newType = m_descriptor.getType();
+        int newType = m_data.getType();
         if ( newType != m_type )
         {
             changed = true;
@@ -297,5 +295,4 @@ class InstrumentNodeData
         
         return changed;
     }
-
 }

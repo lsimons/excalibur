@@ -20,7 +20,6 @@ package org.apache.excalibur.instrument.client;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentSampleUtils;
 
 /**
  *

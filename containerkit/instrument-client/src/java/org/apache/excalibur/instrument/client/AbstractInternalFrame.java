@@ -28,6 +28,9 @@ import javax.swing.event.InternalFrameListener;
 
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
+import org.apache.avalon.framework.logger.LogEnabled;
+import org.apache.avalon.framework.logger.Logger;
+
 
 /**
  *
@@ -37,9 +40,11 @@ import org.apache.avalon.framework.configuration.DefaultConfiguration;
  */
 abstract class AbstractInternalFrame
     extends JInternalFrame
-    implements InternalFrameListener
+    implements InternalFrameListener, LogEnabled
 {
     private InstrumentClientFrame m_frame;
+    private Logger m_logger;
+    
     private JInternalFrame m_nextFrame;
     private boolean m_loaded;
     private boolean m_active;
@@ -112,10 +117,33 @@ abstract class AbstractInternalFrame
 
         m_loaded = false;
     }
+    
+    /*---------------------------------------------------------------
+     * LogEnabled Methods
+     *-------------------------------------------------------------*/
+    /**
+     * Sets the Logger to be used by the component.
+     *
+     * @param logger The Logger.
+     */
+    public void enableLogging( Logger logger )
+    {
+        m_logger = logger;
+    }
 
     /*---------------------------------------------------------------
      * Methods
      *-------------------------------------------------------------*/
+    /**
+     * Returns the logger to be used by the component.
+     *
+     * @return The Logger.
+     */
+    protected Logger getLogger()
+    {
+        return m_logger;
+    }
+    
     /**
      * Adds the frame to the desktop in a simple and dumb cascading format.
      */
