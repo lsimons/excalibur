@@ -39,19 +39,28 @@
             <name>Excalibur Developer List</name>
             <subscribe>dev-subscribe@excalibur.apache.org</subscribe>
             <unsubscribe>dev-unsubscribe@excalibur.apache.org</unsubscribe>
-            <archive>http://nagoya.apache.org/eyebrowse/SummarizeList?listName=dev@excalibur.apache.org</archive>
+<!-- TODO: reference new mod_mbox install instead            
+<archive>http://nagoya.apache.org/eyebrowse/SummarizeList?listName=dev@excalibur.apache.org</archive>
+-->
+<archive>http://news.gmane.org/gmane.comp.apache.excalibur.devel</archive>
         </mailingList>
         <mailingList>
             <name>Excalibur User List</name>
             <subscribe>user-subscribe@excalibur.apache.org</subscribe>
             <unsubscribe>user-unsubscribe@excalibur.apache.org</unsubscribe>
+<!-- TODO: reference new mod_mbox install instead            
             <archive>http://nagoya.apache.org/eyebrowse/SummarizeList?listName=user@excalibur.apache.org</archive>
+-->
+<archive>http://news.gmane.org/gmane.comp.apache.excalibur.user</archive>
         </mailingList>
         <mailingList>
             <name>Excalibur Commit List</name>
             <subscribe>scm-subscribe@excalibur.apache.org</subscribe>
             <unsubscribe>scm-unsubscribe@excalibur.apache.org</unsubscribe>
+<!-- TODO: reference new mod_mbox install instead            
             <archive>http://nagoya.apache.org/eyebrowse/SummarizeList?listName=scm@excalibur.apache.org</archive>
+-->
+<archive>http://news.gmane.org/gmane.comp.apache.excalibur.cvs</archive>
         </mailingList>
     </mailingLists>
 
