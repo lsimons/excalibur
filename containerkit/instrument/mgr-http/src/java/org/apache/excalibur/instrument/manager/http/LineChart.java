@@ -808,7 +808,10 @@ public class LineChart
             chartWidth, chartHeight );
 
         // Draw the vertical grid (Top to Bottom lines)
-        paintVerticalGrid( g, fontHeight, chartLeft, chartTop, chartWidth, chartHeight );
+        if ( m_values.length > 1 )
+        {
+            paintVerticalGrid( g, fontHeight, chartLeft, chartTop, chartWidth, chartHeight );
+        }
 
         // Draw the frame
         paintFrame( g, chartLeft, chartTop, chartWidth, chartHeight );
