@@ -19,7 +19,7 @@
         <title>Lifecycle Extensions</title>
     </properties>
     <body>
-        <section name="Introduction">
+        <section name="Excalibur Lifecycle">
 
             <p>
         The Lifecycle package contains a set of interfaces and classes 

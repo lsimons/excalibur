@@ -21,7 +21,12 @@
         <title>Event</title>
     </properties>
     <body>
-        <section name="Introduction">
+        <section name="Excalibur Event (DEPRECATED)">
+            <p>
+                This package has been deprecated. See
+                <a href="deprecated.html">this page</a> for more
+                information.
+            </p>
             <p>
         This is the Excalibur Event package which includes event queues,
         asynchronous command processing, and the interfaces to support

@@ -51,17 +51,6 @@
                     <th>Description</th>
                 </tr>
                 <tr>
-                    <td>
-                        <a href="configuration.html">Configuration</a>
-                    </td>
-                    <td>
-                        <p>
-                            The Configuration package contains extensions to the Avalon Framework
-                            supporting configuration management.
-                        </p>
-                    </td>
-                </tr>
-                <tr>
                     <td>Datasource</td>
                     <td>
                         <p>
@@ -72,66 +61,6 @@
                             DataSource management.  It provides the same kind of access
                             regardless of which method you choose--since they are obtained
                             through Avalon's Component Manager infrastructure.
-                        </p>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Event</td>
-                    <td>
-                        <p>
-                            This is the Excalibur Event package which includes event queues,
-                            asynchronous command processing, and the interfaces to support
-                            event based programming.  Event is heavily influenced by Matt
-                            Welsh's work with the
-                            <a href="http://www.eecs.harvard.edu/~mdw/proj/seda/">SEDA architecture</a>.
-                            We forked the portion of his SandStorm server that had to do with
-                            event processing.  From there we cleaned up the API and made it as
-                            generic as we could.
-                        </p>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Instrumentation</td>
-                    <td>
-                        <p>
-                            Excalibur Instrument is an instrumentation utility that allows you
-                            to attach a separate JVM to your running application to determine its
-                            health.  Instrumentation is the process of exposing the internal state
-                            in a way that is easy for an administrator or help desk personell to
-                            digest.  Excalibur Instrumentation is such a package that you can use
-                            for your Avalon based projects.
-                        </p>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Lifecycle</td>
-                    <td>
-                        <p>
-                            The Lifecycle package contains a set of interfaces and classes
-                            supporting portable lifecycle extensions.
-                        </p>
-
-                        <p>
-                            Contributions to this project are based on co-development actives by
-                            container projects aiming towards cross-container component
-                            portability and consistent service management.
-                        </p>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Logger</td>
-                    <td>
-                        <p>
-                            Find Avalon Excalibur's Log Management System in the
-                            <code>org.apache.avalon.excalibur.logger</code> package.
-                            Excalibur-Logger integrates neatly into the Avalon ECM
-                            and Fortress. The main goal is to
-                            be able to define the log categories on a component basis by
-                            specifying a 'logger' attribute which denotes the log category
-                            to use for a particular component (given the
-                            component is
-                            <code>LogEnabled</code> or
-                            <code>Loggable</code>).
                         </p>
                     </td>
                 </tr>
@@ -218,43 +147,18 @@
                 </tr>
             </table>
         </section>
-        <section name="Depricated components">
-            <table>
-                <tr>
-                    <th>Package</th>
-                    <th>Description</th>
-                </tr>
-                <tr>
-                    <td>Compatability</td>
-                    <td>
-                        <p>
-                            Avalon is minimizing the number of projects and utilities it maintains
-                            because we need to focus on our charter.  However, we do have users
-                            who have used some of the projects that were previously released.  We
-                            can't just ignore their needs.  The compatibility project is the
-                            graveyard for projects we are no longer supporting.  It exists simply
-                            to let our users (and in some cases, our users' users) continue to
-                            use their legacy components until they migrate to better supported
-                            libraries.
-                        </p>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="component.html">Component</a>
-                    </td>
-                    <td>
-                        <p>
-                            Due to a number of issues in ECM, not the least of which is a
-                            simplistic and convoluted design, it has been deprecated in
-                            favor of Fortress.  Fortress has been designed with
-                            ECM users in mind, so it provides a number of goodies to make
-                            it easier to migrate forward.  This project will be maintained
-                            for bug fixes only.
-                        </p>
-                    </td>
-                </tr>
-            </table>
+        <section name="Container building blocks">
+            <p>
+                Please see <a href="containerkit.html">this page</a> for information on
+                subprojects like Excalibur-Logger and Excalibur-Lifecycle, which are primarily
+                used to build containers.
+            </p>
+        </section>
+        <section name="Deprecated components">
+            <p>
+                Please see <a href="deprecation.html">this page</a> for information on
+                older components that have been deprecated.
+            </p>
         </section>
     </body>
 </document>

@@ -23,7 +23,7 @@
 
     <body>
 
-        <section name="Introduction">
+        <section name="Excalibur XMLUtil">
             <p>
           The XMLUtil package provides some useful components dealing with
           XML, like a parser (for DOM and SAX), an XSLT processor and an

@@ -19,12 +19,17 @@
 <document>
 
     <properties>
-        <title>Configuration</title>
+        <title>Excalibur - Configuration</title>
     </properties>
 
     <body>
 
-        <section name="Excalibur Configuration">
+        <section name="Excalibur Configuration (DEPRECATED)">
+            <p>
+                This package has been deprecated. See
+                <a href="deprecated.html">this page</a> for more
+                information.
+            </p>
 
             <subsection name="Overview">
                 <p>

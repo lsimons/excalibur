@@ -24,7 +24,7 @@
     </properties>
 
     <body>
-        <section name="Introduction">
+        <section name="Excalibur Fortress">
             <p>
         Fortress contains a framework to help you create your own
         avalon containers.  It boasts asynchronous management of your

@@ -22,9 +22,10 @@
 
     <body>
         <links>
-            <item name="Apache" href="http://apache.org/"/>
-            <item name="Excalibur" href="http://excalibur.apache.org/"/>
-            <item name="Avalon-Framework" href="http://avalon.apache.org/product/framework/"/>
+            <item name="Home" href="/index.html"/>
+            <item name="Fortress" href="/fortress/index.html"/>
+            <item name="Components" href="/component-list.html"/>
+            <item name="Containerkit" href="/containerkit.html"/>
         </links>
 
         <menu name="Essentials">
@@ -35,7 +36,7 @@
             <item name="FAQ" href="http://wiki.apache.org/excalibur/FrequentlyAskedQuestions"/>
             <item name="Javadocs" href="http://avalon.apache.org/excalibur/api/"/>
             <item name="Download" href="http://avalon.apache.org/download.cgi"/>
-            <item name="Issue Tracking" href="/jira.html"/>
+            <item name="Issue Tracking" href="/issue-tracking.html"/>
             <item name="Miscellaneous" href="misc.html" collapse="true">
                 <item name="Where's my documentation???" href="/no-docs-available.html"/>
                 <item name="No CVS" href="/cvs-usage.html"/>
@@ -43,44 +44,55 @@
             </item>
         </menu>
 
-        <menu name="Component documentation">
+        <menu name="Fortress">
+            <item name="Overview" href="/fortress/index.html"/>
+            <item name="Features Oriented" href="/fortress/features.html"/>
+            <item name="Getting Started" href="/fortress/getting-started.html"/>
+            <item name="Using Meta Info" href="/fortress/using-meta-info.html"/>
+            <item name="CLI" href="/fortress/cli.html"/>
+            <item name="Swing" href="/fortress/swing.html"/>
+            <item name="Servlet" href="/fortress/servlet.html"/>
+            <item name="Lifecycle Extensions" href="/lifecycle/index.html"/>
+            <item name="Design Notes" href="/fortress/design-notes.html"/>
+        </menu>
+
+        <menu name="Components">
             <item name="Overview" href="/component-list.html"/>
-            <item name="Configuration" href="/configuration.html"/>
-            <item name="ECM" href="/component.html"/>
-            <item name="Event" href="event/index.html" collapse="true">
-                <item href="event/event.html" name="Event"/>
-                <item href="event/command.html" name="Command"/>
-                <item href="event/mpool.html" name="MPool"/>
-                <item href="event/util.html" name="Util"/>
-                <item href="event/event-howto.html" name="Use Event Queues"/>
-                <item href="event/command-howto.html" name="Use the Command Manager"/>
-                <item href="event/mpool-howto.html" name="Use MPool"/>
-                <item href="event/util-howto.html" name="Use System Util"/>
-                <item href="event/cpuparser-howto.html" name="Extend System Util"/>
+            <item name="Sourceresolver" href="/sourceresolve-index.html"/>
+            <item name="Store" href="/store-index.html"/>
+            <item name="Thread" href="/thread.html"/>
+            <item name="XMLUtil" href="/xmlutil/index.html" collapse="true">
+                <item name="Overview" href="/xmlutil/index.html"/>
             </item>
-            <item name="Fortress" href="fortress/index.html" collapse="true">
-                <item name="Overview" href="fortress/index.html"/>
-                <item name="Features Oriented" href="fortress/features.html"/>
-                <item name="Getting Started" href="fortress/getting-started.html"/>
-                <item name="Using Meta Info" href="fortress/using-meta-info.html"/>
-                <item name="CLI" href="fortress/cli.html"/>
-                <item name="Swing" href="fortress/swing.html"/>
-                <item name="Servlet" href="fortress/servlet.html"/>
-                <item name="Lifecycle Extensions" href="lifecycle/index.html"/>
-                <item name="Design Notes" href="fortress/design-notes.html"/>
+        </menu>
+
+        <menu name="Containerkit">
+            <item name="Overview" href="/containerkit.html"/>
+            <item name="Lifecycle" href="/lifecycle/index.html" collapse="true">
+                <item name="Overview" href="/lifecycle/index.html"/>
+                <item name="Extensions" href="/lifecycle/extension.html"/>
+                <item name="Interfaces" href="/lifecycle/interfaces.html"/>
+                <item name="Tutorial" href="/lifecycle/fortress.html"/>
             </item>
-            <item name="Lifecycle" href="lifecycle/index.html" collapse="true">
-                <item name="Overview" href="lifecycle/index.html"/>
-                <item name="Extensions" href="lifecycle/extension.html"/>
-                <item name="Interfaces" href="lifecycle/interfaces.html"/>
-                <item name="Tutorial" href="lifecycle/fortress.html"/>
-            </item>
-            <item name="Logger" href="logger.html"/>
-            <item name="Sourceresolver" href="sourceresolve-index.html"/>
-            <item name="Store" href="store-index.html"/>
-            <item name="Thread" href="thread.html"/>
-            <item name="XMLUtil" href="xmlutil/index.html" collapse="true">
-                <item name="Overview" href="xmlutil/index.html"/>
+            <item name="Logger" href="/logger.html"/>
+        </menu>
+
+        <menu name="Deprecated Materials">
+            <item name="Overview" href="/deprecation.html"/>
+            <item name="Old Documentation" href="/deprecation.html" collapse="false">
+                <item name="ECM" href="/component.html"/>
+                <item name="Event" href="/event/index.html" collapse="true">
+                    <item href="/event/event.html" name="Event"/>
+                    <item href="/event/command.html" name="Command"/>
+                    <item href="/event/mpool.html" name="MPool"/>
+                    <item href="/event/util.html" name="Util"/>
+                    <item href="/event/event-howto.html" name="Use Event Queues"/>
+                    <item href="/event/command-howto.html" name="Use the Command Manager"/>
+                    <item href="/event/mpool-howto.html" name="Use MPool"/>
+                    <item href="/event/util-howto.html" name="Use System Util"/>
+                    <item href="/event/cpuparser-howto.html" name="Extend System Util"/>
+                </item>
+                <item name="Configuration" href="/configuration.html"/>
             </item>
         </menu>
     </body>

@@ -29,7 +29,7 @@
             <p>
               Due to a number of issues in ECM, not the least of which is a
               simplistic and convoluted design, it has been deprecated in
-              favor of Fortress or Phoenix.  Fortress has been designed with
+              favor of <a href="fortress/index.html">Fortress</a>.  Fortress has been designed with
               ECM users in mind, so it provides a number of goodies to make
               it easier to migrate forward.  This project will be maintained
               for bug fixes only.
