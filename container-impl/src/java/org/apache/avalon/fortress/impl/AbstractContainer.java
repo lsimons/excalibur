@@ -787,7 +787,6 @@ public abstract class AbstractContainer
      */
     public void dispose()
     {
-
         if ( getLogger().isDebugEnabled() )
         {
             getLogger().debug( "Component shutdown order:" );
