@@ -255,12 +255,12 @@ public final class ComponentFactory extends AbstractLogEnabledInstrumentable imp
             getLogger().debug(message);
         }
 
-        if (getCreatedClass().equals(component.getClass()))
+        if ( component.getClass().getName().startsWith( "$Proxy" ) || getCreatedClass().equals(component.getClass()))
         {
             ContainerUtil.shutdown(component);
 
-            raiseComponentDestroyedEvent( component );
             m_extManager.executeDestructionExtensions(component, m_context);
+            raiseComponentDestroyedEvent( component );
 
             if (m_dispose.isActive())
             {

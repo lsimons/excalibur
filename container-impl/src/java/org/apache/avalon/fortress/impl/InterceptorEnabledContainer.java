@@ -159,8 +159,8 @@ public class InterceptorEnabledContainer extends DefaultContainer
      */
     public void dispose()
     {
-        ContainerUtil.dispose( m_manager );
         super.dispose();
+        ContainerUtil.dispose( m_manager );
     }
     
     ///

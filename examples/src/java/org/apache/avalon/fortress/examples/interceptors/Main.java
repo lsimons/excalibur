@@ -68,8 +68,10 @@ public final class Main
         }
         catch( SecurityException ex )
         {
-            
+            ex.printStackTrace();
         }
+        
+        manager.release( persistenceManager );
         
         ContainerUtil.dispose( cm );
     }

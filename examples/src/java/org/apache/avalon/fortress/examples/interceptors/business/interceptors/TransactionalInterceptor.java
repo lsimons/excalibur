@@ -21,14 +21,24 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.apache.avalon.fortress.ExtendedMetaInfo;
+import org.apache.avalon.fortress.attributes.AttributeInfo;
 import org.apache.avalon.fortress.impl.interceptor.AbstractInterceptor;
 
 /**
+ * This is a blank space with hypothetical code service as
+ * a recipe for a TransactionalInterceptor. 
+ * 
+ * Basically pick up your favorite implementation of JTA (Java Transaction API)
+ * and access the User Transaction from here. Adjust the transaction according the
+ * transaction attribute (required, supported, requiresnew and so on)
+ * That it, painless transaction management for your classes.
+ * 
+ * You can also you the same approach for OJB, Hibernate and similar frameworks. 
+ * 
  * @author <a href="mailto:dev@excalibur.apache.org">Excalibur Development Team</a>
  */
 public class TransactionalInterceptor extends AbstractInterceptor
 {
-
     /**
      * Document me!
      *  
@@ -37,8 +47,24 @@ public class TransactionalInterceptor extends AbstractInterceptor
     public Object intercept(Object instance, ExtendedMetaInfo meta, Method method, Object[] args)
         throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
     {
-        // TODO Auto-generated method stub
-        return super.intercept(instance, meta, method, args);
-    }
+        AttributeInfo transactionMode = 
+            meta.getAttributeForMethod( "transaction.required", method );
+        
+        // TransactionManager.getTransaction().beginTransaction();
+        
+        Object retValue = null;
+        
+        try
+        {
+            retValue = super.intercept(instance, meta, method, args);
 
+            // TransactionManager.getTransaction().commit();
+        }
+        catch(Exception ex)
+        {
+            // TransactionManager.getTransaction().rollback();
+        }
+        
+        return retValue;
+    }
 }

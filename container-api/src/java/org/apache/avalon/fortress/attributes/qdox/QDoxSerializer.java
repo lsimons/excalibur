@@ -171,7 +171,7 @@ public class QDoxSerializer
                 {
                     final AttributeInfo info = attributes[i];
                     
-                    if (name.equalsIgnoreCase( name ))
+                    if (name.equalsIgnoreCase( info.getName() ))
                     {
                         attribute = info;
                         break;
