@@ -37,7 +37,6 @@
             <p>After downloading the client, point it towards the excalibur repository at</p>
 
             <pre>
-
         https://svn.apache.org/repos/asf/excalibur/
             </pre>
 
@@ -49,6 +48,23 @@
             <pre>
         svn checkout https://svn.apache.org/repos/asf/excalibur/trunk/ excalibur-trunk
             </pre>
+
+        </section>
+
+        <section name="Web access">
+
+            <p>
+                You can browse the repository online through
+            </p>
+
+            <blockquote><a href="http://cvs.apache.org/viewcvs.cgi/excalibur/?root=Apache-SVN">http://cvs.apache.org/viewcvs.cgi/excalibur/?root=Apache-SVN</a></blockquote>
+
+            <p>
+                A rather more restricted web interface is offered by viewing the repository
+                directly:
+            </p>
+
+            <blockquote><a href="https://svn.apache.org/repos/asf/excalibur/">https://svn.apache.org/repos/asf/excalibur/</a></blockquote>
 
         </section>
 
