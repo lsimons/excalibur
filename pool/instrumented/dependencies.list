@@ -2,8 +2,8 @@
 #
 # artifact-id version groupid repository gumpid gumpopts
 #
-excalibur-pool-api - excalibur-pool - - runtime,inherit=runtime
-excalibur-pool-impl - excalibur-pool - - runtime,inherit=runtime
+excalibur-pool-api - - - - runtime,inherit=runtime
+excalibur-pool-impl - - - - runtime,inherit=runtime
 avalon-framework-api 4.1.5 avalon-framework - - runtime,inherit=runtime
 avalon-framework-impl 4.1.5 avalon-framework - - runtime,inherit=runtime
 commons-collections 2.1 - - - runtime,inherit=runtime

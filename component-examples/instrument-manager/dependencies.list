@@ -7,10 +7,10 @@ avalon-framework 4.1.5 framework http://www.apache.org/dist/avalon - runtime,inh
 excalibur-component - - - - runtime,inherit=runtime
 excalibur-logger - - - - runtime,inherit=runtime
 excalibur-instrument - - - - runtime,inherit=runtime
-excalibur-instrument-spi - excalibur-instrument - - runtime,inherit=runtime
-excalibur-instrument-impl - excalibur-instrument - - runtime,inherit=runtime
-excalibur-pool-api - excalibur-pool - - runtime,inherit=runtime
-excalibur-pool-impl - excalibur-pool - - runtime,inherit=runtime
+excalibur-instrument-spi - - - - runtime,inherit=runtime
+excalibur-instrument-impl - - - - runtime,inherit=runtime
+excalibur-pool-api - - - - runtime,inherit=runtime
+excalibur-pool-impl - - - - runtime,inherit=runtime
 concurrent 1.3.1 - - - runtime,inherit=runtime
 commons-collections 2.1 - - - runtime,inherit=runtime
 servletapi 2.2 - - - runtime,inherit=runtime
