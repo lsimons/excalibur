@@ -350,7 +350,11 @@ public class InstrumentProxy
      */
     void setRegistered()
     {
-        m_registered = true;
+        if ( !m_registered )
+        {
+            m_registered = true;
+            stateChanged();
+        }
     }
     
     /**
@@ -375,7 +379,16 @@ public class InstrumentProxy
      */
     void setDescription( String description )
     {
-        m_description = description;
+        String oldDescription = m_description; // thread safety.
+        if ( ( oldDescription == description ) || ( ( description != null ) && description.equals( oldDescription ) ) )
+        {
+            // No change
+        }
+        else
+        {
+            m_description = description;
+            stateChanged();
+        }
     }
     
     /**
