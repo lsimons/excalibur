@@ -12,6 +12,6 @@ and simply run the command;
 
 you might need to download and install a few jars by hand, in particular, the following libraries:
 
-  jsse-1.0.3_02 (groupid: jsse)
+  jsse-1.0.3_03 (groupid: jsse)
   mailapi-1.3.1 (groupid: javamail)
   jms-1.1       (groupid: jms)
