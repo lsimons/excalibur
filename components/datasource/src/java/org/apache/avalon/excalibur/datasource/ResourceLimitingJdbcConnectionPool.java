@@ -105,7 +105,7 @@ public class ResourceLimitingJdbcConnectionPool
 
         return conn;
     }
-
+    
     /**
      * Validates the poolable before it is provided to the caller of get on this pool.
      *  This implementation of the validation method always returns true indicating
@@ -129,6 +129,10 @@ public class ResourceLimitingJdbcConnectionPool
                 getLogger().debug( "JdbcConnection was closed." );
                 return false;
             }
+            
+            // Always reset the auto commit flag in case a previous user has modified it.
+            //  If the user forgot to commit then this may cause a commit.
+            conn.setAutoCommit( m_autoCommit );
         }
         catch( SQLException e )
         {
