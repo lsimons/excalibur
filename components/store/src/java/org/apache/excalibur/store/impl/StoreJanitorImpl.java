@@ -66,6 +66,15 @@ implements StoreJanitor,
     private int index = -1;
     /** Should the gc be called on low memory? */
     protected boolean invokeGC = false;
+    /** 
+     * Amount of memory in use before sleep(). Must be initially set a resonable 
+     * value; ie. <code>memoryInUse()</code>
+     */
+    protected long inUse;
+    private boolean firstRun = true;
+    /** The calculated delay for the next checker run */
+    protected long interval = Long.MAX_VALUE; // Sleep time in ms
+    private long maxRateOfChange = 1; // Used memory change rate in bytes per second
     
     /**
      * Initialize the StoreJanitorImpl.
@@ -133,6 +142,7 @@ implements StoreJanitor,
             getLogger().debug("minimum free memory=" + this.getMinFreeMemory());
             getLogger().debug("heapsize=" + this.getMaxHeapSize());
             getLogger().debug("thread interval=" + this.getThreadInterval());
+            getLogger().debug("adaptivethreadinterval=" + this.getAdaptiveThreadInterval());
             getLogger().debug("priority=" + this.getPriority());
             getLogger().debug("percent=" + percent);
             getLogger().debug("invoke gc=" + this.invokeGC);
@@ -159,76 +169,19 @@ implements StoreJanitor,
     }
 
     /**
-     * The "checker" thread checks if memory is running low in the jvm.
+     * The "checker" thread loop.
      */
     public void run() 
     {
-        boolean firstRun = true;
-        long inUse = memoryInUse(); // Amount of memory in use before sleep()
-        long interval = Long.MAX_VALUE; // Sleep time in ms
-        long maxRateOfChange = 1; // Used memory change rate in bytes per second
-
+        inUse = memoryInUse();
         while (doRun) {
-            if (getAdaptiveThreadInterval()) 
-            {
-                // Monitor the rate of change of heap in use.
-                long change = memoryInUse() - inUse;
-                long rateOfChange = longDiv(change * 1000, interval); // bps.
-                if (maxRateOfChange < rateOfChange) 
-                {
-                    maxRateOfChange = (maxRateOfChange + rateOfChange) / 2;
-                }
-                if (getLogger().isDebugEnabled()) {
-                    getLogger().debug("Waking after " + interval + "ms, in use change "
-                                      + change + "b to " + memoryInUse() + "b, rate "
-                                      + rateOfChange + "b/sec, max rate " + maxRateOfChange + "b/sec");
-                }
-            }
+            checkMemory();
 
-            // Amount of memory used is greater than heapsize
-            if (memoryLow()) 
-            {
-                if ( this.invokeGC ) 
-                {
-                    this.freePhysicalMemory();
-                }
-
-                synchronized (this) 
-                {
-                    if (!this.invokeGC
-                        || (memoryLow() && getStoreList().size() > 0)) 
-                    {
-                            
-                        freeMemory();
-                        setIndex(getIndex() + 1);
-                    }
-                }
-            }
-
-            if (getAdaptiveThreadInterval()) 
-            {
-                // Calculate sleep interval based on the change rate and free memory left
-                interval = minTimeToFill(maxRateOfChange) * 1000 / 2;
-                if (interval > this.threadInterval) 
-                {
-                    interval = this.threadInterval;
-                } 
-                else if (interval < this.minThreadInterval) 
-                {
-                    interval = this.minThreadInterval;
-                }
-                inUse = memoryInUse();
-            } 
-            else 
-            {
-                interval = this.threadInterval;
-            }
+            // Sleep
             if (getLogger().isDebugEnabled()) 
             {
                 getLogger().debug("Sleeping for " + interval + "ms");
             }
-
-            // Sleep
             try 
             {
                 Thread.sleep(interval);
@@ -244,6 +197,66 @@ implements StoreJanitor,
         }
     }
 
+    /**
+     * The "checker" thread checks if memory is running low in the jvm.
+     */
+    protected void checkMemory()
+    {
+        if (getAdaptiveThreadInterval()) 
+        {
+            // Monitor the rate of change of heap in use.
+            long change = memoryInUse() - inUse;
+            long rateOfChange = longDiv(change * 1000, interval); // bps.
+            if (maxRateOfChange < rateOfChange) 
+            {
+                maxRateOfChange = (maxRateOfChange + rateOfChange) / 2;
+            }
+            if (getLogger().isDebugEnabled()) {
+                getLogger().debug("Waking after " + interval + "ms, in use change "
+                                  + change + "b to " + memoryInUse() + "b, rate "
+                                  + rateOfChange + "b/sec, max rate " + maxRateOfChange + "b/sec");
+            }
+        }
+
+        // Amount of memory used is greater than heapsize
+        if (memoryLow()) 
+        {
+            if ( this.invokeGC ) 
+            {
+                this.freePhysicalMemory();
+            }
+
+            synchronized (this) 
+            {
+                if (!this.invokeGC
+                    || (memoryLow() && getStoreList().size() > 0)) 
+                {
+                        
+                    freeMemory();
+                    setIndex(getIndex() + 1);
+                }
+            }
+        }
+
+        if (getAdaptiveThreadInterval()) 
+        {
+            // Calculate sleep interval based on the change rate and free memory left
+            interval = minTimeToFill(maxRateOfChange) * 1000 / 2;
+            if (interval > this.threadInterval) 
+            {
+                interval = this.threadInterval;
+            } 
+            else if (interval < this.minThreadInterval) 
+            {
+                interval = this.minThreadInterval;
+            }
+            inUse = memoryInUse();
+        } 
+        else 
+        {
+            interval = this.threadInterval;
+        }
+    }
     /**
      * Method to check if memory is running low in the JVM.
      *
@@ -277,7 +290,7 @@ implements StoreJanitor,
      *
      * @return memory in use.
      */
-    private long memoryInUse() 
+    protected long memoryInUse() 
     {
         return jvm.totalMemory() - jvm.freeMemory();
     }
