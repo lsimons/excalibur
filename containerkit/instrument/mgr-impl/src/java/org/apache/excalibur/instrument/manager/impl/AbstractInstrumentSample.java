@@ -600,7 +600,12 @@ abstract class AbstractInstrumentSample
             long savedTime = m_time = state.getAttributeAsLong( "time" );
 
             // Load the lease expiration time
-            m_leaseExpirationTime = state.getAttributeAsLong( "lease-expiration", 0 );
+            
+            long leaseExpirationTime = state.getAttributeAsLong( "lease-expiration", 0 );
+            if ( ( m_leaseExpirationTime != 0 ) && ( leaseExpirationTime > m_leaseExpirationTime ) )
+            {
+                m_leaseExpirationTime = leaseExpirationTime;
+            }
 
             // Set the history index.
             m_historyIndex = 0;

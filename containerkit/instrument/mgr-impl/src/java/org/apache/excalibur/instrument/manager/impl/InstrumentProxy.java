@@ -1061,12 +1061,13 @@ public class InstrumentProxy
                         String sampleDescription =
                             instrumentSampleConf.getAttribute( "description", sampleName );
                         
-                        // Create the sample with a permanent expiration time.  The correct
+                        // Create the sample with an expiration time of 1.  This will be expired
+                        //  but not permanent.  It will be set with the correct
                         //  expiration time will be set when its state is loaded.
                         AbstractInstrumentSample instrumentSample = 
                             (AbstractInstrumentSample)InstrumentSampleFactory.getInstrumentSample(
                             this, sampleType, fullSampleName, sampleInterval, sampleSize,
-                            sampleDescription, 0 );
+                            sampleDescription, 1 );
                         instrumentSample.enableLogging( getLogger() );
                         instrumentSample.loadState( instrumentSampleConf );
                         
