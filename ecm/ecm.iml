@@ -30,6 +30,8 @@
     <orderEntry type="library" name="junit-3.8.1" level="project" />
     <orderEntry type="library" name="servletapi-2.3" level="project" />
     <orderEntry type="library" name="excalibur-i18n-trunk" level="project" />
+    <orderEntry type="module" module-name="fortress2-api" />
+    <orderEntry type="module" module-name="fortress2-impl" />
   </component>
 </module>
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4" relativePaths="true">
+  <component name="ModuleRootManager" />
+  <component name="NewModuleRootManager">
+    <output url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/fortress2-impl/target/classes" />
+    <exclude-output />
+    <output-test url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/fortress2-impl/target/test-classes" />
+    <content url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/fortress2-impl">
+      <sourceFolder url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/fortress2-impl/src/java" isTestSource="false" />
+      <sourceFolder url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/fortress2-impl/src/test" isTestSource="true" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="fortress2-api" />
+  </component>
+</module>
+

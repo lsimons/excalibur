@@ -118,6 +118,8 @@
       <module fileurl="file://$PROJECT_DIR$/ecm/ecm.iml" filepath="$PROJECT_DIR$/ecm/ecm.iml" />
       <module fileurl="file://$PROJECT_DIR$/fortress1-api/fortress1-api.iml" filepath="$PROJECT_DIR$/fortress1-api/fortress1-api.iml" />
       <module fileurl="file://$PROJECT_DIR$/fortress1-impl/fortress1-impl.iml" filepath="$PROJECT_DIR$/fortress1-impl/fortress1-impl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fortress2-api/fortress2-api.iml" filepath="$PROJECT_DIR$/fortress2-api/fortress2-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fortress2-impl/fortress2-impl.iml" filepath="$PROJECT_DIR$/fortress2-impl/fortress2-impl.iml" />
     </modules>
   </component>
   <component name="ProjectRootManager" version="2" assert-keyword="true" project-jdk-name="java version &quot;1.4.2_04&quot;" />

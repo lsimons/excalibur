@@ -49,6 +49,8 @@
     <orderEntry type="library" name="xerces-2.4.0" level="project" />
     <orderEntry type="library" name="xml-apis-2.0.2" level="project" />
     <orderEntry type="module" module-name="fortress1-api" />
+    <orderEntry type="module" module-name="fortress2-api" />
+    <orderEntry type="module" module-name="fortress2-impl" />
   </component>
 </module>
 

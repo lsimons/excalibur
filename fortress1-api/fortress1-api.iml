@@ -15,6 +15,7 @@
     <orderEntry type="library" name="excalibur-event-api-trunk" level="project" />
     <orderEntry type="library" name="excalibur-event-impl-trunk" level="project" />
     <orderEntry type="library" name="junit-3.8.1" level="project" />
+    <orderEntry type="module" module-name="fortress2-api" />
   </component>
 </module>
 

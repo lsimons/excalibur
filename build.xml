@@ -7,6 +7,9 @@
     
     <!-- the ordering is important! :-D -->
     <property name="subprojects" value="
+                                      fortress2-api/
+                                      fortress2-impl/
+
                                       ecm/
                                       ecm-examples/instrument-manager/
                                       ecm-test/
