@@ -23,9 +23,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.avalon.excalibur.logger.LoggerManageable;
+import org.apache.avalon.excalibur.logger.LoggerManager;
 import org.apache.avalon.excalibur.logger.LogKitManageable;
 import org.apache.avalon.excalibur.logger.LogKitManager;
-import org.apache.avalon.excalibur.logger.LoggerManager;
 import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.activity.Initializable;
 import org.apache.avalon.framework.component.Component;
@@ -64,6 +65,7 @@ public class ExcaliburComponentSelector
     Disposable,
     RoleManageable,
     LogKitManageable,
+    LoggerManageable,
     InstrumentManageable,
     Instrumentable
 {

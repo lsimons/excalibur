@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.avalon.excalibur.logger.LoggerManageable;
 import org.apache.avalon.excalibur.logger.LogKitManageable;
 import org.apache.avalon.excalibur.pool.ObjectFactory;
 import org.apache.avalon.framework.activity.Disposable;
@@ -276,7 +277,11 @@ public class DefaultComponentFactory
             ( (RoleManageable)component ).setRoleManager( m_roles );
         }
 
-        if( component instanceof LogKitManageable )
+        if( component instanceof LoggerManageable )
+        {
+            ( (LoggerManageable)component ).setLoggerManager( m_loggerManager );
+        }
+        else if( component instanceof LogKitManageable )
         {
             ( (LogKitManageable)component ).setLogKitManager( m_loggerManager.getLogKitManager() );
         }
