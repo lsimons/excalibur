@@ -58,7 +58,7 @@ public class HTTPClientSourceFactory extends AbstractLogEnabled
         try
         {
             final HTTPClientSource source = 
-                new HTTPClientSource( uri, sourceParams );
+                new HTTPClientSource( uri, sourceParams, null );
             ContainerUtil.enableLogging( source, getLogger() );
             ContainerUtil.parameterize( source, m_parameters );
             ContainerUtil.initialize( source );

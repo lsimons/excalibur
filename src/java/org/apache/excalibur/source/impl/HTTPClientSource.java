@@ -36,6 +36,7 @@ import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.HttpState;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.DeleteMethod;
@@ -43,7 +44,15 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
-import org.apache.excalibur.source.*;
+import org.apache.excalibur.source.ModifiableSource;
+import org.apache.excalibur.source.Source;
+import org.apache.excalibur.source.SourceException;
+import org.apache.excalibur.source.SourceFactory;
+import org.apache.excalibur.source.SourceNotFoundException;
+import org.apache.excalibur.source.SourceParameters;
+import org.apache.excalibur.source.SourceResolver;
+import org.apache.excalibur.source.SourceUtil;
+import org.apache.excalibur.source.SourceValidity;
 import org.apache.excalibur.source.impl.validity.TimeStampValidity;
 
 /**
@@ -91,7 +100,7 @@ public class HTTPClientSource extends AbstractLogEnabled
      * Constant used when obtaining the Last-Modified date from HTTP Headers
      */
     public static final String LAST_MODIFIED  = "Last-Modified";
-
+    
     /**
      * The URI being accessed.
      */
@@ -101,6 +110,11 @@ public class HTTPClientSource extends AbstractLogEnabled
      * Contextual parameters passed via the {@link SourceFactory}.
      */
     private final Map m_parameters;
+    
+    /**
+     * Optional http state passed from SourceFactory
+     */
+    private final HttpState m_httpState;
 
     /**
      * The {@link HttpClient} object.
@@ -159,12 +173,12 @@ public class HTTPClientSource extends AbstractLogEnabled
      * @param parameters contextual parameters passed to this instance
      * @exception Exception if an error occurs
      */
-    public HTTPClientSource( final String uri, final Map parameters )
+    public HTTPClientSource( final String uri, final Map parameters, final HttpState httpState )
         throws Exception
     {
         m_uri = uri;
-        m_parameters = 
-            parameters == null ? Collections.EMPTY_MAP : parameters;
+        m_parameters = parameters == null ? Collections.EMPTY_MAP : parameters;
+        m_httpState = httpState;
     }
 
     /**
@@ -203,6 +217,10 @@ public class HTTPClientSource extends AbstractLogEnabled
         if ( m_proxyHost != null && m_proxyPort != -1 )
         {
             m_client.getHostConfiguration().setProxy( m_proxyHost, m_proxyPort );
+        }
+        if (m_httpState != null)
+        {
+            m_client.setState(m_httpState);
         }
 
         m_dataValid = false;
@@ -364,11 +382,10 @@ public class HTTPClientSource extends AbstractLogEnabled
         {
             if ( GET.equals( findMethodType() ) )
             {
+                final HttpMethod head = createHeadMethod( m_uri );
                 try
                 {
-                    final HttpMethod head = createHeadMethod( m_uri );
                     executeMethod( head );
-                    head.releaseConnection();
                     return;
                 }
                 catch ( final IOException e )
@@ -379,6 +396,9 @@ public class HTTPClientSource extends AbstractLogEnabled
                             "Unable to determine response data, using defaults", e
                         );
                     }
+                }
+                finally {
+                    head.releaseConnection();
                 }
             }
 
@@ -399,9 +419,10 @@ public class HTTPClientSource extends AbstractLogEnabled
      * @return response code from server
      * @exception IOException if an error occurs
      */
-    private int executeMethod( final HttpMethod method )
+    protected int executeMethod( final HttpMethod method )
         throws IOException
     {
+
         final int response = m_client.executeMethod( method );
 
         updateExists( method );
@@ -464,7 +485,7 @@ public class HTTPClientSource extends AbstractLogEnabled
         throws IOException, SourceNotFoundException
     {
         final HttpMethod method = getMethod();
-        final int response = executeMethod( method );
+        int response = executeMethod( method );
         m_dataValid = true;
 
         // throw SourceNotFoundException - according to Source API we
@@ -480,7 +501,7 @@ public class HTTPClientSource extends AbstractLogEnabled
 
             throw new SourceNotFoundException( error.toString() );
         }
-
+        
         return method.getResponseBodyAsStream();
     }
 
@@ -742,7 +763,7 @@ public class HTTPClientSource extends AbstractLogEnabled
         private void upload()
             throws IOException
         {
-            HttpMethod uploader = null;
+            final HttpMethod uploader = createPutMethod( m_uri, m_file );
 
             if ( m_logger.isDebugEnabled() )
             {
@@ -751,7 +772,6 @@ public class HTTPClientSource extends AbstractLogEnabled
 
             try
             {
-                uploader = createPutMethod( m_uri, m_file );
                 final int response = executeMethod( uploader );
 
                 if ( !successfulUpload( response ) )
@@ -799,10 +819,10 @@ public class HTTPClientSource extends AbstractLogEnabled
      */
     public void delete() throws SourceException
     {
+        final DeleteMethod delete = createDeleteMethod( m_uri );
         try
         {
-            final int response =
-                executeMethod( createDeleteMethod( m_uri ) );
+            final int response = executeMethod( delete );
 
             if ( !deleteSuccessful( response ) )
             {
@@ -821,6 +841,10 @@ public class HTTPClientSource extends AbstractLogEnabled
             throw new SourceException(
                 "IOException thrown during delete", e 
             );
+        }
+        finally 
+        {
+            delete.releaseConnection();
         }
     }
 
