@@ -999,6 +999,50 @@ public class InstrumentProxy
     }
     
     /**
+     * Saves the state to a StringBuffer using manual generation of XML.  This
+     *  is much more efficient than creating a Configuration object and then
+     *  generating the XML.
+     *
+     * @param indent Base indentation to use when generating the XML.  Ignored
+     *               if packed is true.
+     * @param packed Create packed XML without whitespace if true, or pretty
+     *               human readable XML if false.
+     *
+     * @return The state encoded as XML.
+     */
+    public String saveStateToString( String indent, boolean packed )
+    {
+        StringBuffer sb = new StringBuffer();
+        boolean empty = true;
+        String childIndent = indent + "  ";
+        
+        sb.append( XMLUtil.buildLine( indent, packed,
+            "<instrument name=\"" + m_name + "\">" ) );
+        
+        InstrumentSample[] samples = getInstrumentSamples();
+        for ( int i = 0; i < samples.length; i++ )
+        {
+            String childState = samples[i].saveStateToString( childIndent, packed );
+            if ( !childState.equals( "" ) )
+            {
+                empty = false;
+                sb.append( childState );
+            }
+        }
+        
+        sb.append( XMLUtil.buildLine( indent, packed, "</instrument>" ) );
+        
+        if ( empty )
+        {
+            return "";
+        }
+        else
+        {
+            return sb.toString();
+        }
+    }
+    
+    /**
      * Loads the state into the Instrument.
      *
      * @param state Configuration object to load state from.

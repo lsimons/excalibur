@@ -197,6 +197,20 @@ interface InstrumentSample
     Configuration saveState();
     
     /**
+     * Saves the state to a StringBuffer using manual generation of XML.  This
+     *  is much more efficient than creating a Configuration object and then
+     *  generating the XML.
+     *
+     * @param indent Base indentation to use when generating the XML.  Ignored
+     *               if packed is true.
+     * @param packed Create packed XML without whitespace if true, or pretty
+     *               human readable XML if false.
+     *
+     * @return The state encoded as XML.
+     */
+    String saveStateToString( String indent, boolean packed );
+    
+    /**
      * Loads the state into the InstrumentSample.
      *
      * @param state Configuration object to load state from.

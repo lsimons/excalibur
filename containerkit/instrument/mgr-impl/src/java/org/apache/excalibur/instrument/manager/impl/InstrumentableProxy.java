@@ -656,7 +656,7 @@ class InstrumentableProxy
         InstrumentableProxy[] childProxies = getChildInstrumentableProxies();
         for( int i = 0; i < childProxies.length; i++ )
         {
-            Configuration childState = childProxies[ i ].saveState();
+            Configuration childState = childProxies[i].saveState();
             if ( childState != null )
             {
                 empty = false;
@@ -668,7 +668,7 @@ class InstrumentableProxy
         InstrumentProxy[] proxies = getInstrumentProxies();
         for( int i = 0; i < proxies.length; i++ )
         {
-            Configuration childState = proxies[ i ].saveState();
+            Configuration childState = proxies[i].saveState();
             if ( childState != null )
             {
                 empty = false;
@@ -682,6 +682,63 @@ class InstrumentableProxy
             state = null;
         }
         return state;
+    }
+    
+    /**
+     * Saves the state to a StringBuffer using manual generation of XML.  This
+     *  is much more efficient than creating a Configuration object and then
+     *  generating the XML.
+     *
+     * @param indent Base indentation to use when generating the XML.  Ignored
+     *               if packed is true.
+     * @param packed Create packed XML without whitespace if true, or pretty
+     *               human readable XML if false.
+     *
+     * @return The state encoded as XML.
+     */
+    public String saveStateToString( String indent, boolean packed )
+    {
+        StringBuffer sb = new StringBuffer();
+        boolean empty = true;
+        String childIndent = indent + "  ";
+        
+        sb.append( XMLUtil.buildLine( indent, packed,
+            "<instrumentable name=\"" + m_name + "\">" ) );
+
+        // Save the child Instrumentables
+        InstrumentableProxy[] childProxies = getChildInstrumentableProxies();
+        for( int i = 0; i < childProxies.length; i++ )
+        {
+            String childState = childProxies[i].saveStateToString( childIndent, packed );
+            if ( !childState.equals( "" ) )
+            {
+                empty = false;
+                sb.append( childState );
+            }
+        }
+
+        // Save the direct Instruments
+        InstrumentProxy[] proxies = getInstrumentProxies();
+        for( int i = 0; i < proxies.length; i++ )
+        {
+            String childState = proxies[i].saveStateToString( childIndent, packed );
+            if ( !childState.equals( "" ) )
+            {
+                empty = false;
+                sb.append( childState );
+            }
+        }
+        
+        sb.append( XMLUtil.buildLine( indent, packed, "</instrumentable>" ) );
+        
+        if ( empty )
+        {
+            return "";
+        }
+        else
+        {
+            return sb.toString();
+        }
     }
 
     /**

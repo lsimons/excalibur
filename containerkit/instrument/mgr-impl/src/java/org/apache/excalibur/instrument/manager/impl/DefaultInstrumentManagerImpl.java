@@ -23,6 +23,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -969,14 +971,24 @@ public class DefaultInstrumentManagerImpl
     public void saveStateToStream( OutputStream os )
         throws Exception
     {
+        /*
         Configuration stateConfig = saveStateToConfiguration();
 
         // Ride on top of the Configuration classes to save the state.
         DefaultConfigurationSerializer serializer = new DefaultConfigurationSerializer();
         serializer.setIndent( true );
         serializer.serialize( os, stateConfig );
+        */
+        
+        PrintWriter out = new PrintWriter( new OutputStreamWriter( os, "UTF-8" ) );
+        out.println( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" );
+        
+        out.print( saveStateToString( "", false ) );
+        
+        // Don't close the PrintWriter because it would close the underlying OutputStream.
+        out.flush();
     }
-
+    
     /**
      * Returns the Instrument Manager's state as a Configuration object.
      *
@@ -994,7 +1006,7 @@ public class DefaultInstrumentManagerImpl
 
         for( int i = 0; i < instrumentableProxies.length; i++ )
         {
-            Configuration childState = instrumentableProxies[ i ].saveState();
+            Configuration childState = instrumentableProxies[i].saveState();
             if ( childState != null )
             {
                 state.addChild( childState );
@@ -1002,6 +1014,41 @@ public class DefaultInstrumentManagerImpl
         }
 
         return state;
+    }
+    
+    /**
+     * Saves the state to a StringBuffer using manual generation of XML.  This
+     *  is much more efficient than creating a Configuration object and then
+     *  generating the XML.
+     *
+     * @param indent Base indentation to use when generating the XML.  Ignored
+     *               if packed is true.
+     * @param packed Create packed XML without whitespace if true, or pretty
+     *               human readable XML if false.
+     *
+     * @return The state encoded as XML.
+     */
+    public String saveStateToString( String indent, boolean packed )
+    {
+        StringBuffer sb = new StringBuffer();
+        String childIndent = indent + "  ";
+        
+        sb.append( XMLUtil.buildLine( indent, packed, "<instrument-manager-state>" ) );
+
+        InstrumentableProxy[] instrumentableProxies = m_instrumentableProxyArray;
+        if( instrumentableProxies == null )
+        {
+            instrumentableProxies = updateInstrumentableProxyArray();
+        }
+
+        for( int i = 0; i < instrumentableProxies.length; i++ )
+        {
+            sb.append( instrumentableProxies[i].saveStateToString( childIndent, packed ) );
+        }
+
+        sb.append( XMLUtil.buildLine( indent, packed, "</instrument-manager-state>" ) );
+        
+        return sb.toString();
     }
 
     /*---------------------------------------------------------------

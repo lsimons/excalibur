@@ -553,26 +553,19 @@ abstract class AbstractInstrumentSample
             if( getLeaseExpirationTime() > 0 )
             {
                 state.setAttribute( "lease-expiration", Long.toString( getLeaseExpirationTime() ) );
+                
+                // If the sample is permanent then its description will be set in the configuration
+                //  file and does not need to be saved here as well.
                 state.setAttribute( "description", m_description );
             }
 
+            // Let subclasses add additional attributes.
+            saveState( state );
+
             // Save the history samples so that the newest is first.
             DefaultConfiguration samples = new DefaultConfiguration( "history", "-" );
-            int[] history = getHistorySnapshot();
-
-            // Build up a string of the sample points.
-            StringBuffer sb = new StringBuffer();
-            // Store the first value outside the loop to simplify the loop.
-            sb.append( history[ history.length - 1 ] );
-            for( int i = history.length - 2; i >= 0; i-- )
-            {
-                sb.append( ',' );
-                sb.append( history[ i ] );
-            }
-            samples.setValue( sb.toString() );
+            samples.setValue( getHistoryList() );
             state.addChild( samples );
-
-            saveState( state );
         }
 
         if ( update )
@@ -581,6 +574,88 @@ abstract class AbstractInstrumentSample
         }
 
         return state;
+    }
+    
+    /**
+     * Saves the state to a StringBuffer using manual generation of XML.  This
+     *  is much more efficient than creating a Configuration object and then
+     *  generating the XML.
+     *
+     * @param indent Base indentation to use when generating the XML.  Ignored
+     *               if packed is true.
+     * @param packed Create packed XML without whitespace if true, or pretty
+     *               human readable XML if false.
+     *
+     * @return The state encoded as XML.
+     */
+    public final String saveStateToString( String indent, boolean packed )
+    {
+        // If this sample is not configured and its lease time is 0, then it
+        //  is an artifact of a previous state file, so it should not be saved.
+        if( ( !isConfigured() ) && ( getLeaseExpirationTime() <= 0 ) )
+        {
+            return "";
+        }
+
+        boolean update;
+        int value;
+        long time;
+
+        StringBuffer sb = new StringBuffer();
+        String childIndent = indent + "  ";
+        
+        synchronized( this )
+        {
+            // Always update the sample so its state will be correct when saved.
+            long now = System.currentTimeMillis();
+            update = update( now );
+            value = getValueInner();
+            time = m_time;
+            
+            StringBuffer attrsSb = new StringBuffer();
+            attrsSb.append( "<sample" );
+            attrsSb.append( " type=\"" );
+            attrsSb.append( InstrumentSampleUtils.getInstrumentSampleTypeName( getType() ) );
+            attrsSb.append( "\" interval=\"" );
+            attrsSb.append( Long.toString( m_interval ) );
+            attrsSb.append( "\" size=\"" );
+            attrsSb.append( Integer.toString( m_size ) );
+            attrsSb.append( "\" time=\"" );
+            attrsSb.append( Long.toString( m_time ) );
+            attrsSb.append( "\"" );
+            if( getLeaseExpirationTime() > 0 )
+            {
+                attrsSb.append( " lease-expiration=\"" );
+                attrsSb.append( Long.toString( getLeaseExpirationTime() ) );
+                attrsSb.append( "\"" );
+                
+                // If the sample is permanent then its description will be set in the configuration
+                //  file and does not need to be saved here as well.
+                attrsSb.append( " description=\"" );
+                attrsSb.append( XMLUtil.makeSafeAttribute( m_description ) );
+                attrsSb.append( "\"" );
+            }
+
+            // Let subclasses add additional attributes.
+            saveStateAttributes( attrsSb );
+            
+            attrsSb.append( ">" );
+            
+            sb.append( XMLUtil.buildLine( indent, packed, attrsSb.toString() ) );
+
+            // Save the history samples so that the newest is first.
+            sb.append( XMLUtil.buildLine( childIndent, packed,
+                "<history>" + getHistoryList() + "</history>" ) );
+            
+            sb.append( XMLUtil.buildLine( indent, packed, "</sample>" ) );
+        }
+
+        if ( update )
+        {
+            updateListeners( value, time );
+        }
+
+        return sb.toString();
     }
 
     /**
@@ -720,6 +795,15 @@ abstract class AbstractInstrumentSample
      * @param state State configuration.
      */
     protected void saveState( DefaultConfiguration state )
+    {
+    }
+
+    /**
+     * Allow subclasses to add information into the saves state.
+     *
+     * @param StringBuffer to which attributes should be appended.
+     */
+    protected void saveStateAttributes( StringBuffer attrsSb )
     {
     }
 
@@ -878,6 +962,31 @@ abstract class AbstractInstrumentSample
         history[ m_size - 1 ] = getValueInner();
 
         return history;
+    }
+    
+    /**
+     * Generates a comma separated list of history values.
+     * <p>
+     * Should only be called after an update when synchronized.
+     *
+     * @return The history values.
+     */
+    private String getHistoryList()
+    {
+        int[] history = getHistorySnapshot();
+
+        // Build up a string of the sample points.
+        StringBuffer sb = new StringBuffer();
+        
+        // Store the first value outside the loop to simplify the loop.
+        sb.append( history[ history.length - 1 ] );
+        for( int i = history.length - 2; i >= 0; i-- )
+        {
+            sb.append( ',' );
+            sb.append( history[ i ] );
+        }
+        
+        return sb.toString();
     }
 
     /**
