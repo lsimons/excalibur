@@ -22,7 +22,7 @@ package org.apache.excalibur.instrument.client;
  * @version CVS $Revision: 1.4 $ $Date: 2004/02/28 11:47:23 $
  * @since 4.1
  */
-interface InstrumentManagerConnectionListener
+public interface InstrumentManagerConnectionListener
 {
     /**
      * Called when the connection is opened.  May be called more than once if 

@@ -52,7 +52,7 @@ import org.apache.avalon.framework.logger.Logger;
  */
 public abstract class InstrumentManagerConnection
     extends JComponent
-    implements LogEnabled
+    implements LogEnabled, Runnable
 {
     private Logger m_logger;
     private InstrumentManagerTreeModel m_treeModel;
@@ -61,6 +61,7 @@ public abstract class InstrumentManagerConnection
     private InstrumentClientFrame m_frame;
     
     private boolean m_deleted;
+    private Thread m_runner;
     
     private JLabel m_descriptionLabel;
 
@@ -73,6 +74,7 @@ public abstract class InstrumentManagerConnection
 
     /** Maintain a list of all sample frames which are viewing data in this connection. */
     private Map m_sampleFrames = new HashMap();
+    private InstrumentSampleFrame[] m_sampleFrameArray = null;
     
     /*---------------------------------------------------------------
      * Constructors
@@ -98,6 +100,71 @@ public abstract class InstrumentManagerConnection
         return m_logger;
     }
 
+    /*---------------------------------------------------------------
+     * Runnable Methods
+     *-------------------------------------------------------------*/
+    public void run()
+    {
+        getLogger().debug( "Started " + Thread.currentThread().getName() );
+        try
+        {
+            while( m_runner != null )
+            {
+                try
+                {
+                    try
+                    {
+                        Thread.sleep( 1000 );
+                    }
+                    catch( InterruptedException e )
+                    {
+                        if ( m_runner == null )
+                        {
+                            return;
+                        }
+                    }
+                    
+                    update();
+                    
+                    m_frame.updateConnectionTab( this );
+                    
+                    // Update each of the InstrumentSampleFrames belonging to this connection.
+                    if ( isConnected() )
+                    {
+                        InstrumentSampleFrame[] frames = getSampleFrameArray();
+                        for( int i = 0; i < frames.length; i++ )
+                        {
+                            frames[i].update();
+                        }
+                    }
+                }
+                catch( Throwable t )
+                {
+                    // Should not get here, but we want to make sure that this never happens.
+                    getLogger().error(
+                        "Unexpected error caught in " + Thread.currentThread().getName(), t );
+                    
+                    // Avoid thrashing.
+                    try
+                    {
+                        Thread.sleep( 5000 );
+                    }
+                    catch ( InterruptedException e )
+                    {
+                        if ( m_runner == null )
+                        {
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        finally
+        {
+            getLogger().debug( "Stopped " + Thread.currentThread().getName() );
+        }
+    }
+    
     /*---------------------------------------------------------------
      * Methods
      *-------------------------------------------------------------*/
@@ -216,6 +283,9 @@ public abstract class InstrumentManagerConnection
         // Tree Pane
         m_tree = new InstrumentManagerTree( this );
         add( m_tree, BorderLayout.CENTER );
+        
+        m_runner = new Thread( this, "InstrumentManagerConnection[" + getKey() + "]" );
+        m_runner.start();
     }
     
     /**
@@ -433,7 +503,7 @@ public abstract class InstrumentManagerConnection
      *
      * @return An array of the currently registered listeners
      */
-    private InstrumentManagerConnectionListener[] getListenerArray()
+    protected InstrumentManagerConnectionListener[] getListenerArray()
     {
         InstrumentManagerConnectionListener[] listenerArray = m_listenerArray;
         if ( listenerArray == null )
@@ -489,18 +559,48 @@ public abstract class InstrumentManagerConnection
         return (InstrumentSampleFrame)m_sampleFrames.get( sampleName );
     }
 
+    /**
+     * Adds a single sample frame.
+     * Caller must synchronize on this connection before calling.
+     */
     private void addSampleFrame( String sampleName, InstrumentSampleFrame sampleFrame )
     {
         getLogger().debug("InstrumentManagerConnection.addSampleFrame(" + sampleName + ", frame)");
         // Assumes "this" is synchronized.
         m_sampleFrames.put( sampleName, sampleFrame );
+        m_sampleFrameArray = null;
     }
 
+    /**
+     * Removes a single sample frame.
+     * Caller must synchronize on this connection before calling.
+     */
     private void removeSampleFrame( String sampleName )
     {
         getLogger().debug("InstrumentManagerConnection.removeSampleFrame(" + sampleName + ")");
         // Assumes "this" is synchronized.
         m_sampleFrames.remove( sampleName );
+        m_sampleFrameArray = null;
+    }
+
+    /**
+     * Returns a thread save array representation of the InstrumentSampleFrames.
+     *
+     * @return A thread save array representation of the InstrumentSampleFrames.
+     */
+    private InstrumentSampleFrame[] getSampleFrameArray()
+    {
+        InstrumentSampleFrame[] array = m_sampleFrameArray;
+        if ( array == null )
+        {
+            synchronized(this)
+            {
+                m_sampleFrameArray = new InstrumentSampleFrame[m_sampleFrames.size()];
+                m_sampleFrames.values().toArray( m_sampleFrameArray );
+                array = m_sampleFrameArray;
+            }
+        }
+        return array;
     }
 
     /**
@@ -508,11 +608,9 @@ public abstract class InstrumentManagerConnection
      *
      * @param sampleFrameState Saved state of the frame to load.
      *
-     * @returns The sample frame.
-     *
      * @throws ConfigurationException If there are any problems with the state.
      */
-    InstrumentSampleFrame loadSampleFrame( Configuration sampleFrameState )
+    void loadSampleFrame( Configuration sampleFrameState )
         throws ConfigurationException
     {
         // Get the sample name
@@ -538,8 +636,6 @@ public abstract class InstrumentManagerConnection
             sampleFrame.addToDesktop( m_frame.getDesktopPane() );
         }
         sampleFrame.show();  // Outside of synchronization to avoid deadlocks.
-        
-        return sampleFrame;
     }
     
     /**
@@ -603,6 +699,20 @@ public abstract class InstrumentManagerConnection
         getLogger().debug( "delete()" );
 
         m_deleted = true;
+        
+        Thread runner = m_runner;
+        if ( runner != null )
+        {
+            m_runner = null;
+            runner.interrupt();
+        }
+        
+        // Hide any of our own sample frames.
+        InstrumentSampleFrame[] frames = getSampleFrameArray();
+        for ( int i = 0; i < frames.length; i++ )
+        {
+            frames[i].hideFrame();
+        }
 
         // Notify the listeners.
         InstrumentManagerConnectionListener[] listenerArray = getListenerArray();

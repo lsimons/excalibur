@@ -69,7 +69,7 @@ import org.apache.excalibur.instrument.client.http.HTTPInstrumentManagerConnecti
  */
 class InstrumentClientFrame
     extends JFrame
-    implements Runnable, InstrumentManagerConnectionListener, LogEnabled
+    implements InstrumentManagerConnectionListener, LogEnabled
 {
     protected static final String MEDIA_PATH = "org/apache/excalibur/instrument/client/media/";
     
@@ -92,7 +92,6 @@ class InstrumentClientFrame
     /** Shutdown hook */
     private Thread m_hook;
     
-    private Thread m_runner;
     private Logger m_logger;
     
     /*---------------------------------------------------------------
@@ -114,81 +113,8 @@ class InstrumentClientFrame
     {
         init();
         
-        m_runner = new Thread( this, "InstrumentClientFrameRunner" );
-        m_runner.start();
-        
         ClassLoader cl = this.getClass().getClassLoader();
         setIconImage( new ImageIcon( cl.getResource( MEDIA_PATH + "client.gif") ).getImage() );
-    }
-    
-    /*---------------------------------------------------------------
-     * Runnable Methods
-     *-------------------------------------------------------------*/
-    public void run()
-    {
-        while( m_runner != null )
-        {
-            try
-            {
-                try
-                {
-                    Thread.sleep( 1000 );
-                }
-                catch( InterruptedException e )
-                {
-                    if ( m_runner == null )
-                    {
-                        return;
-                    }
-                }
-                
-                // Update each of the InstrumentManagerConnections.
-                InstrumentManagerConnection[] connections = getConnections();
-                for ( int i = 0; i < connections.length; i++ )
-                {
-                    InstrumentManagerConnection connection = connections[i];
-                    connection.update();
-                    
-                    // Update the tab title.
-                    int tabIndex = m_connectionsPane.indexOfComponent( connection );
-                    if ( tabIndex >= 0 )
-                    {
-                        m_connectionsPane.setTitleAt( tabIndex, connection.getTabTitle() );
-                        m_connectionsPane.setToolTipTextAt( tabIndex, connection.getTabTooltip() );
-                    }
-                }
-                
-                // Update each of the InstrumentSampleFrames.
-                JInternalFrame[] frames = m_desktopPane.getAllFrames();
-                for( int i = 0; i < frames.length; i++ )
-                {
-                    JInternalFrame frame = frames[ i ];
-                    
-                    if( frame instanceof InstrumentSampleFrame )
-                    {
-                        ( (InstrumentSampleFrame)frame ).update();
-                    }
-                }
-            }
-            catch( Throwable t )
-            {
-                // Should not get here, but we want to make sure that this never happens.
-                getLogger().error( "Unexpected error caught in InstrumentClientFrame runner:", t );
-                
-                // Avoid thrashing.
-                try
-                {
-                    Thread.sleep( 5000 );
-                }
-                catch ( InterruptedException e )
-                {
-                    if ( m_runner == null )
-                    {
-                        return;
-                    }
-                }
-            }
-        }
     }
     
     /*---------------------------------------------------------------
@@ -202,13 +128,8 @@ class InstrumentClientFrame
      */
     public void opened( InstrumentManagerConnection connection )
     {
-        // Remove the tab
-        int tabIndex = m_connectionsPane.indexOfComponent( connection );
-        if ( tabIndex >= 0 )
-        {
-            m_connectionsPane.setTitleAt( tabIndex, connection.getTabTitle() );
-            m_connectionsPane.setToolTipTextAt( tabIndex, connection.getTabTooltip() );
-        }
+        getLogger().debug( "opened: " + connection.getKey() );
+        updateConnectionTab( connection );
     }
     
     /**
@@ -219,13 +140,8 @@ class InstrumentClientFrame
      */
     public void closed( InstrumentManagerConnection connection )
     {
-        // Remove the tab
-        int tabIndex = m_connectionsPane.indexOfComponent( connection );
-        if ( tabIndex >= 0 )
-        {
-            m_connectionsPane.setTitleAt( tabIndex, connection.getTabTitle() );
-            m_connectionsPane.setToolTipTextAt( tabIndex, connection.getTabTooltip() );
-        }
+        getLogger().debug( "closed: " + connection.getKey() );
+        updateConnectionTab( connection );
     }
     
     /**
@@ -235,6 +151,7 @@ class InstrumentClientFrame
      */
     public void deleted( InstrumentManagerConnection connection )
     {
+        getLogger().debug( "deleted: " + connection.getKey() );
         // Remove the tab
         int tabIndex = m_connectionsPane.indexOfComponent( connection );
         if ( tabIndex >= 0 )
@@ -468,14 +385,13 @@ class InstrumentClientFrame
         }
         
         
-        // Build up a list of existing frames.
-        List oldFrames = new ArrayList();
+        // Always hide all existing frames as new ones will be created.
         JInternalFrame frames[] = m_desktopPane.getAllFrames();
         for ( int i = 0; i < frames.length; i++ )
         {
             if ( frames[i] instanceof AbstractInternalFrame )
             {
-                oldFrames.add( frames[i] );
+                ((AbstractInternalFrame)frames[i]).hideFrame();
             }
         }
         
@@ -519,8 +435,7 @@ class InstrumentClientFrame
                     // Let the connection load the frame.
                     try
                     {
-                        InstrumentSampleFrame sampleFrame = connection.loadSampleFrame( frameConf );
-                        oldFrames.remove( sampleFrame );
+                        connection.loadSampleFrame( frameConf );
                     }
                     catch ( ConfigurationException e )
                     {
@@ -544,13 +459,6 @@ class InstrumentClientFrame
                 // Ignore unknown types.
                 getLogger().warn( "Not loading inner frame due to unknown type: " + type );
             }
-        }
-        
-        // Any old frames left need to be deleted.
-        for ( Iterator iter = oldFrames.iterator(); iter.hasNext(); )
-        {
-            AbstractInternalFrame frame = (AbstractInternalFrame)iter.next();
-            frame.hideFrame();
         }
     }
 
@@ -762,6 +670,17 @@ class InstrumentClientFrame
         int screenHeight = screenSize.height;
         setLocation( screenWidth / 20, screenHeight / 20 );
         setSize( screenWidth * 9 / 10, screenHeight * 8 / 10 );
+    }
+
+    void updateConnectionTab( InstrumentManagerConnection connection )
+    {
+        // Update the tab title.
+        int tabIndex = m_connectionsPane.indexOfComponent( connection );
+        if ( tabIndex >= 0 )
+        {
+            m_connectionsPane.setTitleAt( tabIndex, connection.getTabTitle() );
+            m_connectionsPane.setToolTipTextAt( tabIndex, connection.getTabTooltip() );
+        }
     }
     
     private void updateTitle()
@@ -1052,11 +971,11 @@ class InstrumentClientFrame
             }
         }
         
-        // Stop the runner.
-        if ( m_runner != null )
+        // Delete all of the connections.
+        InstrumentManagerConnection[] connections = getConnections();
+        for ( int i = 0; i < connections.length; i++ )
         {
-            m_runner.interrupt();
-            m_runner = null;
+            connections[i].delete();
         }
         
         if ( !fallThrough )

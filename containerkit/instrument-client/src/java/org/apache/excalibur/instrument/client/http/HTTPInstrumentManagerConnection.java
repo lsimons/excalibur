@@ -34,6 +34,7 @@ import org.apache.avalon.framework.logger.Logger;
 
 import org.apache.excalibur.instrument.client.InstrumentableData;
 import org.apache.excalibur.instrument.client.InstrumentManagerConnection;
+import org.apache.excalibur.instrument.client.InstrumentManagerConnectionListener;
 import org.apache.excalibur.instrument.client.InstrumentManagerData;
 
 /**
@@ -243,7 +244,17 @@ public class HTTPInstrumentManagerConnection
         {
             HttpURLConnection conn = (HttpURLConnection)url.openConnection();
             
+            boolean oldConnected = m_connected;
             m_connected = true;
+            if ( !oldConnected )
+            {
+                // Notify the listeners.
+                InstrumentManagerConnectionListener[] listenerArray = getListenerArray();
+                for ( int i = 0; i < listenerArray.length; i++ )
+                {
+                    listenerArray[i].opened( this );
+                }
+            }
             
             if ( conn.getResponseCode() == conn.HTTP_OK )
             {
@@ -306,7 +317,19 @@ public class HTTPInstrumentManagerConnection
                 getLogger().debug( "Request failed.  URL: " + url + "  Error: ", e );
             }
             
+            
+            boolean oldConnected = m_connected;
             m_connected = false;
+            if ( oldConnected )
+            {
+                // Notify the listeners.
+                InstrumentManagerConnectionListener[] listenerArray = getListenerArray();
+                for ( int i = 0; i < listenerArray.length; i++ )
+                {
+                    listenerArray[i].closed( this );
+                }
+            }
+            
             return null;
         }
     }
