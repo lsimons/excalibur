@@ -17,4 +17,16 @@ limitations under the License.
 -->
 <project>
     <extend>${basedir}/../project-common.xml</extend>
+
+    <groupId>excalibur-instrument</groupId>
+    <inceptionYear>1997</inceptionYear>
+    <package>org.apache.excalibur</package>
+    <description>
+        Excalibur Instrument is an instrumentation utility that allows you
+        to attach a separate JVM to your running application to determine its
+        health.  Instrumentation is the process of exposing the internal state
+        in a way that is easy for an administrator or help desk personell to
+        digest.  Excalibur Instrumentation is such a package that you can use
+        for your Avalon based projects.
+    </description>
 </project>
