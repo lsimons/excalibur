@@ -990,7 +990,7 @@ public class InstrumentProxy
                     }
                     else
                     {
-                        getLogger().warn( "InstrumentSample entry ignored while loading state " +
+                        getLogger().debug( "InstrumentSample entry ignored while loading state " +
                             "because the sample does not exist: " + fullSampleName );
                     }
                 }
