@@ -57,11 +57,6 @@ limitations under the License.
             <version>1.2</version>
         </dependency>
         <dependency>
-            <groupId>excalibur-i18n</groupId>
-            <artifactId>excalibur-i18n</artifactId>
-            <version>1.2.0-dev</version>
-        </dependency>
-        <dependency>
             <groupId>excalibur-instrument</groupId>
             <artifactId>excalibur-instrument-api</artifactId>
             <version>1.2-dev</version>
