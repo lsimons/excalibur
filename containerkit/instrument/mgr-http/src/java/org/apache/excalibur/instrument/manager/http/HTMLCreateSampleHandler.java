@@ -17,6 +17,7 @@
 
 package org.apache.excalibur.instrument.manager.http;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
@@ -108,8 +109,21 @@ public class HTMLCreateSampleHandler
         }
         
         // Register the new lease
-        InstrumentSampleDescriptor sample =
-            desc.createInstrumentSample( description, interval, size, lease, type );
+        InstrumentSampleDescriptor sample;
+        try
+        {
+            sample = desc.createInstrumentSample( description, interval, size, lease, type );
+        }
+        catch ( IllegalArgumentException e )
+        {
+            // The sample type is not valid.
+            throw new FileNotFoundException( e.getMessage() );
+        }
+        catch ( IllegalStateException e )
+        {
+            // The sample type was incompatible with the instrument.
+            throw new FileNotFoundException( e.getMessage() );
+        }
         
         // Redirect to the new sample page.
         throw new HTTPRedirect( "sample.html?name=" + urlEncode( sample.getName() ) );

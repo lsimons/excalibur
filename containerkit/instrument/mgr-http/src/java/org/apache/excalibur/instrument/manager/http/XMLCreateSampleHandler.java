@@ -101,8 +101,21 @@ public class XMLCreateSampleHandler
         }
         
         // Register the new lease
-        InstrumentSampleDescriptor sample =
-            desc.createInstrumentSample( description, interval, size, lease, type );
+        InstrumentSampleDescriptor sample;
+        try
+        {
+            sample = desc.createInstrumentSample( description, interval, size, lease, type );
+        }
+        catch ( IllegalArgumentException e )
+        {
+            // The sample type is not valid.
+            throw new FileNotFoundException( e.getMessage() );
+        }
+        catch ( IllegalStateException e )
+        {
+            // The sample type was incompatible with the instrument.
+            throw new FileNotFoundException( e.getMessage() );
+        }
         
         out.println( InstrumentManagerHTTPConnector.XML_BANNER );
         outputSample( out, sample, "", packed );
