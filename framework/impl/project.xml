@@ -19,14 +19,14 @@
 
   <extend>${basedir}/../project-common.xml</extend>
 
-  <name>Excalibur Framework Implementation</name>
-  <id>excalibur-framework-impl</id>
-  <shortDescription>Excalibur Framework Implementation</shortDescription>
+  <name>Avalon Framework Implementation</name>
+  <id>avalon-framework-impl</id>
+  <shortDescription>Avalon Framework Implementation</shortDescription>
 
   <dependencies>
     <dependency>
-      <groupId>excalibur-framework</groupId>
-      <artifactId>excalibur-framework-api</artifactId>
+      <groupId>avalon-framework</groupId>
+      <artifactId>avalon-framework-api</artifactId>
       <version>4.3-dev</version>
     </dependency>
     
@@ -53,8 +53,9 @@
       <version>1.2.7</version>
     </dependency>
     <dependency>
-      <id>logkit</id>
-      <version>1.2</version>
+       <groupId>avalon-logkit</groupId>
+       <artifactId>avalon-logkit</artifactId>
+       <version>2.0</version>
     </dependency>
     <dependency>
       <id>junit</id>
