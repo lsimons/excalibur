@@ -66,8 +66,9 @@ easy embedding into various environments like servlet engines.
             <version>2.1</version>
         </dependency>
         <dependency>
-            <id>commons-beanutils</id>
-            <version>1.6.1</version>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils-core</artifactId>
+            <version>1.7.0</version>
         </dependency>
         <dependency>
             <id>concurrent</id>
