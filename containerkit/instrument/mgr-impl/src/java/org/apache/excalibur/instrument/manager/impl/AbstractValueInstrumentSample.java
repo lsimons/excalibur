@@ -113,20 +113,6 @@ abstract class AbstractValueInstrumentSample
         
         state.setAttribute( "value-count", Integer.toString( m_valueCount ) );
     }
-
-    /**
-     * Allow subclasses to add information into the saves state.
-     *
-     * @param StringBuffer to which attributes should be appended.
-     */
-    protected void saveStateAttributes( StringBuffer attrsSb )
-    {
-        super.saveStateAttributes( attrsSb );
-        
-        attrsSb.append( " value-count=\"" );
-        attrsSb.append( Integer.toString( m_valueCount ) );
-        attrsSb.append( "\"" );
-    }
     
     /**
      * Used to load the state, called from AbstractInstrumentSample.loadState();
