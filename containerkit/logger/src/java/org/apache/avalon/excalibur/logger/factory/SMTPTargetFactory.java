@@ -47,6 +47,7 @@ import org.apache.log.output.net.SMTPOutputLogTarget;
  *   &lt;from&gt;address@host&lt;/from&gt;
  *   &lt;subject&gt;subject line&lt;/subject&gt;
  *   &lt;maximum-size&gt;number&lt;/maximum-size&gt;
+ *   &lt;maximum-delay-time&gt;seconds&lt;/maximum-delay-time&gt;
  * &lt;/smtp&gt;
  * </pre>
  *
@@ -103,6 +104,7 @@ public class SMTPTargetFactory
                 getFromAddress( config ),
                 getSubject( config ),
                 getMaxSize( config ),
+                getMaxDelayTime( config ),
                 getFormatter( config )
             );
         }
@@ -201,7 +203,20 @@ public class SMTPTargetFactory
     private int getMaxSize( Configuration config )
         throws ConfigurationException
     {
-        return config.getChild( "maximum-size" ).getValueAsInteger();
+        return config.getChild( "maximum-size" ).getValueAsInteger( 1 );
+    }
+
+    /**
+     * Helper method to obtain the maximum delay time any particular SMTP
+     * message can be queued from a given configuration object.
+     *
+     * @param config a <code>Configuration</code> instance
+     * @return maximum SMTP mail delay time
+     */
+    private int getMaxDelayTime( Configuration config )
+        throws ConfigurationException
+    {
+        return config.getChild( "maximum-delay-time" ).getValueAsInteger( 0 );
     }
 
     /**
