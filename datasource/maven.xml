@@ -1,5 +1,30 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project default="jar:install"  xmlns:maven="jelly:maven" xmlns:j="jelly:core" xmlns:util="jelly:util" xmlns:ant="jelly:ant">
+
+    <!-- ===================================================================== -->
+    <!-- Generate fortress meta descriptors                                    -->
+    <!-- ===================================================================== -->
+
+    <postGoal name="java:compile">
+        <attainGoal name="provide-fortress-meta"/>
+    </postGoal>
+
+    <goal
+        name="provide-fortress-meta"
+        description="Add fortress meta descriptors to the compiled classes">
+
+        <taskdef name="fortress-collect-meta"
+            classname="org.apache.avalon.fortress.tools.ComponentMetaInfoCollector">
+            <classpath>
+                <path refid="maven.dependency.classpath"/>
+                <pathelement path="${java.build.dir}"/>
+            </classpath>
+        </taskdef>
+
+        <fortress-collect-meta destdir="${maven.build.dir}/classes">
+            <fileset dir="${maven.src.dir}/java"/>
+        </fortress-collect-meta>
+    </goal>
     
     <postGoal name="jar:jar">
         <checksum file="${maven.build.dir}/${maven.final.name}.jar" fileext=".md5" />

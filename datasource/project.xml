@@ -20,7 +20,7 @@
 
     <name>Excalibur Datasource</name>
     <id>excalibur-datasource</id>
-    <currentVersion>1.2.0</currentVersion>
+    <currentVersion>1.2.1</currentVersion>
     <inceptionYear>2003</inceptionYear>
     <shortDescription>Excalibur's Datasourc component</shortDescription>
     <description>
@@ -106,6 +106,24 @@ necessary issues from there.
         <dependency>
             <id>excalibur-logger</id>
             <version>1.2</version>
+        </dependency>
+        
+        <dependency>
+            <!-- for metadata generation only -->
+            <groupId>excalibur-fortress</groupId>
+            <artifactId>excalibur-fortress-container-api</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <dependency>
+            <!-- for metadata generation only -->
+            <groupId>excalibur-fortress</groupId>
+            <artifactId>excalibur-fortress-meta</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <dependency>
+            <!-- for metadata generation only -->
+            <id>qdox</id>
+            <version>1.1</version>
         </dependency>
     </dependencies>
 </project>
