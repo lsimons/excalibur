@@ -19,7 +19,7 @@
     <extend>${basedir}/../buildsystem/project-common.xml</extend>
 
     <name>Excalibur Datasource</name>
-    >excalibur-datasource</id>
+    <id>excalibur-datasource</id>
     <currentVersion>1.2.2-dev</currentVersion>
     <inceptionYear>2003</inceptionYear>
     <shortDescription>Excalibur's Datasourc component</shortDescription>
