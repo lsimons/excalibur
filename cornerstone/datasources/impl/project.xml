@@ -2,7 +2,7 @@
 
 <project>
 
-  <extend>${basedir}/../project.xml</extend>
+  <extend>${basedir}/../project-common.xml</extend> 
 
   <id>cornerstone-datasources-impl</id>
   <name>Cornerstone Datasource</name>

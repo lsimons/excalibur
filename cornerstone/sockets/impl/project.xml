@@ -2,7 +2,7 @@
 
 <project>
 
-  <extend>${basedir}/../project.xml</extend>
+  <extend>${basedir}/../project-common.xml</extend> 
 
   <id>cornerstone-sockets-impl</id>
   <name>Cornerstone Socket Manager Implementation</name>
