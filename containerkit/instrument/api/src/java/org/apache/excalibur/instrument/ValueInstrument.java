@@ -50,6 +50,15 @@ public class ValueInstrument
      * Sets the current value of the Instrument.  This method is optimized
      *  to be extremely light weight when an InstrumentManager is not present
      *  and there are no registered ValueInstrumentListeners.
+     * <p>
+     * Note that in many cases is best to call this method even if the
+     *  isActive() method returns false.  This is because the InstrumentManager
+     *  will remember the last value set and use it if the instrument ever
+     *  becomes active.  For things like pool sizes which do not change often,
+     *  this behavior is critical so that users can begin monitoring the value
+     *  and see what it was before they connected.   Setting the value is
+     *  very light weight, but its calculation may not be.  It is up to the
+     *  user to weigh the benefits and consequences one way or the other.
      *
      * @param value The new value for the Instrument.
      */
