@@ -1,16 +1,16 @@
-/* 
+/*
  * Copyright 2003-2004 The Apache Software Foundation
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at 
- * 
+ * You may obtain a copy of the License at
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed  under the  License is distributed on an "AS IS" BASIS,
  * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
  * implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -39,6 +39,23 @@ import java.util.*;
  */
 public final class Service
 {
+    private final static Class POOLABLE;
+
+    static
+    {
+        Class klass = null;
+        try
+        {
+            klass = Thread.currentThread().getContextClassLoader().loadClass( "org.apache.avalon.excalibur.pool.Poolable" );
+        }
+        catch (Exception e)
+        {
+            // couldn't find the class, ignore
+        }
+
+        POOLABLE = klass;
+    }
+
     private static final String SERVICES = "META-INF/services/";
     private static final HashMap providers = new HashMap();
 
@@ -60,7 +77,7 @@ public final class Service
     public static synchronized Iterator providers( final Class klass, ClassLoader loader )
     {
         final String serviceFile = SERVICES + klass.getName();
-        
+
         if ( null == loader )
         {
             loader = klass.getClassLoader();
@@ -133,7 +150,7 @@ public final class Service
             }
         }
 
-        return providerSet.iterator();		
+        return providerSet.iterator();
     }
 
     /**
@@ -148,5 +165,24 @@ public final class Service
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
 
         return providers( klass, loader );
+    }
+
+    /**
+     * Provide a way to determine if a Class implements Poolable without
+     * requiring it to be in the classpath.
+     *
+     * @param clazz  the class to test
+     * @return <code>true</code> if Poolable is in the classpath and the class implements Poolable
+     */
+    public static boolean isClassPoolable( Class clazz )
+    {
+        boolean isPoolable = false;
+
+        if (POOLABLE != null)
+        {
+            isPoolable = POOLABLE.isAssignableFrom( clazz );
+        }
+
+        return isPoolable;
     }
 }
