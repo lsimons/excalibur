@@ -508,9 +508,11 @@ public abstract class InstrumentManagerConnection
      *
      * @param sampleFrameState Saved state of the frame to load.
      *
+     * @returns The sample frame.
+     *
      * @throws ConfigurationException If there are any problems with the state.
      */
-    void loadSampleFrame( Configuration sampleFrameState )
+    InstrumentSampleFrame loadSampleFrame( Configuration sampleFrameState )
         throws ConfigurationException
     {
         // Get the sample name
@@ -536,6 +538,8 @@ public abstract class InstrumentManagerConnection
             sampleFrame.addToDesktop( m_frame.getDesktopPane() );
         }
         sampleFrame.show();  // Outside of synchronization to avoid deadlocks.
+        
+        return sampleFrame;
     }
     
     /**

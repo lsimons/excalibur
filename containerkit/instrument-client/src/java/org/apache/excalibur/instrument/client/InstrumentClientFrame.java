@@ -33,6 +33,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
@@ -83,7 +86,7 @@ class InstrumentClientFrame
     private File m_desktopFile;
     private File m_desktopFileDir;
     
-    private HashMap m_connections = new HashMap();
+    private Map m_connections = new HashMap();
     private InstrumentManagerConnection[] m_connectionArray;
     
     /** Shutdown hook */
@@ -399,6 +402,13 @@ class InstrumentClientFrame
         
         // Show the frame here so that the rest of this works.
         show();
+        
+        // Store a map of the current connections.
+        Map oldConnections;
+        synchronized( m_connections )
+        {
+            oldConnections = new HashMap( m_connections );
+        }
             
         // Load the state of any connections.
         Configuration[] connConfs = state.getChildren( "connection" );
@@ -426,6 +436,8 @@ class InstrumentClientFrame
                     // Need to create a new connection
                     conn = createConnection( url );
                 }
+                
+                oldConnections.remove( url );
             }
             
             // Load the state into the connection.
@@ -445,6 +457,25 @@ class InstrumentClientFrame
                 {
                     getLogger().warn( msg, e );
                 }
+            }
+        }
+        
+        // Any old connections left need to be deleted.
+        for ( Iterator iter = oldConnections.values().iterator(); iter.hasNext(); )
+        {
+            InstrumentManagerConnection conn = (InstrumentManagerConnection)iter.next();
+            conn.delete();
+        }
+        
+        
+        // Build up a list of existing frames.
+        List oldFrames = new ArrayList();
+        JInternalFrame frames[] = m_desktopPane.getAllFrames();
+        for ( int i = 0; i < frames.length; i++ )
+        {
+            if ( frames[i] instanceof AbstractInternalFrame )
+            {
+                oldFrames.add( frames[i] );
             }
         }
         
@@ -488,7 +519,8 @@ class InstrumentClientFrame
                     // Let the connection load the frame.
                     try
                     {
-                        connection.loadSampleFrame( frameConf );
+                        InstrumentSampleFrame sampleFrame = connection.loadSampleFrame( frameConf );
+                        oldFrames.remove( sampleFrame );
                     }
                     catch ( ConfigurationException e )
                     {
@@ -512,6 +544,13 @@ class InstrumentClientFrame
                 // Ignore unknown types.
                 getLogger().warn( "Not loading inner frame due to unknown type: " + type );
             }
+        }
+        
+        // Any old frames left need to be deleted.
+        for ( Iterator iter = oldFrames.iterator(); iter.hasNext(); )
+        {
+            AbstractInternalFrame frame = (AbstractInternalFrame)iter.next();
+            frame.hideFrame();
         }
     }
 
@@ -813,7 +852,7 @@ class InstrumentClientFrame
         }
     
         // add only open frames to the list
-        ArrayList openFrames = new ArrayList();
+        List openFrames = new ArrayList();
         for ( int i = 0; i < count; i++ )
         {
             JInternalFrame f = frames[i];
