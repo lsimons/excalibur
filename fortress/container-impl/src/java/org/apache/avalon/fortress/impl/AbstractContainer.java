@@ -752,8 +752,13 @@ public abstract class AbstractContainer
             int i = 1;
             for ( Iterator iter = vertices.iterator(); iter.hasNext(); i++ )
             {
-                Vertex v = (Vertex) iter.next();
-                getLogger().debug( "  #" + i + " (" + v.getOrder() + ") : " + v.getName() );
+                final Vertex v = (Vertex) iter.next();
+                final int o = v.getOrder();
+                
+                getLogger().debug(
+                    "  #" + i + " (" + o + ") : " + v.getName() 
+                    + ( o > 0 ? ( " [ " + getVertexDeps(v) + " ]" ) : "" )
+                );
             }
         }
 
@@ -774,8 +779,13 @@ public abstract class AbstractContainer
             int i = 1;
             for ( Iterator iter = m_shutDownOrder.iterator(); iter.hasNext(); i++ )
             {
-                Vertex v = (Vertex) iter.next();
-                getLogger().debug( "  #" + i + " (" + v.getOrder() + ") : " + v.getName() );
+                final Vertex v = (Vertex) iter.next();
+                final int o = v.getOrder();
+                
+                getLogger().debug(
+                    "  #" + i + " (" + o + ") : " + v.getName() 
+                    + ( o > 0 ? ( " [ " + getVertexDeps(v) + " ]" ) : "" )
+                );
             }
         }
 
@@ -789,6 +799,30 @@ public abstract class AbstractContainer
             ContainerUtil.dispose( handler );
             if ( getLogger().isDebugEnabled() ) getLogger().debug( "Done." );
         }
+    }
+    
+    /**
+     * Obtain the names of the dependencies for a given vertex.
+     * 
+     * @param vertex vertex to examine
+     * @return comma separated String listing the dependencies for this vertex
+     */
+    private String getVertexDeps( final Vertex vertex )
+    {
+        final List deps = vertex.getDependencies();
+        final StringBuffer buf = new StringBuffer( "" );
+        
+        for ( Iterator i = deps.iterator(); i.hasNext(); )
+        {
+            final Vertex dep = ( Vertex ) i.next();
+            buf.append( dep.getName() );
+
+            if ( i.hasNext() ) {
+                buf.append( ", " );
+            }
+        }
+        
+        return buf.toString();
     }
 
     /**
