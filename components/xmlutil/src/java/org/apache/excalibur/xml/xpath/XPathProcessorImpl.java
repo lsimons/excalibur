@@ -69,7 +69,7 @@ public final class XPathProcessorImpl
     {
         try
         {
-            final XObject result = XPathAPI.eval( contextNode, str, new XalanResolver(resolver) );
+            final XObject result = XPathAPI.eval( contextNode, str, new XalanResolver(resolver, m_baseURI) );
             return result.bool();
         }
         catch( final TransformerException e )
@@ -95,7 +95,7 @@ public final class XPathProcessorImpl
     {
         try
         {
-            final XObject result = XPathAPI.eval( contextNode, str, new XalanResolver(resolver) );
+            final XObject result = XPathAPI.eval( contextNode, str, new XalanResolver(resolver, m_baseURI) );
             return new Double( result.num() );
         }
         catch( final TransformerException e )
@@ -121,7 +121,7 @@ public final class XPathProcessorImpl
     {
         try
         {
-            final XObject result = XPathAPI.eval( contextNode, str, new XalanResolver(resolver) );
+            final XObject result = XPathAPI.eval( contextNode, str, new XalanResolver(resolver, m_baseURI) );
             return result.str();
         }
         catch( final TransformerException e )
@@ -147,7 +147,7 @@ public final class XPathProcessorImpl
     {
         try
         {
-            final XObject result = XPathAPI.eval( contextNode, str, new XalanResolver(resolver) );
+            final XObject result = XPathAPI.eval( contextNode, str, new XalanResolver(resolver, m_baseURI) );
             return result.nodeset().nextNode();
         }
         catch( final TransformerException e )
@@ -173,7 +173,7 @@ public final class XPathProcessorImpl
     {
         try
         {
-            final XObject result = XPathAPI.eval( contextNode, str, new XalanResolver(resolver) );
+            final XObject result = XPathAPI.eval( contextNode, str, new XalanResolver(resolver, m_baseURI) );
             return result.nodelist();
         }
         catch( final TransformerException e )
@@ -190,21 +190,23 @@ public final class XPathProcessorImpl
     /**
      * A Xalan-specific wrapper for the PrefixResolver.
      */
-    private final class XalanResolver implements org.apache.xml.utils.PrefixResolver {
-        private final PrefixResolver resolver;
-
-        public XalanResolver(PrefixResolver resolver) {
-            this.resolver = resolver;
+    private final static class XalanResolver implements org.apache.xml.utils.PrefixResolver {
+        private final PrefixResolver m_resolver;
+        private final String m_baseURI;
+        
+        public XalanResolver(PrefixResolver resolver, String baseURI) {
+            m_resolver = resolver;
+            m_baseURI = baseURI;
         }
 
         public String getNamespaceForPrefix(String prefix)
         {
-            return resolver.prefixToNamespace(prefix);
+            return m_resolver.prefixToNamespace(prefix);
         }
 
         public String getNamespaceForPrefix(String prefix, Node context)
         {
-            return resolver.prefixToNamespace(prefix);
+            return m_resolver.prefixToNamespace(prefix);
         }
 
         public String getBaseIdentifier()
