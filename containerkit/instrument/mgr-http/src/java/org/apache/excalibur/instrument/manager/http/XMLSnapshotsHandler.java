@@ -68,7 +68,7 @@ public class XMLSnapshotsHandler
         
         if ( ( baseTimes.length == 0 ) && ( names.length > 0 ) )
         {
-            baseTimes = new long[baseTimes.length];
+            baseTimes = new long[names.length];
         }
         else if ( names.length != baseTimes.length )
         {
