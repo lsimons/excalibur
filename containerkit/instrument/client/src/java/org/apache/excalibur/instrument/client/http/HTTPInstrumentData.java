@@ -229,19 +229,26 @@ class HTTPInstrumentData
      * @param sampleCount Number of samples in the new sample.
      * @param leaseTime Requested lease time.  The server may not grant the full lease.
      * @param sampleType The type of sample to be created.
+     *
+     * @return True if successful.
      */
-    public void createInstrumentSample( String description,
-                                        long interval,
-                                        int sampleCount,
-                                        long leaseTime,
-                                        int sampleType )
+    public boolean createInstrumentSample( String description,
+                                           long interval,
+                                           int sampleCount,
+                                           long leaseTime,
+                                           int sampleType )
     {
         HTTPInstrumentManagerConnection connection =
             (HTTPInstrumentManagerConnection)getConnection();
         
-        connection.getState( "create-sample.xml?name=" + urlEncode( getName() )
+        Configuration configuration = connection.getState(
+            "create-sample.xml?name=" + urlEncode( getName() )
             + "&description=" + urlEncode( description ) + "&interval=" + interval
             + "&size=" + sampleCount + "&lease=" + leaseTime + "&type=" + sampleType );
+        
+        // If there were any errors on the server while creating the sample then null
+        //  will be returned.
+        return configuration != null;
     }
     
     /*---------------------------------------------------------------

@@ -956,29 +956,34 @@ public abstract class InstrumentManagerConnection
 
                     // If the sample already exists on the server, then the existing one
                     //  will be returned.
-                    instrumentData.createInstrumentSample(
+                    boolean success = instrumentData.createInstrumentSample(
                         description,
                         interval,
                         sampleCount,
                         leaseTime,
                         type );
                     
-                    // Update the connection so the new sample will be loaded.
-                    //update();
-                    
-                    // If configured to do so, start maintaining the sample
-                    if ( maintain )
-                    {
-                        startMaintainingSample( instrumentData.getName(), type, interval,
-                            sampleCount, leaseTime, description );
-                    }
-                    
                     // Figure out what the name of the new sample will be
                     String sampleName = InstrumentSampleUtils.generateFullInstrumentSampleName(
                         instrumentData.getName(), type, interval, sampleCount );
                     
-                    // Display a sample frame.
-                    viewSample( sampleName );
+                    if ( success )
+                    {
+                        // If configured to do so, start maintaining the sample
+                        if ( maintain )
+                        {
+                            startMaintainingSample( instrumentData.getName(), type, interval,
+                                sampleCount, leaseTime, description );
+                        }
+                        
+                        // Display a sample frame.
+                        viewSample( sampleName );
+                    }
+                    else
+                    {
+                        getLogger().warn( "Attempt to register the sample with the server failed: "
+                            + sampleName );
+                    }
                 }
             }
         } );

@@ -61,10 +61,12 @@ public interface InstrumentData
      * @param sampleCount Number of samples in the new sample.
      * @param leaseTime Requested lease time.  The server may not grant the full lease.
      * @param sampleType The type of sample to be created.
+     *
+     * @return True if successful.
      */
-    void createInstrumentSample( String description,
-                                 long interval,
-                                 int sampleCount,
-                                 long leaseTime,
-                                 int sampleType );
+    boolean createInstrumentSample( String description,
+                                    long interval,
+                                    int sampleCount,
+                                    long leaseTime,
+                                    int sampleType );
 }
