@@ -1,16 +1,16 @@
-/* 
+/*
  * Copyright 2003-2004 The Apache Software Foundation
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at 
- * 
+ * You may obtain a copy of the License at
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed  under the  License is distributed on an "AS IS" BASIS,
  * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
  * implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -21,8 +21,8 @@ import org.apache.avalon.fortress.impl.handler.ComponentHandler;
 import org.apache.avalon.fortress.impl.handler.PrepareHandlerCommand;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 
-import org.apache.excalibur.event.command.Command;
-import org.apache.excalibur.event.command.CommandFailureHandler;
+import org.d_haven.event.command.Command;
+import org.d_haven.event.command.CommandFailureHandler;
 
 /**
  * The default CommandFailureHandler used by Fortress to log any
@@ -51,7 +51,7 @@ public class FortressCommandFailureHandler
         {
             PrepareHandlerCommand phc = (PrepareHandlerCommand)command;
             ComponentHandler handler = phc.getHandler();
-            
+
             if ( getLogger().isErrorEnabled() )
             {
                 getLogger().error( "Could not prepare ComponentHandler for: "
@@ -65,7 +65,7 @@ public class FortressCommandFailureHandler
                 getLogger().error( "Command failed: " + command, throwable );
             }
         }
-        
+
         // This handler never requests that commands cease to be processed.
         return false;
     }

@@ -1,16 +1,16 @@
-/* 
+/*
  * Copyright 2003-2004 The Apache Software Foundation
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at 
- * 
+ * You may obtain a copy of the License at
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed  under the  License is distributed on an "AS IS" BASIS,
  * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
  * implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -43,16 +43,13 @@ import org.apache.avalon.framework.service.DefaultServiceManager;
 import org.apache.avalon.framework.service.DefaultServiceSelector;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.ServiceException;
-import org.apache.excalibur.event.Sink;
-import org.apache.excalibur.event.Queue;
-import org.apache.excalibur.event.command.CommandFailureHandler;
-import org.apache.excalibur.event.command.CommandManager;
-import org.apache.excalibur.event.command.TPCThreadManager;
-import org.apache.excalibur.event.command.ThreadManager;
+import org.d_haven.event.Sink;
+import org.d_haven.event.Pipe;
+import org.d_haven.event.command.*;
 import org.apache.excalibur.instrument.InstrumentManager;
 import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
-import org.apache.excalibur.mpool.DefaultPoolManager;
-import org.apache.excalibur.mpool.PoolManager;
+import org.d_haven.mpool.DefaultPoolManager;
+import org.d_haven.mpool.PoolManager;
 import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceResolver;
 import org.apache.excalibur.source.impl.ResourceSourceFactory;
@@ -180,6 +177,7 @@ public class ContextManager
      * to avoid LinkageErrors in some environments.
      */
     private DefaultConfigurationBuilder configBuilder;
+    private CommandManager m_commandManager;
 
     /**
      * Create a new ContextManager.
@@ -315,9 +313,9 @@ public class ContextManager
         m_childContext.put( InstrumentManager.ROLE, null );
         m_childContext.put( INSTRUMENT_MANAGER_CONFIGURATION, null );
         m_childContext.put( INSTRUMENT_MANAGER_CONFIGURATION_URI, null );
-        m_childContext.put( Sink.ROLE, null );
+        m_childContext.put( Sink.class.getName(), null );
         m_childContext.put( MetaInfoManager.ROLE, null );
-        m_childContext.put( PoolManager.ROLE, null );
+        m_childContext.put( PoolManager.class.getName(), null );
         m_childContext.put( LifecycleExtensionManager.ROLE, null );
     }
 
@@ -362,7 +360,7 @@ public class ContextManager
      */
     public void dispose()
     {
-        // Dispose all items owned by ContextManager 
+        // Dispose all items owned by ContextManager
         disposeOwned();
 
         // Now dispose the Logger (cannot log to logger after its shutdown)
@@ -371,21 +369,21 @@ public class ContextManager
             getLogger().debug( "Shutting down: " + m_loggerManager );
         }
 
-        try 
+        try
         {
             ContainerUtil.shutdown( m_loggerManager );
-        } 
-        catch (final Exception ex) 
+        }
+        catch (final Exception ex)
         {
-            if (  m_primordialLogger.isDebugEnabled() ) 
-            { 
+            if (  m_primordialLogger.isDebugEnabled() )
+            {
                 m_primordialLogger.debug( "Failed to shutdown loggerManager", ex );
             }
         }
     }
 
     /**
-     * Disposes all items ContextManager has assumed ownership over 
+     * Disposes all items ContextManager has assumed ownership over
      */
     public void disposeOwned()
     {
@@ -444,7 +442,7 @@ public class ContextManager
     {
         try
         {
-            m_sink = (Sink) m_rootContext.get( Sink.ROLE );
+            m_sink = (Sink) m_rootContext.get( Sink.class.getName() );
         }
         catch ( ContextException ce )
         {
@@ -461,9 +459,12 @@ public class ContextManager
      */
     private Sink createCommandSink() throws Exception
     {
-        final CommandManager cm = new CommandManager();
+        m_commandManager = new DefaultCommandManager(m_threadManager);
+        m_commandManager.start();
 
-        assumeOwnership( cm );
+        assumeOwnership( m_commandManager );
+
+        m_containerManagerContext.put( CommandManager.class.getName(), m_commandManager);
 
         // Set the CommandFailureHandler
         Class failureHandlerClass;
@@ -480,11 +481,9 @@ public class ContextManager
         final Logger fhLogger = m_loggerManager.getLoggerForCategory( "system.command" );
         ContainerUtil.enableLogging( fh, fhLogger );
         ContainerUtil.initialize( fh );
-        cm.setCommandFailureHandler( fh );
+        m_commandManager.setCommandFailureHandler( fh );
 
-        m_threadManager.register( cm );
-
-        return cm.getCommandSink();
+        return new CommandSink(m_commandManager);
     }
 
     /**
@@ -493,20 +492,15 @@ public class ContextManager
      * @return ThreadManager configuration as a <code>Parameters</code>
      *         instance
      */
-    private Parameters buildThreadManagerParameters()
+    private ThreadPolicy buildThreadPolicy()
     {
-        final Parameters p = new Parameters();
+        String version = System.getProperty( "java.version" );
+        if ( version.charAt( 2 ) < '4' ) {
+            return new OneThreadPolicy();
+        }
+
         Integer threadsPerProcessor;
         Long threadBlockTimeout;
-
-        try
-        {
-            final Integer processors = (Integer) m_rootContext.get( "processors" );
-            p.setParameter( "processors", processors.toString() );
-        }
-        catch ( ContextException e )
-        {
-        }
 
         try
         {
@@ -517,8 +511,6 @@ public class ContextManager
             threadsPerProcessor = new Integer( 2 );
         }
 
-        p.setParameter( "threads-per-processor", threadsPerProcessor.toString() );
-
         try
         {
             threadBlockTimeout = (Long) m_rootContext.get( THREAD_TIMEOUT );
@@ -528,9 +520,7 @@ public class ContextManager
             threadBlockTimeout = new Long( 1000 );
         }
 
-        p.setParameter( "block-timeout", threadBlockTimeout.toString() );
-
-        return p;
+        return new ProcessorBoundThreadPolicy(threadsPerProcessor.intValue(), threadBlockTimeout.longValue());
     }
 
     /**
@@ -542,11 +532,11 @@ public class ContextManager
     {
         try
         {
-            m_poolManager = (PoolManager) m_rootContext.get( PoolManager.ROLE );
+            m_poolManager = (PoolManager) m_rootContext.get( PoolManager.class.getName() );
         }
         catch ( ContextException ce )
         {
-            final PoolManager pm = new DefaultPoolManager( m_sink );
+            final PoolManager pm = new DefaultPoolManager( m_commandManager );
             assumeOwnership( pm );
             m_poolManager = pm;
         }
@@ -601,7 +591,7 @@ public class ContextManager
         {
             Class clazz = (Class)m_rootContext.get( ROLE_MANAGER_CLASS );
             // Test if the class implements a constructor to pass into the parent
-            try 
+            try
             {
                 Constructor parentAwareConstructor = clazz.getConstructor(new Class[] {RoleManager.class});
                 rm = (RoleManager)parentAwareConstructor.newInstance(new Object[] {frm});
@@ -610,17 +600,17 @@ public class ContextManager
             {
                 rm = (RoleManager)clazz.newInstance();
             }
-        } 
+        }
         else
         {
             // Create a role manager with the configured roles
             rm = new ConfigurableRoleManager( frm );
-        } 
+        }
 
         ContainerUtil.enableLogging(rm, rmLogger );
         ContainerUtil.configure( rm, roleConfig );
         ContainerUtil.initialize( rm );
-        
+
         assumeOwnership( rm );
         return rm;
     }
@@ -674,7 +664,7 @@ public class ContextManager
                 final ECMMetaInfoManager metaManager =
                     new ECMMetaInfoManager( new Role2MetaInfoManager( roleManager ), classLoader );
                 metaManager.enableLogging( m_loggerManager.getLoggerForCategory( "system.meta" ) );
-                mim = metaManager;                
+                mim = metaManager;
             }
             else
             {
@@ -747,11 +737,11 @@ public class ContextManager
          */
 
         manager.put( LoggerManager.ROLE, m_loggerManager );
-        manager.put( Sink.ROLE, m_sink );
+        manager.put( Sink.class.getName(), m_sink );
         manager.put( MetaInfoManager.ROLE, m_metaInfoManager );
-        manager.put( PoolManager.ROLE, m_poolManager );
+        manager.put( PoolManager.class.getName(), m_poolManager );
         manager.put( InstrumentManager.ROLE, m_instrumentManager );
-        manager.put( ThreadManager.ROLE, m_threadManager );
+        manager.put( ThreadManager.class.getName(), m_threadManager );
 
         if ( lem != null )
         {
@@ -885,7 +875,7 @@ public class ContextManager
                 // a default logger can be created.
                 loggerManagerConfig = EMPTY_CONFIG;
             }
-            
+
             final String lmDefaultLoggerName =
                 (String) get( m_rootContext, ContextManagerConstants.LOG_CATEGORY, "fortress" );
             final String lmLoggerName = loggerManagerConfig.getAttribute( "logger", "system.logkit" );
@@ -917,20 +907,14 @@ public class ContextManager
     {
         try
         {
-            m_threadManager = (ThreadManager)m_rootContext.get( ThreadManager.ROLE );
+            m_threadManager = (ThreadManager)m_rootContext.get( ThreadManager.class.getName() );
         }
         catch( ContextException e )
         {
-            final ThreadManager tm = new TPCThreadManager();
+            final ThreadPolicy policy = buildThreadPolicy();
+            final DefaultThreadManager tm = new DefaultThreadManager(policy);
 
             assumeOwnership( tm );
-
-            // Get the context Logger Manager
-            final Logger tmLogger = m_loggerManager.getLoggerForCategory( "system.threadmgr" );
-
-            ContainerUtil.enableLogging( tm, tmLogger );
-            ContainerUtil.parameterize( tm, buildThreadManagerParameters() );
-            ContainerUtil.initialize( tm );
 
             m_threadManager = tm;
         }
@@ -1031,10 +1015,10 @@ public class ContextManager
 
         public Object lookup(String role) throws ServiceException
         {
-            if ( Queue.ROLE.equals( role ) )
+            if ( Pipe.class.getName().equals( role ) )
             {
                 m_ealogger.info("Using deprecated role (Queue.ROLE) for the Command Sink.  Use \"Sink.ROLE\" instead.");
-                return lookup(Sink.ROLE);
+                return lookup(Sink.class.getName());
             }
 
             return super.lookup( role );
@@ -1042,7 +1026,7 @@ public class ContextManager
 
         public boolean hasService(String role)
         {
-            if (Queue.ROLE.equals( role ) ) return hasService(Sink.ROLE);
+            if (Pipe.class.getName().equals( role ) ) return hasService(Sink.class.getName());
 
             return super.hasService( role );
         }

@@ -1,16 +1,16 @@
-/* 
+/*
  * Copyright 2003-2004 The Apache Software Foundation
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at 
- * 
+ * You may obtain a copy of the License at
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed  under the  License is distributed on an "AS IS" BASIS,
  * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
  * implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -24,10 +24,10 @@ import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.DefaultContext;
 import org.apache.avalon.framework.service.ServiceManager;
-import org.apache.excalibur.event.Sink;
-import org.apache.excalibur.event.command.ThreadManager;
+import org.d_haven.event.Sink;
+import org.d_haven.event.command.ThreadManager;
 import org.apache.excalibur.instrument.InstrumentManager;
-import org.apache.excalibur.mpool.PoolManager;
+import org.d_haven.mpool.PoolManager;
 
 import java.io.File;
 import java.net.URL;
@@ -124,7 +124,7 @@ public final class FortressConfig
 
     public void setCommandSink( final Sink commandSink )
     {
-        m_context.put( Sink.ROLE, commandSink );
+        m_context.put( Sink.class.getName(), commandSink );
     }
 
     public void setServiceManager( final ServiceManager componentManager )
@@ -157,7 +157,7 @@ public final class FortressConfig
     {
         m_context.put( ContextManagerConstants.CONTAINER_CLASS, containerClass );
     }
-    
+
     /**
      * Sets a class whose instance will be used to override the default
      *  CommandFailureHandler used by the container.  This makes it possible
@@ -273,7 +273,7 @@ public final class FortressConfig
 
     public void setPoolManager( final PoolManager poolManager )
     {
-        m_context.put( PoolManager.ROLE, poolManager );
+        m_context.put( PoolManager.class.getName(), poolManager );
     }
 
     public void setRoleManager( final org.apache.avalon.fortress.RoleManager roleManager )
@@ -301,13 +301,13 @@ public final class FortressConfig
         }
 
         setRoleManagerClass( classLoader.loadClass( containerClass ) );
-    }   
+    }
 
     public void setRoleManagerClass( final Class clazz )
     {
         m_context.put( ContextManagerConstants.ROLE_MANAGER_CLASS, clazz );
     }
-    
+
     public void setRoleManagerConfiguration( final String location )
     {
         m_context.put( ContextManagerConstants.ROLE_MANAGER_CONFIGURATION_URI, location );
@@ -330,6 +330,6 @@ public final class FortressConfig
 
     public void setThreadManager( final ThreadManager threadManager )
     {
-        m_context.put( ThreadManager.ROLE, threadManager );
+        m_context.put( ThreadManager.class.getName(), threadManager );
     }
 }

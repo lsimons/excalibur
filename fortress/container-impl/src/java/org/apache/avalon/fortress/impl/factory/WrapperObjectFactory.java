@@ -1,23 +1,23 @@
-/* 
+/*
  * Copyright 2003-2004 The Apache Software Foundation
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at 
- * 
+ * You may obtain a copy of the License at
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed  under the  License is distributed on an "AS IS" BASIS,
  * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
  * implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
 
 package org.apache.avalon.fortress.impl.factory;
 
-import org.apache.excalibur.mpool.ObjectFactory;
+import org.d_haven.mpool.ObjectFactory;
 
 /**
  * An object factory that delegates all calls to another object factory and
@@ -37,10 +37,10 @@ public final class WrapperObjectFactory extends AbstractObjectFactory
 
     /**
      * Creates a {@link WrapperObjectFactory} with the specified
-     * {@link org.apache.excalibur.mpool.ObjectFactory ObjectFactory} as the
+     * {@link org.d_haven.mpool.ObjectFactory ObjectFactory} as the
      * object factory to delegate all calls for new instances to.
      *
-     * @param  objectFactory The {@link org.apache.excalibur.mpool.ObjectFactory
+     * @param  objectFactory The {@link org.d_haven.mpool.ObjectFactory
      *                     ObjectFactory} to sue when creating new instances
      * @throws IllegalArgumentException If <code>objFactory</code> is
      *                                   <code>null</code>
@@ -53,7 +53,7 @@ public final class WrapperObjectFactory extends AbstractObjectFactory
     }
 
     /**
-     * @see org.apache.excalibur.mpool.ObjectFactory#newInstance()
+     * @see org.d_haven.mpool.ObjectFactory#newInstance()
      */
     public Object newInstance() throws Exception
     {
@@ -68,7 +68,7 @@ public final class WrapperObjectFactory extends AbstractObjectFactory
     }
 
     /**
-     * @see org.apache.excalibur.mpool.ObjectFactory#dispose(java.lang.Object)
+     * @see org.d_haven.mpool.ObjectFactory#dispose(java.lang.Object)
      */
     public void dispose( final Object object ) throws Exception
     {

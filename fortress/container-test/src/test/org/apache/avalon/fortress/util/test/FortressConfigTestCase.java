@@ -1,16 +1,16 @@
-/* 
+/*
  * Copyright 2003-2004 The Apache Software Foundation
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at 
- * 
+ * You may obtain a copy of the License at
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed  under the  License is distributed on an "AS IS" BASIS,
  * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
  * implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -27,16 +27,21 @@ import org.apache.avalon.fortress.impl.role.FortressRoleManager;
 import org.apache.avalon.fortress.util.ContextManagerConstants;
 import org.apache.avalon.fortress.util.FortressConfig;
 import org.apache.avalon.fortress.util.LifecycleExtensionManager;
+import org.apache.avalon.fortress.util.CommandSink;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.service.DefaultServiceManager;
 import org.apache.avalon.framework.service.ServiceManager;
-import org.apache.excalibur.event.Sink;
-import org.apache.excalibur.event.impl.DefaultQueue;
+import org.d_haven.event.Sink;
+import org.d_haven.event.command.DefaultThreadManager;
+import org.d_haven.event.command.ThreadManager;
+import org.d_haven.event.command.CommandManager;
+import org.d_haven.event.command.DefaultCommandManager;
+import org.d_haven.event.impl.DefaultPipe;
 import org.apache.excalibur.instrument.InstrumentManager;
-import org.apache.excalibur.mpool.DefaultPoolManager;
-import org.apache.excalibur.mpool.PoolManager;
+import org.d_haven.mpool.DefaultPoolManager;
+import org.d_haven.mpool.PoolManager;
 
 import java.io.File;
 
@@ -57,15 +62,19 @@ public class FortressConfigTestCase extends TestCase
 
     public void setUp() throws Exception
     {
+        ThreadManager manager = new DefaultThreadManager();
+        CommandManager commands = new DefaultCommandManager(manager);
+        commands.start();
+
         m_config = new FortressConfig( FortressConfig.createDefaultConfig() );
-        m_config.setCommandSink( new DefaultQueue() );
+        m_config.setCommandSink( new CommandSink(commands) );
         m_config.setContextClassLoader( FortressConfigTestCase.class.getClassLoader() );
         m_config.setInstrumentManager( new TestInstrumentManager() );
         m_config.setLifecycleExtensionManager( new LifecycleExtensionManager() );
         m_config.setLoggerCategory( "test" );
         m_config.setLoggerManager( new DefaultLoggerManager() );
         m_config.setNumberOfThreadsPerCPU( 10 );
-        m_config.setPoolManager( new DefaultPoolManager() );
+        m_config.setPoolManager( new DefaultPoolManager(commands) );
         m_config.setRoleManager( new FortressRoleManager() );
         m_config.setServiceManager( new DefaultServiceManager() );
         m_config.setThreadTimeout( 50 );
@@ -99,8 +108,8 @@ public class FortressConfigTestCase extends TestCase
 
     private void checkContext( Context context, boolean useURI ) throws Exception
     {
-        assertNotNull( context.get( Sink.ROLE ) );
-        assertInstanceof( context.get( Sink.ROLE ), Sink.class );
+        assertNotNull( context.get( Sink.class.getName() ) );
+        assertInstanceof( context.get( Sink.class.getName() ), Sink.class );
 
         assertNotNull( context.get( ContainerManagerConstants.CONTAINER_CLASS ) );
         assertInstanceof( context.get( ContainerManagerConstants.CONTAINER_CLASS ), Class.class );
@@ -134,8 +143,8 @@ public class FortressConfigTestCase extends TestCase
         assertInstanceof( context.get( ContextManagerConstants.THREADS_CPU ), Integer.class );
         assertEquals( new Integer( 10 ), context.get( ContextManagerConstants.THREADS_CPU ) );
 
-        assertNotNull( context.get( PoolManager.ROLE ) );
-        assertInstanceof( context.get( PoolManager.ROLE ), PoolManager.class );
+        assertNotNull( context.get( PoolManager.class.getName() ) );
+        assertInstanceof( context.get( PoolManager.class.getName() ), PoolManager.class );
 
         assertNotNull( context.get( RoleManager.ROLE ) );
         assertInstanceof( context.get( RoleManager.ROLE ), RoleManager.class );

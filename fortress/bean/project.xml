@@ -47,14 +47,14 @@ Bean for working with Avalon-Fortress.
             <version>1.2</version>
         </dependency>
         <dependency>
-            <groupId>excalibur-event</groupId>
-            <artifactId>excalibur-event-api</artifactId>
-            <version>2.0</version>
+            <groupId>event</groupId>
+            <artifactId>event</artifactId>
+            <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>excalibur-event</groupId>
-            <artifactId>excalibur-event-impl</artifactId>
-            <version>2.0</version>
+            <groupId>managed-pool</groupId>
+            <artifactId>managed-pool</artifactId>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>excalibur-lifecycle</groupId>

@@ -1,16 +1,16 @@
-/* 
+/*
  * Copyright 2003-2004 The Apache Software Foundation
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at 
- * 
+ * You may obtain a copy of the License at
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed  under the  License is distributed on an "AS IS" BASIS,
  * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
  * implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -50,11 +50,11 @@ import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.Serviceable;
 import org.apache.commons.collections.BoundedFifoBuffer;
 import org.apache.commons.collections.StaticBucketMap;
-import org.apache.excalibur.event.Sink;
+import org.d_haven.event.Sink;
 import org.apache.excalibur.instrument.InstrumentManager;
 import org.apache.excalibur.instrument.Instrumentable;
-import org.apache.excalibur.mpool.ObjectFactory;
-import org.apache.excalibur.mpool.PoolManager;
+import org.d_haven.mpool.ObjectFactory;
+import org.d_haven.mpool.PoolManager;
 
 import java.util.*;
 
@@ -185,21 +185,21 @@ public abstract class AbstractContainer
         // get non-optional services
 
         m_loggerManager = (LoggerManager) serviceManager.lookup( LoggerManager.ROLE );
-        m_poolManager = (PoolManager) serviceManager.lookup( PoolManager.ROLE );
+        m_poolManager = (PoolManager) serviceManager.lookup( PoolManager.class.getName() );
         m_instrumentManager = (InstrumentManager) serviceManager.lookup( InstrumentManager.ROLE );
 
         // get optional services, or a default if the service isn't provided
 
         setupExtensionManager( serviceManager );
 
-        if ( serviceManager.hasService( Sink.ROLE ) )
+        if ( serviceManager.hasService( Sink.class.getName() ) )
         {
-            m_commandSink = (Sink) serviceManager.lookup( Sink.ROLE );
+            m_commandSink = (Sink) serviceManager.lookup( Sink.class.getName() );
         }
         else
         {
             final String message =
-                    "No " + Sink.ROLE + " is given, all " +
+                    "No " + Sink.class.getName() + " is given, all " +
                     "management will be performed synchronously";
             getLogger().warn( message );
         }
@@ -359,7 +359,7 @@ public abstract class AbstractContainer
             ContainerUtil.contextualize( targetHandler, m_context );
             final DefaultServiceManager serviceManager =
                     new DefaultServiceManager( getServiceManager() );
-            serviceManager.put( ObjectFactory.ROLE, factory );
+            serviceManager.put( ObjectFactory.class.getName(), factory );
             serviceManager.makeReadOnly();
 
             ContainerUtil.service( targetHandler, serviceManager );
