@@ -47,7 +47,7 @@ public class XMLCreateSampleHandler
      */
     public XMLCreateSampleHandler( InstrumentManagerClient manager )
     {
-        super( "/create-sample.html", manager );
+        super( "/create-sample.xml", manager );
     }
     
     /*---------------------------------------------------------------
