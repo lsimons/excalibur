@@ -33,9 +33,9 @@
             <p>
         This project provides some general components for dealing with stores.
         It contains different store implementations, like the
-                <a href="store-mru.html">MRU Store</a> and a montoring component,
+                <a href="mru.html">MRU Store</a> and a montoring component,
         the
-                <a href="store-janitor.html">Store Janitor</a>.
+                <a href="janitor.html">Store Janitor</a>.
             </p>
             <p>
         These components have been donated by the

@@ -58,8 +58,12 @@
 
         <menu name="Components">
             <item name="Overview" href="/component-list.html"/>
-            <item name="Sourceresolver" href="/sourceresolve-index.html"/>
-            <item name="Store" href="/store-index.html"/>
+            <item name="Sourceresolver" href="/sourceresolve/index.html" collapse="true">
+                <item name="Overview" href="/sourceresolve/index.html"/>
+            </item>
+            <item name="Store" href="/store/index.html" collapse="true">
+                <item name="Overview" href="/store/index.html"/>
+            </item>
             <item name="Thread" href="/thread.html"/>
             <item name="XMLUtil" href="/xmlutil/index.html" collapse="true">
                 <item name="Overview" href="/xmlutil/index.html"/>
