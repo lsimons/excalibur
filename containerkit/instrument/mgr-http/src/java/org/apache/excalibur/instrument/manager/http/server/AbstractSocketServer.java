@@ -123,7 +123,7 @@ abstract class AbstractSocketServer
         }
         catch ( IOException e )
         {
-            String msg = "Unable to bind to port m_port: " + e.getMessage();
+            String msg = "Unable to bind to port " + m_port + ": " + e.getMessage();
             throw new BindException( msg );
         }
         
