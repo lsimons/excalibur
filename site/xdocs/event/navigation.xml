@@ -44,6 +44,7 @@
         </menu>
 
         <menu name="Component documentation">
+            <item name="Overview" href="/component-list.html"/>
             <item name="Configuration" href="/configuration.html"/>
             <item name="ECM" href="/component.html"/>
             <item name="Event" href="event/index.html" collapse="false">
