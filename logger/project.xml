@@ -50,12 +50,6 @@
         </dependency>
         
         <dependency>
-            <groupId>excalibur-i18n</groupId>
-            <artifactId>excalibur-i18n</artifactId>
-            <version>1.2.0-dev</version>
-        </dependency>
-        
-        <dependency>
             <id>log4j</id>
             <version>1.2.7</version>
         </dependency>

@@ -81,10 +81,6 @@ Bean for working with Avalon-Fortress.
             <version>2.0</version>
         </dependency>
         <dependency>
-            <id>excalibur-i18n</id>
-            <version>1.2.0-dev</version>
-        </dependency>
-        <dependency>
             <id>excalibur-xmlutil</id>
             <version>1.1</version>
         </dependency>

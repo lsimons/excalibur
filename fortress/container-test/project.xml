@@ -121,10 +121,6 @@ easy embedding into various environments like servlet engines.
 
         <!-- test -->
         <dependency>
-            <id>excalibur-i18n</id>
-            <version>1.2.0-dev</version>
-        </dependency>
-        <dependency>
             <id>xalan</id>
             <version>2.5.1</version>
         </dependency>

@@ -119,10 +119,5 @@
             <id>excalibur-instrument</id>
             <version>1.2</version>
         </dependency>
-        <dependency>
-            <!-- testing only -->
-            <id>excalibur-i18n</id>
-            <version>1.2.0-dev</version>
-        </dependency>
     </dependencies>
 </project>
