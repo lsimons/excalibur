@@ -19,9 +19,9 @@
 
   <extend>${basedir}/../project-common.xml</extend>
 
-  <name>Excalibur Instrument Manager HTTP Implementation</name>
+  <name>Excalibur Instrument Manager HTTP Connector</name>
   <id>excalibur-instrument-http</id>
-  <shortDescription>Excalibur Instrument Manager HTTP Implementation</shortDescription>
+  <shortDescription>Excalibur Instrument Manager HTTP Connector</shortDescription>
 
   <dependencies>
     <dependency>
