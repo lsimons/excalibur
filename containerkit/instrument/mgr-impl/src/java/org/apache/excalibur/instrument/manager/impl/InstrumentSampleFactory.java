@@ -15,17 +15,15 @@
  * limitations under the License.
  */
 
-package org.apache.excalibur.instrument.manager;
+package org.apache.excalibur.instrument.manager.impl;
 
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
+import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
 
 /**
  * The InstrumentSample represents a single data sample in a ProfileDataSet.
  * Access to InstrumentSamples are synchronized through the ProfileDataSet.
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
- * @version CVS $Revision: 1.4 $ $Date: 2004/02/28 11:47:25 $
- * @since 4.1
  */
 class InstrumentSampleFactory
 {
@@ -52,19 +50,19 @@ class InstrumentSampleFactory
     {
         switch ( type )
         {
-        case InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MAXIMUM:
+        case DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MAXIMUM:
             return new MaximumValueInstrumentSample(
                 instrumentProxy, name, interval, size, description, lease );
             
-        case InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MINIMUM:
+        case DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MINIMUM:
             return new MinimumValueInstrumentSample(
                 instrumentProxy, name, interval, size, description, lease );
         
-        case InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MEAN:
+        case DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MEAN:
             return new MeanValueInstrumentSample(
                 instrumentProxy, name, interval, size, description, lease );
             
-        case InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_COUNTER:
+        case DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_COUNTER:
             return new CounterInstrumentSample(
                 instrumentProxy, name, interval, size, description, lease );
             

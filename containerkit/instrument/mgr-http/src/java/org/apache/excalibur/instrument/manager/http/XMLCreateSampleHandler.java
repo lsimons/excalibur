@@ -23,10 +23,10 @@ import java.io.PrintWriter;
 import java.util.Map;
 
 import org.apache.excalibur.instrument.manager.http.server.HTTPRedirect;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentSampleDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.NoSuchInstrumentException;
+import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
+import org.apache.excalibur.instrument.manager.InstrumentDescriptor;
+import org.apache.excalibur.instrument.manager.InstrumentSampleDescriptor;
+import org.apache.excalibur.instrument.manager.NoSuchInstrumentException;
 
 /**
  *
@@ -43,9 +43,9 @@ public class XMLCreateSampleHandler
     /**
      * Creates a new XMLCreateSampleHandler.
      *
-     * @param manager Reference to the InstrumentManagerClient.
+     * @param manager Reference to the DefaultInstrumentManager.
      */
-    public XMLCreateSampleHandler( InstrumentManagerClient manager )
+    public XMLCreateSampleHandler( DefaultInstrumentManager manager )
     {
         super( "/create-sample.xml", manager );
     }
@@ -74,7 +74,7 @@ public class XMLCreateSampleHandler
         InstrumentDescriptor desc;
         try
         {
-            desc = getInstrumentManagerClient().locateInstrumentDescriptor( name );
+            desc = getInstrumentManager().locateInstrumentDescriptor( name );
         }
         catch ( NoSuchInstrumentException e )
         {

@@ -15,32 +15,31 @@
  * limitations under the License.
  */
 
-package org.apache.excalibur.instrument.manager;
+package org.apache.excalibur.instrument.manager.impl;
 
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
+import org.apache.avalon.framework.configuration.DefaultConfiguration;
+
+import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
 
 /**
- * A InstrumentSample which stores the number of times that increment has been
- *  called during the sample period.
+ * A InstrumentSample which stores the mean value set during the sample
+ *  period.
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
- * @version CVS $Revision: 1.4 $ $Date: 2004/02/28 11:47:25 $
- * @since 4.1
  */
-class CounterInstrumentSample
-    extends AbstractInstrumentSample
-    implements CounterInstrumentListener
+class MeanValueInstrumentSample
+    extends AbstractValueInstrumentSample
 {
-    /** The count. */
-    protected int m_count;
+    /** Total of all values seen during the sample period. */
+    private long m_valueTotal;
     
     /*---------------------------------------------------------------
      * Constructors
      *-------------------------------------------------------------*/
     /**
-     * Creates a new CounterInstrumentSample
+     * Creates a new MeanValueInstrumentSample
      *
      * @param instrumentProxy The InstrumentProxy which owns the
      *                        InstrumentSample.
@@ -50,17 +49,14 @@ class CounterInstrumentSample
      * @param description The description of the new InstrumentSample.
      * @param lease The length of the lease in milliseconds.
      */
-    CounterInstrumentSample( InstrumentProxy instrumentProxy,
-                             String name,
-                             long interval,
-                             int size,
-                             String description,
-                             long lease )
+    MeanValueInstrumentSample( InstrumentProxy instrumentProxy,
+                               String name,
+                               long interval,
+                               int size,
+                               String description,
+                               long lease )
     {
         super( instrumentProxy, name, interval, size, description, lease );
-        
-        // Set the current value to 0 initially.
-        m_count = 0;
     }
     
     /*---------------------------------------------------------------
@@ -73,32 +69,7 @@ class CounterInstrumentSample
      */
     public int getType()
     {
-        return InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_COUNTER;
-    }
-    
-    /**
-     * Returns the Type of the Instrument which can use the sample.  This
-     *  should be the same for all instances of a class.
-     * <p>
-     * This InstrumentSample returns InstrumentManager.PROFILE_POINT_TYPE_COUNTER
-     *
-     * @return The Type of the Instrument which can use the sample.
-     */
-    public final int getInstrumentType()
-    {
-        return InstrumentManagerClient.INSTRUMENT_TYPE_COUNTER;
-    }
-    
-    /**
-     * Obtain the value of the sample.  All samples are integers, so the profiled
-     * objects must measure quantity (numbers of items), rate (items/period), time in
-     * milliseconds, etc.
-     *
-     * @return The sample value.
-     */
-    public int getValueInner()
-    {
-        return m_count;
+        return DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MEAN;
     }
     
     /*---------------------------------------------------------------
@@ -112,8 +83,10 @@ class CounterInstrumentSample
      */
     protected void advanceToNextSample()
     {
-        // Counts do not propagate, so always reset the count to 0.
-        m_count = 0;
+        // Leave the value as is so that it will propagate to the next sample
+        //  if needed.  But reset the value count so that new values will not
+        //  be affected by the old.
+        m_valueCount = 0;
     }
 
     /**
@@ -123,7 +96,19 @@ class CounterInstrumentSample
      */
     protected int getFillValue()
     {
-        return 0;
+        return m_value;
+    }
+    
+    /**
+     * Allow subclasses to add information into the saved state.
+     *
+     * @param state State configuration.
+     */
+    protected void saveState( DefaultConfiguration state )
+    {
+        super.saveState( state );
+        
+        state.setAttribute( "value-total", Long.toString( m_valueTotal ) );
     }
     
     /**
@@ -140,7 +125,9 @@ class CounterInstrumentSample
     protected void loadState( int value, Configuration state )
         throws ConfigurationException
     {
-        m_count = value;
+        super.loadState( value, state );
+        
+        m_valueTotal = state.getAttributeAsLong( "value-total" );
     }
     
     /**
@@ -149,35 +136,22 @@ class CounterInstrumentSample
      */
     protected void postSaveNeedsReset()
     {
-        m_count = 0;
+        super.postSaveNeedsReset();
+        
+        m_valueTotal = 0;
     }
     
     /*---------------------------------------------------------------
-     * CounterInstrumentListener Methods
+     * AbstractValueInstrumentSample Methods
      *-------------------------------------------------------------*/
     /**
-     * Called by a CounterInstrument whenever its value is incremented.
+     * Sets the current value of the sample.  The value will be set as the
+     *  mean of the new value and other values seen during the sample period.
      *
-     * @param instrumentName The name of Instrument which was incremented.
-     * @param count A positive integer to increment the counter by.
-     * @param time The time that the Instrument was incremented.
+     * @param value New sample value.
+     * @param time Time that the new sample arrives.
      */
-    public void increment( String instrumentName, int count, long time )
-    {
-        //System.out.println("CounterInstrumentSample.increment(" + instrumentName + ", " + count + ", " + time + ") : " + getName() );
-        increment( count, time );
-    }
-    
-    /*---------------------------------------------------------------
-     * Methods
-     *-------------------------------------------------------------*/
-    /**
-     * Increments the count.
-     *
-     * @param time Time that the count is incremented.
-     * @param count A positive integer to increment the counter by.
-     */
-    private void increment( int count, long time )
+    protected void setValueInner( int value, long time )
     {
         int sampleValue;
         long sampleTime;
@@ -186,9 +160,20 @@ class CounterInstrumentSample
         {
             update( time );
             
-            m_count += count;
-            
-            sampleValue = m_count;
+            if ( m_valueCount > 0 )
+            {
+                // Additional sample
+                m_valueCount++;
+                m_valueTotal += value;
+                m_value = (int)(m_valueTotal / m_valueCount);
+            }
+            else
+            {
+                // First value of this sample.
+                m_valueCount = 1;
+                m_valueTotal = m_value = value;
+            }
+            sampleValue = m_value;
             sampleTime = m_time;
         }
         

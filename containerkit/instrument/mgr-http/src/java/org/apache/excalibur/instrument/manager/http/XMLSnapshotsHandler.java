@@ -22,9 +22,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentSampleDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.NoSuchInstrumentSampleException;
+import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
+import org.apache.excalibur.instrument.manager.InstrumentSampleDescriptor;
+import org.apache.excalibur.instrument.manager.NoSuchInstrumentSampleException;
 
 /**
  *
@@ -44,7 +44,7 @@ public class XMLSnapshotsHandler
      * @param path The path handled by this handler.
      * @param contentType The content type.
      */
-    public XMLSnapshotsHandler( InstrumentManagerClient manager )
+    public XMLSnapshotsHandler( DefaultInstrumentManager manager )
     {
         super( "/snapshots.xml", manager );
     }
@@ -88,7 +88,7 @@ public class XMLSnapshotsHandler
                 try
                 {
                     desc =
-                        getInstrumentManagerClient().locateInstrumentSampleDescriptor( names[i] );
+                        getInstrumentManager().locateInstrumentSampleDescriptor( names[i] );
                     
                     outputSampleHistory( out, desc, "", baseTimes[i], packed, compact );
                 }

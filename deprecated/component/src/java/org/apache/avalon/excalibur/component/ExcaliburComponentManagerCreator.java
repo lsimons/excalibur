@@ -35,7 +35,7 @@ import org.apache.avalon.framework.logger.Logger;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.WrapperServiceManager;
 import org.apache.excalibur.instrument.InstrumentManager;
-import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
+import org.apache.excalibur.instrument.manager.impl.DefaultInstrumentManagerImpl;
 import org.apache.log.Hierarchy;
 import org.apache.log.Priority;
 
@@ -472,7 +472,7 @@ public class ExcaliburComponentManagerCreator
                 instrumentManagerConfig.getAttribute( "logger", "system.instrument" ) );
 
             // Set up the Instrument Manager
-            DefaultInstrumentManager instrumentManager = new DefaultInstrumentManager();
+            DefaultInstrumentManagerImpl instrumentManager = new DefaultInstrumentManagerImpl();
             instrumentManager.enableLogging( imLogger );
             instrumentManager.configure( instrumentManagerConfig );
             instrumentManager.initialize();

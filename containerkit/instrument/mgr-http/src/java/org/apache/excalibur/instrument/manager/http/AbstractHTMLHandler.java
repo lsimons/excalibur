@@ -23,10 +23,10 @@ import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
 import org.apache.excalibur.instrument.manager.http.server.URLCoder;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentableDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentSampleDescriptor;
+import org.apache.excalibur.instrument.manager.InstrumentableDescriptor;
+import org.apache.excalibur.instrument.manager.InstrumentDescriptor;
+import org.apache.excalibur.instrument.manager.InstrumentSampleDescriptor;
+import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
 
 /**
  *
@@ -44,9 +44,9 @@ public abstract class AbstractHTMLHandler
      * Creates a new AbstractHTMLHandler.
      *
      * @param path The path handled by this handler.
-     * @param manager Reference to the instrument manager client interface.
+     * @param manager Reference to the instrument manager interface.
      */
-    public AbstractHTMLHandler( String path, InstrumentManagerClient manager )
+    public AbstractHTMLHandler( String path, DefaultInstrumentManager manager )
     {
         super( path, CONTENT_TYPE_TEXT_HTML, manager );
     }
@@ -74,11 +74,11 @@ public abstract class AbstractHTMLHandler
         if ( link )
         {
             out.println( "<a href='instrument-manager.html'>"
-                + getInstrumentManagerClient().getDescription() + "</a>" );
+                + getInstrumentManager().getDescription() + "</a>" );
         }
         else
         {
-            out.println( getInstrumentManagerClient().getDescription() );
+            out.println( getInstrumentManager().getDescription() );
         }
     }
     

@@ -18,7 +18,7 @@
 package org.apache.excalibur.instrument.manager.http;
 
 import org.apache.excalibur.instrument.manager.http.server.AbstractHTTPURLPrintWriterHandler;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
+import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
 
 /**
  *
@@ -30,7 +30,7 @@ public abstract class AbstractHandler
     extends AbstractHTTPURLPrintWriterHandler
 {
     /** The instrument manager */
-    private InstrumentManagerClient m_manager;
+    private DefaultInstrumentManager m_manager;
     
     /*---------------------------------------------------------------
      * Constructors
@@ -40,11 +40,11 @@ public abstract class AbstractHandler
      *
      * @param path The path handled by this handler.
      * @param contentType The content type.
-     * @param manager Reference to the instrument manager client interface.
+     * @param manager Reference to the instrument manager interface.
      */
     public AbstractHandler( String path,
                             String contentType,
-                            InstrumentManagerClient manager )
+                            DefaultInstrumentManager manager )
     {
         super( path, contentType, InstrumentManagerHTTPConnector.ENCODING );
         
@@ -55,11 +55,11 @@ public abstract class AbstractHandler
      * Methods
      *-------------------------------------------------------------*/
     /**
-     * Returns a reference to the instrument manager client interface.
+     * Returns a reference to the instrument manager interface.
      *
-     * @return A reference to the instrument manager client interface. 
+     * @return A reference to the instrument manager interface. 
      */
-    public InstrumentManagerClient getInstrumentManagerClient()
+    public DefaultInstrumentManager getInstrumentManager()
     {
         return m_manager;
     }

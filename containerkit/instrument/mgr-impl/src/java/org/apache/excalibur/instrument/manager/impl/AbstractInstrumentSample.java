@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.apache.excalibur.instrument.manager;
+package org.apache.excalibur.instrument.manager.impl;
 
 import java.util.StringTokenizer;
 import java.util.Calendar;
@@ -24,16 +24,17 @@ import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentSampleSnapshot;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentSampleUtils;
+
+import org.apache.excalibur.instrument.manager.InstrumentSampleDescriptor;
+import org.apache.excalibur.instrument.manager.InstrumentSampleListener;
+import org.apache.excalibur.instrument.manager.InstrumentSampleSnapshot;
+import org.apache.excalibur.instrument.manager.InstrumentSampleUtils;
 
 /**
  * An AbstractInstrumentSample contains all of the functionality common to all
  *  InstrumentSamples.
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
- * @version CVS $Revision: 1.5 $ $Date: 2004/02/28 11:47:25 $
- * @since 4.1
  */
 abstract class AbstractInstrumentSample
     extends AbstractLogEnabled
@@ -61,7 +62,7 @@ abstract class AbstractInstrumentSample
     private String m_description;
 
     /** The Descriptor for the InstrumentSample. */
-    private InstrumentSampleDescriptorLocal m_descriptor;
+    private InstrumentSampleDescriptor m_descriptor;
 
     /**
      * The maximum amount of time between updates before history will be
@@ -155,7 +156,7 @@ abstract class AbstractInstrumentSample
         init( 0 );
 
         // Create the descriptor
-        m_descriptor = new InstrumentSampleDescriptorLocalImpl( this );
+        m_descriptor = new InstrumentSampleDescriptorImpl( this );
     }
 
     /*---------------------------------------------------------------
@@ -227,7 +228,7 @@ abstract class AbstractInstrumentSample
      *
      * @return A Descriptor for the InstrumentSample.
      */
-    public InstrumentSampleDescriptorLocal getDescriptor()
+    public InstrumentSampleDescriptor getDescriptor()
     {
         return m_descriptor;
     }
@@ -386,8 +387,8 @@ abstract class AbstractInstrumentSample
     {
         if( getLogger().isDebugEnabled() )
         {
-            getLogger().debug( "A InstrumentSampleListener was added to sample, " + m_name + " : " +
-                               listener.getClass().getName() );
+            getLogger().debug( "An InstrumentSampleListener was added to sample, " + m_name
+                + " : " + listener.getClass().getName() );
         }
 
         synchronized( this )
@@ -424,8 +425,8 @@ abstract class AbstractInstrumentSample
     {
         if( getLogger().isDebugEnabled() )
         {
-            getLogger().debug( "A InstrumentSampleListener was removed from sample, " + m_name +
-                               " : " + listener.getClass().getName() );
+            getLogger().debug( "An InstrumentSampleListener was removed from sample, " + m_name
+                + " : " + listener.getClass().getName() );
         }
 
         synchronized( this )

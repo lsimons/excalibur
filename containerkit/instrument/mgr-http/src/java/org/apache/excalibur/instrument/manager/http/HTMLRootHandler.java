@@ -22,7 +22,7 @@ import java.io.PrintWriter;
 import java.util.Map;
 
 import org.apache.excalibur.instrument.manager.http.server.HTTPRedirect;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
+import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
 
 /**
  *
@@ -39,9 +39,9 @@ public class HTMLRootHandler
     /**
      * Creates a new HTMLRootHandler.
      *
-     * @param manager Reference to the InstrumentManagerClient.
+     * @param manager Reference to the DefaultInstrumentManager.
      */
-    public HTMLRootHandler( InstrumentManagerClient manager )
+    public HTMLRootHandler( DefaultInstrumentManager manager )
     {
         super( "/", manager );
     }

@@ -15,15 +15,13 @@
  * limitations under the License.
  */
 
-package org.apache.excalibur.instrument.manager.interfaces;
+package org.apache.excalibur.instrument.manager;
 
 import java.io.Serializable;
 
 /**
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
- * @version CVS $Revision: 1.4 $ $Date: 2004/02/28 11:47:19 $
- * @since 4.1
  */
 public class InstrumentSampleSnapshot
     implements Serializable
@@ -60,11 +58,11 @@ public class InstrumentSampleSnapshot
      * @param stateVersion The current state version of the sample. 
      */
     public InstrumentSampleSnapshot( String InstrumentSampleName,
-                           long interval,
-                           int size,
-                           long time,
-                           int[] samples,
-                           int stateVersion )
+                                     long interval,
+                                     int size,
+                                     long time,
+                                     int[] samples,
+                                     int stateVersion )
     {
         m_InstrumentSampleName = InstrumentSampleName;
         m_interval = interval;

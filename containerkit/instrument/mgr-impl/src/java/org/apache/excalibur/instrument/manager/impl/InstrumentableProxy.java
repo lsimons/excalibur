@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.apache.excalibur.instrument.manager;
+package org.apache.excalibur.instrument.manager.impl;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -26,6 +26,9 @@ import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
+
+import org.apache.excalibur.instrument.manager.InstrumentableDescriptor;
+import org.apache.excalibur.instrument.manager.InstrumentDescriptor;
 
 /**
  * A InstrumentableProxy makes it easy for the InstrumentManager to manage
@@ -42,7 +45,7 @@ class InstrumentableProxy
     implements Configurable
 {
     /** InstrumentManager which owns the proxy. */
-    private DefaultInstrumentManager m_instrumentManager;
+    private DefaultInstrumentManagerImpl m_instrumentManager;
     
     /** The parent Instrumentable proxy or null if this is a top level
      *   Instrumentable. */
@@ -61,7 +64,7 @@ class InstrumentableProxy
     private String m_description;
 
     /** The Descriptor for the Instrumentable. */
-    private InstrumentableDescriptorLocalImpl m_descriptor;
+    private InstrumentableDescriptorImpl m_descriptor;
 
     /** Map of the Child InstrumentableProxies owned by this InstrumentableProxy. */
     private HashMap m_childInstrumentableProxies = new HashMap();
@@ -69,8 +72,8 @@ class InstrumentableProxy
     /** Optimized array of the child InstrumentableProxies. */
     private InstrumentableProxy[] m_childInstrumentableProxyArray;
 
-    /** Optimized array of the child InstrumentableDescriptorLocals. */
-    private InstrumentableDescriptorLocal[] m_childInstrumentableDescriptorArray;
+    /** Optimized array of the child InstrumentableDescriptors. */
+    private InstrumentableDescriptor[] m_childInstrumentableDescriptorArray;
 
     /** Map of the InstrumentProxies owned by this InstrumentableProxy. */
     private HashMap m_instrumentProxies = new HashMap();
@@ -78,8 +81,8 @@ class InstrumentableProxy
     /** Optimized array of the InstrumentProxies. */
     private InstrumentProxy[] m_instrumentProxyArray;
 
-    /** Optimized array of the InstrumentDescriptorLocals. */
-    private InstrumentDescriptorLocal[] m_instrumentDescriptorArray;
+    /** Optimized array of the InstrumentDescriptors. */
+    private InstrumentDescriptor[] m_instrumentDescriptorArray;
     
     /** State Version. */
     private int m_stateVersion;
@@ -96,7 +99,7 @@ class InstrumentableProxy
      * @param name The name used to identify a Instrumentable.
      * @param description The description of the the Instrumentable.
      */
-    InstrumentableProxy( DefaultInstrumentManager instrumentManager,
+    InstrumentableProxy( DefaultInstrumentManagerImpl instrumentManager,
                          InstrumentableProxy parentInstrumentableProxy,
                          String name,
                          String description )
@@ -107,19 +110,19 @@ class InstrumentableProxy
         m_description = description;
 
         // Create the descriptor
-        m_descriptor = new InstrumentableDescriptorLocalImpl( this );
+        m_descriptor = new InstrumentableDescriptorImpl( this );
     }
 
     /*---------------------------------------------------------------
      * Configurable Methods
      *-------------------------------------------------------------*/
     /**
-     * Configures the Instrumentable.  Called from the ProfilerManager's
+     * Configures the Instrumentable.  Called from the InstrumentManager's
      *  configure method.  The class does not need to be configured to
      *  function correctly.
      *
      * @param configuration Instrumentable configuration element from the
-     *                      ProfilerManager's configuration.
+     *                      InstrumentManager's configuration.
      *
      * @throws ConfigurationException If there are any configuration problems.
      */
@@ -201,7 +204,7 @@ class InstrumentableProxy
      *
      * @return InstrumentManager which owns the proxy.
      */
-    DefaultInstrumentManager getInstrumentManager()
+    DefaultInstrumentManagerImpl getInstrumentManager()
     {
         return m_instrumentManager;
     }
@@ -253,10 +256,9 @@ class InstrumentableProxy
     }
     
     /**
-     * Gets the name for the Instrumentable.  The Instrumentable Name is used to
-     *  uniquely identify the Instrumentable during the configuration of the
-     *  Profiler and to gain access to a InstrumentableDescriptor through a
-     *  ProfilerManager.
+     * Gets the name for the Instrumentable.  The Instrumentable Name is used
+     *  to uniquely identify the Instrumentable during its configuration and to
+     *  gain access to a InstrumentableDescriptor through an InstrumentManager.
      *
      * @return The name used to identify a Instrumentable.
      */
@@ -267,8 +269,8 @@ class InstrumentableProxy
 
     /**
      * Sets the description for the instrumentable object.  This description will
-     *  be set during the configuration of the profiler if a configuration
-     *  exists for this Instrumentable.
+     *  be set during the configuration of the Instrumentable if a configuration
+     *  exists.
      *
      * @param description The description of the Instrumentable.
      */
@@ -301,7 +303,7 @@ class InstrumentableProxy
      *
      * @return A Descriptor for the Instrumentable.
      */
-    InstrumentableDescriptorLocal getDescriptor()
+    InstrumentableDescriptor getDescriptor()
     {
         return m_descriptor;
     }
@@ -311,10 +313,9 @@ class InstrumentableProxy
      *-------------------------------------------------------------*/
     /**
      * Adds a child InstrumentableProxy to the Instrumentable.  This method
-     *  will be called during the configuration phase of the Profiler if an
-     *  element defining the child Instrumentable exists, or if the
-     *  Instrumentable registers itself with the InstrumentManager as it
-     *  is running.
+     *  will be called during the configuration phase if an element defining
+     *  the child Instrumentable exists, or if the Instrumentable registers
+     *  itself with the InstrumentManager as it is running.
      * <p>
      * This method should never be called for child Instrumentables which
      *  have already been added.
@@ -399,9 +400,9 @@ class InstrumentableProxy
      * @return An array of Descriptors for the child Instrumentables in this
      *         Instrumentable.
      */
-    InstrumentableDescriptorLocal[] getChildInstrumentableDescriptors()
+    InstrumentableDescriptor[] getChildInstrumentableDescriptors()
     {
-        InstrumentableDescriptorLocal[] descriptors = m_childInstrumentableDescriptorArray;
+        InstrumentableDescriptor[] descriptors = m_childInstrumentableDescriptorArray;
         if( descriptors == null )
         {
             descriptors = updateChildInstrumentableDescriptorArray();
@@ -446,12 +447,12 @@ class InstrumentableProxy
     }
 
     /**
-     * Updates the cached array of child InstrumentableDescriptorLocals taking
+     * Updates the cached array of child InstrumentableDescriptors taking
      *  synchronization into account.
      *
-     * @return An array of the child InstrumentableDescriptorLocals.
+     * @return An array of the child InstrumentableDescriptors.
      */
-    private InstrumentableDescriptorLocal[] updateChildInstrumentableDescriptorArray()
+    private InstrumentableDescriptor[] updateChildInstrumentableDescriptorArray()
     {
         synchronized( this )
         {
@@ -461,7 +462,7 @@ class InstrumentableProxy
             }
 
             m_childInstrumentableDescriptorArray =
-                new InstrumentableDescriptorLocal[ m_childInstrumentableProxyArray.length ];
+                new InstrumentableDescriptor[ m_childInstrumentableProxyArray.length ];
             for( int i = 0; i < m_childInstrumentableProxyArray.length; i++ )
             {
                 m_childInstrumentableDescriptorArray[ i ] =
@@ -477,9 +478,9 @@ class InstrumentableProxy
      *-------------------------------------------------------------*/
     /**
      * Adds a InstrumentProxy to the Instrumentable.  This method will be
-     *  called during the configuration phase of the Profiler if an element
-     *  defining the Instrument exists, or if the Instrument registers
-     *  itself with the ProfilerManager as it is running.
+     *  called during the configuration phase if an element defining the
+     *  Instrument exists, or if the Instrument registers itself with the
+     *  InstrumentManager as it is running.
      * <p>
      * This method should never be called for Instruments which have already
      *  been added.
@@ -555,9 +556,9 @@ class InstrumentableProxy
      *
      * @return An array of Descriptors for the Instruments in the Instrumentable.
      */
-    InstrumentDescriptorLocal[] getInstrumentDescriptors()
+    InstrumentDescriptor[] getInstrumentDescriptors()
     {
-        InstrumentDescriptorLocal[] descriptors = m_instrumentDescriptorArray;
+        InstrumentDescriptor[] descriptors = m_instrumentDescriptorArray;
         if( descriptors == null )
         {
             descriptors = updateInstrumentDescriptorArray();
@@ -614,12 +615,12 @@ class InstrumentableProxy
     }
 
     /**
-     * Updates the cached array of InstrumentDescriptorLocals taking
+     * Updates the cached array of InstrumentDescriptors taking
      *  synchronization into account.
      *
-     * @return An array of the InstrumentDescriptorLocals.
+     * @return An array of the InstrumentDescriptors.
      */
-    private InstrumentDescriptorLocal[] updateInstrumentDescriptorArray()
+    private InstrumentDescriptor[] updateInstrumentDescriptorArray()
     {
         synchronized( this )
         {
@@ -629,7 +630,7 @@ class InstrumentableProxy
             }
 
             m_instrumentDescriptorArray =
-                new InstrumentDescriptorLocal[ m_instrumentProxyArray.length ];
+                new InstrumentDescriptor[ m_instrumentProxyArray.length ];
             for( int i = 0; i < m_instrumentProxyArray.length; i++ )
             {
                 m_instrumentDescriptorArray[ i ] = m_instrumentProxyArray[ i ].getDescriptor();

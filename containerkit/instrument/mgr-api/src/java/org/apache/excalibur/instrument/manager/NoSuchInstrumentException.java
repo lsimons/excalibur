@@ -18,21 +18,23 @@
 package org.apache.excalibur.instrument.manager;
 
 /**
- * Interface for classes which can be registered as Connectors for
- *  InstrumentManagers.
- *
- * The DefaultInstrumentManager is smart about handling connectors which
- *  implement the LogEnabled, Configurable, Initializable, Startable and
- *  Disposable interfaces.
+ * Thrown when a Instrument can not be found.
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  */
-public interface DefaultInstrumentManagerConnector
+public class NoSuchInstrumentException
+    extends RuntimeException
 {
+    /*---------------------------------------------------------------
+     * Constructors
+     *-------------------------------------------------------------*/
     /**
-     * Set the InstrumentManager to which the Connecter will provide
-     *  access.  This method is called before the new connector is
-     *  configured or started.
+     * Construct a new NoSuchInstrumentException instance.
+     *
+     * @param message The detail message for this exception.
      */
-    //void setInstrumentManager( DefaultInstrumentManager manager );
+    public NoSuchInstrumentException( String message )
+    {
+        super( message );
+    }
 }

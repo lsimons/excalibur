@@ -22,10 +22,10 @@ import java.io.PrintWriter;
 import java.util.Map;
 
 import org.apache.excalibur.instrument.manager.http.server.HTTPRedirect;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentSampleDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.NoSuchInstrumentException;
+import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
+import org.apache.excalibur.instrument.manager.InstrumentDescriptor;
+import org.apache.excalibur.instrument.manager.InstrumentSampleDescriptor;
+import org.apache.excalibur.instrument.manager.NoSuchInstrumentException;
 
 /**
  *
@@ -42,9 +42,9 @@ public class HTMLInstrumentHandler
     /**
      * Creates a new HTMLInstrumentHandler.
      *
-     * @param manager Reference to the InstrumentManagerClient.
+     * @param manager Reference to the DefaultInstrumentManager.
      */
-    public HTMLInstrumentHandler( InstrumentManagerClient manager )
+    public HTMLInstrumentHandler( DefaultInstrumentManager manager )
     {
         super( "/instrument.html", manager );
     }
@@ -66,7 +66,7 @@ public class HTMLInstrumentHandler
         InstrumentDescriptor desc;
         try
         {
-            desc = getInstrumentManagerClient().locateInstrumentDescriptor( name );
+            desc = getInstrumentManager().locateInstrumentDescriptor( name );
         }
         catch ( NoSuchInstrumentException e )
         {
@@ -91,63 +91,63 @@ public class HTMLInstrumentHandler
         presets.append( "<option value='0-0' selected>-- Select a Preset --</option>" );
         switch ( desc.getType() )
         {
-        case InstrumentManagerClient.INSTRUMENT_TYPE_COUNTER:
+        case DefaultInstrumentManager.INSTRUMENT_TYPE_COUNTER:
             type = "Counter";
             types.append( "<option value='"
-                + InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_COUNTER
+                + DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_COUNTER
                 + "' selected>Count</option>" );
             
             presets.append( "<option value='"
-                + InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_COUNTER
+                + DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_COUNTER
                 + "-0'>Count / Second Over 10 Minutes</option>" );
             presets.append( "<option value='"
-                + InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_COUNTER
+                + DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_COUNTER
                 + "-1'>Count / Minute Over 1 Day</option>" );
             presets.append( "<option value='"
-                + InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_COUNTER
+                + DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_COUNTER
                 + "-2'>Count / Hour Over 1 Month</option>" );
             break;
             
-        case InstrumentManagerClient.INSTRUMENT_TYPE_VALUE:
+        case DefaultInstrumentManager.INSTRUMENT_TYPE_VALUE:
             type = "Value";
             types.append( "<option value='"
-                + InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MAXIMUM
+                + DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MAXIMUM
                 + "' selected>Maximum Value</option>" );
             types.append( "<option value='"
-                + InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MINIMUM
+                + DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MINIMUM
                 + "'>Minimum Value</option>" );
             types.append( "<option value='"
-                + InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MEAN
+                + DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MEAN
                 + "'>Mean Value</option>" );
             
             presets.append( "<option value='"
-                + InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MAXIMUM
+                + DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MAXIMUM
                 + "-0'>Max Value / Second Over 10 Minutes</option>" );
             presets.append( "<option value='"
-                + InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MAXIMUM
+                + DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MAXIMUM
                 + "-1'>Max Value / Minute Over 1 Day</option>" );
             presets.append( "<option value='"
-                + InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MAXIMUM
+                + DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MAXIMUM
                 + "-2'>Max Value / Hour Over 1 Month</option>" );
             
             presets.append( "<option value='"
-                + InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MINIMUM
+                + DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MINIMUM
                 + "-0'>Min Value / Second Over 10 Minutes</option>" );
             presets.append( "<option value='"
-                + InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MINIMUM
+                + DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MINIMUM
                 + "-1'>Min Value / Minute Over 1 Day</option>" );
             presets.append( "<option value='"
-                + InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MINIMUM
+                + DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MINIMUM
                 + "-2'>Min Value / Hour Over 1 Month</option>" );
             
             presets.append( "<option value='"
-                + InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MEAN
+                + DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MEAN
                 + "-0'>Mean Value / Second Over 10 Minutes</option>" );
             presets.append( "<option value='"
-                + InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MEAN
+                + DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MEAN
                 + "-1'>Mean Value / Minute Over 1 Day</option>" );
             presets.append( "<option value='"
-                + InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MEAN
+                + DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MEAN
                 + "-2'>Mean Value / Hour Over 1 Month</option>" );
             break;
             
@@ -192,13 +192,13 @@ public class HTMLInstrumentHandler
         out.println( "  var prefix;" );
         out.println( "  if (type == 0) {" );
         out.println( "    return;" );
-        out.println( "  } else if (type == " + InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_COUNTER + ") {" );
+        out.println( "  } else if (type == " + DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_COUNTER + ") {" );
         out.println( "    typeLbl = \"Count\"" );
-        out.println( "  } else if (type == " + InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MAXIMUM + ") {" );
+        out.println( "  } else if (type == " + DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MAXIMUM + ") {" );
         out.println( "    typeLbl = \"Max Value\"" );
-        out.println( "  } else if (type == " + InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MINIMUM + ") {" );
+        out.println( "  } else if (type == " + DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MINIMUM + ") {" );
         out.println( "    typeLbl = \"Min Value\"" );
-        out.println( "  } else if (type == " + InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MEAN + ") {" );
+        out.println( "  } else if (type == " + DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MEAN + ") {" );
         out.println( "    typeLbl = \"Mean Value\"" );
         out.println( "  } else {" );
         out.println( "    typeLbl = \"Unknown\"" );

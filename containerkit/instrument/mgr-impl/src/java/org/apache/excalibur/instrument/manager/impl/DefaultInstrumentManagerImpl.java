@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.apache.excalibur.instrument.manager;
+package org.apache.excalibur.instrument.manager.impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -41,16 +41,22 @@ import org.apache.avalon.framework.container.ContainerUtil;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.logger.Logger;
 import org.apache.avalon.framework.service.ServiceException;
+
 import org.apache.excalibur.instrument.AbstractInstrument;
 import org.apache.excalibur.instrument.CounterInstrument;
 import org.apache.excalibur.instrument.Instrument;
 import org.apache.excalibur.instrument.InstrumentManager;
 import org.apache.excalibur.instrument.Instrumentable;
 import org.apache.excalibur.instrument.ValueInstrument;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
-import org.apache.excalibur.instrument.manager.interfaces.NoSuchInstrumentException;
-import org.apache.excalibur.instrument.manager.interfaces.NoSuchInstrumentSampleException;
-import org.apache.excalibur.instrument.manager.interfaces.NoSuchInstrumentableException;
+
+import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
+import org.apache.excalibur.instrument.manager.DefaultInstrumentManagerConnector;
+import org.apache.excalibur.instrument.manager.InstrumentableDescriptor;
+import org.apache.excalibur.instrument.manager.InstrumentDescriptor;
+import org.apache.excalibur.instrument.manager.InstrumentSampleDescriptor;
+import org.apache.excalibur.instrument.manager.NoSuchInstrumentException;
+import org.apache.excalibur.instrument.manager.NoSuchInstrumentSampleException;
+import org.apache.excalibur.instrument.manager.NoSuchInstrumentableException;
 
 /**
  *
@@ -58,9 +64,9 @@ import org.apache.excalibur.instrument.manager.interfaces.NoSuchInstrumentableEx
  * @version CVS $Revision: 1.4 $ $Date: 2004/02/28 11:47:25 $
  * @since 4.1
  */
-public class DefaultInstrumentManager
+public class DefaultInstrumentManagerImpl
     extends AbstractLogEnabled
-    implements Configurable, Initializable, Disposable, InstrumentManager,
+    implements Configurable, Initializable, Disposable, DefaultInstrumentManager,
         Instrumentable, Runnable
 {
     public static final String INSTRUMENT_TOTAL_MEMORY = "total-memory";
@@ -104,8 +110,8 @@ public class DefaultInstrumentManager
     /** Optimized array of the InstrumentableProxies. */
     private InstrumentableProxy[] m_instrumentableProxyArray;
 
-    /** Optimized array of the InstrumentableDescriptorLocals. */
-    private InstrumentableDescriptorLocal[] m_instrumentableDescriptorArray;
+    /** Optimized array of the InstrumentableDescriptors. */
+    private InstrumentableDescriptor[] m_instrumentableDescriptorArray;
 
     /** List of leased InstrumentSamples. */
     private ArrayList m_leasedInstrumentSamples = new ArrayList();
@@ -171,22 +177,22 @@ public class DefaultInstrumentManager
      * Constructors
      *-------------------------------------------------------------*/
     /**
-     * Creates a new DefaultInstrumentManager.
+     * Creates a new DefaultInstrumentManagerImpl.
      *
      * @param name The name used to identify this InstrumentManager.  Should not
      *             contain any spaces or periods.
      *
      * @deprecated Name should be set in the instrument configuration file.
      */
-    public DefaultInstrumentManager( String name )
+    public DefaultInstrumentManagerImpl( String name )
     {
         this();
     }
     
     /**
-     * Creates a new DefaultInstrumentManager.
+     * Creates a new DefaultInstrumentManagerImpl.
      */
-    public DefaultInstrumentManager()
+    public DefaultInstrumentManagerImpl()
     {
         // Initialize the Instrumentable elements.
         m_totalMemoryInstrument = new ValueInstrument( INSTRUMENT_TOTAL_MEMORY );
@@ -312,8 +318,8 @@ public class DefaultInstrumentManager
                 try
                 {
                     Class clazz = Class.forName( className );
-                    InstrumentManagerConnector connector =
-                        (InstrumentManagerConnector)clazz.newInstance();
+                    DefaultInstrumentManagerConnector connector =
+                        (DefaultInstrumentManagerConnector)clazz.newInstance();
                     
                     // Initialize the new connector
                     connector.setInstrumentManager( this );
@@ -381,7 +387,8 @@ public class DefaultInstrumentManager
         // Shutdown the connectors
         for ( Iterator iter = m_connectors.iterator(); iter.hasNext(); )
         {
-            InstrumentManagerConnector connector = (InstrumentManagerConnector)iter.next();
+            DefaultInstrumentManagerConnector connector =
+                (DefaultInstrumentManagerConnector)iter.next();
             try
             {
                 ContainerUtil.stop( connector );
@@ -493,14 +500,13 @@ public class DefaultInstrumentManager
         stateChanged();
     }
 
-    
     /*---------------------------------------------------------------
-     * Methods
+     * DefaultInstrumentManager Methods
      *-------------------------------------------------------------*/
     /**
-     * Returns the name used to identify this InstrumentManager.
+     * Returns the name used to identify this DefaultInstrumentManager.
      *
-     * @return The name used to identify this InstrumentManager.
+     * @return The name used to identify this DefaultInstrumentManager.
      */
     public String getName()
     {
@@ -508,9 +514,9 @@ public class DefaultInstrumentManager
     }
     
     /**
-     * Returns the description of this InstrumentManager.
+     * Returns the description of this DefaultInstrumentManager.
      *
-     * @return The description of this InstrumentManager.
+     * @return The description of this DefaultInstrumentManager.
      */
     public String getDescription()
     {
@@ -518,8 +524,8 @@ public class DefaultInstrumentManager
     }
     
     /**
-     * Returns an InstrumentableDescriptorLocal based on its name or the name
-     *  of any of its children.
+     * Returns a InstrumentableDescriptor based on its name or the name of any
+     *  of its children.
      *
      * @param instrumentableName Name of the Instrumentable being requested.
      *
@@ -528,7 +534,7 @@ public class DefaultInstrumentManager
      * @throws NoSuchInstrumentableException If the specified Instrumentable
      *                                       does not exist.
      */
-    public InstrumentableDescriptorLocal getInstrumentableDescriptor( String instrumentableName )
+    public InstrumentableDescriptor getInstrumentableDescriptor( String instrumentableName )
         throws NoSuchInstrumentableException
     {
         InstrumentableProxy proxy = getInstrumentableProxy( instrumentableName );
@@ -543,14 +549,13 @@ public class DefaultInstrumentManager
 
     /**
      * Returns an array of Descriptors for the Instrumentables managed by this
-     *  InstrumentManager.
+     *  DefaultInstrumentManager.
      *
-     * @return An array of Descriptors for the Instrumentables managed by this
-     *  InstrumentManager.
+     * @return An array of InstrumentableDescriptors.
      */
-    public InstrumentableDescriptorLocal[] getInstrumentableDescriptors()
+    public InstrumentableDescriptor[] getInstrumentableDescriptors()
     {
-        InstrumentableDescriptorLocal[] descriptors = m_instrumentableDescriptorArray;
+        InstrumentableDescriptor[] descriptors = m_instrumentableDescriptorArray;
         if( descriptors == null )
         {
             descriptors = updateInstrumentableDescriptorArray();
@@ -559,17 +564,17 @@ public class DefaultInstrumentManager
     }
     
     /**
-     * Searches the entire instrument tree an instrumentable with the given
+     * Searches the entire instrument tree for an instrumentable with the given
      *  name.
      *
      * @param instrumentableName Name of the Instrumentable being requested.
      *
      * @return A Descriptor of the requested Instrumentable.
      *
-     * @throws NoSuchInstrumentableException If the specified Instrumentable does
-     *                                       not exist.
+     * @throws NoSuchInstrumentableException If the specified Instrumentable
+     *                                       does not exist.
      */
-    public InstrumentableDescriptorLocal locateInstrumentableDescriptor( String instrumentableName )
+    public InstrumentableDescriptor locateInstrumentableDescriptor( String instrumentableName )
         throws NoSuchInstrumentableException
     {
         InstrumentableProxy instrumentableProxy =
@@ -589,7 +594,8 @@ public class DefaultInstrumentManager
     }
     
     /**
-     * Searches the entire instrument tree an instrument with the given name.
+     * Searches the entire instrument tree for an instrument with the given
+     *  name.
      *
      * @param instrumentName Name of the Instrument being requested.
      *
@@ -598,7 +604,7 @@ public class DefaultInstrumentManager
      * @throws NoSuchInstrumentException If the specified Instrument does
      *                                   not exist.
      */
-    public InstrumentDescriptorLocal locateInstrumentDescriptor( String instrumentName )
+    public InstrumentDescriptor locateInstrumentDescriptor( String instrumentName )
         throws NoSuchInstrumentException
     {
         InstrumentableProxy instrumentableProxy =
@@ -624,8 +630,8 @@ public class DefaultInstrumentManager
     }
 
     /**
-     * Searches the entire instrument tree an instrument sample with the given
-     *  name.
+     * Searches the entire instrument tree for an instrument sample with the
+     *  given name.
      *
      * @param sampleName Name of the Instrument Sample being requested.
      *
@@ -634,7 +640,7 @@ public class DefaultInstrumentManager
      * @throws NoSuchInstrumentSampleException If the specified Instrument
      *                                         Sample does not exist.
      */
-    public InstrumentSampleDescriptorLocal locateInstrumentSampleDescriptor( String sampleName )
+    public InstrumentSampleDescriptor locateInstrumentSampleDescriptor( String sampleName )
         throws NoSuchInstrumentSampleException
     {
         InstrumentableProxy instrumentableProxy =
@@ -663,21 +669,22 @@ public class DefaultInstrumentManager
         throw new NoSuchInstrumentSampleException(
             "No instrument sample can be found with the name: " + sampleName );
     }
-    
+
     /**
-     * Returns the stateVersion of the instrument manager.  The state version
-     *  will be incremented each time any of the configuration of the
-     *  instrument manager or any of its children is modified.
+     * Returns the stateVersion of the DefaultInstrumeManager.  The state
+     *  version will be incremented each time any of the configuration of
+     *  the instrument manager or any of its children is modified.
+     * <p>
      * Clients can use this value to tell whether or not anything has
      *  changed without having to do an exhaustive comparison.
      *
      * @return The state version of the instrument manager.
      */
-    int getStateVersion()
+    public int getStateVersion()
     {
         return m_stateVersion;
     }
-    
+        
     /**
      * Invokes garbage collection.
      */
@@ -686,8 +693,111 @@ public class DefaultInstrumentManager
         System.gc();
     }
     
-    
+    /*---------------------------------------------------------------
+     * Instrumentable Methods
+     *-------------------------------------------------------------*/
+    /**
+     * Sets the name for the Instrumentable.  The Instrumentable Name is used
+     *  to uniquely identify the Instrumentable during the configuration of
+     *  the InstrumentManager and to gain access to an InstrumentableDescriptor
+     *  through the InstrumentManager.  The value should be a string which does
+     *  not contain spaces or periods.
+     * <p>
+     * This value may be set by a parent Instrumentable, or by the
+     *  InstrumentManager using the value of the 'instrumentable' attribute in
+     *  the configuration of the component.
+     *
+     * @param name The name used to identify a Instrumentable.
+     */
+    public void setInstrumentableName( String name )
+    {
+        m_instrumentableName = name;
+    }
 
+    /**
+     * Gets the name of the Instrumentable.
+     *
+     * @return The name used to identify a Instrumentable.
+     */
+    public String getInstrumentableName()
+    {
+        return m_instrumentableName;
+    }
+
+    /**
+     * Obtain a reference to all the Instruments that the Instrumentable object
+     *  wishes to expose.  All sampling is done directly through the
+     *  Instruments as opposed to the Instrumentable interface.
+     *
+     * @return An array of the Instruments available for profiling.  Should
+     *         never be null.  If there are no Instruments, then
+     *         EMPTY_INSTRUMENT_ARRAY can be returned.  This should never be
+     *         the case though unless there are child Instrumentables with
+     *         Instruments.
+     */
+    public Instrument[] getInstruments()
+    {
+        return new Instrument[]
+        {
+            m_totalMemoryInstrument,
+            m_freeMemoryInstrument,
+            m_memoryInstrument,
+            m_activeThreadCountInstrument,
+            m_registrationsInstrument,
+            m_instrumentablesInstrument,
+            m_instrumentsInstrument,
+            m_samplesInstrument,
+            m_leasedSamplesInstrument,
+            m_leaseRequestsInstrument
+        };
+    }
+
+    /**
+     * Any Object which implements Instrumentable can also make use of other
+     *  Instrumentable child objects.  This method is used to tell the
+     *  InstrumentManager about them.
+     *
+     * @return An array of child Instrumentables.  This method should never
+     *         return null.  If there are no child Instrumentables, then
+     *         EMPTY_INSTRUMENTABLE_ARRAY can be returned.
+     */
+    public Instrumentable[] getChildInstrumentables()
+    {
+        return Instrumentable.EMPTY_INSTRUMENTABLE_ARRAY;
+    }
+
+    /*---------------------------------------------------------------
+     * Runnable Methods
+     *-------------------------------------------------------------*/
+    public void run()
+    {
+        while( m_runner != null )
+        {
+            try
+            {
+                Thread.sleep( 1000 );
+
+                memoryInstruments();
+                threadInstruments();
+                testInstrumentSampleLeases();
+
+                // Handle the state file if it is set
+                long now = System.currentTimeMillis();
+                if( now - m_lastStateSave >= m_stateInterval )
+                {
+                    saveState();
+                }
+            }
+            catch( Throwable t )
+            {
+                getLogger().error( "Encountered an unexpected error.", t );
+            }
+        }
+    }
+    
+    /*---------------------------------------------------------------
+     * State File Methods
+     *-------------------------------------------------------------*/
     /**
      * Loads the Instrument Manager state from the specified file.
      *
@@ -896,109 +1006,122 @@ public class DefaultInstrumentManager
     }
 
     /*---------------------------------------------------------------
-     * Instrumentable Methods
+     * Package Methods
      *-------------------------------------------------------------*/
     /**
-     * Sets the name for the Instrumentable.  The Instrumentable Name is used
-     *  to uniquely identify the Instrumentable during the configuration of
-     *  the InstrumentManager and to gain access to an InstrumentableDescriptor
-     *  through the InstrumentManager.  The value should be a string which does
-     *  not contain spaces or periods.
-     * <p>
-     * This value may be set by a parent Instrumentable, or by the
-     *  InstrumentManager using the value of the 'instrumentable' attribute in
-     *  the configuration of the component.
+     * Registers an InstrumentSample which has been leased so that the
+     *  Instrument Manager can efficiently purge it when it has expired.
      *
-     * @param name The name used to identify a Instrumentable.
+     * @param instrumentSample Leased InstrumentSample to register.
      */
-    public void setInstrumentableName( String name )
+    void registerLeasedInstrumentSample( InstrumentSample instrumentSample )
     {
-        m_instrumentableName = name;
-    }
-
-    /**
-     * Gets the name of the Instrumentable.
-     *
-     * @return The name used to identify a Instrumentable.
-     */
-    public String getInstrumentableName()
-    {
-        return m_instrumentableName;
-    }
-
-    /**
-     * Obtain a reference to all the Instruments that the Instrumentable object
-     *  wishes to expose.  All sampling is done directly through the
-     *  Instruments as opposed to the Instrumentable interface.
-     *
-     * @return An array of the Instruments available for profiling.  Should
-     *         never be null.  If there are no Instruments, then
-     *         EMPTY_INSTRUMENT_ARRAY can be returned.  This should never be
-     *         the case though unless there are child Instrumentables with
-     *         Instruments.
-     */
-    public Instrument[] getInstruments()
-    {
-        return new Instrument[]
+        synchronized( m_leasedInstrumentSamples )
         {
-            m_totalMemoryInstrument,
-            m_freeMemoryInstrument,
-            m_memoryInstrument,
-            m_activeThreadCountInstrument,
-            m_registrationsInstrument,
-            m_instrumentablesInstrument,
-            m_instrumentsInstrument,
-            m_samplesInstrument,
-            m_leasedSamplesInstrument,
-            m_leaseRequestsInstrument
-        };
-    }
-
-    /**
-     * Any Object which implements Instrumentable can also make use of other
-     *  Instrumentable child objects.  This method is used to tell the
-     *  InstrumentManager about them.
-     *
-     * @return An array of child Instrumentables.  This method should never
-     *         return null.  If there are no child Instrumentables, then
-     *         EMPTY_INSTRUMENTABLE_ARRAY can be returned.
-     */
-    public Instrumentable[] getChildInstrumentables()
-    {
-        return Instrumentable.EMPTY_INSTRUMENTABLE_ARRAY;
-    }
-
-    /*---------------------------------------------------------------
-     * Runnable Methods
-     *-------------------------------------------------------------*/
-    public void run()
-    {
-        while( m_runner != null )
-        {
-            try
+            // Make sure that the sample is really leased.
+            if ( instrumentSample.getLeaseExpirationTime() <= 0 )
             {
-                Thread.sleep( 1000 );
-
-                memoryInstruments();
-                threadInstruments();
-                testInstrumentSampleLeases();
-
-                // Handle the state file if it is set
-                long now = System.currentTimeMillis();
-                if( now - m_lastStateSave >= m_stateInterval )
-                {
-                    saveState();
-                }
+                throw new IllegalStateException( "Got an InstrumentSample that was not leased." );
             }
-            catch( Throwable t )
+            
+            // Make sure that it is not already in the list.
+            if ( m_leasedInstrumentSamples.indexOf( instrumentSample ) < 0 )
             {
-                getLogger().error( "Encountered an unexpected error.", t );
+                m_leasedInstrumentSamples.add( instrumentSample );
+                m_leasedInstrumentSampleArray = null;
             }
         }
     }
-
+    
+    /**
+     * Called whenever the state of the instrument manager is changed.
+     */
+    void stateChanged()
+    {
+        m_stateVersion++;
+    }
+    
+    /**
+     * Called to increment the number of Instrumentables registered.
+     */
+    void incrementInstrumentableCount()
+    {
+        int count;
+        synchronized( m_semaphore )
+        {
+            count = ++m_instrumentableCount;
+        }
+        m_instrumentablesInstrument.setValue( count );
+    }
+    
+    /**
+     * Called to increment the number of Instruments registered.
+     */
+    void incrementInstrumentCount()
+    {
+        int count;
+        synchronized( m_semaphore )
+        {
+            count = ++m_instrumentCount;
+        }
+        m_instrumentsInstrument.setValue( count );
+    }
+    
+    /**
+     * Called to increment the number of Permanent Instrument Samples registered.
+     */
+    void incrementPermanentSampleCount()
+    {
+        int count;
+        synchronized( m_semaphore )
+        {
+            count = ++m_permanentSampleCount + m_leasedSampleCount;
+        }
+        m_samplesInstrument.setValue( count );
+    }
+    
+    /**
+     * Called to increment the number of Leased Instrument Samples registered.
+     */
+    void incrementLeasedSampleCount()
+    {
+        int count;
+        int leasedCount;
+        synchronized( m_semaphore )
+        {
+            leasedCount = ++m_leasedSampleCount;
+            count = m_permanentSampleCount + m_leasedSampleCount;
+        }
+        m_samplesInstrument.setValue( count );
+        m_leasedSamplesInstrument.setValue( leasedCount );
+    }
+    
+    /**
+     * Called to decrement the number of Leased Instrument Samples registered.
+     */
+    void decrementLeasedSampleCount()
+    {
+        int count;
+        int leasedCount;
+        synchronized( m_semaphore )
+        {
+            leasedCount = --m_leasedSampleCount;
+            count = m_permanentSampleCount + m_leasedSampleCount;
+        }
+        m_samplesInstrument.setValue( count );
+        m_leasedSamplesInstrument.setValue( leasedCount );
+    }
+    
+    /**
+     * Increment the lease requests.
+     */
+    void incrementLeaseRequests()
+    {
+        m_leaseRequestsInstrument.increment();
+    }
+    
     /*---------------------------------------------------------------
-     * Methods
+     * Private Methods
      *-------------------------------------------------------------*/
     /**
      * Saves the state to the current state file if configured.
@@ -1191,31 +1314,6 @@ public class DefaultInstrumentManager
     }
     
     /**
-     * Registers an InstrumentSample which has been leased so that the
-     *  Instrument Manager can efficiently purge it when it has expired.
-     *
-     * @param instrumentSample Leased InstrumentSample to register.
-     */
-    void registerLeasedInstrumentSample( InstrumentSample instrumentSample )
-    {
-        synchronized( m_leasedInstrumentSamples )
-        {
-            // Make sure that the sample is really leased.
-            if ( instrumentSample.getLeaseExpirationTime() <= 0 )
-            {
-                throw new IllegalStateException( "Got an InstrumentSample that was not leased." );
-            }
-            
-            // Make sure that it is not already in the list.
-            if ( m_leasedInstrumentSamples.indexOf( instrumentSample ) < 0 )
-            {
-                m_leasedInstrumentSamples.add( instrumentSample );
-                m_leasedInstrumentSampleArray = null;
-            }
-        }
-    }
-    
-    /**
      * Updates the cached array of InstrumentableProxies taking
      *  synchronization into account.
      *
@@ -1250,12 +1348,12 @@ public class DefaultInstrumentManager
     }
 
     /**
-     * Updates the cached array of InstrumentableDescriptorLocals taking
+     * Updates the cached array of InstrumentableDescriptors taking
      *  synchronization into account.
      *
      * @return An array of the InstrumentableDescriptors.
      */
-    private InstrumentableDescriptorLocal[] updateInstrumentableDescriptorArray()
+    private InstrumentableDescriptor[] updateInstrumentableDescriptorArray()
     {
         synchronized( m_semaphore )
         {
@@ -1265,7 +1363,7 @@ public class DefaultInstrumentManager
             }
 
             m_instrumentableDescriptorArray =
-                new InstrumentableDescriptorLocal[ m_instrumentableProxyArray.length ];
+                new InstrumentableDescriptor[ m_instrumentableProxyArray.length ];
             for( int i = 0; i < m_instrumentableProxyArray.length; i++ )
             {
                 m_instrumentableDescriptorArray[ i ] = m_instrumentableProxyArray[ i ].getDescriptor();
@@ -1387,11 +1485,11 @@ public class DefaultInstrumentManager
                 //  class of the actual Instrument.
                 if( instrument instanceof CounterInstrument )
                 {
-                    proxy.setType( InstrumentManagerClient.INSTRUMENT_TYPE_COUNTER );
+                    proxy.setType( DefaultInstrumentManager.INSTRUMENT_TYPE_COUNTER );
                 }
                 else if( instrument instanceof ValueInstrument )
                 {
-                    proxy.setType( InstrumentManagerClient.INSTRUMENT_TYPE_VALUE );
+                    proxy.setType( DefaultInstrumentManager.INSTRUMENT_TYPE_VALUE );
                 }
                 else
                 {
@@ -1416,15 +1514,15 @@ public class DefaultInstrumentManager
                 {
                     switch( proxy.getType() )
                     {
-                        case InstrumentManagerClient.INSTRUMENT_TYPE_COUNTER:
+                        case DefaultInstrumentManager.INSTRUMENT_TYPE_COUNTER:
                             // Type is the same.
                             // Store a reference to the proxy in the Instrument.
                             ( (AbstractInstrument)instrument ).setInstrumentProxy( proxy );
                             break;
 
-                        case InstrumentManagerClient.INSTRUMENT_TYPE_NONE:
+                        case DefaultInstrumentManager.INSTRUMENT_TYPE_NONE:
                             // Not yet set.  Created in configuration.
-                            proxy.setType( InstrumentManagerClient.INSTRUMENT_TYPE_COUNTER );
+                            proxy.setType( DefaultInstrumentManager.INSTRUMENT_TYPE_COUNTER );
 
                             // Store a reference to the proxy in the Instrument.
                             ( (AbstractInstrument)instrument ).setInstrumentProxy( proxy );
@@ -1440,15 +1538,15 @@ public class DefaultInstrumentManager
                 {
                     switch( proxy.getType() )
                     {
-                        case InstrumentManagerClient.INSTRUMENT_TYPE_VALUE:
+                        case DefaultInstrumentManager.INSTRUMENT_TYPE_VALUE:
                             // Type is the same.
                             // Store a reference to the proxy in the Instrument.
                             ( (AbstractInstrument)instrument ).setInstrumentProxy( proxy );
                             break;
 
-                        case InstrumentManagerClient.INSTRUMENT_TYPE_NONE:
+                        case DefaultInstrumentManager.INSTRUMENT_TYPE_NONE:
                             // Not yet set.  Created in configuration.
-                            proxy.setType( InstrumentManagerClient.INSTRUMENT_TYPE_VALUE );
+                            proxy.setType( DefaultInstrumentManager.INSTRUMENT_TYPE_VALUE );
 
                             // Store a reference to the proxy in the Instrument.
                             ( (AbstractInstrument)instrument ).setInstrumentProxy( proxy );
@@ -1509,93 +1607,6 @@ public class DefaultInstrumentManager
             // Recurse to the child
             registerInstrumentableInner( child, proxy, fullChildName );
         }
-    }
-    
-    /**
-     * Called whenever the state of the instrument manager is changed.
-     */
-    protected void stateChanged()
-    {
-        m_stateVersion++;
-    }
-    
-    /**
-     * Called to increment the number of Instrumentables registered.
-     */
-    protected void incrementInstrumentableCount()
-    {
-        int count;
-        synchronized( m_semaphore )
-        {
-            count = ++m_instrumentableCount;
-        }
-        m_instrumentablesInstrument.setValue( count );
-    }
-    
-    /**
-     * Called to increment the number of Instruments registered.
-     */
-    protected void incrementInstrumentCount()
-    {
-        int count;
-        synchronized( m_semaphore )
-        {
-            count = ++m_instrumentCount;
-        }
-        m_instrumentsInstrument.setValue( count );
-    }
-    
-    /**
-     * Called to increment the number of Permanent Instrument Samples registered.
-     */
-    protected void incrementPermanentSampleCount()
-    {
-        int count;
-        synchronized( m_semaphore )
-        {
-            count = ++m_permanentSampleCount + m_leasedSampleCount;
-        }
-        m_samplesInstrument.setValue( count );
-    }
-    
-    /**
-     * Called to increment the number of Leased Instrument Samples registered.
-     */
-    protected void incrementLeasedSampleCount()
-    {
-        int count;
-        int leasedCount;
-        synchronized( m_semaphore )
-        {
-            leasedCount = ++m_leasedSampleCount;
-            count = m_permanentSampleCount + m_leasedSampleCount;
-        }
-        m_samplesInstrument.setValue( count );
-        m_leasedSamplesInstrument.setValue( leasedCount );
-    }
-    
-    /**
-     * Called to decrement the number of Leased Instrument Samples registered.
-     */
-    protected void decrementLeasedSampleCount()
-    {
-        int count;
-        int leasedCount;
-        synchronized( m_semaphore )
-        {
-            leasedCount = --m_leasedSampleCount;
-            count = m_permanentSampleCount + m_leasedSampleCount;
-        }
-        m_samplesInstrument.setValue( count );
-        m_leasedSamplesInstrument.setValue( leasedCount );
-    }
-    
-    /**
-     * Increment the lease requests.
-     */
-    protected void incrementLeaseRequests()
-    {
-        m_leaseRequestsInstrument.increment();
     }
 }
 

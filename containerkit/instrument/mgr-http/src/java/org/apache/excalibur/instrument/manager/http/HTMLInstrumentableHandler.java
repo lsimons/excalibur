@@ -22,10 +22,10 @@ import java.io.PrintWriter;
 import java.util.Map;
 
 import org.apache.excalibur.instrument.manager.http.server.HTTPRedirect;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentableDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.NoSuchInstrumentableException;
+import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
+import org.apache.excalibur.instrument.manager.InstrumentableDescriptor;
+import org.apache.excalibur.instrument.manager.InstrumentDescriptor;
+import org.apache.excalibur.instrument.manager.NoSuchInstrumentableException;
 
 /**
  *
@@ -42,9 +42,9 @@ public class HTMLInstrumentableHandler
     /**
      * Creates a new HTMLInstrumentableHandler.
      *
-     * @param manager Reference to the InstrumentManagerClient.
+     * @param manager Reference to the DefaultInstrumentManager.
      */
-    public HTMLInstrumentableHandler( InstrumentManagerClient manager )
+    public HTMLInstrumentableHandler( DefaultInstrumentManager manager )
     {
         super( "/instrumentable.html", manager );
     }
@@ -66,7 +66,7 @@ public class HTMLInstrumentableHandler
         InstrumentableDescriptor desc;
         try
         {
-            desc = getInstrumentManagerClient().locateInstrumentableDescriptor( name );
+            desc = getInstrumentManager().locateInstrumentableDescriptor( name );
         }
         catch ( NoSuchInstrumentableException e )
         {

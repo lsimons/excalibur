@@ -15,16 +15,17 @@
  * limitations under the License.
  */
 
-package org.apache.excalibur.instrument.manager.interfaces;
+package org.apache.excalibur.instrument.manager;
 
+import org.apache.excalibur.instrument.InstrumentManager;
 
 /**
+ * The public interface to the DefaultInstrumentManager implementation.
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
- * @version CVS $Revision: 1.4 $ $Date: 2004/02/28 11:47:19 $
- * @since 4.1
  */
-public interface InstrumentManagerClient
+public interface DefaultInstrumentManager
+    extends InstrumentManager
 {
     /** Type which specifies that the type of a Instrument has not yet been determined. */
     int INSTRUMENT_TYPE_NONE = 0;
@@ -48,16 +49,16 @@ public interface InstrumentManagerClient
     int INSTRUMENT_SAMPLE_TYPE_MEAN = 104;
     
     /**
-     * Returns the name used to identify this InstrumentManager.
+     * Returns the name used to identify this DefaultInstrumentManager.
      *
-     * @return The name used to identify this InstrumentManager.
+     * @return The name used to identify this DefaultInstrumentManager.
      */
     String getName();
     
     /**
-     * Returns the description of this InstrumentManager.
+     * Returns the description of this DefaultInstrumentManager.
      *
-     * @return The description of this InstrumentManager.
+     * @return The description of this DefaultInstrumentManager.
      */
     String getDescription();
     
@@ -69,37 +70,37 @@ public interface InstrumentManagerClient
      *
      * @return A Descriptor of the requested Instrumentable.
      *
-     * @throws NoSuchInstrumentableException If the specified Instrumentable does
-     *                                   not exist.
+     * @throws NoSuchInstrumentableException If the specified Instrumentable
+     *                                       does not exist.
      */
     InstrumentableDescriptor getInstrumentableDescriptor( String instrumentableName )
         throws NoSuchInstrumentableException;
 
     /**
      * Returns an array of Descriptors for the Instrumentables managed by this
-     *  InstrumentManager.
+     *  DefaultInstrumentManager.
      *
-     * @return An array of Descriptors for the Instrumentables managed by this
-     *  InstrumentManager.
+     * @return An array of InstrumentableDescriptors.
      */
     InstrumentableDescriptor[] getInstrumentableDescriptors();
     
     /**
-     * Searches the entire instrument tree an instrumentable with the given
+     * Searches the entire instrument tree for an instrumentable with the given
      *  name.
      *
      * @param instrumentableName Name of the Instrumentable being requested.
      *
      * @return A Descriptor of the requested Instrumentable.
      *
-     * @throws NoSuchInstrumentableException If the specified Instrumentable does
-     *                                       not exist.
+     * @throws NoSuchInstrumentableException If the specified Instrumentable
+     *                                       does not exist.
      */
     InstrumentableDescriptor locateInstrumentableDescriptor( String instrumentableName )
         throws NoSuchInstrumentableException;
     
     /**
-     * Searches the entire instrument tree an instrument with the given name.
+     * Searches the entire instrument tree for an instrument with the given
+     *  name.
      *
      * @param instrumentName Name of the Instrument being requested.
      *
@@ -112,8 +113,8 @@ public interface InstrumentManagerClient
         throws NoSuchInstrumentException;
 
     /**
-     * Searches the entire instrument tree an instrument sample with the given
-     *  name.
+     * Searches the entire instrument tree for an instrument sample with the
+     *  given name.
      *
      * @param sampleName Name of the Instrument Sample being requested.
      *
@@ -126,9 +127,10 @@ public interface InstrumentManagerClient
         throws NoSuchInstrumentSampleException;
 
     /**
-     * Returns the stateVersion of the instrument manager.  The state version
-     *  will be incremented each time any of the configuration of the
-     *  instrument manager or any of its children is modified.
+     * Returns the stateVersion of the DefaultInstrumeManager.  The state
+     *  version will be incremented each time any of the configuration of
+     *  the instrument manager or any of its children is modified.
+     * <p>
      * Clients can use this value to tell whether or not anything has
      *  changed without having to do an exhaustive comparison.
      *

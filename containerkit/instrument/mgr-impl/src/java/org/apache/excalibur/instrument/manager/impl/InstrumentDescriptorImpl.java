@@ -15,11 +15,14 @@
  * limitations under the License.
  */
 
-package org.apache.excalibur.instrument.manager;
+package org.apache.excalibur.instrument.manager.impl;
 
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentableDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentSampleDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.NoSuchInstrumentSampleException;
+import org.apache.excalibur.instrument.manager.CounterInstrumentListener;
+import org.apache.excalibur.instrument.manager.InstrumentableDescriptor;
+import org.apache.excalibur.instrument.manager.InstrumentDescriptor;
+import org.apache.excalibur.instrument.manager.InstrumentSampleDescriptor;
+import org.apache.excalibur.instrument.manager.NoSuchInstrumentSampleException;
+import org.apache.excalibur.instrument.manager.ValueInstrumentListener;
 
 /**
  * Describes a Instrument and acts as a Proxy to protect the original
@@ -29,8 +32,8 @@ import org.apache.excalibur.instrument.manager.interfaces.NoSuchInstrumentSample
  * @version CVS $Revision: 1.4 $ $Date: 2004/02/28 11:47:25 $
  * @since 4.1
  */
-public class InstrumentDescriptorLocalImpl
-    implements InstrumentDescriptorLocal
+public class InstrumentDescriptorImpl
+    implements InstrumentDescriptor
 {
     /** InstrumentProxy being described. */
     private InstrumentProxy m_instrumentProxy;
@@ -43,7 +46,7 @@ public class InstrumentDescriptorLocalImpl
      *
      * @param instrumentProxy InstrumentProxy being described.
      */
-    InstrumentDescriptorLocalImpl( InstrumentProxy instrumentProxy )
+    InstrumentDescriptorImpl( InstrumentProxy instrumentProxy )
     {
         m_instrumentProxy = instrumentProxy;
     }
@@ -118,96 +121,6 @@ public class InstrumentDescriptorLocalImpl
      */
     public InstrumentableDescriptor getInstrumentableDescriptor()
     {
-        return getInstrumentableDescriptorLocal();
-    }
-    
-    /**
-     * Returns a InstrumentSampleDescriptor based on its name.
-     *
-     * @param instrumentSampleName Name of the InstrumentSample being requested.
-     *
-     * @return A Descriptor of the requested InstrumentSample.
-     *
-     * @throws NoSuchInstrumentSampleException If the specified InstrumentSample
-     *                                      does not exist.
-     */
-    public InstrumentSampleDescriptor getInstrumentSampleDescriptor( String instrumentSampleName )
-        throws NoSuchInstrumentSampleException
-    {
-        return getInstrumentSampleDescriptorLocal( instrumentSampleName );
-    }
-    
-    /**
-     * Returns a InstrumentSampleDescriptor based on its name.  If the requested
-     *  sample is invalid in any way, then an expired Descriptor will be
-     *  returned.
-     *
-     * @param sampleDescription Description to assign to the new Sample.
-     * @param sampleInterval Sample interval to use in the new Sample.
-     * @param sampleLease Requested lease time for the new Sample in
-     *                    milliseconds.  The InstrumentManager may grant a
-     *                    lease which is shorter or longer than the requested
-     *                    period.
-     * @param sampleType Type of sample to request.  Must be one of the
-     *                   following:  InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_COUNTER,
-     *                   InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MINIMUM,
-     *                   InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MAXIMUM,
-     *                   InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MEAN.
-     *
-     * @return A Descriptor of the requested InstrumentSample.
-     *
-     * @throws NoSuchInstrumentSampleException If the specified InstrumentSample
-     *                                      does not exist.
-     */
-    public InstrumentSampleDescriptor createInstrumentSample( String sampleDescription,
-                                                              long sampleInterval,
-                                                              int sampleSize,
-                                                              long sampleLease,
-                                                              int sampleType )
-    {
-        return createInstrumentSampleLocal(
-            sampleDescription, sampleInterval, sampleSize, sampleLease, sampleType );
-    }
-    
-    /**
-     * Returns an array of Descriptors for the InstrumentSamples configured for this
-     *  Instrument.
-     *
-     * @return An array of Descriptors for the InstrumentSamples configured for this
-     *  Instrument.
-     */
-    public InstrumentSampleDescriptor[] getInstrumentSampleDescriptors()
-    {
-        return getInstrumentSampleDescriptorLocals();
-    }
-    
-    
-    /**
-     * Returns the stateVersion of the instrument.  The state version will be
-     *  incremented each time any of the configuration of the instrument or
-     *  any of its children is modified.
-     * Clients can use this value to tell whether or not anything has
-     *  changed without having to do an exhaustive comparison.
-     *
-     * @return The state version of the instrument.
-     */
-    public int getStateVersion()
-    {
-        return m_instrumentProxy.getStateVersion();
-    }
-    
-    /*---------------------------------------------------------------
-     * InstrumentDescriptorLocal Methods
-     *-------------------------------------------------------------*/
-    /**
-     * Returns a reference to the descriptor of the Instrumentable of the
-     *  instrument.
-     *
-     * @return A reference to the descriptor of the Instrumentable of the
-     *  instrument.
-     */
-    public InstrumentableDescriptorLocal getInstrumentableDescriptorLocal()
-    {
         return m_instrumentProxy.getInstrumentableProxy().getDescriptor();
     }
     
@@ -249,7 +162,7 @@ public class InstrumentDescriptorLocalImpl
      *                 profile updates.
      *
      * @throws IllegalStateException If the Instrument's type is not
-     *         InstrumentManager.PROFILE_POINT_TYPE_VALUE.
+     *         DefaultInstrumentManager.INSTRUMENT_TYPE_VALUE.
      */
     public void addValueInstrumentListener( ValueInstrumentListener listener )
     {
@@ -264,7 +177,7 @@ public class InstrumentDescriptorLocalImpl
      *                 events.
      *
      * @throws IllegalStateException If the Instrument's type is not
-     *         InstrumentManager.PROFILE_POINT_TYPE_VALUE.
+     *         DefaultInstrumentManager.INSTRUMENT_TYPE_VALUE.
      */
     public void removeValueInstrumentListener( ValueInstrumentListener listener )
     {
@@ -272,7 +185,7 @@ public class InstrumentDescriptorLocalImpl
     }
     
     /**
-     * Returns a InstrumentSampleDescriptorLocal based on its name.
+     * Returns a InstrumentSampleDescriptor based on its name.
      *
      * @param instrumentSampleName Name of the InstrumentSample being requested.
      *
@@ -281,8 +194,7 @@ public class InstrumentDescriptorLocalImpl
      * @throws NoSuchInstrumentSampleException If the specified InstrumentSample
      *                                      does not exist.
      */
-    public InstrumentSampleDescriptorLocal getInstrumentSampleDescriptorLocal(
-                                                    String instrumentSampleName )
+    public InstrumentSampleDescriptor getInstrumentSampleDescriptor( String instrumentSampleName )
         throws NoSuchInstrumentSampleException
     {
         InstrumentSample instrumentSample =
@@ -297,7 +209,7 @@ public class InstrumentDescriptorLocalImpl
     }
     
     /**
-     * Returns a InstrumentSampleDescriptorLocal based on its name.  If the requested
+     * Returns a InstrumentSampleDescriptor based on its name.  If the requested
      *  sample is invalid in any way, then an expired Descriptor will be
      *  returned.
      *
@@ -318,11 +230,11 @@ public class InstrumentDescriptorLocalImpl
      * @throws NoSuchInstrumentSampleException If the specified InstrumentSample
      *                                      does not exist.
      */
-    public InstrumentSampleDescriptorLocal createInstrumentSampleLocal( String sampleDescription,
-                                                                        long sampleInterval,
-                                                                        int sampleSize,
-                                                                        long sampleLease,
-                                                                        int sampleType )
+    public InstrumentSampleDescriptor createInstrumentSample( String sampleDescription,
+                                                              long sampleInterval,
+                                                              int sampleSize,
+                                                              long sampleLease,
+                                                              int sampleType )
     {
         InstrumentSample sample = m_instrumentProxy.createInstrumentSample(
             sampleDescription, sampleInterval, sampleSize, sampleLease, sampleType );
@@ -336,8 +248,22 @@ public class InstrumentDescriptorLocalImpl
      * @return An array of Descriptors for the InstrumentSamples configured for this
      *  Instrument.
      */
-    public InstrumentSampleDescriptorLocal[] getInstrumentSampleDescriptorLocals()
+    public InstrumentSampleDescriptor[] getInstrumentSampleDescriptors()
     {
         return m_instrumentProxy.getInstrumentSampleDescriptors();
+    }
+    
+    /**
+     * Returns the stateVersion of the instrument.  The state version will be
+     *  incremented each time any of the configuration of the instrument or
+     *  any of its children is modified.
+     * Clients can use this value to tell whether or not anything has
+     *  changed without having to do an exhaustive comparison.
+     *
+     * @return The state version of the instrument.
+     */
+    public int getStateVersion()
+    {
+        return m_instrumentProxy.getStateVersion();
     }
 }

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.apache.excalibur.instrument.manager;
+package org.apache.excalibur.instrument.manager.impl;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -27,13 +27,19 @@ import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.logger.Logger;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentSampleUtils;
+
+import org.apache.excalibur.instrument.manager.CounterInstrumentListener;
+import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
+import org.apache.excalibur.instrument.manager.InstrumentDescriptor;
+import org.apache.excalibur.instrument.manager.InstrumentListener;
+import org.apache.excalibur.instrument.manager.InstrumentSampleDescriptor;
+import org.apache.excalibur.instrument.manager.InstrumentSampleUtils;
+import org.apache.excalibur.instrument.manager.ValueInstrumentListener;
 
 /**
  * Instrumentables which do not implement ThreadSafe may have multiple instances
  *  created by the ComponentLocator.  Each of these Instruments will share
- *  a common key and are profiled as a group.  The InstrumentProxy is used
+ *  a common key and are instrumented as a group.  The InstrumentProxy is used
  *  make it easy for the InstrumentManager to control groups of Instruments
  *  as one.
  * <p>
@@ -64,7 +70,7 @@ public class InstrumentProxy
     private String m_description;
     
     /** The Descriptor for the Instrument. */
-    private InstrumentDescriptorLocal m_descriptor;
+    private InstrumentDescriptor m_descriptor;
     
     /** Type of the Instrument */
     private int m_type;
@@ -78,8 +84,8 @@ public class InstrumentProxy
     /** Optimized array of the InstrumentSamples. */
     private InstrumentSample[] m_sampleArray;
     
-    /** Optimized array of the InstrumentSampleDescriptorLocals. */
-    private InstrumentSampleDescriptorLocal[] m_sampleDescriptorArray;
+    /** Optimized array of the InstrumentSampleDescriptors. */
+    private InstrumentSampleDescriptor[] m_sampleDescriptorArray;
     
     /** Child logger to use for logging of new values. */
     private Logger m_valueLogger;
@@ -110,7 +116,7 @@ public class InstrumentProxy
         m_description = description;
         
         // Create the descriptor
-        m_descriptor = new InstrumentDescriptorLocalImpl( this );
+        m_descriptor = new InstrumentDescriptorImpl( this );
     }
     
     /*---------------------------------------------------------------
@@ -225,7 +231,7 @@ public class InstrumentProxy
      * InstrumentProxy Methods
      *-------------------------------------------------------------*/
     /**
-     * Used by classes being profiles so that they can avoid unnecessary
+     * Used by classes being instrumented so that they can avoid unnecessary
      *  code when the data from a Instrument is not being used.
      *
      * @returns True if listeners are registered with the Instrument.
@@ -243,7 +249,7 @@ public class InstrumentProxy
      */
     public void increment( int count )
     {
-        if ( m_type != InstrumentManagerClient.INSTRUMENT_TYPE_COUNTER )
+        if ( m_type != DefaultInstrumentManager.INSTRUMENT_TYPE_COUNTER )
         {
             // Type is not correct.
             throw new IllegalStateException(
@@ -278,7 +284,7 @@ public class InstrumentProxy
      */
     public void setValue( int value )
     {
-        if ( m_type != InstrumentManagerClient.INSTRUMENT_TYPE_VALUE )
+        if ( m_type != DefaultInstrumentManager.INSTRUMENT_TYPE_VALUE )
         {
             // Type is not correct.
             throw new IllegalStateException(
@@ -359,9 +365,8 @@ public class InstrumentProxy
     
     /**
      * Gets the name for the Instrument.  The Instrument Name is used to
-     *  uniquely identify the Instrument during the configuration of the
-     *  Profiler and to gain access to a InstrumentDescriptor through a
-     *  InstrumentManager.
+     *  uniquely identify the Instrument during configuration and to gain
+     *  access to a InstrumentDescriptor through an InstrumentManager.
      *
      * @return The name used to identify a Instrumentable.
      */
@@ -372,8 +377,8 @@ public class InstrumentProxy
     
     /**
      * Sets the description for the Instrument.  This description will
-     *  be set during the configuration of the profiler if a configuration
-     *  exists for this Instrument.
+     *  be set during configuration if a configuration exists for this
+     *  Instrument.
      *
      * @param description The description of the Instrument.
      */
@@ -406,7 +411,7 @@ public class InstrumentProxy
      *
      * @return A Descriptor for the Instrument.
      */
-    InstrumentDescriptorLocal getDescriptor()
+    InstrumentDescriptor getDescriptor()
     {
         return m_descriptor;
     }
@@ -420,14 +425,14 @@ public class InstrumentProxy
     {
         synchronized(this)
         {
-            if ( m_type != InstrumentManagerClient.INSTRUMENT_TYPE_NONE )
+            if ( m_type != DefaultInstrumentManager.INSTRUMENT_TYPE_NONE )
             {
                 throw new IllegalStateException( "Type already set." );
             }
             switch ( type )
             {
-            case InstrumentManagerClient.INSTRUMENT_TYPE_COUNTER:
-            case InstrumentManagerClient.INSTRUMENT_TYPE_VALUE:
+            case DefaultInstrumentManager.INSTRUMENT_TYPE_COUNTER:
+            case DefaultInstrumentManager.INSTRUMENT_TYPE_VALUE:
                 m_type = type;
                 break;
             default:
@@ -451,14 +456,14 @@ public class InstrumentProxy
      *  receive updates of the value of the Instrument.
      *
      * @param listener CounterInstrumentListener which will start receiving
-     *                 profile updates.
+     *                 updates.
      *
      * @throws IllegalStateException If the Instrument's type is not
      *         InstrumentManager.INSTRUMENT_TYPE_COUNTER.
      */
     void addCounterInstrumentListener( CounterInstrumentListener listener )
     {
-        if ( m_type != InstrumentManagerClient.INSTRUMENT_TYPE_COUNTER )
+        if ( m_type != DefaultInstrumentManager.INSTRUMENT_TYPE_COUNTER )
         {
             // Type is not correct.
             throw new IllegalStateException(
@@ -476,17 +481,16 @@ public class InstrumentProxy
     
     /**
      * Removes a InstrumentListener from the list of listeners which will
-     *  receive profile events.
+     *  receive events.
      *
-     * @param listener InstrumentListener which will stop receiving profile
-     *                 events.
+     * @param listener InstrumentListener which will stop receiving events.
      *
      * @throws IllegalStateException If the Instrument's type is not
      *         InstrumentManager.INSTRUMENT_TYPE_COUNTER.
      */
     void removeCounterInstrumentListener( CounterInstrumentListener listener )
     {
-        if ( m_type != InstrumentManagerClient.INSTRUMENT_TYPE_COUNTER )
+        if ( m_type != DefaultInstrumentManager.INSTRUMENT_TYPE_COUNTER )
         {
             // Type is not correct.
             throw new IllegalStateException(
@@ -507,14 +511,14 @@ public class InstrumentProxy
      *  receive updates of the value of the Instrument.
      *
      * @param listener ValueInstrumentListener which will start receiving
-     *                 profile updates.
+     *                 updates.
      *
      * @throws IllegalStateException If the Instrument's type is not
      *         InstrumentManager.INSTRUMENT_TYPE_VALUE.
      */
     void addValueInstrumentListener( ValueInstrumentListener listener )
     {
-        if ( m_type != InstrumentManagerClient.INSTRUMENT_TYPE_VALUE )
+        if ( m_type != DefaultInstrumentManager.INSTRUMENT_TYPE_VALUE )
         {
             // Type is not correct.
             throw new IllegalStateException(
@@ -536,17 +540,16 @@ public class InstrumentProxy
     
     /**
      * Removes a InstrumentListener from the list of listeners which will
-     *  receive profile events.
+     *  receive events.
      *
-     * @param listener InstrumentListener which will stop receiving profile
-     *                 events.
+     * @param listener InstrumentListener which will stop receiving events.
      *
      * @throws IllegalStateException If the Instrument's type is not
      *         InstrumentManager.INSTRUMENT_TYPE_VALUE.
      */
     void removeValueInstrumentListener( ValueInstrumentListener listener )
     {
-        if ( m_type != InstrumentManagerClient.INSTRUMENT_TYPE_VALUE )
+        if ( m_type != DefaultInstrumentManager.INSTRUMENT_TYPE_VALUE )
         {
             // Type is not correct.
             throw new IllegalStateException(
@@ -573,7 +576,7 @@ public class InstrumentProxy
         {
             // If the type has not been set, set it.  If it has been set, make sure this sample has
             //  the same type.
-            if ( m_type == InstrumentManagerClient.INSTRUMENT_TYPE_NONE )
+            if ( m_type == DefaultInstrumentManager.INSTRUMENT_TYPE_NONE )
             {
                 setType( instrumentSample.getInstrumentType() );
             }
@@ -604,11 +607,11 @@ public class InstrumentProxy
             // Add the sample as a listener for this Instrument.
             switch ( m_type )
             {
-            case InstrumentManagerClient.INSTRUMENT_TYPE_COUNTER:
+            case DefaultInstrumentManager.INSTRUMENT_TYPE_COUNTER:
                 addCounterInstrumentListener( (CounterInstrumentSample)instrumentSample );
                 break;
                 
-            case InstrumentManagerClient.INSTRUMENT_TYPE_VALUE:
+            case DefaultInstrumentManager.INSTRUMENT_TYPE_VALUE:
                 addValueInstrumentListener( (AbstractValueInstrumentSample)instrumentSample );
                 break;
                 
@@ -642,11 +645,11 @@ public class InstrumentProxy
             // Remove the sample from the listener list for this Instrument.
             switch ( m_type )
             {
-            case InstrumentManagerClient.INSTRUMENT_TYPE_COUNTER:
+            case DefaultInstrumentManager.INSTRUMENT_TYPE_COUNTER:
                 removeCounterInstrumentListener( (CounterInstrumentSample)instrumentSample );
                 break;
                 
-            case InstrumentManagerClient.INSTRUMENT_TYPE_VALUE:
+            case DefaultInstrumentManager.INSTRUMENT_TYPE_VALUE:
                 removeValueInstrumentListener( (AbstractValueInstrumentSample)instrumentSample );
                 break;
                 
@@ -699,7 +702,7 @@ public class InstrumentProxy
     }
     
     /**
-     * Returns a InstrumentSampleDescriptorLocal based on its name.  If the
+     * Returns an InstrumentSampleDescriptor based on its name.  If the
      *  requested sample is invalid in any way, then an expired Descriptor
      *  will be returned.
      *
@@ -710,10 +713,10 @@ public class InstrumentProxy
      *                    lease which is shorter or longer than the requested
      *                    period.
      * @param sampleType Type of sample to request.  Must be one of the
-     *                   following:  InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_COUNTER,
-     *                   InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MINIMUM,
-     *                   InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MAXIMUM,
-     *                   InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MEAN.
+     *                   following:  DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_COUNTER,
+     *                   DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MINIMUM,
+     *                   DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MAXIMUM,
+     *                   DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MEAN.
      *
      * @return The requested InstrumentSample.
      *
@@ -772,9 +775,9 @@ public class InstrumentProxy
      * @return An array of Descriptors for the InstrumentSamples in the
      *         Instrument.
      */
-    InstrumentSampleDescriptorLocal[] getInstrumentSampleDescriptors()
+    InstrumentSampleDescriptor[] getInstrumentSampleDescriptors()
     {
-        InstrumentSampleDescriptorLocal[] descriptors = m_sampleDescriptorArray;
+        InstrumentSampleDescriptor[] descriptors = m_sampleDescriptorArray;
         if ( descriptors == null )
         {
             descriptors = updateInstrumentSampleDescriptorArray();
@@ -801,7 +804,7 @@ public class InstrumentProxy
      *  receive updates of the value of the Instrument.
      *
      * @param listener InstrumentListener which will start receiving
-     *                 profile updates.
+     *                 updates.
      */
     private void addInstrumentListener( InstrumentListener listener )
     {
@@ -834,7 +837,7 @@ public class InstrumentProxy
      *  receive updates of the value of the Instrument.
      *
      * @param listener InstrumentListener which will stop receiving
-     *                 profile updates.
+     *                 updates.
      */
     private void removeInstrumentListener( InstrumentListener listener )
     {
@@ -939,12 +942,12 @@ public class InstrumentProxy
     }
     
     /**
-     * Updates the cached array of InstrumentSampleDescriptorLocals taking
+     * Updates the cached array of InstrumentSampleDescriptors taking
      *  synchronization into account.
      *
      * @return An array of the InstrumentSampleDescriptors.
      */
-    private InstrumentSampleDescriptorLocal[] updateInstrumentSampleDescriptorArray()
+    private InstrumentSampleDescriptor[] updateInstrumentSampleDescriptorArray()
     {
         synchronized(this)
         {
@@ -954,7 +957,7 @@ public class InstrumentProxy
             }
             
             m_sampleDescriptorArray =
-                new InstrumentSampleDescriptorLocal[ m_sampleArray.length ];
+                new InstrumentSampleDescriptor[ m_sampleArray.length ];
             for ( int i = 0; i < m_sampleArray.length; i++ )
             {
                 m_sampleDescriptorArray[i] = m_sampleArray[i].getDescriptor();
@@ -1084,11 +1087,11 @@ public class InstrumentProxy
     {
         switch ( type )
         {
-        case InstrumentManagerClient.INSTRUMENT_TYPE_NONE:
+        case DefaultInstrumentManager.INSTRUMENT_TYPE_NONE:
             return "none";
-        case InstrumentManagerClient.INSTRUMENT_TYPE_COUNTER:
+        case DefaultInstrumentManager.INSTRUMENT_TYPE_COUNTER:
             return "counter";
-        case InstrumentManagerClient.INSTRUMENT_TYPE_VALUE:
+        case DefaultInstrumentManager.INSTRUMENT_TYPE_VALUE:
             return "value";
         default:
             throw new IllegalArgumentException( type + " is not a known Instrument type." );

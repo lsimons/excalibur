@@ -15,27 +15,25 @@
  * limitations under the License.
  */
 
-package org.apache.excalibur.instrument.manager.interfaces;
+package org.apache.excalibur.instrument.manager;
 
 /**
- * Thrown when a Instrument can not be found.
+ * Thrown when a InstrumentSample can not be found.
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
- * @version CVS $Revision: 1.4 $ $Date: 2004/02/28 11:47:19 $
- * @since 4.1
  */
-public class NoSuchInstrumentException
+public class NoSuchInstrumentSampleException
     extends RuntimeException
 {
     /*---------------------------------------------------------------
      * Constructors
      *-------------------------------------------------------------*/
     /**
-     * Construct a new NoSuchInstrumentException instance.
+     * Construct a new NoSuchInstrumentSampleException instance.
      *
      * @param message The detail message for this exception.
      */
-    public NoSuchInstrumentException( String message )
+    public NoSuchInstrumentSampleException( String message )
     {
         super( message );
     }

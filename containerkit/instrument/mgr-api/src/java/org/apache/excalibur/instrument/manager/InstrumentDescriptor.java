@@ -15,15 +15,13 @@
  * limitations under the License.
  */
 
-package org.apache.excalibur.instrument.manager.interfaces;
+package org.apache.excalibur.instrument.manager;
 
 /**
  * Describes a Instrument and acts as a Proxy to protect the original
  *  Instrument.
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
- * @version CVS $Revision: 1.4 $ $Date: 2004/02/28 11:47:19 $
- * @since 4.1
  */
 public interface InstrumentDescriptor
 {
@@ -63,9 +61,9 @@ public interface InstrumentDescriptor
     
     /**
      * Returns the type of the Instrument.  Possible values include
-     *  InstrumentManagerClient.INSTRUMENT_TYPE_COUNTER,
-     *  InstrumentManagerClient.INSTRUMENT_TYPE_VALUE or
-     *  InstrumentManagerClient.INSTRUMENT_TYPE_NONE, if the type was never set.
+     *  DefaultInstrumentManager.INSTRUMENT_TYPE_COUNTER,
+     *  DefaultInstrumentManager.INSTRUMENT_TYPE_VALUE or
+     *  DefaultInstrumentManager.INSTRUMENT_TYPE_NONE, if the type was never set.
      *
      * @return The type of the Instrument.
      */
@@ -80,6 +78,54 @@ public interface InstrumentDescriptor
      */
     InstrumentableDescriptor getInstrumentableDescriptor();
     
+    /**
+     * Adds a CounterInstrumentListener to the list of listeners which will
+     *  receive updates of the value of the Instrument.
+     *
+     * @param listener CounterInstrumentListener which will start receiving
+     *                 profile updates.
+     *
+     * @throws IllegalStateException If the Instrument's type is not
+     *         DefaultInstrumentManager.INSTRUMENT_TYPE_COUNTER.
+     */
+    void addCounterInstrumentListener( CounterInstrumentListener listener );
+    
+    /**
+     * Removes a InstrumentListener from the list of listeners which will
+     *  receive profile events.
+     *
+     * @param listener InstrumentListener which will stop receiving profile
+     *                 events.
+     *
+     * @throws IllegalStateException If the Instrument's type is not
+     *         DefaultInstrumentManager.PROFILE_POINT_TYPE_COUNTER.
+     */
+    void removeCounterInstrumentListener( CounterInstrumentListener listener );
+    
+    /**
+     * Adds a ValueInstrumentListener to the list of listeners which will
+     *  receive updates of the value of the Instrument.
+     *
+     * @param listener ValueInstrumentListener which will start receiving
+     *                 profile updates.
+     *
+     * @throws IllegalStateException If the Instrument's type is not
+     *         DefaultInstrumentManager.INSTRUMENT_TYPE_VALUE.
+     */
+    void addValueInstrumentListener( ValueInstrumentListener listener );
+        
+    /**
+     * Removes a InstrumentListener from the list of listeners which will
+     *  receive profile events.
+     *
+     * @param listener InstrumentListener which will stop receiving profile
+     *                 events.
+     *
+     * @throws IllegalStateException If the Instrument's type is not
+     *         DefaultInstrumentManager.INSTRUMENT_TYPE_VALUE.
+     */
+    void removeValueInstrumentListener( ValueInstrumentListener listener );
+
     /**
      * Returns a InstrumentSampleDescriptor based on its name.
      *
@@ -105,10 +151,10 @@ public interface InstrumentDescriptor
      *                    lease which is shorter or longer than the requested
      *                    period.
      * @param sampleType Type of sample to request.  Must be one of the
-     *                   following:  InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_COUNTER,
-     *                   InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MINIMUM,
-     *                   InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MAXIMUM,
-     *                   InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MEAN.
+     *                   following:  DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_COUNTER,
+     *                   DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MINIMUM,
+     *                   DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MAXIMUM,
+     *                   DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MEAN.
      *
      * @return A Descriptor of the requested InstrumentSample.
      */

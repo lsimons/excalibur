@@ -18,21 +18,23 @@
 package org.apache.excalibur.instrument.manager;
 
 /**
- * Objects which implement the InstrumentSampleListener interface can register
- *  themselves with InstrumentSample instances to receive updates on their value.
+ * Thrown when a Instrumentable can not be found.
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
- * @version CVS $Revision: 1.4 $ $Date: 2004/02/28 11:47:25 $
- * @since 4.1
  */
-public interface InstrumentSampleListener
+public class NoSuchInstrumentableException
+    extends RuntimeException
 {
+    /*---------------------------------------------------------------
+     * Constructors
+     *-------------------------------------------------------------*/
     /**
-     * Called by a InstrumentSample whenever its value is changed.
+     * Construct a new NoSuchInstrumentableException instance.
      *
-     * @param InstrumentSampleName The name of the InstrumentSample whose value was changed.
-     * @param value The new value.
-     * @param time The time that the InstrumentSample value was changed.
+     * @param message The detail message for this exception.
      */
-    void setValue( String InstrumentSampleName, int value, long time );
+    public NoSuchInstrumentableException( String message )
+    {
+        super( message );
+    }
 }

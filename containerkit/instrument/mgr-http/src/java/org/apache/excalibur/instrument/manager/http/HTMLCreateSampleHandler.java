@@ -22,10 +22,10 @@ import java.io.PrintWriter;
 import java.util.Map;
 
 import org.apache.excalibur.instrument.manager.http.server.HTTPRedirect;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentSampleDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.NoSuchInstrumentException;
+import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
+import org.apache.excalibur.instrument.manager.InstrumentDescriptor;
+import org.apache.excalibur.instrument.manager.InstrumentSampleDescriptor;
+import org.apache.excalibur.instrument.manager.NoSuchInstrumentException;
 
 /**
  *
@@ -42,9 +42,9 @@ public class HTMLCreateSampleHandler
     /**
      * Creates a new HTMLCreateSampleHandler.
      *
-     * @param manager Reference to the InstrumentManagerClient.
+     * @param manager Reference to the DefaultInstrumentManager.
      */
-    public HTMLCreateSampleHandler( InstrumentManagerClient manager )
+    public HTMLCreateSampleHandler( DefaultInstrumentManager manager )
     {
         super( "/create-sample.html", manager );
     }
@@ -72,7 +72,7 @@ public class HTMLCreateSampleHandler
         InstrumentDescriptor desc;
         try
         {
-            desc = getInstrumentManagerClient().locateInstrumentDescriptor( name );
+            desc = getInstrumentManager().locateInstrumentDescriptor( name );
         }
         catch ( NoSuchInstrumentException e )
         {

@@ -22,9 +22,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentSampleDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.NoSuchInstrumentSampleException;
+import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
+import org.apache.excalibur.instrument.manager.InstrumentSampleDescriptor;
+import org.apache.excalibur.instrument.manager.NoSuchInstrumentSampleException;
 
 /**
  *
@@ -41,9 +41,9 @@ public class XMLSampleLeaseHandler
     /**
      * Creates a new XMLSampleLeaseHandler.
      *
-     * @param manager Reference to the InstrumentManagerClient.
+     * @param manager Reference to the DefaultInstrumentManager.
      */
-    public XMLSampleLeaseHandler( InstrumentManagerClient manager )
+    public XMLSampleLeaseHandler( DefaultInstrumentManager manager )
     {
         super( "/sample-lease.xml", manager );
     }
@@ -68,7 +68,7 @@ public class XMLSampleLeaseHandler
         InstrumentSampleDescriptor desc;
         try
         {
-            desc = getInstrumentManagerClient().locateInstrumentSampleDescriptor( name );
+            desc = getInstrumentManager().locateInstrumentSampleDescriptor( name );
         }
         catch ( NoSuchInstrumentSampleException e )
         {

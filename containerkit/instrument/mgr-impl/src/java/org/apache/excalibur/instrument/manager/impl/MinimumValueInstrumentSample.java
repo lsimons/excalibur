@@ -15,32 +15,31 @@
  * limitations under the License.
  */
 
-package org.apache.excalibur.instrument.manager;
+package org.apache.excalibur.instrument.manager.impl;
 
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
+
+import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
 
 /**
- * A InstrumentSample which stores the mean value set during the sample
+ * A InstrumentSample which stores the minimum value set during the sample
  *  period.
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
- * @version CVS $Revision: 1.4 $ $Date: 2004/02/28 11:47:25 $
- * @since 4.1
  */
-class MeanValueInstrumentSample
+class MinimumValueInstrumentSample
     extends AbstractValueInstrumentSample
 {
-    /** Total of all values seen during the sample period. */
-    private long m_valueTotal;
+    /** Last value set to the sample for use for sample periods where no value is set. */
+    private int m_lastValue;
     
     /*---------------------------------------------------------------
      * Constructors
      *-------------------------------------------------------------*/
     /**
-     * Creates a new MeanValueInstrumentSample
+     * Creates a new MinimumValueInstrumentSample
      *
      * @param instrumentProxy The InstrumentProxy which owns the
      *                        InstrumentSample.
@@ -50,12 +49,12 @@ class MeanValueInstrumentSample
      * @param description The description of the new InstrumentSample.
      * @param lease The length of the lease in milliseconds.
      */
-    MeanValueInstrumentSample( InstrumentProxy instrumentProxy,
-                               String name,
-                               long interval,
-                               int size,
-                               String description,
-                               long lease )
+    MinimumValueInstrumentSample( InstrumentProxy instrumentProxy,
+                                  String name,
+                                  long interval,
+                                  int size,
+                                  String description,
+                                  long lease )
     {
         super( instrumentProxy, name, interval, size, description, lease );
     }
@@ -70,7 +69,7 @@ class MeanValueInstrumentSample
      */
     public int getType()
     {
-        return InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MEAN;
+        return DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MINIMUM;
     }
     
     /*---------------------------------------------------------------
@@ -84,9 +83,8 @@ class MeanValueInstrumentSample
      */
     protected void advanceToNextSample()
     {
-        // Leave the value as is so that it will propagate to the next sample
-        //  if needed.  But reset the value count so that new values will not
-        //  be affected by the old.
+        // Reset the value count and set the value to the last known value.
+        m_value = m_lastValue;
         m_valueCount = 0;
     }
 
@@ -97,7 +95,7 @@ class MeanValueInstrumentSample
      */
     protected int getFillValue()
     {
-        return m_value;
+        return m_lastValue;
     }
     
     /**
@@ -109,7 +107,7 @@ class MeanValueInstrumentSample
     {
         super.saveState( state );
         
-        state.setAttribute( "value-total", Long.toString( m_valueTotal ) );
+        state.setAttribute( "last-value", Integer.toString( m_lastValue ) );
     }
     
     /**
@@ -128,7 +126,7 @@ class MeanValueInstrumentSample
     {
         super.loadState( value, state );
         
-        m_valueTotal = state.getAttributeAsLong( "value-total" );
+        m_lastValue = state.getAttributeAsInteger( "last-value" );
     }
     
     /**
@@ -139,7 +137,7 @@ class MeanValueInstrumentSample
     {
         super.postSaveNeedsReset();
         
-        m_valueTotal = 0;
+        m_lastValue = 0;
     }
     
     /*---------------------------------------------------------------
@@ -147,13 +145,14 @@ class MeanValueInstrumentSample
      *-------------------------------------------------------------*/
     /**
      * Sets the current value of the sample.  The value will be set as the
-     *  mean of the new value and other values seen during the sample period.
+     *  sample value if it is the smallest value seen during the sample period.
      *
      * @param value New sample value.
      * @param time Time that the new sample arrives.
      */
     protected void setValueInner( int value, long time )
     {
+        boolean update;
         int sampleValue;
         long sampleTime;
         
@@ -161,23 +160,34 @@ class MeanValueInstrumentSample
         {
             update( time );
             
+            // Always store the last value to use for samples where a value is not set.
+            m_lastValue = value;
+            
             if ( m_valueCount > 0 )
             {
                 // Additional sample
                 m_valueCount++;
-                m_valueTotal += value;
-                m_value = (int)(m_valueTotal / m_valueCount);
+                if ( value < m_value )
+                {
+                    m_value = value;
+                    update = true;
+                }
             }
             else
             {
                 // First value of this sample.
                 m_valueCount = 1;
-                m_valueTotal = m_value = value;
+                m_value = value;
             }
+            
             sampleValue = m_value;
             sampleTime = m_time;
+                update = true;
         }
         
-        updateListeners( sampleValue, sampleTime );
+        if ( update )
+        {
+            updateListeners( sampleValue, sampleTime );
+        }
     }
 }

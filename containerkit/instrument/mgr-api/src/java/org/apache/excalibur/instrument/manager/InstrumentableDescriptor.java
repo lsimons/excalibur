@@ -15,15 +15,13 @@
  * limitations under the License.
  */
 
-package org.apache.excalibur.instrument.manager.interfaces;
+package org.apache.excalibur.instrument.manager;
 
 /**
  * Describes a Instrumentable and acts as a Proxy to protect the original
  *  Instrumentable.
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
- * @version CVS $Revision: 1.4 $ $Date: 2004/02/28 11:47:19 $
- * @since 4.1
  */
 public interface InstrumentableDescriptor
 {
@@ -44,10 +42,10 @@ public interface InstrumentableDescriptor
     boolean isRegistered();
 
     /**
-     * Gets the name for the Instrumentable.  The Instrumentable Name is used to
-     *  uniquely identify the Instrumentable during the configuration of the
-     *  Profiler and to gain access to a InstrumentableDescriptor through a
-     *  ProfilerManager.
+     * Gets the name for the Instrumentable.  The Instrumentable Name is used
+     *  to uniquely identify the Instrumentable during its configuration and to
+     *  gain access to a InstrumentableDescriptor through a
+     *  DefaultInstrumentManager.
      *
      * @return The name used to identify a Instrumentable.
      */

@@ -26,7 +26,7 @@ import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.logger.ConsoleLogger;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.excalibur.instrument.InstrumentManager;
-import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
+import org.apache.excalibur.instrument.manager.impl.DefaultInstrumentManagerImpl;
 
 /**
  * ContextManagerTestCase does XYZ
@@ -50,7 +50,7 @@ public class ContextManagerTestCase extends TestCase implements ContainerManager
         config.setContainerConfiguration( "resource://org/apache/avalon/fortress/test/data/test1.xconf" );
         config.setLoggerManagerConfiguration( "resource://org/apache/avalon/fortress/test/data/test1.xlog" );
 
-        m_instrManager = new DefaultInstrumentManager();
+        m_instrManager = new DefaultInstrumentManagerImpl();
         ContainerUtil.enableLogging(m_instrManager, new ConsoleLogger());
         ContainerUtil.initialize(m_instrManager);
         config.setInstrumentManager(m_instrManager);

@@ -21,15 +21,13 @@ package org.apache.excalibur.instrument.manager;
  * Interface for classes which can be registered as Connectors for
  *  InstrumentManagers.
  *
- * The InstrumentManager is smart about handling connectors which implement
- *  the LogEnabled, Configurable, Initializable, Startable and Disposable
- *  interfaces.
+ * The DefaultInstrumentManager is smart about handling connectors which
+ *  implement the LogEnabled, Configurable, Initializable, Startable and
+ *  Disposable interfaces.
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
- * @version CVS $Revision: 1.4 $ $Date: 2004/02/28 11:47:25 $
- * @since 4.1
  */
-public interface InstrumentManagerConnector
+public interface DefaultInstrumentManagerConnector
 {
     /**
      * Set the InstrumentManager to which the Connecter will provide

@@ -21,8 +21,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentableDescriptor;
+import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
+import org.apache.excalibur.instrument.manager.InstrumentableDescriptor;
 
 /**
  *
@@ -39,9 +39,9 @@ public class HTMLInstrumentManagerHandler
     /**
      * Creates a new HTMLInstrumentManagerHandler.
      *
-     * @param manager Reference to the InstrumentManagerClient.
+     * @param manager Reference to the DefaultInstrumentManager.
      */
-    public HTMLInstrumentManagerHandler( InstrumentManagerClient manager )
+    public HTMLInstrumentManagerHandler( DefaultInstrumentManager manager )
     {
         super( "/instrument-manager.html", manager );
     }
@@ -71,7 +71,7 @@ public class HTMLInstrumentManagerHandler
         
         // This is the root
         out.println( "<html>" );
-        out.println( "<head><title>" + getInstrumentManagerClient().getDescription()
+        out.println( "<head><title>" + getInstrumentManager().getDescription()
             + "</title></head>" );
         out.println( "<body>" );
         
@@ -80,13 +80,13 @@ public class HTMLInstrumentManagerHandler
         
         out.println( "<h2>Instrument Manager</h2>" );
         startTable( out );
-        tableRow( out, 0, "Name", getInstrumentManagerClient().getName() );
-        tableRow( out, 0, "Description", getInstrumentManagerClient().getDescription() );
+        tableRow( out, 0, "Name", getInstrumentManager().getName() );
+        tableRow( out, 0, "Description", getInstrumentManager().getDescription() );
         tableRow( out, 0, "GC", gcLabel );
         endTable( out );
         
         InstrumentableDescriptor[] instrumentables =
-            getInstrumentManagerClient().getInstrumentableDescriptors();
+            getInstrumentManager().getInstrumentableDescriptors();
         if ( instrumentables.length > 0 )
         {
             out.println( "<h2>Instrumentables</h2>" );

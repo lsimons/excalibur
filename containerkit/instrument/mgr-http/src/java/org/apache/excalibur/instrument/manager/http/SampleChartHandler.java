@@ -32,10 +32,10 @@ import java.util.Map;
 import org.apache.excalibur.instrument.manager.http.server.AbstractHTTPURLHandler;
 import org.apache.excalibur.instrument.manager.http.server.HTTPRedirect;
 import org.apache.excalibur.instrument.manager.http.server.URLCoder;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentSampleDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentSampleSnapshot;
-import org.apache.excalibur.instrument.manager.interfaces.NoSuchInstrumentSampleException;
+import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
+import org.apache.excalibur.instrument.manager.InstrumentSampleDescriptor;
+import org.apache.excalibur.instrument.manager.InstrumentSampleSnapshot;
+import org.apache.excalibur.instrument.manager.NoSuchInstrumentSampleException;
 
 /**
  *
@@ -47,7 +47,7 @@ public class SampleChartHandler
     extends AbstractHTTPURLHandler
 {
     /** The instrument manager */
-    private InstrumentManagerClient m_manager;
+    private DefaultInstrumentManager m_manager;
     
     /*---------------------------------------------------------------
      * Constructors
@@ -56,9 +56,9 @@ public class SampleChartHandler
      * Creates a new SampleChartHandler.
      *
      * @param path The path handled by this handler.
-     * @param manager Reference to the instrument manager client interface.
+     * @param manager Reference to the instrument manager interface.
      */
-    public SampleChartHandler( InstrumentManagerClient manager )
+    public SampleChartHandler( DefaultInstrumentManager manager )
     {
         super( "/sample-chart.jpg", CONTENT_TYPE_IMAGE_JPEG,
             InstrumentManagerHTTPConnector.ENCODING );

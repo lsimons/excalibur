@@ -22,9 +22,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.NoSuchInstrumentException;
+import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
+import org.apache.excalibur.instrument.manager.InstrumentDescriptor;
+import org.apache.excalibur.instrument.manager.NoSuchInstrumentException;
 
 /**
  *
@@ -44,7 +44,7 @@ public class XMLInstrumentHandler
      * @param path The path handled by this handler.
      * @param contentType The content type.
      */
-    public XMLInstrumentHandler( InstrumentManagerClient manager )
+    public XMLInstrumentHandler( DefaultInstrumentManager manager )
     {
         super( "/instrument.xml", manager );
     }
@@ -69,7 +69,7 @@ public class XMLInstrumentHandler
         InstrumentDescriptor desc;
         try
         {
-            desc = getInstrumentManagerClient().locateInstrumentDescriptor( name );
+            desc = getInstrumentManager().locateInstrumentDescriptor( name );
         }
         catch ( NoSuchInstrumentException e )
         {

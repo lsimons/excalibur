@@ -15,15 +15,13 @@
  * limitations under the License.
  */
 
-package org.apache.excalibur.instrument.manager.interfaces;
+package org.apache.excalibur.instrument.manager;
 
 /**
  * Describes an InstrumentSample and acts as a Proxy to protect the original
  *  InstrumentSample object.
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
- * @version CVS $Revision: 1.4 $ $Date: 2004/02/28 11:47:19 $
- * @since 4.1
  */
 public interface InstrumentSampleDescriptor
 {
@@ -65,10 +63,10 @@ public interface InstrumentSampleDescriptor
     
     /**
      * Returns the type of the Instrument Sample.  Possible values include
-     *  InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_COUNTER,
-     *  InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MAXIMUM,
-     *  InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MEAN, or
-     *  InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MINIMUM.
+     *  DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_COUNTER,
+     *  DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MAXIMUM,
+     *  DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MEAN, or
+     *  DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MINIMUM.
      *
      * @return The type of the Instrument Sample.
      */
@@ -107,6 +105,22 @@ public interface InstrumentSampleDescriptor
      * @return A reference to the descriptor of the Instrument of the sample.
      */
     InstrumentDescriptor getInstrumentDescriptor();
+    
+    /**
+     * Registers a InstrumentSampleListener with a InstrumentSample given a name.
+     *
+     * @param listener The listener which should start receiving updates from the
+     *                 InstrumentSample.
+     */
+    void addInstrumentSampleListener( InstrumentSampleListener listener );
+    
+    /**
+     * Unregisters a InstrumentSampleListener from a InstrumentSample given a name.
+     *
+     * @param listener The listener which should stop receiving updates from the
+     *                 InstrumentSample.
+     */
+    void removeInstrumentSampleListener( InstrumentSampleListener listener );
     
     /**
      * Returns the time that the current lease expires.  Permanent samples will

@@ -47,7 +47,7 @@ import org.d_haven.event.Sink;
 import org.d_haven.event.Pipe;
 import org.d_haven.event.command.*;
 import org.apache.excalibur.instrument.InstrumentManager;
-import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
+import org.apache.excalibur.instrument.manager.impl.DefaultInstrumentManagerImpl;
 import org.d_haven.mpool.DefaultPoolManager;
 import org.d_haven.mpool.PoolManager;
 import org.apache.excalibur.source.Source;
@@ -164,6 +164,7 @@ public class ContextManager
      * Either supplied via rootContext or created locally.
      */
     protected InstrumentManager m_instrumentManager;
+    
     /**
      * The components that are "owned" by this context and should
      * be disposed by it. Any manager that is created as a result
@@ -960,7 +961,8 @@ public class ContextManager
                     instrumentConfig.getAttribute( "logger", "system.instrument" ) );
 
             // Set up the Instrument Manager
-            final DefaultInstrumentManager instrumentManager = new DefaultInstrumentManager();
+            final DefaultInstrumentManagerImpl instrumentManager =
+                new DefaultInstrumentManagerImpl();
             instrumentManager.enableLogging( imLogger );
             instrumentManager.configure( instrumentConfig );
             instrumentManager.initialize();

@@ -20,11 +20,11 @@ package org.apache.excalibur.instrument.manager.http;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentableDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentSampleDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentSampleSnapshot;
+import org.apache.excalibur.instrument.manager.InstrumentableDescriptor;
+import org.apache.excalibur.instrument.manager.InstrumentDescriptor;
+import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
+import org.apache.excalibur.instrument.manager.InstrumentSampleDescriptor;
+import org.apache.excalibur.instrument.manager.InstrumentSampleSnapshot;
 
 /**
  *
@@ -44,9 +44,9 @@ public abstract class AbstractXMLHandler
      * Creates a new AbstractXMLHandler.
      *
      * @param path The path handled by this handler.
-     * @param manager Reference to the instrument manager client interface.
+     * @param manager Reference to the instrument manager interface.
      */
-    public AbstractXMLHandler( String path, InstrumentManagerClient manager )
+    public AbstractXMLHandler( String path, DefaultInstrumentManager manager )
     {
         super( path, CONTENT_TYPE_TEXT_XML, manager );
     }
@@ -74,7 +74,7 @@ public abstract class AbstractXMLHandler
     }
     
     protected void outputInstrumentManager( PrintWriter out,
-                                            InstrumentManagerClient manager,
+                                            DefaultInstrumentManager manager,
                                             String indent,
                                             boolean recurse,
                                             boolean packed )

@@ -22,9 +22,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentSampleDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.NoSuchInstrumentSampleException;
+import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
+import org.apache.excalibur.instrument.manager.InstrumentSampleDescriptor;
+import org.apache.excalibur.instrument.manager.NoSuchInstrumentSampleException;
 
 /**
  *
@@ -44,7 +44,7 @@ public class XMLSampleHandler
      * @param path The path handled by this handler.
      * @param contentType The content type.
      */
-    public XMLSampleHandler( InstrumentManagerClient manager )
+    public XMLSampleHandler( DefaultInstrumentManager manager )
     {
         super( "/sample.xml", manager );
     }
@@ -68,7 +68,7 @@ public class XMLSampleHandler
         InstrumentSampleDescriptor desc;
         try
         {
-            desc = getInstrumentManagerClient().locateInstrumentSampleDescriptor( name );
+            desc = getInstrumentManager().locateInstrumentSampleDescriptor( name );
         }
         catch ( NoSuchInstrumentSampleException e )
         {

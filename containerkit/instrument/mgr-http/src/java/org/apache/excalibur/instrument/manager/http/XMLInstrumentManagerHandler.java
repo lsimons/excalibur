@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
+import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
 
 /**
  *
@@ -41,7 +41,7 @@ public class XMLInstrumentManagerHandler
      * @param path The path handled by this handler.
      * @param contentType The content type.
      */
-    public XMLInstrumentManagerHandler( InstrumentManagerClient manager )
+    public XMLInstrumentManagerHandler( DefaultInstrumentManager manager )
     {
         super( "/instrument-manager.xml", manager );
     }
@@ -63,7 +63,7 @@ public class XMLInstrumentManagerHandler
         boolean recurse = ( getParameter( parameters, "recurse", null ) != null );
         
         out.println( InstrumentManagerHTTPConnector.XML_BANNER );
-        outputInstrumentManager( out, getInstrumentManagerClient(), "", recurse, packed );
+        outputInstrumentManager( out, getInstrumentManager(), "", recurse, packed );
     }
             
     /*---------------------------------------------------------------

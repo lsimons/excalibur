@@ -15,10 +15,12 @@
  * limitations under the License.
  */
 
-package org.apache.excalibur.instrument.manager;
+package org.apache.excalibur.instrument.manager.impl;
 
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentSampleSnapshot;
+import org.apache.excalibur.instrument.manager.InstrumentDescriptor;
+import org.apache.excalibur.instrument.manager.InstrumentSampleDescriptor;
+import org.apache.excalibur.instrument.manager.InstrumentSampleListener;
+import org.apache.excalibur.instrument.manager.InstrumentSampleSnapshot;
 
 /**
  * Describes an InstrumentSample and acts as a Proxy to protect the original
@@ -28,8 +30,8 @@ import org.apache.excalibur.instrument.manager.interfaces.InstrumentSampleSnapsh
  * @version CVS $Revision: 1.4 $ $Date: 2004/02/28 11:47:25 $
  * @since 4.1
  */
-public class InstrumentSampleDescriptorLocalImpl
-    implements InstrumentSampleDescriptorLocal
+public class InstrumentSampleDescriptorImpl
+    implements InstrumentSampleDescriptor
 {
     /** The InstrumentSample. */
     private InstrumentSample m_instrumentSample;
@@ -42,7 +44,7 @@ public class InstrumentSampleDescriptorLocalImpl
      *
      * @param InstrumentSample InstrumentSample being described.
      */
-    InstrumentSampleDescriptorLocalImpl( InstrumentSample InstrumentSample )
+    InstrumentSampleDescriptorImpl( InstrumentSample InstrumentSample )
     {
         m_instrumentSample = InstrumentSample;
     }
@@ -158,7 +160,29 @@ public class InstrumentSampleDescriptorLocalImpl
      */
     public InstrumentDescriptor getInstrumentDescriptor()
     {
-        return getInstrumentDescriptorLocal();
+        return m_instrumentSample.getInstrumentProxy().getDescriptor();
+    }
+    
+    /**
+     * Registers a InstrumentSampleListener with a InstrumentSample given a name.
+     *
+     * @param listener The listener which should start receiving updates from the
+     *                 InstrumentSample.
+     */
+    public void addInstrumentSampleListener( InstrumentSampleListener listener )
+    {
+        m_instrumentSample.addInstrumentSampleListener( listener );
+    }
+    
+    /**
+     * Unregisters a InstrumentSampleListener from a InstrumentSample given a name.
+     *
+     * @param listener The listener which should stop receiving updates from the
+     *                 InstrumentSample.
+     */
+    public void removeInstrumentSampleListener( InstrumentSampleListener listener )
+    {
+        m_instrumentSample.removeInstrumentSampleListener( listener );
     }
     
     /**
@@ -207,41 +231,6 @@ public class InstrumentSampleDescriptorLocalImpl
     public int getStateVersion()
     {
         return m_instrumentSample.getStateVersion();
-    }
-    
-    /*---------------------------------------------------------------
-     * Methods InstrumentSampleDescriptorLocal
-     *-------------------------------------------------------------*/
-    /**
-     * Returns a reference to the descriptor of the Instrument of the sample.
-     *
-     * @return A reference to the descriptor of the Instrument of the sample.
-     */
-    public InstrumentDescriptorLocal getInstrumentDescriptorLocal()
-    {
-        return m_instrumentSample.getInstrumentProxy().getDescriptor();
-    }
-    
-    /**
-     * Registers a InstrumentSampleListener with a InstrumentSample given a name.
-     *
-     * @param listener The listener which should start receiving updates from the
-     *                 InstrumentSample.
-     */
-    public void addInstrumentSampleListener( InstrumentSampleListener listener )
-    {
-        m_instrumentSample.addInstrumentSampleListener( listener );
-    }
-    
-    /**
-     * Unregisters a InstrumentSampleListener from a InstrumentSample given a name.
-     *
-     * @param listener The listener which should stop receiving updates from the
-     *                 InstrumentSample.
-     */
-    public void removeInstrumentSampleListener( InstrumentSampleListener listener )
-    {
-        m_instrumentSample.removeInstrumentSampleListener( listener );
     }
 }
 

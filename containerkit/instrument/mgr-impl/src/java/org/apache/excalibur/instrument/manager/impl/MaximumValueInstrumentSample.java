@@ -15,20 +15,19 @@
  * limitations under the License.
  */
 
-package org.apache.excalibur.instrument.manager;
+package org.apache.excalibur.instrument.manager.impl;
 
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
+
+import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
 
 /**
  * A InstrumentSample which stores the maximum value set during the sample
  *  period.
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
- * @version CVS $Revision: 1.4 $ $Date: 2004/02/28 11:47:25 $
- * @since 4.1
  */
 class MaximumValueInstrumentSample
     extends AbstractValueInstrumentSample
@@ -70,7 +69,7 @@ class MaximumValueInstrumentSample
      */
     public int getType()
     {
-        return InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MAXIMUM;
+        return DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MAXIMUM;
     }
     
     /*---------------------------------------------------------------

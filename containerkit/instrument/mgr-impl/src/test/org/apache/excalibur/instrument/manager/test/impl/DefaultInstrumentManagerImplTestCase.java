@@ -15,33 +15,34 @@
  * limitations under the License.
  */
 
-package org.apache.excalibur.instrument.manager.test;
+package org.apache.excalibur.instrument.manager.test.impl;
 
 import junit.framework.TestCase;
 
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.avalon.framework.logger.ConsoleLogger;
-import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentableDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.NoSuchInstrumentException;
-import org.apache.excalibur.instrument.manager.interfaces.NoSuchInstrumentableException;
+
+import org.apache.excalibur.instrument.manager.impl.DefaultInstrumentManagerImpl;
+import org.apache.excalibur.instrument.manager.InstrumentDescriptor;
+import org.apache.excalibur.instrument.manager.InstrumentableDescriptor;
+import org.apache.excalibur.instrument.manager.NoSuchInstrumentException;
+import org.apache.excalibur.instrument.manager.NoSuchInstrumentableException;
 
 /**
- * Test of the DefaultInstrumentManager.
+ * Test of the DefaultInstrumentManagerImpl.
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  * @version CVS $Revision: 1.4 $ $Date: 2004/02/28 11:47:36 $
  */
-public class DefaultInstrumentManagerTestCase
+public class DefaultInstrumentManagerImplTestCase
     extends TestCase
 {
-    private DefaultInstrumentManager m_instrumentManager;
+    private DefaultInstrumentManagerImpl m_instrumentManager;
     
     /*---------------------------------------------------------------
      * Constructors
      *-------------------------------------------------------------*/
-    public DefaultInstrumentManagerTestCase( String name )
+    public DefaultInstrumentManagerImplTestCase( String name )
     {
         super( name );
     }
@@ -58,7 +59,7 @@ public class DefaultInstrumentManagerTestCase
         
         DefaultConfiguration instrumentConfig = new DefaultConfiguration( "instrument" );
         
-        m_instrumentManager = new DefaultInstrumentManager();
+        m_instrumentManager = new DefaultInstrumentManagerImpl();
         m_instrumentManager.enableLogging( new ConsoleLogger( ConsoleLogger.LEVEL_DEBUG ) );
         m_instrumentManager.configure( instrumentConfig );
         m_instrumentManager.initialize();

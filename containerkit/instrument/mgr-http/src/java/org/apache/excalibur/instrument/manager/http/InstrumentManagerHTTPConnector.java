@@ -28,10 +28,9 @@ import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.excalibur.instrument.AbstractLogEnabledInstrumentable;
 
 import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
-import org.apache.excalibur.instrument.manager.InstrumentManagerConnector;
+import org.apache.excalibur.instrument.manager.DefaultInstrumentManagerConnector;
 import org.apache.excalibur.instrument.manager.http.server.AbstractHTTPURLHandler;
 import org.apache.excalibur.instrument.manager.http.server.HTTPServer;
-import org.apache.excalibur.instrument.manager.InstrumentManagerClientLocalImpl;
 
 /**
  * An HTTP connector which allows a client to connect to the ServiceManager
@@ -47,7 +46,7 @@ import org.apache.excalibur.instrument.manager.InstrumentManagerClientLocalImpl;
  */
 public class InstrumentManagerHTTPConnector
     extends AbstractLogEnabledInstrumentable
-    implements InstrumentManagerConnector, Configurable, Startable
+    implements DefaultInstrumentManagerConnector, Configurable, Startable
 {
     /** The default port. */
     public static final int DEFAULT_PORT = 15080;
@@ -85,7 +84,7 @@ public class InstrumentManagerHTTPConnector
     }
 
     /*---------------------------------------------------------------
-     * InstrumentManagerConnector Methods
+     * DefaultInstrumentManagerConnector Methods
      *-------------------------------------------------------------*/
     /**
      * Set the InstrumentManager to which the Connecter will provide
@@ -134,27 +133,25 @@ public class InstrumentManagerHTTPConnector
     public void start()
         throws Exception
     {
-        InstrumentManagerClientLocalImpl client = new InstrumentManagerClientLocalImpl( m_manager );
-        
         // Register all of the helpers that we support
         if ( m_xml )
         {
             // XML
             String nameBase = "xml-";
             initAndRegisterHandler(
-                new XMLInstrumentManagerHandler( client ), nameBase + "instrument-manager" );
+                new XMLInstrumentManagerHandler( m_manager ), nameBase + "instrument-manager" );
             initAndRegisterHandler(
-                new XMLInstrumentableHandler( client ), nameBase + "instrumentable" );
+                new XMLInstrumentableHandler( m_manager ), nameBase + "instrumentable" );
             initAndRegisterHandler(
-                new XMLInstrumentHandler( client ), nameBase + "instrument" );
-            initAndRegisterHandler( new XMLSampleHandler( client ), nameBase + "sample" );
+                new XMLInstrumentHandler( m_manager ), nameBase + "instrument" );
+            initAndRegisterHandler( new XMLSampleHandler( m_manager ), nameBase + "sample" );
             initAndRegisterHandler(
-                new XMLSampleLeaseHandler( client ), nameBase + "sample-lease" );
+                new XMLSampleLeaseHandler( m_manager ), nameBase + "sample-lease" );
             initAndRegisterHandler(
-                new XMLCreateSampleHandler( client ), nameBase + "create-sample" );
-            initAndRegisterHandler(	new XMLSnapshotHandler( client ), nameBase + "snapshot" );
-            initAndRegisterHandler(	new XMLSnapshotsHandler( client ), nameBase + "snapshots" );
-            initAndRegisterHandler(	new XMLGCHandler( client ), nameBase + "gc" );
+                new XMLCreateSampleHandler( m_manager ), nameBase + "create-sample" );
+            initAndRegisterHandler(	new XMLSnapshotHandler( m_manager ), nameBase + "snapshot" );
+            initAndRegisterHandler(	new XMLSnapshotsHandler( m_manager ), nameBase + "snapshots" );
+            initAndRegisterHandler(	new XMLGCHandler( m_manager ), nameBase + "gc" );
         }
         
         if ( m_html )
@@ -162,19 +159,19 @@ public class InstrumentManagerHTTPConnector
             // HTML
             String nameBase = "html-";
             initAndRegisterHandler(
-                new HTMLInstrumentManagerHandler( client ), nameBase + "instrument-manager" );
+                new HTMLInstrumentManagerHandler( m_manager ), nameBase + "instrument-manager" );
             initAndRegisterHandler(
-                new HTMLInstrumentableHandler( client ), nameBase + "instrumentable" );
+                new HTMLInstrumentableHandler( m_manager ), nameBase + "instrumentable" );
             initAndRegisterHandler(
-                new HTMLInstrumentHandler( client ), nameBase + "instrument" );
-            initAndRegisterHandler( new HTMLSampleHandler( client ), nameBase + "sample" );
+                new HTMLInstrumentHandler( m_manager ), nameBase + "instrument" );
+            initAndRegisterHandler( new HTMLSampleHandler( m_manager ), nameBase + "sample" );
             initAndRegisterHandler(
-                new HTMLSampleLeaseHandler( client ), nameBase + "sample-lease" );
+                new HTMLSampleLeaseHandler( m_manager ), nameBase + "sample-lease" );
             initAndRegisterHandler(
-                new HTMLCreateSampleHandler( client ), nameBase + "create-sample" );
-            initAndRegisterHandler( new SampleChartHandler( client ), "sample-chart" );
-            initAndRegisterHandler(	new HTMLGCHandler( client ), nameBase + "gc" );
-            initAndRegisterHandler( new HTMLRootHandler( client ), nameBase + "root" );
+                new HTMLCreateSampleHandler( m_manager ), nameBase + "create-sample" );
+            initAndRegisterHandler( new SampleChartHandler( m_manager ), "sample-chart" );
+            initAndRegisterHandler(	new HTMLGCHandler( m_manager ), nameBase + "gc" );
+            initAndRegisterHandler( new HTMLRootHandler( m_manager ), nameBase + "root" );
         }
         
         getLogger().debug( "Starting Instrument Manager HTTP Connector" );

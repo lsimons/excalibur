@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.apache.excalibur.instrument.manager.interfaces;
+package org.apache.excalibur.instrument.manager;
 
 import org.apache.avalon.framework.configuration.ConfigurationException;
 
@@ -24,8 +24,6 @@ import org.apache.avalon.framework.configuration.ConfigurationException;
  *  These methods can be used on the server as well as the client.
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
- * @version CVS $Revision: 1.4 $ $Date: 2004/02/28 11:47:19 $
- * @since 4.1
  */
 public class InstrumentSampleUtils
 {
@@ -43,19 +41,19 @@ public class InstrumentSampleUtils
         
         if ( type.equalsIgnoreCase( "max" ) || type.equalsIgnoreCase( "maximum" ) )
         {
-            return InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MAXIMUM;
+            return DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MAXIMUM;
         }
         else if ( type.equalsIgnoreCase( "min" ) || type.equalsIgnoreCase( "minimum" ) )
         {
-            return InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MINIMUM;
+            return DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MINIMUM;
         }
         else if ( type.equalsIgnoreCase( "mean" ) )
         {
-            return InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MEAN;
+            return DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MEAN;
         }
         else if ( type.equalsIgnoreCase( "ctr" ) || type.equalsIgnoreCase( "counter" ) )
         {
-            return InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_COUNTER;
+            return DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_COUNTER;
         }
         else
         {
@@ -67,16 +65,16 @@ public class InstrumentSampleUtils
     {
         switch ( type )
         {
-        case InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MAXIMUM:
+        case DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MAXIMUM:
             return "maximum";
             
-        case InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MINIMUM:
+        case DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MINIMUM:
             return "minimum";
         
-        case InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MEAN:
+        case DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MEAN:
             return "mean";
             
-        case InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_COUNTER:
+        case DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_COUNTER:
             return "counter";
             
         default:

@@ -23,10 +23,10 @@ import java.util.Date;
 import java.util.Map;
 
 import org.apache.excalibur.instrument.manager.http.server.HTTPRedirect;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentSampleDescriptor;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentSampleSnapshot;
-import org.apache.excalibur.instrument.manager.interfaces.NoSuchInstrumentSampleException;
+import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
+import org.apache.excalibur.instrument.manager.InstrumentSampleDescriptor;
+import org.apache.excalibur.instrument.manager.InstrumentSampleSnapshot;
+import org.apache.excalibur.instrument.manager.NoSuchInstrumentSampleException;
 
 /**
  *
@@ -43,9 +43,9 @@ public class HTMLSampleHandler
     /**
      * Creates a new HTMLSampleHandler.
      *
-     * @param manager Reference to the InstrumentManagerClient.
+     * @param manager Reference to the DefaultInstrumentManager.
      */
-    public HTMLSampleHandler( InstrumentManagerClient manager )
+    public HTMLSampleHandler( DefaultInstrumentManager manager )
     {
         super( "/sample.html", manager );
     }
@@ -67,7 +67,7 @@ public class HTMLSampleHandler
         InstrumentSampleDescriptor desc;
         try
         {
-            desc = getInstrumentManagerClient().locateInstrumentSampleDescriptor( name );
+            desc = getInstrumentManager().locateInstrumentSampleDescriptor( name );
         }
         catch ( NoSuchInstrumentSampleException e )
         {
@@ -90,19 +90,19 @@ public class HTMLSampleHandler
         String type;
         switch ( desc.getType() )
         {
-        case InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_COUNTER:
+        case DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_COUNTER:
             type = "Counter";
             break;
             
-        case InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MAXIMUM:
+        case DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MAXIMUM:
             type = "Max Value";
             break;
             
-        case InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MINIMUM:
+        case DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MINIMUM:
             type = "Min Value";
             break;
             
-        case InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MEAN:
+        case DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MEAN:
             type = "Mean Value";
             break;
             

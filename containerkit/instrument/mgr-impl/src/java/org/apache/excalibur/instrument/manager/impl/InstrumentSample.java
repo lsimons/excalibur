@@ -15,12 +15,15 @@
  * limitations under the License.
  */
 
-package org.apache.excalibur.instrument.manager;
+package org.apache.excalibur.instrument.manager.impl;
 
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.logger.LogEnabled;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentSampleSnapshot;
+
+import org.apache.excalibur.instrument.manager.InstrumentSampleDescriptor;
+import org.apache.excalibur.instrument.manager.InstrumentSampleListener;
+import org.apache.excalibur.instrument.manager.InstrumentSampleSnapshot;
 
 /**
  * InstrumentSamples are used to provide an Instrument with state.  Samples
@@ -82,10 +85,10 @@ interface InstrumentSample
     
     /**
      * Returns the type of the Instrument Sample.  Possible values include
-     *  InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_COUNTER,
-     *  InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MAXIMUM,
-     *  InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MEAN, or
-     *  InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MINIMUM.
+     *  DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_COUNTER,
+     *  DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MAXIMUM,
+     *  DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MEAN, or
+     *  DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MINIMUM.
      *
      * @return The type of the Instrument Sample.
      */
@@ -96,7 +99,7 @@ interface InstrumentSample
      *
      * @return A Descriptor for the InstrumentSample.
      */
-    InstrumentSampleDescriptorLocal getDescriptor();
+    InstrumentSampleDescriptor getDescriptor();
     
     /**
      * Obtain the value of the sample.  All samples are integers, so the profiled
@@ -118,8 +121,9 @@ interface InstrumentSample
      * Returns the Type of the Instrument which can use the sample.  This
      *  should be the same for all instances of a class.
      * <p>
-     * Should be one of the following: InstrumentManager.PROFILE_POINT_TYPE_COUNTER
-     *  or InstrumentManager.PROFILE_POINT_TYPE_VALUE
+     * Should be one of the following:
+     *  DefaultInstrumentManager.INSTRUMENT_TYPE_COUNTER
+     *  or DefaultInstrumentManager.INSTRUMENT_TYPE_VALUE
      *
      * @return The Type of the Instrument which can use the sample.
      */

@@ -15,32 +15,32 @@
  * limitations under the License.
  */
 
-package org.apache.excalibur.instrument.manager;
+package org.apache.excalibur.instrument.manager.impl;
 
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.avalon.framework.configuration.DefaultConfiguration;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
+
+import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
+import org.apache.excalibur.instrument.manager.CounterInstrumentListener;
 
 /**
- * A InstrumentSample which stores the minimum value set during the sample
- *  period.
+ * A InstrumentSample which stores the number of times that increment has been
+ *  called during the sample period.
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
- * @version CVS $Revision: 1.4 $ $Date: 2004/02/28 11:47:25 $
- * @since 4.1
  */
-class MinimumValueInstrumentSample
-    extends AbstractValueInstrumentSample
+class CounterInstrumentSample
+    extends AbstractInstrumentSample
+    implements CounterInstrumentListener
 {
-    /** Last value set to the sample for use for sample periods where no value is set. */
-    private int m_lastValue;
+    /** The count. */
+    protected int m_count;
     
     /*---------------------------------------------------------------
      * Constructors
      *-------------------------------------------------------------*/
     /**
-     * Creates a new MinimumValueInstrumentSample
+     * Creates a new CounterInstrumentSample
      *
      * @param instrumentProxy The InstrumentProxy which owns the
      *                        InstrumentSample.
@@ -50,14 +50,17 @@ class MinimumValueInstrumentSample
      * @param description The description of the new InstrumentSample.
      * @param lease The length of the lease in milliseconds.
      */
-    MinimumValueInstrumentSample( InstrumentProxy instrumentProxy,
-                                  String name,
-                                  long interval,
-                                  int size,
-                                  String description,
-                                  long lease )
+    CounterInstrumentSample( InstrumentProxy instrumentProxy,
+                             String name,
+                             long interval,
+                             int size,
+                             String description,
+                             long lease )
     {
         super( instrumentProxy, name, interval, size, description, lease );
+        
+        // Set the current value to 0 initially.
+        m_count = 0;
     }
     
     /*---------------------------------------------------------------
@@ -70,7 +73,32 @@ class MinimumValueInstrumentSample
      */
     public int getType()
     {
-        return InstrumentManagerClient.INSTRUMENT_SAMPLE_TYPE_MINIMUM;
+        return DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_COUNTER;
+    }
+    
+    /**
+     * Returns the Type of the Instrument which can use the sample.  This
+     *  should be the same for all instances of a class.
+     * <p>
+     * This InstrumentSample returns DefaultInstrumentManager.INSTRUMENT_TYPE_COUNTER
+     *
+     * @return The Type of the Instrument which can use the sample.
+     */
+    public final int getInstrumentType()
+    {
+        return DefaultInstrumentManager.INSTRUMENT_TYPE_COUNTER;
+    }
+    
+    /**
+     * Obtain the value of the sample.  All samples are integers, so the profiled
+     * objects must measure quantity (numbers of items), rate (items/period), time in
+     * milliseconds, etc.
+     *
+     * @return The sample value.
+     */
+    public int getValueInner()
+    {
+        return m_count;
     }
     
     /*---------------------------------------------------------------
@@ -84,9 +112,8 @@ class MinimumValueInstrumentSample
      */
     protected void advanceToNextSample()
     {
-        // Reset the value count and set the value to the last known value.
-        m_value = m_lastValue;
-        m_valueCount = 0;
+        // Counts do not propagate, so always reset the count to 0.
+        m_count = 0;
     }
 
     /**
@@ -96,19 +123,7 @@ class MinimumValueInstrumentSample
      */
     protected int getFillValue()
     {
-        return m_lastValue;
-    }
-    
-    /**
-     * Allow subclasses to add information into the saved state.
-     *
-     * @param state State configuration.
-     */
-    protected void saveState( DefaultConfiguration state )
-    {
-        super.saveState( state );
-        
-        state.setAttribute( "last-value", Integer.toString( m_lastValue ) );
+        return 0;
     }
     
     /**
@@ -125,9 +140,7 @@ class MinimumValueInstrumentSample
     protected void loadState( int value, Configuration state )
         throws ConfigurationException
     {
-        super.loadState( value, state );
-        
-        m_lastValue = state.getAttributeAsInteger( "last-value" );
+        m_count = value;
     }
     
     /**
@@ -136,24 +149,36 @@ class MinimumValueInstrumentSample
      */
     protected void postSaveNeedsReset()
     {
-        super.postSaveNeedsReset();
-        
-        m_lastValue = 0;
+        m_count = 0;
     }
     
     /*---------------------------------------------------------------
-     * AbstractValueInstrumentSample Methods
+     * CounterInstrumentListener Methods
      *-------------------------------------------------------------*/
     /**
-     * Sets the current value of the sample.  The value will be set as the
-     *  sample value if it is the smallest value seen during the sample period.
+     * Called by a CounterInstrument whenever its value is incremented.
      *
-     * @param value New sample value.
-     * @param time Time that the new sample arrives.
+     * @param instrumentName The name of Instrument which was incremented.
+     * @param count A positive integer to increment the counter by.
+     * @param time The time that the Instrument was incremented.
      */
-    protected void setValueInner( int value, long time )
+    public void increment( String instrumentName, int count, long time )
     {
-        boolean update;
+        //System.out.println("CounterInstrumentSample.increment(" + instrumentName + ", " + count + ", " + time + ") : " + getName() );
+        increment( count, time );
+    }
+    
+    /*---------------------------------------------------------------
+     * Methods
+     *-------------------------------------------------------------*/
+    /**
+     * Increments the count.
+     *
+     * @param time Time that the count is incremented.
+     * @param count A positive integer to increment the counter by.
+     */
+    private void increment( int count, long time )
+    {
         int sampleValue;
         long sampleTime;
         
@@ -161,34 +186,12 @@ class MinimumValueInstrumentSample
         {
             update( time );
             
-            // Always store the last value to use for samples where a value is not set.
-            m_lastValue = value;
+            m_count += count;
             
-            if ( m_valueCount > 0 )
-            {
-                // Additional sample
-                m_valueCount++;
-                if ( value < m_value )
-                {
-                    m_value = value;
-                    update = true;
-                }
-            }
-            else
-            {
-                // First value of this sample.
-                m_valueCount = 1;
-                m_value = value;
-            }
-            
-            sampleValue = m_value;
+            sampleValue = m_count;
             sampleTime = m_time;
-                update = true;
         }
         
-        if ( update )
-        {
-            updateListeners( sampleValue, sampleTime );
-        }
+        updateListeners( sampleValue, sampleTime );
     }
 }

@@ -15,12 +15,14 @@
  * limitations under the License.
  */
 
-package org.apache.excalibur.instrument.manager;
+package org.apache.excalibur.instrument.manager.impl;
 
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
-import org.apache.excalibur.instrument.manager.interfaces.InstrumentManagerClient;
+
+import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
+import org.apache.excalibur.instrument.manager.ValueInstrumentListener;
 
 /**
  * An AbstractValueInstrumentSample contains all of the functionality common
@@ -74,13 +76,13 @@ abstract class AbstractValueInstrumentSample
      * Returns the Type of the Instrument which can use the sample.  This
      *  should be the same for all instances of a class.
      * <p>
-     * This InstrumentSample returns InstrumentManager.PROFILE_POINT_TYPE_VALUE
+     * This InstrumentSample returns DefaultInstrumentManager.INSTRUMENT_TYPE_VALUE
      *
      * @return The Type of the Instrument which can use the sample.
      */
     public final int getInstrumentType()
     {
-        return InstrumentManagerClient.INSTRUMENT_TYPE_VALUE;
+        return DefaultInstrumentManager.INSTRUMENT_TYPE_VALUE;
     }
     
     /**
