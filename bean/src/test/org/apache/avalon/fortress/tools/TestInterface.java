@@ -23,12 +23,11 @@ package org.apache.avalon.fortress.tools;
  * @author <a href="mailto:dev@avalon.apache.org">The Avalon Team</a>
  * @version CVS $Revision: 1.3 $ $Date: 2004/02/28 15:16:27 $
  */
-public interface TestInterface {
-
+public interface TestInterface 
+{
     static final String ROLE = TestInterface.class.getName();
 
     void run();
 
     boolean isRunning();
-
 }

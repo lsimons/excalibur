@@ -229,12 +229,10 @@ import org.apache.log.output.io.StreamTarget;
  */
 public class FortressTestCase extends TestCase
 {
-
     ///Format of default formatter
     private static final String FORMAT =
         "%7.7{priority} %23.23{time:yyyy-MM-dd' 'HH:mm:ss.SSS} [%30.30{category}] " +
         "(%{context}): %{message}\n%{throwable}";
-
 
     //The default logger
     private Logger m_logger;
@@ -248,9 +246,7 @@ public class FortressTestCase extends TestCase
     private LoggerManager m_loggerManager;
     private ServiceManager m_serviceManager;
     
-
     private static HashMap m_tests = new HashMap();
-    
     
     public FortressTestCase( final String name )
     {
@@ -301,7 +297,6 @@ public class FortressTestCase extends TestCase
     {
         return m_logger;
     }
-
     
     /**
      * Override <code>run</code> so that we can have code that is run once.
@@ -531,7 +526,6 @@ public class FortressTestCase extends TestCase
     {
     }
 
-
     /**
      * Exctract the base class name of a class.
      */
@@ -546,7 +540,6 @@ public class FortressTestCase extends TestCase
         return name;
     }
 
-
     /**
      * Disposes Fortress
      */
@@ -554,5 +547,4 @@ public class FortressTestCase extends TestCase
     {
         ContainerUtil.dispose( m_containerManager );
     }
-
 }

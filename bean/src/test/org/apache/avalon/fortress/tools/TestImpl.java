@@ -23,22 +23,23 @@ package org.apache.avalon.fortress.tools;
  * @author <a href="mailto:dev@avalon.apache.org">The Avalon Team</a>
  * @version CVS $Revision: 1.3 $ $Date: 2004/02/28 15:16:27 $
  */
-public class TestImpl implements TestInterface {
-
-    private boolean isRunning = false;
+public class TestImpl implements TestInterface
+{
+    private boolean m_isRunning = false;
 
     /**
      * @see org.apache.avalon.fortress.tools.TestInterface#isRunning()
      */
-    public boolean isRunning() {
-        return this.isRunning;
+    public boolean isRunning()
+    {
+        return m_isRunning;
     }
 
     /**
      * @see org.apache.avalon.fortress.tools.TestInterface#run()
      */
-    public void run() {
-        this.isRunning = true;
+    public void run()
+    {
+		m_isRunning = true;
     }
-
 }

@@ -4,9 +4,10 @@ import org.apache.avalon.framework.logger.Logger;
 import org.apache.commons.logging.Log;
 
 /**
- * Created by IntelliJ IDEA. User: bloritsch Date: Jun 24, 2004 Time:
- * 5:07:47 PM To change this template use File | Settings | File
- * Templates.
+ * Adapter to be used where a commons-logging Log is expected. 
+ * Dispatch invocations to Avalon's Logger implementation.
+ *
+ * @author <a href="mailto:dev@excalibur.apache.org">The Excalibur Team</a>
  */
 public class AvalonLogger implements Log
 {
