@@ -100,7 +100,7 @@ easy embedding into various environments like servlet engines.
         </dependency>
         <dependency>
             <id>excalibur-logger</id>
-            <version>1.2</version>
+            <version>1.1</version>
         </dependency>
         <dependency>
             <id>excalibur-sourceresolve</id>

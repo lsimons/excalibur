@@ -88,14 +88,14 @@ public final class Service
         if ( null == providerSet )
         {
             providerSet = new HashSet();
-            Enumeration enum = null;
+            Enumeration enumeration = null;
             boolean errorOccurred = false;
 
             providers.put( serviceFile, providerSet );
 
             try
             {
-                enum = loader.getResources( serviceFile );
+                enumeration = loader.getResources( serviceFile );
             }
             catch ( IOException ioe )
             {
@@ -104,11 +104,11 @@ public final class Service
 
             if ( !errorOccurred )
             {
-                while ( enum.hasMoreElements() )
+                while ( enumeration.hasMoreElements() )
                 {
                     try
                     {
-                        final URL url = (URL) enum.nextElement();
+                        final URL url = (URL) enumeration.nextElement();
                         final InputStream is = url.openStream();
                         final BufferedReader reader = new BufferedReader(
                             new InputStreamReader( is,
