@@ -13,7 +13,6 @@
       <sourceFolder url="file://$MODULE_DIR$/../instrument-client/src/java" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$/../instrument-manager">
-      <sourceFolder url="file://$MODULE_DIR$/../instrument-manager/altrmi/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../instrument-manager/http/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../instrument-manager/impl/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../instrument-manager/impl/src/test" isTestSource="true" />
