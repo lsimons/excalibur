@@ -12,7 +12,7 @@
   <shortDescription>Fortress Migration Adapter</shortDescription>
 
   <description>
-	Fortress migration is a project supporting the 
+    Fortress migration is a project supporting the 
       binary compatibility of legacy fortress components 
       within an avalon environment.
   </description>
@@ -56,8 +56,8 @@
     </dependency>
     <dependency>
       <groupId>excalibur-instrument</groupId>
-      <artifactId>excalibur-instrument</artifactId>
-      <version>1.2</version>
+      <artifactId>excalibur-instrument-api</artifactId>
+      <version>1.2-dev</version>
     </dependency>
     <dependency>
       <groupId>excalibur-lifecycle</groupId>

@@ -32,7 +32,7 @@
     <dependency>
       <groupId>excalibur-instrument</groupId>
       <artifactId>excalibur-instrument-api</artifactId>
-      <version>1.2</version>
+      <version>1.2-dev</version>
     </dependency>
         
     <dependency>

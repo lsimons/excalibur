@@ -93,8 +93,9 @@ limitations under the License.
             <version>2.0</version>
         </dependency>
         <dependency>
-            <id>excalibur-instrument</id>
-            <version>1.2</version>
+            <groupId>excalibur-instrument</groupId>
+            <artifactId>excalibur-instrument-api</artifactId>
+            <version>1.2-dev</version>
         </dependency>
         <dependency>
             <id>excalibur-sourceresolve</id>

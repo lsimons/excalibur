@@ -92,8 +92,9 @@
         </dependency>
         <dependency>
             <!-- testing only -->
-            <id>excalibur-instrument</id>
-            <version>1.2</version>
+            <groupId>excalibur-instrument</groupId>
+            <artifactId>excalibur-instrument-api</artifactId>
+            <version>1.2-dev</version>
         </dependency>
         <dependency>
             <groupId>excalibur-fortress</groupId>

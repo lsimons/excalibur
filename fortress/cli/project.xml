@@ -62,18 +62,19 @@ Provides a commandline wrapper around the Excalibur Fortress Platform.
             <version>1.3.1</version>
         </dependency>
         <dependency>
-            <id>excalibur-instrument</id>
-            <version>1.2</version>
+            <groupId>excalibur-instrument</groupId>
+            <artifactId>excalibur-instrument-api</artifactId>
+            <version>1.2-dev</version>
         </dependency>
         <dependency>
             <groupId>excalibur-instrument</groupId>
-            <artifactId>excalibur-instrument-spi</artifactId>
-            <version>1.2</version>
+            <artifactId>excalibur-instrument-mgr-api</artifactId>
+            <version>1.2-dev</version>
         </dependency>
         <dependency>
             <groupId>excalibur-instrument</groupId>
-            <artifactId>excalibur-instrument-impl</artifactId>
-            <version>1.2</version>
+            <artifactId>excalibur-instrument-mgr-impl</artifactId>
+            <version>1.2-dev</version>
         </dependency>
         <dependency>
             <groupId>excalibur-event</groupId>
