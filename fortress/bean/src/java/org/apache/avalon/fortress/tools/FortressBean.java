@@ -42,6 +42,7 @@ import org.apache.avalon.framework.service.Serviceable;
 public class FortressBean implements Initializable, LogEnabled, Serviceable, Disposable {
 
     private static final String COMMONS_LOG_PROPERTY = "org.apache.commons.logging.Log";
+    private static final String COMMONS_AVALON_LOGGER = "org.apache.commons.logging.impl.AvalonLogger";
 
     private final FortressConfig config = new FortressConfig();
     private Logger logger = null;
@@ -88,7 +89,7 @@ public class FortressBean implements Initializable, LogEnabled, Serviceable, Dis
             // Get the root container initialized
             this.cm = new DefaultContainerManager(config.getContext());
             ContainerUtil.initialize(cm);
-            initializeCommonsLogging();
+            initializeCommonsLogging(cl);
             this.container = (DefaultContainer) cm.getContainer();
             this.sm = container.getServiceManager();
         }
@@ -99,11 +100,22 @@ public class FortressBean implements Initializable, LogEnabled, Serviceable, Dis
      * if it is not available, this section is ignored. This needs version 1.0.4 (or later) of commons
      * logging, earlier versions do not have avalon support.
      */
-    private void initializeCommonsLogging() {
+    private void initializeCommonsLogging(ClassLoader cl) {
         try {
-            AvalonLogger.setDefaultLogger( cm.getLogger() );
-
-            System.setProperty(COMMONS_LOG_PROPERTY, AvalonLogger.class.getName());
+            //if commons logging is available, set the static logger for commons logging
+            Class commonsLoggerClass;
+            if (cl != null) {
+                commonsLoggerClass = cl.loadClass(COMMONS_AVALON_LOGGER);
+            } else {
+                commonsLoggerClass = Class.forName(COMMONS_AVALON_LOGGER);
+            }
+            Method setDefaultLoggerMethod = commonsLoggerClass.getMethod("setDefaultLogger", new Class[] {Logger.class});
+            setDefaultLoggerMethod.invoke(null, new Object[] {cm.getLogger()});
+            //set the system property to use avalon logger
+            System.setProperty(COMMONS_LOG_PROPERTY, COMMONS_AVALON_LOGGER);
+            if (getLogger().isInfoEnabled()) getLogger().info("AvalonLogger found, commons logging redirected to Avalon logs");
+        } catch (ClassNotFoundException e) {
+            if (getLogger().isInfoEnabled()) getLogger().info("AvalonLogger not found, commons logging not redirected");
         } catch (Exception e) {
             if (getLogger().isDebugEnabled()) getLogger().debug("error while initializing commons logging: " + e.getClass().getName() + ", " + e.getMessage());
         }
