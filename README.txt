@@ -10,8 +10,10 @@ and simply run the command;
 
   maven multiproject:install
 
-you might need to download and install a few jars by hand, in particular, the following libraries:
+you might need to download and install a few jars by hand, in particular, the following:
 
   jsse-1.0.3_03 (groupid: jsse)
-  mailapi-1.3.1 (groupid: javamail)
-  jms-1.1       (groupid: jms)
+  
+Logkit and Excalibur-Logger use the geronimo-spec JMS and JavaMail jars for
+building and testing.  For production use, developers should download the JMS
+and JavaMail dependencies from Sun.
