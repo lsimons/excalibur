@@ -27,8 +27,6 @@
       <sourceFolder url="file://$MODULE_DIR$/fortress/examples/src/test" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/fortress/meta/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/fortress/migration/src/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/i18n/src/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/i18n/src/test" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/instrument-client/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/instrument-manager/altrmi/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/instrument-manager/http/src/java" isTestSource="false" />

@@ -20,7 +20,6 @@
     <orderEntry type="library" name="Clover" level="application" />
     <orderEntry type="library" name="Doug Lea's Concurrent" level="application" />
     <orderEntry type="library" name="JUnit" level="application" />
-    <orderEntry type="module" module-name="i18n" />
     <orderEntry type="module" module-name="instrument" />
     <orderEntry type="module" module-name="instrument-manager" />
     <orderEntry type="module" module-name="lifecycle" />

@@ -69,7 +69,6 @@
                 <item name="Lifecycle Extensions" href="lifecycle/index.html"/>
                 <item name="Design Notes" href="fortress/design-notes.html"/>
             </item>
-            <item name="i18n" href="i18n.html"/>
             <item name="Lifecycle" href="lifecycle/index.html" collapse="false">
                 <item name="Overview" href="lifecycle/index.html"/>
                 <item name="Extensions" href="lifecycle/extension.html"/>

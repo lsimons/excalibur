@@ -91,20 +91,6 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>
-                        <a href="i18n.html">i18n</a>
-                    </td>
-                    <td>
-                        <p>
-                            Excalibur's Internationalization package is found in
-                            <code>org.apache.avalon.excalibur.i18n</code>.  Avalon
-                            Excalibur includes a method of managing resources, and
-                            an interface for specifying the resource.  Support for
-                            XML resource bundles are still under development.
-                        </p>
-                    </td>
-                </tr>
-                <tr>
                     <td>Instrumentation</td>
                     <td>
                         <p>

@@ -122,7 +122,6 @@
       <module fileurl="file://$PROJECT_DIR$/datasource/datasource.iml" filepath="$PROJECT_DIR$/datasource/datasource.iml" />
       <module fileurl="file://$PROJECT_DIR$/event/event.iml" filepath="$PROJECT_DIR$/event/event.iml" />
       <module fileurl="file://$PROJECT_DIR$/fortress/fortress.iml" filepath="$PROJECT_DIR$/fortress/fortress.iml" />
-      <module fileurl="file://$PROJECT_DIR$/i18n/i18n.iml" filepath="$PROJECT_DIR$/i18n/i18n.iml" />
       <module fileurl="file://$PROJECT_DIR$/instrument/instrument.iml" filepath="$PROJECT_DIR$/instrument/instrument.iml" />
       <module fileurl="file://$PROJECT_DIR$/lifecycle/lifecycle.iml" filepath="$PROJECT_DIR$/lifecycle/lifecycle.iml" />
       <module fileurl="file://$PROJECT_DIR$/logger/logger.iml" filepath="$PROJECT_DIR$/logger/logger.iml" />
