@@ -22,7 +22,6 @@ import java.util.Set;
 
 import org.apache.avalon.excalibur.logger.DefaultLogTargetFactoryManager;
 import org.apache.avalon.excalibur.logger.DefaultLogTargetManager;
-import org.apache.avalon.excalibur.logger.LogTargetFactoryManageable;
 import org.apache.avalon.excalibur.logger.LogTargetFactoryManager;
 import org.apache.avalon.excalibur.logger.LogTargetManager;
 import org.apache.avalon.excalibur.logger.util.LoggerUtil;
@@ -149,10 +148,7 @@ public class LogKitConfHelper extends AbstractLogEnabled implements
 
         ContainerUtil.enableLogging( targetManager, getLogger() );
 
-        if( targetManager instanceof LogTargetFactoryManageable )
-        {
-            targetManager.setLogTargetFactoryManager( targetFactoryManager );
-        }
+        targetManager.setLogTargetFactoryManager( targetFactoryManager );
 
         ContainerUtil.configure( targetManager, configuration );
 
@@ -162,7 +158,7 @@ public class LogKitConfHelper extends AbstractLogEnabled implements
     /**
      * Setup Loggers
      *
-     * @param categories []  The array object of configurations for categories.
+     * @param parentElement  The array object of configurations for categories.
      * @param root shows if we're processing the root of the configuration
      * @throws ConfigurationException if the configuration is malformed
      */

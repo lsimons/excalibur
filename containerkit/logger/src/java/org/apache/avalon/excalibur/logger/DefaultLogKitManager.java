@@ -250,10 +250,7 @@ public class DefaultLogKitManager
             throw new ConfigurationException( message, ce );
         }
 
-        if( targetManager instanceof LogTargetFactoryManageable )
-        {
-            targetManager.setLogTargetFactoryManager( targetFactoryManager );
-        }
+        targetManager.setLogTargetFactoryManager( targetFactoryManager );
 
         ContainerUtil.configure( targetManager, configuration );
         return targetManager;

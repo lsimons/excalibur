@@ -37,7 +37,7 @@ import org.apache.avalon.framework.logger.NullLogger;
 
 public class LoggerSwitch
 {
-    private final static Logger SHARED_NULL = new NullLogger();
+    protected final static Logger SHARED_NULL = new NullLogger();
 
     private final static class BooleanThreadLocal extends ThreadLocal
     {

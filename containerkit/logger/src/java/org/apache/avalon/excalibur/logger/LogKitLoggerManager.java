@@ -310,7 +310,7 @@ public class LogKitLoggerManager extends AbstractLoggerManager
      * <p>There is nothing wrong with passing <code>fallbackLogger</code>
      * via this constructor, but as this constructor is not convinient to
      * be invoked (too many arguments, some of them likely to be null) and the 
-     * {@link #LogKitLogger(java.lang.String,org.apache.log.Hierarchy,org.apache.framework.logger.Logger}
+     * {@link #LogKitLoggerManager(String,Hierarchy,Logger)}
      * constructor is broken
      * in using its <code>Logger</code> argument both as 
      * <code>fallbackLogger</code> (which is okay) and as 
@@ -452,10 +452,7 @@ public class LogKitLoggerManager extends AbstractLoggerManager
 
         ContainerUtil.enableLogging( targetManager, getLogger() );
 
-        if( targetManager instanceof LogTargetFactoryManageable )
-        {
-            targetManager.setLogTargetFactoryManager( targetFactoryManager );
-        }
+        targetManager.setLogTargetFactoryManager( targetFactoryManager );
 
         ContainerUtil.configure( targetManager, configuration );
 

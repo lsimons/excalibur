@@ -36,7 +36,7 @@ public class OverrideDefaultDecorator extends LoggerManagerDecorator
 
     /**
      * Creates an <code>OverrideDecorator</code> instance.
-     * @param <code>OverrideDecorator</code> is unique in that
+     * @param defaultLogger <code>OverrideDecorator</code> is unique in that
      *        it won't tolerate a null extra argument: if this
      *        argument is <code>null</code> a NullPointerException will
      *        be thrown. This ensures that no logging surprises will occur.
