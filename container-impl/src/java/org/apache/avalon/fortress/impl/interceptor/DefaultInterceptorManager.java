@@ -23,6 +23,7 @@ import java.util.TreeMap;
 import org.apache.avalon.fortress.Container;
 import org.apache.avalon.fortress.ContainerListener;
 import org.apache.avalon.fortress.MetaInfoEntry;
+import org.apache.avalon.fortress.MetaInfoManager;
 import org.apache.avalon.fortress.interceptor.Interceptor;
 import org.apache.avalon.fortress.interceptor.InterceptorManager;
 import org.apache.avalon.fortress.interceptor.InterceptorManagerException;
@@ -49,6 +50,8 @@ public class DefaultInterceptorManager
     private Container m_container;
     
     private final Map m_families;
+    
+    private MetaInfoManager m_metaManager;
 
     ///
     /// Constructors
@@ -146,6 +149,14 @@ public class DefaultInterceptorManager
      */
     public Object componentCreated( final MetaInfoEntry entry, final Object instance )
     {
+        try
+        {
+            m_metaManager = (MetaInfoManager) m_container.get( MetaInfoManager.ROLE, null );
+        }
+        catch(Exception ex)
+        {
+        }
+
         return instance;
     }
 

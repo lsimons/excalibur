@@ -21,6 +21,7 @@ import org.apache.avalon.fortress.ContainerManager;
 import org.apache.avalon.fortress.impl.DefaultContainerManager;
 import org.apache.avalon.fortress.impl.InterceptorEnabledContainer;
 import org.apache.avalon.fortress.impl.interceptor.TailInterceptor;
+import org.apache.avalon.fortress.impl.interceptor.test.components.CustomerDataAccessObject;
 import org.apache.avalon.fortress.impl.interceptor.test.examples.ValidInterceptor;
 import org.apache.avalon.fortress.interceptor.Interceptor;
 import org.apache.avalon.fortress.interceptor.InterceptorManager;
@@ -117,4 +118,14 @@ public class DefaultInterceptorManagerTestCase extends TestCase
 
         return (InterceptorEnabledContainer) cm.getContainer();
     }
+    
+    public void testGetComponent() throws Exception
+    {
+        testAddInterceptor();
+        
+        m_container.get( CustomerDataAccessObject.ROLE, "*" );
+        
+        
+    }
+
 }

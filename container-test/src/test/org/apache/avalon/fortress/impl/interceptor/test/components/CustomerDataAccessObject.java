@@ -24,5 +24,5 @@ package org.apache.avalon.fortress.impl.interceptor.test.components;
  */
 public interface CustomerDataAccessObject extends DataAccessObject
 {
-    
+    static String ROLE = CustomerDataAccessObject.class.getName(); 
 }
