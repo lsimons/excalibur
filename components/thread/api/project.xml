@@ -23,7 +23,8 @@
   <groupId>excalibur-thread</groupId>
   <id>excalibur-thread-api</id>
   <name>Excalibur Thread API</name>
-  <version>2.0.0</version>
+  <currentVersion>2.0.0</currentVersion>
+
   <package>org.apache.avalon.excalibur.thread</package>
   <inceptionYear>2001</inceptionYear>
   <shortDescription>Excalibur Threads API</shortDescription>

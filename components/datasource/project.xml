@@ -20,7 +20,7 @@
 
     <name>Excalibur Datasource</name>
     <id>excalibur-datasource</id>
-    <version>1.2.0</version>
+    <currentVersion>1.2.0</currentVersion>
 
     <inceptionYear>2003</inceptionYear>
     <shortDescription>Excalibur's Datasourc component</shortDescription>
