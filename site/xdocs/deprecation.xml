@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<document>
+
+    <properties>
+        <title>Deprecated Excalibur Components</title>
+    </properties>
+
+    <body>
+        <section name="Deprecated Excalibur Components">
+            <p>
+                Over time several Excalibur components have reached the
+                end of their lifecycle. This page documents the deprecated
+                components.
+            </p>
+            <subsection name="Compatibility">
+                <p>
+                    Compatibility was a library consisting of several utility classes that
+                    Excalibur had ceased developing with the aim of focusing on the charter.
+                    The following table lists the replacement packages for each of the
+                    packages in excalibur.
+                </p>
+                <table>
+                    <tr>
+                        <th>Package</th>
+                        <th>Replacement</th>
+                    </tr>
+                    <tr>
+                        <td>o.a.a.excalibur.cli</td>
+                        <td><a href="http://jakarta.apache.org/commons/cli/">Commons-CLI</a></td>
+                    </tr>
+                    <tr>
+                        <td>o.a.a.excalibur.collections</td>
+                        <td><a href="http://jakarta.apache.org/commons/collections/">Commons-Collections</a></td>
+                    </tr>
+                    <tr>
+                        <td>o.a.a.excalibur.concurrent</td>
+                        <td>Doug Leas <a href="http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html">Concurrent Library</a></td>
+                    </tr>
+                    <tr>
+                        <td>o.a.a.excalibur.io</td>
+                        <td><a href="http://spice.codehaus.org/salt">Spice-Salt</a></td>
+                    </tr>
+                    <tr>
+                        <td>o.a.a.excalibur.naming</td>
+                        <td><a href="http://spice.codehaus.org/jndikit">Spice-JNDIKit</a></td>
+                    </tr>
+                </table>
+            </subsection>
+
+            <subsection name="i18n">
+                <p>
+                    The i18n library was deprecated in favour of
+                    <a href="http://spice.codehaus.org/salt">Spice-Salt</a>. 
+                </p>
+            </subsection>
+        </section>
+    </body>
+</document>
