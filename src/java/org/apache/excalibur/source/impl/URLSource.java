@@ -1,16 +1,16 @@
-/* 
+/*
  * Copyright 2002-2004 The Apache Software Foundation
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at 
- * 
+ * You may obtain a copy of the License at
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed  under the  License is distributed on an "AS IS" BASIS,
  * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
  * implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -89,13 +89,17 @@ public class URLSource extends AbstractSource implements Source
         m_url = url;
         m_isPost = false;
         // get the default system encoding in case no encoding is specified
-        m_encoding = System.getProperties().getProperty("file.property", "ISO-8859-1");
+        try {
+            m_encoding = System.getProperty("file.property", "ISO-8859-1");
+        } catch (SecurityException e) {
+            m_encoding = "ISO-8859-1"; 
+        }
 
         if (null != parameters)
         {
             m_parameters = (SourceParameters) parameters.get(SourceResolver.URI_PARAMETERS);
             final String method = (String) parameters.get(SourceResolver.METHOD);
-            
+
             if ("POST".equalsIgnoreCase(method))
                 m_isPost = true;
 
@@ -103,7 +107,7 @@ public class URLSource extends AbstractSource implements Source
             if (encoding != null && !"".equals(encoding))
                 m_encoding = encoding;
         }
-        
+
         if (null != m_parameters && m_parameters.hasParameters() && !m_isPost)
         {
             StringBuffer urlBuffer = new StringBuffer(systemId);
@@ -297,21 +301,21 @@ public class URLSource extends AbstractSource implements Source
     {
         return m_mimeType;
     }
-    
+
     /**
      * The decoded userinfo for this source.
-     * null, if no userinfo exists 
+     * null, if no userinfo exists
      */
-    protected String getUserInfo() 
+    protected String getUserInfo()
     {
         if (m_url == null) return null;
         String ui = m_url.getUserInfo();
         if (ui == null) return null;
-    
-        try 
+
+        try
         {
          ui = URLDecoder.decode(ui,"UTF-8");
-        } 
+        }
         catch (UnsupportedEncodingException e)
         {
          // Platform does not support UTF-8. This should never happen.
