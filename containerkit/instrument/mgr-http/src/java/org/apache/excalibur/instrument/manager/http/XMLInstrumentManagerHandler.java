@@ -68,9 +68,6 @@ public class XMLInstrumentManagerHandler
         boolean packed = getBooleanParameter( parameters, "packed", false );
         boolean recurse = getBooleanParameter( parameters, "recurse", false );
         
-        getLogger().info( "packed=" + packed + " (" + getParameter( parameters, "packed", null ) + ")" );
-        getLogger().info( "recurse=" + recurse + " (" + getParameter( parameters, "recurse", null ) + ")" );
-        
         out.println( InstrumentManagerHTTPConnector.XML_BANNER );
         outputInstrumentManager(
             out, getInstrumentManager(), "", recurse, packed, m_connector.isReadOnly() );
