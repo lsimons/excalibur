@@ -251,6 +251,7 @@ limitations under the License.
                 destdir="${jbs.build.dir}/classes"
                 excludes="**/package.html"
                 debug="${jbs.compile.debug}"
+                source="${jbs.compile.source}"
                 deprecation="${jbs.compile.deprecation}"
                 optimize="${jbs.compile.optimize}">
 
@@ -271,6 +272,7 @@ limitations under the License.
         <javac
                 destdir="${jbs.build.dir}/test-classes"
                 excludes="**/package.html"
+                source="${jbs.compile.source}"
                 debug="${jbs.compile.debug}"
                 deprecation="${jbs.compile.deprecation}"
                 optimize="${jbs.compile.optimize}">
