@@ -58,6 +58,7 @@ JBS is now being installed into ${jbs.home}...
         <property name="jbs.home" value="${user.home}/.jbs"/>
         <property name="jbs.work" value="${jbs.home}/work"/>
         <property name="jbs.backup" value="${jbs.home}/backup"/>
+        <property name="jbs.repository.remote" value="http://svn.apache.org/repos/asf/excalibur/repository"/>
         <property name="jbs.repository.local" value="${jbs.home}/repository"/>
 
         <antcall target="jbs:info"/>
@@ -75,15 +76,22 @@ JBS is now being installed into ${jbs.home}...
         <mkdir dir="${jbs.repository.local}/js"/>
         <mkdir dir="${jbs.repository.local}/js/jars"/>
         <mkdir dir="${jbs.repository.local}/js/licenses"/>
+        <mkdir dir="${jbs.repository.local}/junit"/>
+        <mkdir dir="${jbs.repository.local}/junit/jars"/>
+        <mkdir dir="${jbs.repository.local}/junit/licenses"/>
 
-	<get src="http://svn.apache.org/repos/asf/excalibur/repository/bsf/jars/bsf-2.3.0.jar"
+	<get src="${jbs.repository.remote}/bsf/jars/bsf-2.3.0.jar"
           dest="${jbs.repository.local}/bsf/jars/bsf-2.3.0.jar"/>
-	<get src="http://svn.apache.org/repos/asf/excalibur/repository/bsf/licenses/LICENSE.txt"
+	<get src="${jbs.repository.remote}/bsf/licenses/LICENSE.txt"
           dest="${jbs.repository.local}/bsf/licenses/LICENSE.txt"/>
-	<get src="http://svn.apache.org/repos/asf/excalibur/repository/js/jars/js.jar"
+	<get src="${jbs.repository.remote}/js/jars/js.jar"
           dest="${jbs.repository.local}/js/jars/js.jar"/>
-	<get src="http://svn.apache.org/repos/asf/excalibur/repository/js/licenses/LICENSE.html"
+	<get src="${jbs.repository.remote}/js/licenses/LICENSE.html"
           dest="${jbs.repository.local}/js/licenses/LICENSE.html"/>
+	<get src="${jbs.repository.remote}/junit/jars/junit-3.8.1.jar"
+          dest="${jbs.repository.local}/junit/jars/junit-3.8.1.jar"/>
+	<get src="${jbs.repository.remote}/junit/licenses/LICENSE.txt"
+          dest="${jbs.repository.local}/junit/licenses/LICENSE.txt"/>
 
         <copy todir="${ant.home}/lib" file="${jbs.repository.local}/bsf/jars/bsf-2.3.0.jar" failonerror="false"/>
         <available file="${ant.home}/lib/bsf-2.3.0.jar" property="bsf.installed.successfully"/>
@@ -93,10 +101,15 @@ JBS is now being installed into ${jbs.home}...
         <available file="${ant.home}/lib/js.jar" property="js.installed.successfully"/>
         <antcall target="js.required"/>
 
+        <copy todir="${ant.home}/lib" file="${jbs.repository.local}/junit/jars/juni-3.8.1.jar" failonerror="false"/>
+        <available file="${ant.home}/lib/junit-3.8.1.jar" property="junit.installed.successfully"/>
+        <antcall target="junit.required"/>
+
         <condition property="install.success">
           <and>
             <available file="${ant.home}/lib/bsf-2.3.0.jar"/>
             <available file="${ant.home}/lib/js.jar"/>
+            <available file="${ant.home}/lib/junit-3.8.1.jar"/>
           </and>
         </condition>
         <antcall target="jbs:error"/>
@@ -128,6 +141,22 @@ JBS is now being installed into ${jbs.home}...
   did not work. Please install the
 
             ${jbs.repository.local}/bsf/jars/js.jar
+
+  jar into your ant lib directory manually, which should be
+
+            ${ant.home}/lib
+=======================================================================</echo>
+    </target>
+
+    <target name="junit.required" unless="junit.installed.successfully">
+        <echo>=======================================================================
+                      ERROR installing!
+
+  JBS requires the junit task to be available.
+  We just tried installing the required junit jar, but apparently that
+  did not work. Please install the
+
+            ${jbs.repository.local}/junit/jars/junit-3.8.1.jar
 
   jar into your ant lib directory manually, which should be
 
