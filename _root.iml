@@ -35,7 +35,6 @@
       <sourceFolder url="file://$MODULE_DIR$/instrument/src/test" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/lifecycle/api/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/lifecycle/impl/src/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/logger-tests/src/test" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/logger/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/monitor/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/monitor/src/test" isTestSource="true" />
