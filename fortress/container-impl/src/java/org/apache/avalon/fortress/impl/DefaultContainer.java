@@ -91,6 +91,7 @@ public class DefaultContainer
         throws ConfigurationException
     {
         interpretProxy( config.getAttribute("proxy-type", "discover") );
+        m_defaultActivationPolicy = getDefaultActivationPolicy( config );
 
         final Configuration[] elements = config.getChildren();
         for ( int i = 0; i < elements.length; i++ )
@@ -120,6 +121,29 @@ public class DefaultContainer
                 }
             }
         }
+    }
+    
+    /**
+     * Obtains the default activation policy from the component configuration header
+     * 
+     * @param config {@link Configuration} to examine
+     * @return activation policy if specified, 'background' (the default) if not
+     */
+    private String getDefaultActivationPolicy( final Configuration config )
+    {
+        final String policy = config.getAttribute( "activation", null );
+
+        if ( policy == null )
+        {
+            return "background";
+        }
+
+        if ( getLogger().isDebugEnabled() )
+        {
+            getLogger().debug( "Default component activation policy changed to: " + policy );
+        }
+
+        return policy;
     }
 
     /**
@@ -205,7 +229,8 @@ public class DefaultContainer
     private int getActivation( final Configuration component )
         throws ConfigurationException
     {
-        final String activation = component.getAttribute( "activation", "background" );
+        final String activation =
+            component.getAttribute( "activation", m_defaultActivationPolicy );
         
         if ( "background".equalsIgnoreCase( activation )
             || "startup".equalsIgnoreCase( activation ) )
@@ -242,4 +267,9 @@ public class DefaultContainer
     {
         return super.getServiceManager();
     }
+    
+    /**
+     * Default activation policy for components, ie. inline, background, etc.
+     */
+    private String m_defaultActivationPolicy;
 }
