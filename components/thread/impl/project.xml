@@ -68,6 +68,11 @@
       <artifactId>junitperf</artifactId>
       <version>1.8</version>
     </dependency>
+    <dependency> <!-- see if we can fool maven/gump -->
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+    </dependency>
 
   </dependencies>
 
