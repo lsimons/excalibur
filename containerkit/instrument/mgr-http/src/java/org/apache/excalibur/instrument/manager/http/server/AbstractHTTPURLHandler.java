@@ -185,7 +185,22 @@ public abstract class AbstractHTTPURLHandler
             return defaultValue;
         }
         
-        return Boolean.getBoolean( value );
+        if ( value.length() < 1 )
+        {
+            return false;
+        }
+        
+        char c = value.charAt( 0 );
+        switch ( c )
+        {
+        case 'T': // TRUE
+        case 't': // true
+        case 'Y': // YES
+        case 'y': // yes
+            return true;
+        }
+        
+        return false;
     }
     
     public int getIntegerParameter( Map params, String name )

@@ -63,8 +63,8 @@ public class XMLInstrumentableHandler
         throws IOException
     {
         String name = getParameter( parameters, "name" );
-        boolean packed = ( getParameter( parameters, "packed", null ) != null );
-        boolean recurse = ( getParameter( parameters, "recurse", null ) != null );
+        boolean packed = getBooleanParameter( parameters, "packed", false );
+        boolean recurse = getBooleanParameter( parameters, "recurse", false );
         
         InstrumentableDescriptor desc;
         try

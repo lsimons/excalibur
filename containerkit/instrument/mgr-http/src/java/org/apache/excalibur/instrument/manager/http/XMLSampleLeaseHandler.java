@@ -70,7 +70,7 @@ public class XMLSampleLeaseHandler
     {
         String name = getParameter( parameters, "name" );
         long lease = getLongParameter( parameters, "lease" );
-        boolean packed = ( getParameter( parameters, "packed", null ) != null );
+        boolean packed = getBooleanParameter( parameters, "packed", false );
         
         InstrumentSampleDescriptor desc;
         try

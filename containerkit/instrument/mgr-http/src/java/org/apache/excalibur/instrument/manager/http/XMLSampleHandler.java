@@ -63,7 +63,7 @@ public class XMLSampleHandler
         throws IOException
     {
         String name = getParameter( parameters, "name" );
-        boolean packed = ( getParameter( parameters, "packed", null ) != null );
+        boolean packed = getBooleanParameter( parameters, "packed", false );
         
         InstrumentSampleDescriptor desc;
         try

@@ -65,8 +65,11 @@ public class XMLInstrumentManagerHandler
     public void doGet( String path, Map parameters, PrintWriter out )
         throws IOException
     {
-        boolean packed = ( getParameter( parameters, "packed", null ) != null );
-        boolean recurse = ( getParameter( parameters, "recurse", null ) != null );
+        boolean packed = getBooleanParameter( parameters, "packed", false );
+        boolean recurse = getBooleanParameter( parameters, "recurse", false );
+        
+        getLogger().info( "packed=" + packed + " (" + getParameter( parameters, "packed", null ) + ")" );
+        getLogger().info( "recurse=" + recurse + " (" + getParameter( parameters, "recurse", null ) + ")" );
         
         out.println( InstrumentManagerHTTPConnector.XML_BANNER );
         outputInstrumentManager(

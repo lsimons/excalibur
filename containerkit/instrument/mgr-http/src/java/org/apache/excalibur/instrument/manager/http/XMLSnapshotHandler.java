@@ -64,8 +64,8 @@ public class XMLSnapshotHandler
     {
         String name = getParameter( parameters, "name" );
         long baseTime = getLongParameter( parameters, "base-time", 0 );
-        boolean packed = ( getParameter( parameters, "packed", null ) != null );
-        boolean compact = ( getParameter( parameters, "compact", null ) != null );
+        boolean packed = getBooleanParameter( parameters, "packed", false );
+        boolean compact = getBooleanParameter( parameters, "compact", false );
         
         InstrumentSampleDescriptor desc;
         try

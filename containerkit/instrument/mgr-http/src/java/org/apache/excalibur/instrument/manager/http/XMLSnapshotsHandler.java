@@ -63,8 +63,8 @@ public class XMLSnapshotsHandler
     {
         String[] names = getParameters( parameters, "name" );
         long[] baseTimes = getLongParameters( parameters, "base-time", 0 );
-        boolean packed = ( getParameter( parameters, "packed", null ) != null );
-        boolean compact = ( getParameter( parameters, "compact", null ) != null );
+        boolean packed = getBooleanParameter( parameters, "packed", false );
+        boolean compact = getBooleanParameter( parameters, "compact", false );
         
         if ( ( baseTimes.length == 0 ) && ( names.length > 0 ) )
         {

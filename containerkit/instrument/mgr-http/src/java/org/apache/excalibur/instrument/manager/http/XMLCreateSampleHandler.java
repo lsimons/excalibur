@@ -76,7 +76,7 @@ public class XMLCreateSampleHandler
         int size = getIntegerParameter( parameters, "size" );
         long lease = getLongParameter( parameters, "lease" );
         int type = getIntegerParameter( parameters, "type" );
-        boolean packed = ( getParameter( parameters, "packed", null ) != null );
+        boolean packed = getBooleanParameter( parameters, "packed", false );
         
         InstrumentDescriptor desc;
         try

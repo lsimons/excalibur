@@ -69,7 +69,7 @@ public class XMLSampleLeasesHandler
     {
         String[] names = getParameters( parameters, "name" );
         long[] leases = getLongParameters( parameters, "lease", 0 );
-        boolean packed = ( getParameter( parameters, "packed", null ) != null );
+        boolean packed = getBooleanParameter( parameters, "packed", false );
         
         if ( names.length != leases.length )
         {

@@ -76,7 +76,7 @@ public class XMLCreateSamplesHandler
         int[] sizes = getIntegerParameters( parameters, "size", 0 );
         long[] leases = getLongParameters( parameters, "lease", 0 );
         int[] types = getIntegerParameters( parameters, "type", 0 );
-        boolean packed = ( getParameter( parameters, "packed", null ) != null );
+        boolean packed = getBooleanParameter( parameters, "packed", false );
         
         if ( names.length != descriptions.length )
         {
