@@ -70,6 +70,15 @@ public class InstrumentManagerHTTPConnector
     /** True if HTML handlers should be registered. */
     private boolean m_html;
     
+    /** Default Chart Width. */
+    private int m_chartWidth;
+    
+    /** Default Chart Height. */
+    private int m_chartHeight;
+    
+    /** Antialias flag for images. */
+    private boolean m_antialias;
+    
     private HTTPServer m_httpServer;
 
     /*---------------------------------------------------------------
@@ -121,6 +130,10 @@ public class InstrumentManagerHTTPConnector
         m_xml = configuration.getAttributeAsBoolean( "xml", true );
         m_html = configuration.getAttributeAsBoolean( "html", true );
         
+        m_chartWidth = configuration.getAttributeAsInteger( "chart-width", 600 );
+        m_chartHeight = configuration.getAttributeAsInteger( "chart-height", 120 );
+        m_antialias = configuration.getAttributeAsBoolean( "antialias", true );
+        
         m_httpServer = new HTTPServer( m_port, m_bindAddr );
         m_httpServer.enableLogging( getLogger().getChildLogger( "server" ) );
         m_httpServer.setInstrumentableName( "server" );
@@ -169,7 +182,8 @@ public class InstrumentManagerHTTPConnector
                 new HTMLSampleLeaseHandler( m_manager ), nameBase + "sample-lease" );
             initAndRegisterHandler(
                 new HTMLCreateSampleHandler( m_manager ), nameBase + "create-sample" );
-            initAndRegisterHandler( new SampleChartHandler( m_manager ), "sample-chart" );
+            initAndRegisterHandler( new SampleChartHandler(
+                m_manager, m_chartWidth, m_chartHeight, m_antialias ), "sample-chart" );
             initAndRegisterHandler(	new HTMLGCHandler( m_manager ), nameBase + "gc" );
             initAndRegisterHandler( new HTMLRootHandler( m_manager ), nameBase + "root" );
         }

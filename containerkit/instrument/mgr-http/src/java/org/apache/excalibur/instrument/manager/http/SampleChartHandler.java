@@ -49,6 +49,15 @@ public class SampleChartHandler
     /** The instrument manager */
     private DefaultInstrumentManager m_manager;
     
+    /** Default width of the image. */
+    private int m_width;
+    
+    /** Default height of the image. */
+    private int m_height;
+    
+    /** Default antialias flag. */
+    private boolean m_antialias;
+    
     /*---------------------------------------------------------------
      * Constructors
      *-------------------------------------------------------------*/
@@ -57,13 +66,22 @@ public class SampleChartHandler
      *
      * @param path The path handled by this handler.
      * @param manager Reference to the instrument manager interface.
+     * @param width Default image width.
+     * @param height Default image height.
+     * @param antialias True if the default antialias parameter should be true.
      */
-    public SampleChartHandler( DefaultInstrumentManager manager )
+    public SampleChartHandler( DefaultInstrumentManager manager,
+                               int width,
+                               int height,
+                               boolean antialias )
     {
         super( "/sample-chart.jpg", CONTENT_TYPE_IMAGE_JPEG,
             InstrumentManagerHTTPConnector.ENCODING );
         
         m_manager = manager;
+        m_width = width;
+        m_height = height;
+        m_antialias = antialias;
     }
     
     /*---------------------------------------------------------------
@@ -103,6 +121,13 @@ public class SampleChartHandler
                 throw new HTTPRedirect( "instrumentable.html" );
             }
         }
+        
+        int width = getIntegerParameter( parameters, "width", m_width );
+        width = Math.max( 1, Math.min( 2048, width ) );
+        int height = getIntegerParameter( parameters, "height", m_height );
+        height = Math.max( 1, Math.min( 1024, height ) );
+        
+        boolean antialias = getBooleanParameter( parameters, "antialias", m_antialias );
         
         InstrumentSampleSnapshot snapshot = desc.getSnapshot();
         
@@ -162,13 +187,13 @@ public class SampleChartHandler
         }
             
         // Actually create the chart and add it to the content pane
-        LineChart chart = new LineChart( hInterval, interval, format, detailFormat, 20 );
+        LineChart chart = new LineChart( hInterval, interval, format, detailFormat, 20, antialias );
         chart.setValues( snapshot.getSamples(), snapshot.getTime() );
         
         byte[] imageData = null;
         
         // Create a new BufferedImage onto which the plant will be painted.
-        BufferedImage bi = new BufferedImage( 600, 120, BufferedImage.TYPE_INT_RGB );
+        BufferedImage bi = new BufferedImage( width, height, BufferedImage.TYPE_INT_RGB );
         
         // Paint the chart onto the Graphics object of the BufferedImage.
         chart.setSize( bi.getWidth(), bi.getHeight() );

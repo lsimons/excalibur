@@ -171,6 +171,23 @@ public abstract class AbstractHTTPURLHandler
         return param;
     }
     
+    public boolean getBooleanParameter( Map params, String name )
+        throws FileNotFoundException
+    {
+        return Boolean.getBoolean( getParameter( params, name ) );
+    }
+    
+    public boolean getBooleanParameter( Map params, String name, boolean defaultValue )
+    {
+        String value = getParameter( params, name, null );
+        if ( value == null )
+        {
+            return defaultValue;
+        }
+        
+        return Boolean.getBoolean( value );
+    }
+    
     public int getIntegerParameter( Map params, String name )
         throws FileNotFoundException
     {
@@ -181,6 +198,24 @@ public abstract class AbstractHTTPURLHandler
         catch ( NumberFormatException e )
         {
             throw new FileNotFoundException( "The specified " + name + " was invalid." );
+        }
+    }
+    
+    public int getIntegerParameter( Map params, String name, int defaultValue )
+    {
+        String value = getParameter( params, name, null );
+        if ( value == null )
+        {
+            return defaultValue;
+        }
+        
+        try
+        {
+            return Integer.parseInt( value );
+        }
+        catch ( NumberFormatException e )
+        {
+            return defaultValue;
         }
     }
     

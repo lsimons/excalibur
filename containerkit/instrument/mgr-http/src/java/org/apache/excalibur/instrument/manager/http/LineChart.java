@@ -21,7 +21,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -73,6 +75,10 @@ public class LineChart
 
     /** Number of sample points to use when calculating the moving average. */
     private int m_averageWindow;
+    
+    /** True if Antialiasing should be used when rendering the chart. */
+    private boolean m_antialias;
+    
     /** Time of the last sample point. */
     private long m_time;
 
@@ -128,18 +134,21 @@ public class LineChart
      *  and {6} by the hundereths of a second.
      * @param averageWindow Number of data points to do a moving average over when the
      *  mouse is pressed on the component.
+     * @param antialias True if Antialiasing should be used when rendering the chart.
      */
     public LineChart( int lineSampleInterval,
                       long sampleInterval,
                       String format,
                       String detailFormat,
-                      int averageWindow )
+                      int averageWindow,
+                      boolean antialias )
     {
         m_lineSampleInterval = lineSampleInterval;
         m_sampleInterval = sampleInterval;
         m_format = format;
         m_dFormat = detailFormat;
         m_averageWindow = averageWindow;
+        m_antialias = antialias;
 
         setBackground( Color.white );
         setValues( new int[ 0 ], System.currentTimeMillis() );
@@ -150,6 +159,17 @@ public class LineChart
     /*---------------------------------------------------------------
      * Methods
      *-------------------------------------------------------------*/
+    /**
+     * Sets the antialias flag to control whether or not antialiasing will be
+     *  used when rendering the component.
+     *
+     * @param antialias True to use antialiasing.
+     */
+    public void setAntialias( boolean antialias )
+    {
+        m_antialias = antialias;
+    }
+    
     /**
      * Sets the data samples to be displayed by the line chart.
      *
@@ -744,6 +764,23 @@ public class LineChart
     {
         Dimension size = getSize();
         Insets insets = getInsets();
+        
+        // If we directly test whether g is a Graphics2D using instanceof then the class
+        //  must exist.  If it exists then it will be a Graphics2D.
+        if ( g.getClass().getName().indexOf( "Graphics2D" ) >= 0 )
+        {
+            Graphics2D g2 = (Graphics2D)g;
+            if ( m_antialias )
+            {
+                g2.setRenderingHint(
+                    RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
+            }
+            else
+            {
+                g2.setRenderingHint(
+                    RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF );
+            }
+        }
 
         g.setColor( getBackground() );
         g.fillRect( insets.left, insets.top, size.width - insets.left - insets.right,
