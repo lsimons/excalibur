@@ -16,7 +16,13 @@
  */
 package org.apache.excalibur.source;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.BitSet;
 import java.util.Iterator;
 
@@ -479,7 +485,8 @@ public final class SourceUtil
      */
     static public void copy(Source source,
                             Source destination)
-    throws SourceException {
+        throws SourceException
+    {
         if (source instanceof MoveableSource
             && source.getClass().equals(destination.getClass()))
         {
@@ -492,12 +499,45 @@ public final class SourceUtil
                                           destination.getURI()+
                                           "' is not writeable");
             }
-
-            try {
-                OutputStream out = ((ModifiableSource) destination).getOutputStream();
+            
+            ModifiableSource modDestination = (ModifiableSource)destination;
+            try
+            {
                 InputStream in = source.getInputStream();
-
-                copy(in, out);
+                try
+                {
+                    OutputStream out = modDestination.getOutputStream();
+                    try
+                    {
+                        try
+                        {
+                            copy(in, out);
+                        }
+                        catch ( IOException e )
+                        {
+                            if ( modDestination.canCancel( out ) )
+                            {
+                                modDestination.cancel( out );
+                                out = null;
+                            }
+                            
+                            // Rethrow the exception.  It will be recaught below.
+                            throw e;
+                        }
+                    }
+                    finally
+                    {
+                        // out may have already been closed if there was a problem.
+                        if ( out != null )
+                        {
+                            out.close();
+                        }
+                    }
+                }
+                finally
+                {
+                    in.close();
+                }
             } catch (IOException ioe) {
                 throw new SourceException("Could not copy source '"+
                                           source.getURI()+"' to '"+

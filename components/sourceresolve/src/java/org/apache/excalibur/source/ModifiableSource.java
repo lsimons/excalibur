@@ -38,6 +38,8 @@ public interface ModifiableSource
 {
     /**
      * Return an {@link OutputStream} to write to.
+     *
+     * The returned stream must be closed or cancelled by the calling code.
      */
     OutputStream getOutputStream() throws IOException;
     
@@ -56,7 +58,7 @@ public interface ModifiableSource
 
     /**
      * Cancel the data sent to an <code>OutputStream</code> returned by
-     * {@link #getOutputStream()}.
+     * {@link #getOutputStream()}.  Cancelling the stream will also close it.
      *
      * <p>After cancelling, the stream should no longer be used.</p>
      */

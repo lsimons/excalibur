@@ -186,6 +186,8 @@ public class URLSource extends AbstractSource implements Source
     /**
      * Return an <code>InputStream</code> object to read from the source.
      *
+     * The returned stream must be closed by the calling code.
+     *
      * @throws SourceException if file not found or
      *         HTTP location does not exist.
      * @throws IOException if I/O error occured.
@@ -302,19 +304,19 @@ public class URLSource extends AbstractSource implements Source
      */
     protected String getUserInfo() 
     {
-	    if (m_url == null) return null;
-	    String ui = m_url.getUserInfo();
-	    if (ui == null) return null;
-	
-	    try 
+        if (m_url == null) return null;
+        String ui = m_url.getUserInfo();
+        if (ui == null) return null;
+    
+        try 
         {
-	        ui = URLDecoder.decode(ui,"UTF-8");
-	    } 
+         ui = URLDecoder.decode(ui,"UTF-8");
+        } 
         catch (UnsupportedEncodingException e)
         {
-	        // Platform does not support UTF-8. This should never happen.
-	        // e.printStackTrace();
-	    }
-	    return ui;
+         // Platform does not support UTF-8. This should never happen.
+         // e.printStackTrace();
+        }
+        return ui;
     }
 }

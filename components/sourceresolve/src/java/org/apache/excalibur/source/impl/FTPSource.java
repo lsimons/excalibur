@@ -40,7 +40,7 @@ import sun.net.ftp.FtpClient;
 public class FTPSource extends URLSource implements ModifiableSource
 {   
     private boolean m_isAscii;
-	
+    
     public FTPSource()
     {
         super();
@@ -189,6 +189,8 @@ public class FTPSource extends URLSource implements ModifiableSource
 
     /**
      * Return an {@link OutputStream} to write to.
+     *
+     * The returned stream must be closed or cancelled by the calling code.
      */
     public OutputStream getOutputStream() throws IOException
     {
