@@ -17,6 +17,8 @@
 
 package org.apache.avalon.fortress.impl.factory;
 
+import java.security.ProtectionDomain;
+
 import org.apache.bcel.Constants;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
@@ -26,14 +28,15 @@ import org.apache.bcel.util.ClassLoaderRepository;
 import org.apache.bcel.util.Repository;
 
 /**
- * Create the BCELWrapper for the component
+ * Create the BCELWrapper for the component.
+ * The generated wrapper classes will be assigned the same ProtectionDomain as
+ *  the actual classes which they are wrapping.  This simplifies the
+ *  configuration of a SecurityManager by making the existence of the BCEL
+ *  generated classes transparent to the policy file author.
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  */
-
-
 final class BCELWrapperGenerator
-
 {
     /**
      * The BCEL util.Repository instance to use when loading JavaClass instances.
@@ -79,7 +82,6 @@ final class BCELWrapperGenerator
      * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
      */
     private final class BCELClassLoader extends ClassLoader
-
     {
         /**
          * The <i>byte code</i> representing the wrapper class created by the
@@ -87,6 +89,13 @@ final class BCELWrapperGenerator
          * managed by the <code>BCELWrapperGenerator</code>.
          */
         private byte[] m_byteCode = null;
+        
+        /**
+         * The ProtectionDomain to use for the newly generated class.  When a
+         *  SecurityManager is set, this will determine what privileges this
+         *  class will have.
+         */
+        private ProtectionDomain m_protectionDomain;
 
         /**
          * Constructs a <code>BCELClassLoader</code> with the specified class
@@ -118,29 +127,34 @@ final class BCELWrapperGenerator
             // the BCELWrapperGenerator
             if ( name.endsWith( WRAPPER_CLASS_SUFFIX ) )
             {
-                return super.defineClass(
+                Class clazz = super.defineClass(
                     name,
-                    getByteCode(),
+                    m_byteCode,
                     0,
-                    getByteCode().length );
+                    m_byteCode.length,
+                    m_protectionDomain );
+                
+                return clazz;
             }
 
             return super.findClass( name );
         }
 
         /**
-         * Passes in the <code>byte code</code> to use when loading a class
-         * created by the <code>BCELWrapperGenerator</code>.
+         * Passes in data needed to create and initialze the new class when
+         *  findClass is called by the <code>BCELWrapperGenerator</code>.
          * This method will be called by the <code>BCELWrapperGenerator</code>
          * prior to asking this class loader for the generated wrapper class.
          *
          * @param byteCode The <code>byte code</code> to use when loading
-         *                  a generated class
+         *                  the generated class
+         * @param protectionDomain The ProtectionDomain to use when loading
+         *                         the generated class.
          *
          * @throws IllegalArgumentException If <code>byteCode</code> is null or
          *          empty
          */
-        private void setByteCode( final byte[] byteCode )
+        private void setup( final byte[] byteCode, final ProtectionDomain protectionDomain )
             throws IllegalArgumentException
         {
             if ( byteCode == null || byteCode.length == 0 )
@@ -151,17 +165,19 @@ final class BCELWrapperGenerator
             }
 
             m_byteCode = byteCode;
+            m_protectionDomain = protectionDomain;
         }
 
         /**
-         * Clears the <code>byte code</code>, setting it to <code>null</code>.
+         * Clears the data used to generate a class to free up memory.
          * This method will be called by the <code>BCELWrapperGenerator</code>
          * immediately after this class loader has returned the generated wrapper
          * class.
          */
-        private void clearByteCode()
+        private void tearDown()
         {
             m_byteCode = null;
+            m_protectionDomain = null;
         }
 
         /**
@@ -198,6 +214,9 @@ final class BCELWrapperGenerator
             final String message = "Class to wrap must not be <null>.";
             throw new IllegalArgumentException( message );
         }
+        
+        // Use the same ProtectionDomain as the class being wrapped.
+        ProtectionDomain protectionDomain = classToWrap.getProtectionDomain();
 
         // Guess work interfaces ...
         final Class[] interfacesToImplement =
@@ -234,9 +253,15 @@ final class BCELWrapperGenerator
                 m_classGenerator );
 
             final byte[] byteCode = buildWrapper( javaInterfacesToImplement );
-            m_bcelClassLoader.setByteCode( byteCode );
-            generatedClass = m_bcelClassLoader.loadClass( wrapperClassName );
-            m_bcelClassLoader.clearByteCode();
+            m_bcelClassLoader.setup( byteCode, protectionDomain );
+            try
+            {
+                generatedClass = m_bcelClassLoader.loadClass( wrapperClassName );
+            }
+            finally
+            {
+                m_bcelClassLoader.tearDown();
+            }
         }
 
         return generatedClass;
