@@ -85,7 +85,7 @@ public class FortressServiceSelector
         }
         catch ( final Exception e )
         {
-            final String name = m_key + "/" + hint.toString();
+            final String name = m_key + "/" + String.valueOf(hint);
             final String message = "Could not return a reference to the Component";
             throw new ServiceException( name, message, e );
         }
@@ -127,7 +127,7 @@ public class FortressServiceSelector
         {
             final String message =
                 "The hint does not exist in the ComponentSelector";
-            throw new ServiceException( m_key + "/" + hint.toString(),
+            throw new ServiceException( m_key + "/" + String.valueOf(hint),
                 message );
         }
         return handler;
