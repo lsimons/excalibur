@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4" relativePaths="true">
+  <component name="ModuleRootManager" />
+  <component name="NewModuleRootManager">
+    <output url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/ecm/target/classes" />
+    <exclude-output />
+    <output-test url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/ecm/target/test-classes" />
+    <content url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/ecm">
+      <sourceFolder url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/ecm/src/java" isTestSource="false" />
+    </content>
+    <content url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/ecm-examples">
+      <sourceFolder url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/ecm-examples/instrument-manager/src/java" isTestSource="false" />
+    </content>
+    <content url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/ecm-test">
+      <sourceFolder url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/ecm-test/src/test" isTestSource="true" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="avalon-framework-api-4.1.5" level="project" />
+    <orderEntry type="library" name="avalon-framework-impl-4.1.5" level="project" />
+    <orderEntry type="library" name="avalon-logkit-2.0" level="project" />
+    <orderEntry type="library" name="commons-collections-2.1" level="project" />
+    <orderEntry type="library" name="concurrent-1.3.2" level="project" />
+    <orderEntry type="library" name="excalibur-instrument-manager-trunk" level="project" />
+    <orderEntry type="library" name="excalibur-instrument-spi-trunk" level="project" />
+    <orderEntry type="library" name="excalibur-instrument-trunk" level="project" />
+    <orderEntry type="library" name="excalibur-pool-api-trunk" level="project" />
+    <orderEntry type="library" name="excalibur-pool-impl-trunk" level="project" />
+    <orderEntry type="library" name="excalibur-pool-instrumented-trunk" level="project" />
+    <orderEntry type="library" name="junit-3.8.1" level="project" />
+    <orderEntry type="library" name="servletapi-2.3" level="project" />
+    <orderEntry type="library" name="excalibur-i18n-trunk" level="project" />
+  </component>
+</module>
+

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4" relativePaths="true">
+  <component name="ModuleRootManager" />
+  <component name="NewModuleRootManager">
+    <output url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/fortress1-api/target/classes" />
+    <exclude-output />
+    <output-test url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/fortress1-api/target/test-classes" />
+    <content url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/fortress1-api">
+      <sourceFolder url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/fortress1-api/src/java" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="avalon-framework-api-4.1.5" level="project" />
+    <orderEntry type="library" name="avalon-framework-impl-4.1.5" level="project" />
+    <orderEntry type="library" name="excalibur-event-api-trunk" level="project" />
+    <orderEntry type="library" name="excalibur-event-impl-trunk" level="project" />
+    <orderEntry type="library" name="junit-3.8.1" level="project" />
+  </component>
+</module>
+

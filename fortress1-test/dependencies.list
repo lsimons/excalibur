@@ -5,6 +5,7 @@
 excalibur-fortress1-api - - - - runtime,inherit=runtime
 excalibur-fortress1-impl - - - - runtime,inherit=runtime
 excalibur-fortress1-meta - - - - runtime,inherit=runtime
+excalibur-fortress1-bean - - - - runtime,inherit=runtime
 avalon-framework 4.1.5 framework http://www.apache.org/dist/avalon - runtime,inherit=runtime
 avalon-logkit 2.0 - - - runtime,inherit=runtime
 commons-collections 2.1 - - - runtime,inherit=runtime
@@ -24,6 +25,5 @@ xml-apis 2.0.2 - - - runtime,inherit=runtime
 excalibur-i18n - - - - runtime,inherit=runtime
 xalan 2.5.1 - - - runtime,inherit=runtime
 xerces 2.3.0 - - - runtime,inherit=runtime
-excalibur-fortress-bean - - - - runtime,inherit=runtime
 qdox 1.2 - - - runtime,inherit=runtime
 ant 1.5.1 - - - runtime,inherit=runtime

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4" relativePaths="true">
+  <component name="ModuleRootManager" />
+  <component name="NewModuleRootManager">
+    <output url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/fortress1-impl/target/classes" />
+    <exclude-output />
+    <output-test url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/fortress1-impl/target/test-classes" />
+    <content url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/fortress1-bean">
+      <sourceFolder url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/fortress1-bean/src/java" isTestSource="false" />
+      <sourceFolder url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/fortress1-bean/src/test" isTestSource="true" />
+    </content>
+    <content url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/fortress1-examples">
+      <sourceFolder url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/fortress1-examples/src/java" isTestSource="false" />
+    </content>
+    <content url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/fortress1-impl">
+      <sourceFolder url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/fortress1-impl/src/java" isTestSource="false" />
+    </content>
+    <content url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/fortress1-meta">
+      <sourceFolder url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/fortress1-meta/src/java" isTestSource="false" />
+    </content>
+    <content url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/fortress1-test">
+      <sourceFolder url="file:///home/lsimons/svn/asf/excalibur/sandbox/fortress2/fortress1-test/src/test" isTestSource="true" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="avalon-framework-api-4.1.5" level="project" />
+    <orderEntry type="library" name="avalon-framework-impl-4.1.5" level="project" />
+    <orderEntry type="library" name="avalon-logkit-2.0" level="project" />
+    <orderEntry type="library" name="bcel-5.1" level="project" />
+    <orderEntry type="library" name="commons-beanutils-1.6.1" level="project" />
+    <orderEntry type="library" name="commons-collections-2.1" level="project" />
+    <orderEntry type="library" name="concurrent-1.3.2" level="project" />
+    <orderEntry type="library" name="excalibur-event-api-trunk" level="project" />
+    <orderEntry type="library" name="excalibur-event-impl-trunk" level="project" />
+    <orderEntry type="library" name="excalibur-i18n-trunk" level="project" />
+    <orderEntry type="library" name="excalibur-instrument-manager-trunk" level="project" />
+    <orderEntry type="library" name="excalibur-instrument-spi-trunk" level="project" />
+    <orderEntry type="library" name="excalibur-instrument-trunk" level="project" />
+    <orderEntry type="library" name="excalibur-lifecycle-api-trunk" level="project" />
+    <orderEntry type="library" name="excalibur-lifecycle-impl-trunk" level="project" />
+    <orderEntry type="library" name="excalibur-pool-api-trunk" level="project" />
+    <orderEntry type="library" name="excalibur-pool-impl-trunk" level="project" />
+    <orderEntry type="library" name="excalibur-sourceresolve-trunk" level="project" />
+    <orderEntry type="library" name="junit-3.8.1" level="project" />
+    <orderEntry type="library" name="servletapi-2.3" level="project" />
+    <orderEntry type="library" name="ant-1.5.1" level="project" />
+    <orderEntry type="library" name="qdox-1.2" level="project" />
+    <orderEntry type="library" name="xalan-2.5.1" level="project" />
+    <orderEntry type="library" name="xerces-2.4.0" level="project" />
+    <orderEntry type="library" name="xml-apis-2.0.2" level="project" />
+    <orderEntry type="module" module-name="fortress1-api" />
+  </component>
+</module>
+
