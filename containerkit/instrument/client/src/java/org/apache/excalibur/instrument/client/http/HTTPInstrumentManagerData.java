@@ -35,6 +35,12 @@ class HTTPInstrumentManagerData
     /* Name of the remote object. */
     private String m_name;
     
+    /* Flag which keeps track of whether the manager supports batched lease updates. */
+    private boolean m_batchedUpdates;
+    
+    /* Flag which keeps track of whether the manager is read only or not. */
+    private boolean m_readOnly;
+    
     private List m_instrumentables = new ArrayList();
     private HTTPInstrumentableData[] m_instrumentableAry;
     private Map m_instrumentableMap = new HashMap();
@@ -70,6 +76,12 @@ class HTTPInstrumentManagerData
         super.update( configuration );
         
         m_name = configuration.getAttribute( "name" );
+        
+        // Support for batched lease creates and renewals added in version 1.2.
+        m_batchedUpdates = configuration.getAttributeAsBoolean( "batched-updates", false );
+        
+        // read-only attribute added in version 1.2.
+        m_readOnly = configuration.getAttributeAsBoolean( "read-only", false );
         
         if ( getLogger().isDebugEnabled() )
         {
@@ -158,6 +170,32 @@ class HTTPInstrumentManagerData
     }
     
     /**
+     * Returns true if the InstrumentManager on the server is operating in
+     *  read-only mode.
+     *
+     * @return True if read-only.
+     *
+     * @since 1.2
+     */
+    public boolean isReadOnly()
+    {
+        return m_readOnly;
+    }
+    
+    /**
+     * Returns true if batched lease creates and renewals are implemented on
+     *  the server.
+     *
+     * @return True if read-only.
+     *
+     * @since 1.2
+     */
+    private boolean isSupportsBatchedUpdates()
+    {
+        return m_batchedUpdates;
+    }
+    
+    /**
      * Gets a thread-safe snapshot of the instrumentable list.
      *
      * @return A thread-safe snapshot of the instrumentable list.
@@ -216,7 +254,8 @@ class HTTPInstrumentManagerData
      * @param description Description to assign to the new sample.
      * @param interval Sample interval of the new sample.
      * @param sampleCount Number of samples in the new sample.
-     * @param leaseTime Requested lease time.  The server may not grant the full lease.
+     * @param leaseTime Requested lease time.  The server may not grant the
+     *                  full lease.
      * @param sampleType The type of sample to be created.
      */
     public void createInstrumentSample( String instrumentName,
@@ -232,6 +271,76 @@ class HTTPInstrumentManagerData
         connection.getState( "create-sample.xml?name=" + urlEncode( instrumentName )
             + "&description=" + urlEncode( description ) + "&interval=" + interval
             + "&size=" + sampleCount + "&lease=" + leaseTime + "&type=" + sampleType );
+    }
+    
+    /**
+     * Requests that a set of samples be created or that their leases be
+     *  updated.  All array parameters must be of the same length.
+     *
+     * @param instrumentNames The full names of the instruments whose sample
+     *                        are to be created or updated.
+     * @param descriptions Descriptions to assign to the new samples.
+     * @param intervals Sample intervals of the new samples.
+     * @param sampleCounts Number of samples in each the new samples.
+     * @param leaseTimes Requested lease times.  The server may not grant the
+     *                   full leases.
+     * @param sampleTypes The types of samples to be created.
+     */
+    public void createInstrumentSamples( String[] instrumentNames,
+                                         String[] descriptions,
+                                         long[] intervals,
+                                         int[] sampleCounts,
+                                         long[] leaseTimes,
+                                         int[] sampleTypes )
+    {
+        HTTPInstrumentManagerConnection connection =
+            (HTTPInstrumentManagerConnection)getConnection();
+        
+        // Validate the arguments to avoid errors from misuse.
+        if ( ( instrumentNames.length != descriptions.length )
+            || ( instrumentNames.length != intervals.length )
+            || ( instrumentNames.length != sampleCounts.length )
+            || ( instrumentNames.length != leaseTimes.length )
+            || ( instrumentNames.length != sampleTypes.length ) )
+        {
+            throw new IllegalArgumentException( "Array lengths of all parameters must be equal." );
+        }
+        
+        // If batched updates are not supported, then do them individually
+        if ( isSupportsBatchedUpdates() )
+        {
+            StringBuffer sb = new StringBuffer();
+            sb.append( "create-samples.xml?" );
+            for ( int i = 0; i < instrumentNames.length; i++ )
+            {
+                if ( i > 0 )
+                {
+                    sb.append( "&" );
+                }
+                sb.append( "name=" );
+                sb.append( urlEncode( instrumentNames[i] ) );
+                sb.append( "&description=" );
+                sb.append( urlEncode( descriptions[i] ) );
+                sb.append( "&interval=" );
+                sb.append( intervals[i] );
+                sb.append( "&size=" );
+                sb.append( sampleCounts[i] );
+                sb.append( "&lease=" );
+                sb.append( leaseTimes[i] );
+                sb.append( "&type=" );
+                sb.append( sampleTypes[i] );
+            }
+            
+            connection.getState( sb.toString() );
+        }
+        else
+        {
+            for ( int i = 0; i < instrumentNames.length; i++ )
+            {
+                createInstrumentSample( instrumentNames[i], descriptions[i], intervals[i],
+                    sampleCounts[i], leaseTimes[i], sampleTypes[i] );
+            }
+        }
     }
     
     /*---------------------------------------------------------------

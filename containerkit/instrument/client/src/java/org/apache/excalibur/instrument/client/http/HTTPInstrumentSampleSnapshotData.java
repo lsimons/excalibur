@@ -19,6 +19,7 @@ package org.apache.excalibur.instrument.client.http;
 
 import java.util.StringTokenizer;
 
+import org.apache.excalibur.instrument.client.Data;
 import org.apache.excalibur.instrument.client.InstrumentSampleSnapshotData;
 
 import org.apache.avalon.framework.configuration.Configuration;
@@ -36,16 +37,29 @@ class HTTPInstrumentSampleSnapshotData
      *-------------------------------------------------------------*/
     /**
      * Creates a new HTTPInstrumentSampleSnapshotData.
+     *
+     * @param connection The connection used to communicate with the server.
+     * @param name The name of the data element.
      */
-    HTTPInstrumentSampleSnapshotData( HTTPInstrumentSampleData parent,
+    HTTPInstrumentSampleSnapshotData( HTTPInstrumentManagerConnection connection,
                                       String name )
     {
-        super( (HTTPInstrumentManagerConnection)parent.getConnection(), parent, name );
+        super( connection, null, name );
     }
     
     /*---------------------------------------------------------------
      * AbstractHTTPElementData Methods
      *-------------------------------------------------------------*/
+    /**
+     * Returns the parent data object.
+     *
+     * @return The parent data object.
+     */
+    public Data getParent()
+    {
+        throw new IllegalStateException( "getParent() can not be called for snapshots." );
+    }
+    
     /**
      * Update the contents of the object using values from the Configuration object.
      *
@@ -64,7 +78,10 @@ class HTTPInstrumentSampleSnapshotData
                 + "to version " + getStateVersion() );
         }
         
-        m_samples = new int[getSize()];
+        // Get the actual number of samples returned.
+        int count = configuration.getAttributeAsInteger( "count", getSize() );
+        
+        m_samples = new int[count];
         
         String rawSamples = configuration.getChild( "values" ).getValue( "" );
         StringTokenizer st = new StringTokenizer( rawSamples, ", " );

@@ -19,9 +19,11 @@ package org.apache.excalibur.instrument.client.http;
 
 import java.io.InputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +38,7 @@ import org.apache.excalibur.instrument.client.InstrumentableData;
 import org.apache.excalibur.instrument.client.InstrumentManagerConnection;
 import org.apache.excalibur.instrument.client.InstrumentManagerConnectionListener;
 import org.apache.excalibur.instrument.client.InstrumentManagerData;
+import org.apache.excalibur.instrument.client.InstrumentSampleFrame;
 
 /**
  * A Connection to the remote InstrumentManager which connects using
@@ -179,26 +182,118 @@ public class HTTPInstrumentManagerConnection
     }
     
     /**
-     * Gets a thread-safe snapshot of the leased sample list.
+     * URL encode the specified string.
      *
-     * @return A thread-safe snapshot of the leased sample list.
+     * @param val String to be URL encoded.
+     *
+     * @return The URL encoded string.
      */
-    /*
-    public InstrumentSampleData[] getLeasedSamples()
+    String urlEncode( String val )
     {
-        InstrumentSampleData[] samples = m_leasedSampleAry;
-        if ( samples == null )
+        try
         {
-            synchronized ( m_leasedSamples )
+            return URLEncoder.encode( val, "UTF8" );
+        }
+        catch ( UnsupportedEncodingException e )
+        {
+            // Should never happen.
+            getLogger().error( "Bad encoding.", e );
+            return val;
+        }
+    }
+    
+    /**
+     * Updates all registered SampleFrames with the latest data from the
+     *  server.  The status of all Sample Frames is also handled by this
+     *  method, so it must handle disconnected connections and missing or
+     *  expired samples correctly.
+     *
+     * This method overrides the default to implement a batch update to
+     *  get all snapshots from the server in a single request.
+     */
+    public void updateSampleFrames()
+    {
+        InstrumentSampleFrame[] frames = getSampleFrameArray();
+        if ( frames.length == 0 )
+        {
+            // Nothing to do.
+            return;
+        }
+        
+        // Build up a set of arrays so that all of the snapshots can be requested at once.
+        String[] names = new String[frames.length];
+        long[] lastTimes = new long[frames.length];
+        HTTPInstrumentSampleSnapshotData[] snapshots =
+            new HTTPInstrumentSampleSnapshotData[frames.length];
+        for ( int i = 0; i < frames.length; i++ )
+        {
+            InstrumentSampleFrame frame = frames[i];
+            names[i] = frame.getInstrumentSampleName();
+            lastTimes[i] = frame.getLastSnapshotTime();
+        }
+        
+        // Request the snapshots.  Don't bother if we know we are not connected.
+        if ( isConnected() )
+        {
+            StringBuffer sb = new StringBuffer();
+            sb.append( "snapshots.xml?packed=true&compact=true" );
+            for ( int i = 0; i < frames.length; i++ )
             {
-                m_leasedSampleAry = new InstrumentSampleData[m_leasedSamples.size()];
-                m_leasedSamples.toArray( m_leasedSampleAry );
-                samples = m_leasedSampleAry;
+                sb.append( "&name=" );
+                sb.append( this.urlEncode( names[i] ) );
+                sb.append( "&base-time=" );
+                sb.append( lastTimes[i] );
+            }
+            Configuration configuration = getState( sb.toString() );
+            if ( configuration != null )
+            {
+                Configuration[] snapshotConfs = configuration.getChildren( "sample" );
+                for ( int i = 0; i < snapshotConfs.length; i++ )
+                {
+                    Configuration snapshotConf = snapshotConfs[i];
+                    String name = snapshotConf.getAttribute( "name", null );
+                    if ( name != null )
+                    {
+                        boolean expired = snapshotConf.getAttributeAsBoolean( "expired", false );
+                        if ( !expired )
+                        {
+                            // Look for the specified sample frame.  Should always exist.
+                            for ( int j = 0; j < frames.length; j++ )
+                            {
+                                if ( name.equals( names[j] ) )
+                                {
+                                    snapshots[j] =
+                                        new HTTPInstrumentSampleSnapshotData( this, name );
+                                    snapshots[j].enableLogging( getLogger() );
+                                    try
+                                    {
+                                        snapshots[j].update( snapshotConf );
+                                    }
+                                    catch ( ConfigurationException e )
+                                    {
+                                        // Should not happen.
+                                        getLogger().info( "Snapshot update failed.", e );
+                                        getLogger().info( " URL: " + sb.toString() );
+                                        getLogger().info( " i:" + i + " j:" + j );
+                                        snapshots[j] = null;
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
-        return samples;
+        
+        // Now we should have all available snapshots.  Loop back over the frames
+        //  and update them as is appropriate.
+        for ( int i = 0; i < frames.length; i++ )
+        {
+            InstrumentSampleFrame frame = frames[i];
+            frame.updateSnapshot( snapshots[i] );
+        }
     }
-    */
     
     /*---------------------------------------------------------------
      * Methods
@@ -333,16 +428,4 @@ public class HTTPInstrumentManagerConnection
             return null;
         }
     }
-    
-    /*
-    private void updateLeasedSamples()
-    {
-        InstrumentSampleData[] samples = getLeasedSamples();
-        for ( int i = 0; i < samples.length; i++ )
-        {
-            InstrumentSampleData sample = samples[i];
-            sample.updateLease();
-        }
-    }
-    */
 }

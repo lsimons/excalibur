@@ -111,8 +111,11 @@ class HTTPInstrumentSampleData
      */
     public InstrumentSampleSnapshotData getSnapshot()
     {
+        HTTPInstrumentManagerConnection connection =
+            (HTTPInstrumentManagerConnection)getConnection();
+        
         HTTPInstrumentSampleSnapshotData snapshot =
-            new HTTPInstrumentSampleSnapshotData( this, getName() );
+            new HTTPInstrumentSampleSnapshotData( connection, getName() );
         snapshot.enableLogging( getLogger() );
         if ( snapshot.update() )
         {

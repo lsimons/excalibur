@@ -36,7 +36,7 @@ import org.apache.avalon.framework.configuration.DefaultConfiguration;
  * @version CVS $Revision: 1.4 $ $Date: 2004/02/28 11:47:23 $
  * @since 4.1
  */
-class InstrumentSampleFrame
+public class InstrumentSampleFrame
     extends AbstractInternalFrame
 {
     public static final String FRAME_TYPE = "sample-frame";
@@ -55,6 +55,15 @@ class InstrumentSampleFrame
     private InstrumentManagerConnection m_connection;
     private String m_instrumentSampleName;
     private String m_fullName;
+    
+    /** The last time that a snapshot was received.  This is the time in the
+     *   snapshot and is always in Server time.  Not the time on this system. */
+    private long m_lastSnapshotTime;
+    
+    /** A buffered set of sample values.  May be null. */
+    private int[] m_samples;
+    
+    /** The LineChart currently visible in the Frame.  May be null. */
     private LineChart m_lineChart;
 
     /*---------------------------------------------------------------
@@ -142,9 +151,20 @@ class InstrumentSampleFrame
      *
      * @return The name of the sample being displayed.
      */
-    String getInstrumentSampleName()
+    public String getInstrumentSampleName()
     {
         return m_instrumentSampleName;
+    }
+    
+    /**
+     * The last time that a snapshot was received.  This is the time in the
+     *  snapshot and is always in Server time.  Not the time on this system.
+     *
+     * @return The last snapshot time.
+     */
+    public long getLastSnapshotTime()
+    {
+        return m_lastSnapshotTime;
     }
     
     /**
@@ -269,7 +289,7 @@ class InstrumentSampleFrame
     private void initChart( InstrumentSampleSnapshotData snapshot )
     {
         // Decide on a line interval based on the interval of the sample.
-        long interval = snapshot.getInterval();
+        long interval = Math.max( 1, snapshot.getInterval() );
         int hInterval;
         String format;
         String detailFormat;
@@ -341,16 +361,91 @@ class InstrumentSampleFrame
             m_state = STATE_SNAPSHOT;
             
             updateTitle();
-            updateIcon();
+        }
+
+        int size = snapshot.getSize();
+        
+        // The new samples that came in the snapshot may or may not be a complete
+        //  set.  They usually will be partial.
+        int[] newSamples = snapshot.getSamples();
+        if ( newSamples.length == size )
+        {
+            // We got a full sample set.  Just replace the internal sample buffer.
+            m_samples = newSamples;
+        }
+        else if ( newSamples.length > size )
+        {
+            // Should never happen.  But protect against it to avoid errors.
+            //  Only use the last {size} samples.
+            m_samples = new int[size];
+            System.arraycopy( newSamples, newSamples.length - size, m_samples, 0, size );
         }
         else
         {
-            // Update the contents of the chart.
-            m_lineChart.setValues( snapshot.getSamples(), snapshot.getTime() );
+            // We received a partial sample set, so we need to adjust the existing
+            //  data then copy the new data over the array.
             
-            // Icon can change.
-            updateIcon();
+            // Make sure that the local buffer is the correct size.
+            if ( m_samples == null )
+            {
+                m_samples = new int[size];
+            }
+            else if ( m_samples.length != size )
+            {
+                // The sample size changed on the server.
+                int[] tmpSamples = new int[size];
+                if ( m_samples.length > size )
+                {
+                    // Got smaller.  The beginning of the existing array gets trimmed.
+                    System.arraycopy( m_samples, m_samples.length - size, tmpSamples, 0, size );
+                }
+                else
+                {
+                    // Got larger.  The beginning of the new array will be all 0s.
+                    System.arraycopy(
+                        m_samples, 0, tmpSamples, size - m_samples.length, m_samples.length );
+                }
+                m_samples = tmpSamples;
+            }
+            
+            // Calculate the age of the buffered samples.
+            long age = snapshot.getTime() - m_lastSnapshotTime;
+            int intervalAge = (int)( age / snapshot.getInterval() );
+            if ( intervalAge > m_samples.length )
+            {
+                intervalAge = m_samples.length;
+            }
+            
+            // Move existing values down in the buffer as necessary.
+            if ( ( intervalAge > 0 ) && ( intervalAge < m_samples.length ) )
+            {
+                // We are moving down in the array so we can do this withtout a temp array.
+                System.arraycopy( m_samples, intervalAge, m_samples, 0, size - intervalAge );
+            }
+            
+            // This will only happen if there is a timing problem, but fill in any
+            //  space between the old and new values with 0s.
+            if ( intervalAge > newSamples.length )
+            {
+                for ( int i = size - intervalAge; i < size - newSamples.length; i++ )
+                {
+                    m_samples[i] = 0;
+                }
+            }
+            
+            // Copy the new samples over the end of the sample buffer.
+            System.arraycopy(
+                newSamples, 0, m_samples, size - newSamples.length, newSamples.length );
         }
+        
+        // Update the contents of the chart.
+        m_lineChart.setValues( m_samples, snapshot.getTime() );
+            
+        // Store the time of this snapshot.
+        m_lastSnapshotTime = snapshot.getTime();
+        
+        // Icon can change.
+        updateIcon();
     }
 
     /**
@@ -420,11 +515,12 @@ class InstrumentSampleFrame
         }
     }
     
-    
     /**
-     * Called once per second to prompt the sample frame to refresh itself.
+     * Called to update the frame when a snapshot is already available.
+     *
+     * @param snapshot Snapshot to update the frame with.  Null if unavailable.
      */
-    void update()
+    public void updateSnapshot( InstrumentSampleSnapshotData snapshot )
     {
         if ( m_connection.isDeleted() )
         {
@@ -438,9 +534,6 @@ class InstrumentSampleFrame
                 m_lineChart.setAntialias( getFrame().isAntialias() );
             }
             
-            // Request a snapshot from the connection
-            InstrumentSampleSnapshotData snapshot =
-                m_connection.getSampleSnapshot( m_instrumentSampleName );
             if ( snapshot == null )
             {
                 // A sample was not available.  Why.
@@ -465,6 +558,20 @@ class InstrumentSampleFrame
                 setStateSnapshot( snapshot );
             }
         }
+    }
+    
+    /**
+     * Called to update the frame and request a new snapshot from the server.
+     */
+    void update()
+    {
+        InstrumentSampleSnapshotData snapshot = null;
+        if ( !m_connection.isDeleted() )
+        {
+            snapshot = m_connection.getSampleSnapshot( m_instrumentSampleName );
+        }
+        
+        updateSnapshot( snapshot );
     }
 }
 

@@ -49,6 +49,10 @@ abstract class AbstractHTTPInstrumentSampleElementData
      *-------------------------------------------------------------*/
     /**
      * Creates a new AbstractHTTPInstrumentSampleElementData.
+     *
+     * @param connection The connection used to communicate with the server.
+     * @param parent The parent data element.
+     * @param name The name of the data element.
      */
     AbstractHTTPInstrumentSampleElementData( HTTPInstrumentManagerConnection connection,
                                              AbstractHTTPData parent,

@@ -50,7 +50,8 @@ public interface InstrumentManagerData
      * @param description Description to assign to the new sample.
      * @param interval Sample interval of the new sample.
      * @param sampleCount Number of samples in the new sample.
-     * @param leaseTime Requested lease time.  The server may not grant the full lease.
+     * @param leaseTime Requested lease time.  The server may not grant the
+     *                  full lease.
      * @param sampleType The type of sample to be created.
      */
     void createInstrumentSample( String instrumentName,
@@ -59,4 +60,24 @@ public interface InstrumentManagerData
                                  int sampleCount,
                                  long leaseTime,
                                  int sampleType );
+    
+    /**
+     * Requests that a set of samples be created or that their leases be
+     *  updated.  All array parameters must be of the same length.
+     *
+     * @param instrumentNames The full names of the instruments whose sample
+     *                        are to be created or updated.
+     * @param descriptions Descriptions to assign to the new samples.
+     * @param intervals Sample intervals of the new samples.
+     * @param sampleCounts Number of samples in each the new samples.
+     * @param leaseTimes Requested lease times.  The server may not grant the
+     *                   full leases.
+     * @param sampleTypes The types of samples to be created.
+     */
+    void createInstrumentSamples( String[] instrumentNames,
+                                  String[] descriptions,
+                                  long[] intervals,
+                                  int[] sampleCounts,
+                                  long[] leaseTimes,
+                                  int[] sampleTypes );
 }

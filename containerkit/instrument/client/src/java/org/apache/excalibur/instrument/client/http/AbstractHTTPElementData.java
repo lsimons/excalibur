@@ -71,7 +71,9 @@ abstract class AbstractHTTPElementData
     /**
      * Creates a new AbstractHTTPElementData.
      *
-     * @param description An initial description.
+     * @param connection The connection used to communicate with the server.
+     * @param parent The parent data element.
+     * @param name The name of the data element.
      */
     protected AbstractHTTPElementData( HTTPInstrumentManagerConnection connection,
                                        AbstractHTTPData parent,
@@ -131,6 +133,6 @@ abstract class AbstractHTTPElementData
     {
         super.update( configuration );
         
-        m_configured = configuration.getAttributeAsBoolean( "configured" );
+        m_configured = configuration.getAttributeAsBoolean( "configured", false );
     }
 }

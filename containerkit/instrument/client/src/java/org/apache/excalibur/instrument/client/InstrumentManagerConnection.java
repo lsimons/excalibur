@@ -128,15 +128,7 @@ public abstract class InstrumentManagerConnection
                     
                     m_frame.updateConnectionTab( this );
                     
-                    // Update each of the InstrumentSampleFrames belonging to this connection.
-                    if ( isConnected() )
-                    {
-                        InstrumentSampleFrame[] frames = getSampleFrameArray();
-                        for( int i = 0; i < frames.length; i++ )
-                        {
-                            frames[i].update();
-                        }
-                    }
+                    updateSampleFrames();
                 }
                 catch( Throwable t )
                 {
@@ -451,6 +443,22 @@ public abstract class InstrumentManagerConnection
     }
     
     /**
+     * Updates all registered SampleFrames with the latest data from the
+     *  server.  The status of all Sample Frames is also handled by this
+     *  method, so it must handle disconnected connections and missing or
+     *  expired samples correctly.
+     */
+    public void updateSampleFrames()
+    {
+        InstrumentSampleFrame[] frames = getSampleFrameArray();
+        for ( int i = 0; i < frames.length; i++ )
+        {
+            InstrumentSampleFrame frame = frames[i];
+            frame.update();
+        }
+    }
+    
+    /**
      * Returns the TreeModel which contains the entire Instrument tree for
      *  this connection.
      *
@@ -591,7 +599,7 @@ public abstract class InstrumentManagerConnection
      *
      * @return A thread save array representation of the InstrumentSampleFrames.
      */
-    private InstrumentSampleFrame[] getSampleFrameArray()
+    protected InstrumentSampleFrame[] getSampleFrameArray()
     {
         InstrumentSampleFrame[] array = m_sampleFrameArray;
         if ( array == null )
@@ -635,6 +643,7 @@ public abstract class InstrumentManagerConnection
 
             // Now create the frame
             sampleFrame = new InstrumentSampleFrame( sampleFrameState, this, m_frame );
+            sampleFrame.enableLogging( getLogger() );
             addSampleFrame( sampleName, sampleFrame );
             sampleFrame.addToDesktop( m_frame.getDesktopPane() );
         }
@@ -656,6 +665,7 @@ public abstract class InstrumentManagerConnection
             if ( sampleFrame == null )
             {
                 sampleFrame = new InstrumentSampleFrame( this, sampleName, m_frame );
+                sampleFrame.enableLogging( getLogger() );
                 addSampleFrame( sampleName, sampleFrame );
                 sampleFrame.addToDesktop( m_frame.getDesktopPane() );
             }
@@ -770,7 +780,7 @@ public abstract class InstrumentManagerConnection
             m_maintainedSampleLeaseMap.put( sampleName, sampleLease );
             m_maintainedSampleLeaseArray = null;
 
-            // Reset te last lease renewal time so that the leases along with this
+            // Reset the last lease renewal time so that the leases along with this
             //  new one will be renewed right away.
             m_lastLeaseRenewalTime = 0;
 
@@ -870,18 +880,32 @@ public abstract class InstrumentManagerConnection
         if ( now - m_lastLeaseRenewalTime > 30000 )
         {
             getLogger().debug( "Renew Leases:" );
+            
             MaintainedSampleLease[] leases = getMaintainedSampleLeaseArray();
+            String[] instrumentNames = new String[leases.length];
+            String[] descriptions = new String[leases.length];
+            long[] intervals = new long[leases.length];
+            int[] sampleCounts = new int[leases.length];
+            long[] leaseTimes = new long[leases.length];
+            int[] sampleTypes = new int[leases.length];
             for ( int i = 0; i < leases.length; i++ )
             {
                 MaintainedSampleLease lease = leases[i];
                 getLogger().debug( " lease: " + lease.getSampleName() );
                 
-                // Regardless of whether the sample already exists or not, it is created
-                //  or extended the same way.
-                getInstrumentManager().createInstrumentSample( lease.getInstrumentName(),
-                    lease.getDescription(), lease.getInterval(), lease.getSize(),
-                    lease.getLeaseDuration(), lease.getType() );
+                instrumentNames[i] = lease.getInstrumentName();
+                descriptions[i] = lease.getDescription();
+                intervals[i] = lease.getInterval();
+                sampleCounts[i] = lease.getSize();
+                leaseTimes[i] = lease.getLeaseDuration();
+                sampleTypes[i] = lease.getType();
             }
+            
+            // Regardless of whether the samples already exists or not, they
+            //  are created or extended the same way.  This way the client
+            //  will recreate a sample if it has expored.
+            getInstrumentManager().createInstrumentSamples(
+                instrumentNames, descriptions, intervals, sampleCounts, leaseTimes, sampleTypes );
 
             // Also, take this oportunity to update all of the leased samples in
             //  the model.

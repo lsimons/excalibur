@@ -17,9 +17,6 @@
 
 package org.apache.excalibur.instrument.client.http;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
@@ -52,6 +49,7 @@ abstract class AbstractHTTPData
     /**
      * Creates a new AbstractHTTPData.
      *
+     * @param connection The connection used to communicate with the server.
      * @param description An initial description.
      */
     protected AbstractHTTPData( HTTPInstrumentManagerConnection connection,
@@ -108,21 +106,19 @@ abstract class AbstractHTTPData
     protected void update( Configuration configuration )
         throws ConfigurationException
     {
-        m_description = configuration.getAttribute( "description" );
-        m_stateVersion = configuration.getAttributeAsInteger( "state-version" );
+        m_description = configuration.getAttribute( "description", "" );
+        m_stateVersion = configuration.getAttributeAsInteger( "state-version", 0 );
     }
     
+    /**
+     * URL encode the specified string.
+     *
+     * @param val String to be URL encoded.
+     *
+     * @return The URL encoded string.
+     */
     protected String urlEncode( String val )
     {
-        try
-        {
-            return URLEncoder.encode( val, "UTF8" );
-        }
-        catch ( UnsupportedEncodingException e )
-        {
-            // Should never happen.
-            getLogger().error( "Bad encoding.", e );
-            return val;
-        }
+        return m_connection.urlEncode( val );
     }
 }
