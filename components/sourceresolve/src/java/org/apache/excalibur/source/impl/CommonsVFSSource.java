@@ -18,6 +18,7 @@ package org.apache.excalibur.source.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Map;
 
 import org.apache.avalon.framework.logger.LogEnabled;
@@ -27,6 +28,7 @@ import org.apache.commons.vfs.FileObject;
 import org.apache.commons.vfs.FileSystemException;
 import org.apache.commons.vfs.FileSystemManager;
 import org.apache.commons.vfs.VFS;
+import org.apache.excalibur.source.ModifiableSource;
 import org.apache.excalibur.source.SourceException;
 import org.apache.excalibur.source.SourceUtil;
 
@@ -39,7 +41,7 @@ import org.apache.excalibur.source.SourceUtil;
  * @since Nov 19, 2004 10:54:02 AM
  */
 public class CommonsVFSSource extends AbstractSource
-    implements LogEnabled {
+    implements LogEnabled, ModifiableSource {
     
     /**
      * Constructor, creates instance of class.
@@ -119,7 +121,56 @@ public class CommonsVFSSource extends AbstractSource
             return false;
         }
     }
+    
+    // ModifiableSource methods
 
+    /**
+     * Whether we can cancel writing to the output stream
+     * 
+     * @param stream stream to cancel
+     * @return true if we can cancel, false otherwise
+     * @see org.apache.excalibur.source.ModifiableSource#canCancel(java.io.OutputStream)
+     */
+    public boolean canCancel(final OutputStream stream) {
+        // VFS API doesn't support buffering of write streams till close() directly
+        return false;
+    }
+    
+    /**
+     * Cancels writing to the specified output stream.
+     * 
+     * @param stream stream to cancel writing to
+     * @throws IOException if an error occurs
+     * @see org.apache.excalibur.source.ModifiableSource#cancel(java.io.OutputStream)
+     */
+    public void cancel(final OutputStream stream) throws IOException {
+        throw new IOException("Cancel() not implemented");
+    }
+    
+    /**
+     * Deletes the source.
+     * 
+     * @throws SourceException if an error occurs
+     * @see org.apache.excalibur.source.ModifiableSource#delete()
+     */
+    public void delete() throws SourceException {
+        try {
+            m_fileObject.delete();
+        } catch (final FileSystemException e) {
+            throw new SourceException("Unable to delete resource: " + m_location, e);
+        }
+    }
+    
+    /**
+     * Obtain an {@link OutputStream} to the source
+     * 
+     * @return an {@link OutputStream} 
+     * @see org.apache.excalibur.source.ModifiableSource#getOutputStream()
+     */
+    public OutputStream getOutputStream() throws IOException {
+        return m_fileContent.getOutputStream();
+    }
+    
     /**
      * Enables logging for this source.
      * 
