@@ -21,7 +21,7 @@ cd target/base
 maven site
 
 # copy merged data into main tree
-cd ../..
-mkdir -p target/docs
-cp -r target/base/target/docs/apidocs target/docs
-cp -r target/base/target/docs/clover target/docs
+#cd ../..
+#mkdir -p target/docs
+#cp -r target/base/target/docs/apidocs target/docs
+#cp -r target/base/target/docs/clover target/docs
