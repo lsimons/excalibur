@@ -38,8 +38,8 @@
             </classpath>
         </taskdef>
 
-        <fortress-collect-meta destdir="${maven.build.dir}/test-classes">
-            <fileset dir="${maven.src.dir}/test"/>
+        <fortress-collect-meta destdir="${maven.build.dir}/classes">
+            <fileset dir="${maven.src.dir}/java"/>
         </fortress-collect-meta>
     </goal>
 
