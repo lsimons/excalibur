@@ -17,6 +17,7 @@
 
 package org.apache.avalon.fortress.impl;
 
+import org.apache.avalon.fortress.impl.factory.ProxyManager;
 import org.apache.avalon.fortress.impl.interceptor.DefaultInterceptorManager;
 import org.apache.avalon.fortress.interceptor.InterceptorManager;
 import org.apache.avalon.fortress.util.CompositeException;
@@ -69,6 +70,24 @@ public class InterceptorEnabledContainer extends DefaultContainer
     /// 
 
     /**
+     * Turn off proxy (interceptable components already has proxy)
+     *
+     * @param proxyType
+     * @throws ConfigurationException
+     */
+    protected void interpretProxy( final String proxyType ) throws ConfigurationException
+    {
+        try
+        {
+            setProxyManager( new ProxyManager( ProxyManager.NONE ) );
+        }
+        catch (Exception e)
+        {
+            throw new ConfigurationException("Could not create ProxyManager", e);
+        }
+    }
+    
+    /**
      * Pending
      * 
      * @see org.apache.avalon.fortress.impl.AbstractContainer#provideComponentContext(org.apache.avalon.framework.context.Context)
@@ -77,6 +96,7 @@ public class InterceptorEnabledContainer extends DefaultContainer
     {
         DefaultContext context = new DefaultContext( parent );
         context.put( "container", this );
+        context.put( "metamanager", m_metaManager );
         context.makeReadOnly();
         return context;
     }

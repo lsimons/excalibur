@@ -20,6 +20,7 @@ package org.apache.avalon.fortress.impl.interceptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import org.apache.avalon.fortress.ExtendedMetaInfo;
 import org.apache.avalon.fortress.interceptor.Interceptor;
 
 /**
@@ -56,9 +57,9 @@ public abstract class AbstractInterceptor implements Interceptor
      * 
      * @see org.apache.avalon.fortress.interceptor.Interceptor#intercept(java.lang.Object, java.lang.reflect.Method, java.lang.Object[])
      */
-    public Object intercept(Object instance, Method method, Object[] args)
+    public Object intercept(Object instance, ExtendedMetaInfo meta, Method method, Object[] args)
         throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
     {
-        return getNext().intercept( instance, method, args );
+        return getNext().intercept( instance, meta, method, args );
     }
 }

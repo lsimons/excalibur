@@ -22,8 +22,11 @@ import java.util.TreeMap;
 
 import org.apache.avalon.fortress.Container;
 import org.apache.avalon.fortress.ContainerListener;
+import org.apache.avalon.fortress.ExtendedMetaInfo;
 import org.apache.avalon.fortress.MetaInfoEntry;
 import org.apache.avalon.fortress.MetaInfoManager;
+import org.apache.avalon.fortress.attributes.AttributeInfo;
+import org.apache.avalon.fortress.impl.interceptor.strategies.simple.SimpleInterceptableFactory;
 import org.apache.avalon.fortress.interceptor.Interceptor;
 import org.apache.avalon.fortress.interceptor.InterceptorManager;
 import org.apache.avalon.fortress.interceptor.InterceptorManagerException;
@@ -43,15 +46,20 @@ import org.apache.avalon.framework.context.Contextualizable;
 public class DefaultInterceptorManager
     implements InterceptorManager, Configurable, Contextualizable, Initializable, ContainerListener
 {
+    protected static final String INTERCEPTABLE_TAGNAME = "excalibur.interceptable";
+    protected static final String FAMILY_ATT_NAME = "family";
+    
     ///
     /// Instance fields
     ///
 
-    private Container m_container;
+    protected final Map m_families;
+
+    protected Container m_container;
+
+    protected MetaInfoManager m_metaManager;
     
-    private final Map m_families;
-    
-    private MetaInfoManager m_metaManager;
+    protected InterceptableFactory m_interFactory = new SimpleInterceptableFactory();
 
     ///
     /// Constructors
@@ -82,6 +90,7 @@ public class DefaultInterceptorManager
     public void contextualize(Context context) throws ContextException
     {
         m_container = (Container) context.get("container");
+        m_metaManager = (MetaInfoManager) context.get("metamanager");
     }
 
     /**
@@ -91,43 +100,10 @@ public class DefaultInterceptorManager
      */
     public void configure(final Configuration config) throws ConfigurationException
     {
-        final Configuration[] sets = config.getChildren("set");
-        
-        for (int i = 0; i < sets.length; i++)
-        {
-            final Configuration set = sets[i];
-            final String familyName = set.getAttribute("family", "");
-            
-            if ( "".equals(familyName) )
-            {
-                throw new ConfigurationException("Element 'set' must " +                    "specify a valid 'family' attribute.");
-            }
-            
-            Configuration[] interceptors = set.getChildren("interceptor");
-            
-            for (int j = 0; j < interceptors.length; j++)
-            {
-                final Configuration interceptor = interceptors[j];
-                final String key = interceptor.getAttribute("name", "");
-                final String clazz = interceptor.getAttribute("class", "");
-                
-                if ( "".equals(key) || "".equals(clazz) )
-                {
-                    throw new ConfigurationException("Element 'interceptor' must " +                        "specify 'name' and 'class' attributes.");
-                }
-                
-                try
-                {
-                    add( familyName, key, clazz );
-                }
-                catch(InterceptorManagerException ex)
-                {
-                    throw new ConfigurationException("Invalid interceptor entry", ex);
-                }
-            }
-        }
+        configureFactory( config.getAttribute("factory", "") );
+        configureInterceptors(config);
     }
-
+    
     /**
      * Pending
      * 
@@ -149,15 +125,32 @@ public class DefaultInterceptorManager
      */
     public Object componentCreated( final MetaInfoEntry entry, final Object instance )
     {
-        try
+        Object newInstance = instance;
+        
+        final ExtendedMetaInfo metaInfo = 
+            m_metaManager.getExtendedMetaInfo( entry.getComponentClass().getName() );
+        final String family = obtainComponentFamily( metaInfo );
+        
+        if ( family != null )
         {
-            m_metaManager = (MetaInfoManager) m_container.get( MetaInfoManager.ROLE, null );
-        }
-        catch(Exception ex)
-        {
+            try
+            {
+                Interceptor chain = buildChain( family );
+                
+                Class[] interfaces = entry.getComponentClass().getInterfaces();
+                
+                newInstance = m_interFactory.createInterceptableInstance( 
+                    instance, metaInfo, interfaces, chain );
+            }
+            catch(IllegalAccessException ex)
+            {
+            }
+            catch(InstantiationException ex)
+            {
+            }
         }
 
-        return instance;
+        return newInstance;
     }
 
     /**
@@ -267,6 +260,84 @@ public class DefaultInterceptorManager
         return new TailInterceptor();
     }
     
+    protected String obtainComponentFamily( final ExtendedMetaInfo metaInfo )
+    {
+        // TODO: There are plenty space here for optimizations.
+        
+        AttributeInfo[] attributes = metaInfo.getClassAttributes();
+        
+        for (int i = 0; i < attributes.length; i++)
+        {
+            AttributeInfo info = attributes[i];
+            if (INTERCEPTABLE_TAGNAME.equalsIgnoreCase( info.getName() ))
+            {
+                return (String) info.getProperties().get( FAMILY_ATT_NAME );
+            }
+        }
+        
+        return null;
+    }
+    
+    protected void configureFactory( final String factoryClass ) throws ConfigurationException
+    {
+        if ( factoryClass.equals("") )
+        {
+            // Use the default factory
+            return;
+        }
+        
+        try
+        {
+            m_interFactory = (InterceptableFactory) 
+                Thread.currentThread().getContextClassLoader().loadClass( factoryClass ).newInstance();
+        }
+        catch(Exception ex)
+        {
+            throw new ConfigurationException("Custom InterceptableFactory specified could not be created.");
+        }
+    }
+
+    protected void configureInterceptors(final Configuration config) throws ConfigurationException
+    {
+        final Configuration[] sets = config.getChildren("set");
+        
+        for (int i = 0; i < sets.length; i++)
+        {
+            final Configuration set = sets[i];
+            final String familyName = set.getAttribute(FAMILY_ATT_NAME, "");
+            
+            if ( "".equals(familyName) )
+            {
+                throw new ConfigurationException("Element 'set' must " +
+                    "specify a valid 'family' attribute.");
+            }
+            
+            Configuration[] interceptors = set.getChildren("interceptor");
+            
+            for (int j = 0; j < interceptors.length; j++)
+            {
+                final Configuration interceptor = interceptors[j];
+                final String key = interceptor.getAttribute("name", "");
+                final String clazz = interceptor.getAttribute("class", "");
+                
+                if ( "".equals(key) || "".equals(clazz) )
+                {
+                    throw new ConfigurationException("Element 'interceptor' must " +
+                        "specify 'name' and 'class' attributes.");
+                }
+                
+                try
+                {
+                    add( familyName, key, clazz );
+                }
+                catch(InterceptorManagerException ex)
+                {
+                    throw new ConfigurationException("Invalid interceptor entry", ex);
+                }
+            }
+        }
+    }
+
     ///
     /// Private implementation
     ///

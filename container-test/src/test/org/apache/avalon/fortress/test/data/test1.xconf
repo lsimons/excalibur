@@ -17,19 +17,22 @@ limitations under the License.
 <test>
     <component1 id="component1"
         logger="component1"
-        activation="startup"/>
+        activation="lazy"/>
     <component2 id="component2"
         logger="component2"
         pool-min="2"
-        activation="startup"/>
+        activation="lazy"/>
     <component3 id="component3"
         logger="component3"
-        activation="startup"/>
+        activation="lazy"/>
     <component4 id="component4"
         logger="component4"
-        activation="startup"/>
+        activation="lazy"/>
     <customerDAO id="customerDAO"
         logger="customerDAO"
+        activation="lazy"/>
+    <supplierDAO id="supplierDAO"
+        logger="supplierDAO"
         activation="lazy"/>
 </test>
 

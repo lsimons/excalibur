@@ -17,56 +17,23 @@
 
 package org.apache.avalon.fortress.impl.interceptor.test;
 
-import org.apache.avalon.fortress.ContainerManager;
-import org.apache.avalon.fortress.impl.DefaultContainerManager;
-import org.apache.avalon.fortress.impl.InterceptorEnabledContainer;
+import org.apache.avalon.fortress.impl.handler.ComponentHandler;
 import org.apache.avalon.fortress.impl.interceptor.TailInterceptor;
 import org.apache.avalon.fortress.impl.interceptor.test.components.CustomerDataAccessObject;
+import org.apache.avalon.fortress.impl.interceptor.test.examples.FakeTransactionManager;
 import org.apache.avalon.fortress.impl.interceptor.test.examples.ValidInterceptor;
 import org.apache.avalon.fortress.interceptor.Interceptor;
-import org.apache.avalon.fortress.interceptor.InterceptorManager;
-import org.apache.avalon.fortress.util.FortressConfig;
-import org.apache.avalon.framework.container.ContainerUtil;
-
-import junit.framework.TestCase;
 
 /**
  * Pending
  * 
  * @author <a href="mailto:dev@excalibur.apache.org">Excalibur Development Team</a>
  */
-public class DefaultInterceptorManagerTestCase extends TestCase
+public class DefaultInterceptorManagerTestCase extends AbstractInterceptorManagerTest
 {
-    private InterceptorEnabledContainer m_container;
-    private InterceptorManager m_interManager;
-    
-    /**
-     * Constructor for DefaultInterceptorManagerTestCase.
-     * @param name
-     */
-    public DefaultInterceptorManagerTestCase(String name)
-    {
-        super(name);
-    }
-
-    protected void setUp() throws Exception
-    {
-        super.setUp();
-        
-        m_container = createContainer();
-        m_interManager = m_container.getInterceptorManager();
-    }
-
-    protected void tearDown() throws Exception
-    {
-        super.tearDown();
-        
-        m_container.dispose();
-    }
-
     public void testAddInterceptor() throws Exception
     {
-        m_interManager.add( "dao", "key", ValidInterceptor.class.getName() );
+        addValidInterceptor();
         String[] families = m_interManager.getFamilies();
         
         assertNotNull( families );
@@ -102,30 +69,29 @@ public class DefaultInterceptorManagerTestCase extends TestCase
         assertNull( interceptor.getNext() );
     }
 
-    private InterceptorEnabledContainer createContainer() throws Exception
-    {
-        final FortressConfig config = new FortressConfig();
-        config.setContainerClass( InterceptorEnabledContainer.class );
-        config.setContextDirectory( "./" );
-        config.setWorkDirectory( "./" );
-        
-        final String BASE = "resource://org/apache/avalon/fortress/test/data/";
-        config.setContainerConfiguration( BASE + "test1.xconf" );
-        config.setLoggerManagerConfiguration( BASE + "test1.xlog" );
-
-        final ContainerManager cm = new DefaultContainerManager( config.getContext() );
-        ContainerUtil.initialize( cm );
-
-        return (InterceptorEnabledContainer) cm.getContainer();
-    }
     
     public void testGetComponent() throws Exception
     {
         testAddInterceptor();
         
-        m_container.get( CustomerDataAccessObject.ROLE, "*" );
+        ComponentHandler handler = (ComponentHandler) 
+            m_container.get( CustomerDataAccessObject.ROLE, "*" );
         
+        CustomerDataAccessObject dao = (CustomerDataAccessObject) handler.get();
         
-    }
+        assertEquals( 0, FakeTransactionManager.instance().getTransactionsStarted() );
+        assertEquals( 0, FakeTransactionManager.instance().getTransactionsFinished() );
+        
+        dao.save( "Data" );
 
+        assertEquals( 1, FakeTransactionManager.instance().getTransactionsStarted() );
+        assertEquals( 1, FakeTransactionManager.instance().getTransactionsFinished() );
+        
+        dao.save( "More data" );
+
+        assertEquals( 2, FakeTransactionManager.instance().getTransactionsStarted() );
+        assertEquals( 2, FakeTransactionManager.instance().getTransactionsFinished() );
+        
+        handler.put( dao );
+    }
 }

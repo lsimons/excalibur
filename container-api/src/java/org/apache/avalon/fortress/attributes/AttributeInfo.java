@@ -17,7 +17,7 @@
 
 package org.apache.avalon.fortress.attributes;
 
-import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -27,24 +27,26 @@ import java.util.Map;
  */
 public class AttributeInfo
 {
+    public static final AttributeInfo EMPTY = new AttributeInfo();
+    
     private final String m_name;
     private final Map m_properties;
     private final AttributeLevel m_level;
-    private final Method m_method;
 
-    public AttributeInfo( final String name, final Map properties, 
-                          final AttributeLevel level, final Method method )
+    private AttributeInfo()
+    {
+        m_name = "";
+        m_properties = Collections.EMPTY_MAP;
+        m_level = AttributeLevel.Undefined;
+    }
+
+    public AttributeInfo( final String name, 
+                          final Map properties, 
+                          final AttributeLevel level )
     {
         m_name = name;
         m_properties = properties;
         m_level = level;
-        m_method = method;
-    }
-    
-    public AttributeInfo( final String name, final Map properties, 
-                          final AttributeLevel level )
-    {
-        this( name, properties, level, null );
     }
     
     public String getName()
@@ -65,15 +67,5 @@ public class AttributeInfo
     public AttributeLevel getAttributeLevel()
     {
         return m_level;
-    }
-
-    /**
-     * Pending
-     * 
-     * @return
-     */
-    public Method getMethod()
-    {
-        return m_method;
     }
 }

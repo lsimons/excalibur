@@ -69,7 +69,7 @@ public class ServiceTestCase extends TestCase
 
     public void testAddComponent()
     {
-        JavaClass model = new JavaClass()
+        JavaClass model = new JavaClass(null)
         {
             public String getFullyQualifiedName()
             {

@@ -20,6 +20,8 @@ package org.apache.avalon.fortress.impl.interceptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import org.apache.avalon.fortress.ExtendedMetaInfo;
+
 /**
  * The tail interceptor delegates the call to the object.
  * 
@@ -30,7 +32,7 @@ public class TailInterceptor extends AbstractInterceptor
     /**
      * Simply invokes the method on the instance.
      */
-    public Object intercept(Object instance, Method method, Object[] args)
+    public Object intercept(Object instance, ExtendedMetaInfo meta, Method method, Object[] args)
         throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
     {
         return method.invoke( instance, args );

@@ -128,7 +128,9 @@ public final class ServiceMetaManager extends AbstractMetaInfoManager implements
 
     public ExtendedMetaInfo getExtendedMetaInfo( final String classname )
     {
-        return EMPTY_EXTENDED_META_INFO;
+        ExtendedMetaInfo info = (ExtendedMetaInfo) m_class2ExtendedInfo.get( classname );
+        
+        return info != null ? info : EMPTY_EXTENDED_META_INFO;
     }
     
     /**

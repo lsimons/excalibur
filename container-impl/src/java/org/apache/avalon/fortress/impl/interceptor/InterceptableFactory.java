@@ -17,6 +17,7 @@
 
 package org.apache.avalon.fortress.impl.interceptor;
 
+import org.apache.avalon.fortress.ExtendedMetaInfo;
 import org.apache.avalon.fortress.interceptor.Interceptor;
 
 /**
@@ -26,6 +27,6 @@ import org.apache.avalon.fortress.interceptor.Interceptor;
  */
 public interface InterceptableFactory
 {
-    Object createInterceptableInstance( Object realInstance, /*ClassMetaData meta,*/ 
+    Object createInterceptableInstance( Object realInstance, ExtendedMetaInfo meta, 
         Class[] interfaces, Interceptor chain );
 }

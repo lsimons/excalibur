@@ -47,7 +47,7 @@ public class ComponentTestCase extends TestCase
     {
         super.setUp();
         
-        JavaClass model = new JavaClass()
+        JavaClass model = new JavaClass(null)
         {
             public String getFullyQualifiedName()
             {

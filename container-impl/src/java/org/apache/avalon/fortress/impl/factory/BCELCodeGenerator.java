@@ -36,7 +36,6 @@ import java.util.Set;
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  */
-
 public final class BCELCodeGenerator
 {
     //***************************************************************************

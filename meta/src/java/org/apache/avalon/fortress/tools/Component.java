@@ -26,7 +26,6 @@ import org.apache.tools.ant.BuildException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.*;
 
 /**
@@ -373,9 +372,7 @@ public final class Component
         
         try
         {
-            ObjectOutputStream objOutStream = new ObjectOutputStream( outStream );
-            QDoxSerializer.instance().serialize( objOutStream, m_javaClass );
-            objOutStream.close();
+            QDoxSerializer.instance().serialize( outStream, m_javaClass );
         }
         finally
         {

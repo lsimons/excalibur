@@ -21,9 +21,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
 import java.lang.reflect.Method;
 
 import org.apache.avalon.fortress.ExtendedMetaInfo;
@@ -84,10 +82,8 @@ public class QDoxSerializerTestCase extends TestCase
         
         /// Serialization
         ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
-        ObjectOutputStream outStream = new ObjectOutputStream( byteOutStream );   
         
-        QDoxSerializer.instance().serialize( outStream, clazz );
-        outStream.close();
+        QDoxSerializer.instance().serialize( byteOutStream, clazz );
         byteOutStream.close();
         
         assertTrue( byteOutStream.size() != 0 );
@@ -113,10 +109,8 @@ public class QDoxSerializerTestCase extends TestCase
         targetFile.deleteOnExit();
         
         FileOutputStream fsOutStream = new FileOutputStream( targetFile ); 
-        ObjectOutputStream outStream = new ObjectOutputStream( fsOutStream );   
         
-        QDoxSerializer.instance().serialize( outStream, clazz );
-        outStream.close();
+        QDoxSerializer.instance().serialize( fsOutStream, clazz );
         fsOutStream.close();
         
         /// Deserialization
@@ -135,6 +129,15 @@ public class QDoxSerializerTestCase extends TestCase
         assertNotNull( classAttrs );
         assertEquals( 3, classAttrs.length );
         
+        assertEquals( "attribute1", classAttrs[0].getName() );
+        assertEquals( 0, classAttrs[0].getProperties().size() );
+        
+        assertEquals( "attribute2", classAttrs[1].getName() );
+        assertEquals( 1, classAttrs[1].getProperties().size() );
+
+        assertEquals( "attribute3", classAttrs[2].getName() );
+        assertEquals( 2, classAttrs[2].getProperties().size() );
+        
         Method[] methods = Component.class.getDeclaredMethods();
         
         for (int i = 0; i < methods.length; i++)
@@ -146,7 +149,7 @@ public class QDoxSerializerTestCase extends TestCase
         }
     }
 
-    private JavaClass createJavaClass() throws FileNotFoundException
+    private JavaClass createJavaClass() throws Exception
     {
         JavaDocBuilder builder = new JavaDocBuilder();
         builder.addSource(new File("src/test/org/apache/avalon/fortress/attributes/qdox/test/data/Component.java"));

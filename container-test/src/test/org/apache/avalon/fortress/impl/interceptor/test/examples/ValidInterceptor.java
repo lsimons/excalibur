@@ -17,6 +17,10 @@
 
 package org.apache.avalon.fortress.impl.interceptor.test.examples;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import org.apache.avalon.fortress.ExtendedMetaInfo;
 import org.apache.avalon.fortress.impl.interceptor.AbstractInterceptor;
 
 /**
@@ -26,4 +30,21 @@ import org.apache.avalon.fortress.impl.interceptor.AbstractInterceptor;
  */
 public class ValidInterceptor extends AbstractInterceptor
 {
+    /**
+     * Document me!
+     *  
+     * @see org.apache.avalon.fortress.interceptor.Interceptor#intercept(java.lang.Object, java.lang.reflect.Method, java.lang.Object[])
+     */
+    public Object intercept(Object instance, ExtendedMetaInfo meta, Method method, Object[] args)
+        throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
+    {
+        FakeTransactionManager.instance().startTransaction();
+        
+        Object returnData = super.intercept(instance, meta, method, args);
+        
+        FakeTransactionManager.instance().endTransaction();
+        
+        return returnData;
+    }
+
 }

@@ -21,6 +21,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
+import org.apache.avalon.fortress.ExtendedMetaInfo;
 import org.apache.avalon.fortress.impl.interceptor.InterceptableFactory;
 import org.apache.avalon.fortress.interceptor.Interceptor;
 
@@ -36,21 +37,25 @@ public class SimpleInterceptableFactory implements InterceptableFactory
      * 
      * @see org.apache.avalon.fortress.impl.interceptor.InterceptableFactory#createInterceptableInstance(java.lang.Object, org.apache.avalon.fortress.interceptor.Interceptor)
      */
-    public Object createInterceptableInstance(Object realInstance, Class[] interfaces, Interceptor chain)
+    public Object createInterceptableInstance( Object realInstance, ExtendedMetaInfo meta, Class[] interfaces, Interceptor chain )
     {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        return Proxy.newProxyInstance( loader, interfaces, new InterceptorInvocationHandler( realInstance, chain ) );
+        InterceptorInvocationHandler handler = new InterceptorInvocationHandler( realInstance, chain, meta );
+        
+        return Proxy.newProxyInstance( loader, interfaces, handler );
     }
     
     public static class InterceptorInvocationHandler implements InvocationHandler
     {
         private final Object m_instance;
         private final Interceptor m_chain;
+        private final ExtendedMetaInfo m_meta;
         
-        public InterceptorInvocationHandler( Object instance, Interceptor chain )
+        public InterceptorInvocationHandler( Object instance, Interceptor chain, ExtendedMetaInfo meta )
         {
             m_instance = instance;
             m_chain = chain;
+            m_meta = meta;
         }
         
         /**
@@ -60,7 +65,7 @@ public class SimpleInterceptableFactory implements InterceptableFactory
          */
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable
         {
-            return m_chain.intercept( m_instance, method, args );
+            return m_chain.intercept( m_instance, m_meta, method, args );
         }
     }
 }

@@ -20,6 +20,8 @@ package org.apache.avalon.fortress.interceptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import org.apache.avalon.fortress.ExtendedMetaInfo;
+
 /**
  * Pending
  * 
@@ -31,6 +33,6 @@ public interface Interceptor
     
     Interceptor getNext();
     
-    Object intercept( Object instance, Method method, Object[] args ) 
+    Object intercept( Object instance, ExtendedMetaInfo meta, Method method, Object[] args ) 
         throws IllegalAccessException, IllegalArgumentException, InvocationTargetException; 
 }

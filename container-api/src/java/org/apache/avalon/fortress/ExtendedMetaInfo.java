@@ -18,83 +18,19 @@
 package org.apache.avalon.fortress;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.apache.avalon.fortress.attributes.AttributeInfo;
-import org.apache.avalon.fortress.attributes.AttributeLevel;
 
 /**
  * Pending
  * 
  * @author <a href="mailto:dev@excalibur.apache.org">Excalibur Development Team</a>
  */
-public class ExtendedMetaInfo
+public interface ExtendedMetaInfo
 {
-    private static final AttributeInfo[] EMPTY = new AttributeInfo[0]; 
+    AttributeInfo[] getClassAttributes();
     
-    private final AttributeInfo[] m_classAttributes;
-    private final Map m_method2Attributes;
-    
-    public ExtendedMetaInfo( AttributeInfo[] attributes )
-    {
-        final List classLevel = new ArrayList();
-        m_method2Attributes = new HashMap(); 
-        
-        for (int i = 0; i < attributes.length; i++)
-        {
-            final AttributeInfo attribute = attributes[i];
-            
-            if (attribute.getAttributeLevel() == AttributeLevel.ClassLevel)
-            {
-                classLevel.add( attribute );
-            }
-            else if (attribute.getAttributeLevel() == AttributeLevel.MethodLevel)
-            {
-                if (attribute.getMethod() != null)
-                {
-                    associateMethodAttribute( attribute );
-                }
-            }
-        }
-        
-        m_classAttributes = (AttributeInfo[]) classLevel.toArray( new AttributeInfo[0] );
-    }
-    
-    public AttributeInfo[] getClassAttributes()
-    {
-        return m_classAttributes;
-    }
-    
-    public AttributeInfo[] getAttributesForMethod( final Method method )
-    {
-        List attributes = obtainAttributeList( method );
-        
-        if (attributes == null)
-        {
-            return EMPTY;
-        }
-        
-        return (AttributeInfo[]) attributes.toArray( new AttributeInfo[0] );
-    }
-    
-    private void associateMethodAttribute( AttributeInfo attribute )
-    {
-        List attrs = obtainAttributeList( attribute.getMethod() );
-        
-        if (attrs == null)
-        {
-            attrs = new ArrayList();
-            m_method2Attributes.put( attribute.getMethod(), attrs );
-        }
-        
-        attrs.add( attribute );
-    }
+    AttributeInfo[] getAttributesForMethod( final Method method );
 
-    private List obtainAttributeList( final Method method )
-    {
-        return (List) m_method2Attributes.get( method );
-    }
+    AttributeInfo getAttributeForMethod( final String name, final Method method );
 }

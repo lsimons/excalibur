@@ -33,5 +33,6 @@ public class CustomerDAOImpl implements CustomerDataAccessObject
      */
     public void save( final Object data )
     {
+        // Some fake work
     }
 }
