@@ -19,7 +19,8 @@
 
     <define:taglib uri="excalibur">
         <!--
-         @name the name of file to deploy (assumed to be in the distributions dir)
+         @name the name of file to deploy
+         @dir the name of the directory the file lives in
          @type the maven "type"
         -->
         <define:tag name="deploy">
@@ -28,20 +29,24 @@
             <j:set var="deployDir" value="${maven.repo.default.directory}/${pom.groupId}/${type}s"/>
             <j:set var="grp" value="${maven.repo.default.group}"/>
 
-            <ant:exec dir="${maven.dist.dir}" executable="scp" failonerror="true">
+            <ant:exec dir="${dir}" executable="ssh" failonerror="true">
+                <ant:arg line="${pass} ${acct} 'mkdir -p ${deployDir}'"/>
+            </ant:exec>
+            <ant:exec dir="${dir}" executable="scp" failonerror="true">
                 <ant:arg line="${pass} ${name} ${acct}:${deployDir}"/>
             </ant:exec>
-            <ant:exec dir="${maven.dist.dir}" executable="ssh" failonerror="true">
-                <ant:arg line="${pass} ${acct} 'chgrp -R ${grp} ${deployDir};chmod -R a+r ${deployDir}'"/>
+            <ant:exec dir="${dir}" executable="ssh" failonerror="true">
+                <ant:arg line="${pass} ${acct} 'chgrp -R ${grp} ${deployDir};chmod -R a+r ${deployDir}; chmod -R g+w ${deployDir}'"/>
             </ant:exec>
 	</define:tag>
 
         <!--
-         @name the name of file to gpg (assumed to be in the distributions dir)
+         @name the name of file to gpg
+         @dir the name of the directory the file lives in
         -->
         <define:tag name="gpg">
-            <ant:exec dir="${maven.dist.dir}" executable="gpg" failonerror="true">
-                <ant:arg line="-v --output ${name}.asc --detach-sig --armor ${name}"/>
+            <ant:exec dir="${dir}" executable="gpg" failonerror="true">
+                <ant:arg line="--yes -v --output ${name}.asc --detach-sig --armor ${name}"/>
             </ant:exec>
         </define:tag>
     </define:taglib>
@@ -56,27 +61,38 @@
     </goal>
 
     <postGoal name="dist:build-src">
-        <excalibur:gpg name="${pom.artifactId}-${pom.currentVersion}-src.zip"/>
-        <excalibur:gpg name="${pom.artifactId}-${pom.currentVersion}-src.tar.gz"/>
+        <excalibur:gpg name="${pom.artifactId}-${pom.currentVersion}-src.zip"
+            dir="${maven.dist.dir}"/>
+        <excalibur:gpg name="${pom.artifactId}-${pom.currentVersion}-src.tar.gz"
+             dir="${maven.dist.dir}"/>
     </postGoal>
 
     <postGoal name="dist:build-bin">
-        <excalibur:gpg name="${pom.artifactId}-${pom.currentVersion}.zip"/>
-        <excalibur:gpg name="${pom.artifactId}-${pom.currentVersion}.tar.gz"/>
+        <excalibur:gpg name="${pom.artifactId}-${pom.currentVersion}.zip"
+            dir="${maven.dist.dir}"/>
+        <excalibur:gpg name="${pom.artifactId}-${pom.currentVersion}.tar.gz"
+            dir="${maven.dist.dir}"/>
+        <excalibur:gpg name="${pom.artifactId}-${pom.currentVersion}.jar"
+            dir="${maven.build.dir}"/>
     </postGoal>
 
     <postGoal name="dist:deploy-src">
         <excalibur:deploy name="${pom.artifactId}-${pom.currentVersion}-src.zip.asc"
-            type="distribution"/>
+            type="distribution" dir="${maven.dist.dir}"/>
         <excalibur:deploy name="${pom.artifactId}-${pom.currentVersion}-src.tar.gz.asc"
-            type="distribution"/>
+            type="distribution" dir="${maven.dist.dir}"/>
     </postGoal>
 
     <postGoal name="dist:deploy-bin">
         <excalibur:deploy name="${pom.artifactId}-${pom.currentVersion}.zip.asc"
-            type="distribution"/>
+            type="distribution" dir="${maven.dist.dir}"/>
         <excalibur:deploy name="${pom.artifactId}-${pom.currentVersion}.tar.gz.asc"
-            type="distribution"/>
+            type="distribution" dir="${maven.dist.dir}"/>
+
+        <excalibur:deploy name="${pom.artifactId}-${pom.currentVersion}.jar"
+            type="jar" dir="${maven.build.dir}"/>
+        <excalibur:deploy name="${pom.artifactId}-${pom.currentVersion}.jar.asc"
+            type="jar" dir="${maven.build.dir}"/>
     </postGoal>
 
     <goal name="excalibur:deploy">
