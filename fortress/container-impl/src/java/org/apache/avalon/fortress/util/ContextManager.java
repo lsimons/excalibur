@@ -164,7 +164,7 @@ public class ContextManager
      * Either supplied via rootContext or created locally.
      */
     protected InstrumentManager m_instrumentManager;
-    
+
     /**
      * The components that are "owned" by this context and should
      * be disposed by it. Any manager that is created as a result
@@ -606,7 +606,7 @@ public class ContextManager
         else
         {
             // Create a role manager with the configured roles
-            rm = new ConfigurableRoleManager( frm );
+            rm = new ConfigurableRoleManager( frm, classLcp oader );
         }
 
         ContainerUtil.enableLogging(rm, rmLogger );
@@ -918,7 +918,7 @@ public class ContextManager
 
             final ThreadPolicy policy = buildThreadPolicy();
             policy.setThreadFactory( factory );
-            
+
             final DefaultThreadManager tm = new DefaultThreadManager(policy);
 
             assumeOwnership( tm );
