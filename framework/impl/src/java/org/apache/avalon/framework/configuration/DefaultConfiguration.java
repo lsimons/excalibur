@@ -44,6 +44,27 @@ public class DefaultConfiguration
     private boolean m_readOnly;
     
     /**
+     * Copy constructor, to create a clone of another configuration.
+     * To modify children, use <code>getChild()</code>, 
+     * <code>removeChild()</code> and <code>addChild()</code>.
+     * 
+     * @param config the <code>Configuration</code> to copy
+     * @param deepCopy true will cause clones of the children to be added,
+     *                 false will add the original instances and is thus
+     *                 faster.
+     *
+     * @throws ConfigurationException if an error occurs when copying
+     */
+    public DefaultConfiguration( Configuration config, boolean deepCopy )
+        throws ConfigurationException
+    {
+        this( config.getName(), config.getLocation(), config.getNamespace(), 
+            ( (config instanceof AbstractConfiguration) ? ((AbstractConfiguration)config).getPrefix() : "") );
+        
+        addAll( config, deepCopy );
+    }
+    
+    /**
      * Shallow copy constructor, suitable for craeting a writable clone of
      * a read-only configuration. To modify children, use <code>getChild()</code>, 
      * <code>removeChild()</code> and <code>addChild()</code>.
@@ -53,9 +74,7 @@ public class DefaultConfiguration
      */
     public DefaultConfiguration( Configuration config ) throws ConfigurationException
     {
-        this( config.getName(), config.getLocation(), config.getNamespace(), 
-            ( (config instanceof AbstractConfiguration) ? ((AbstractConfiguration)config).getPrefix() : "") );
-        addAll( config );
+        this( config, false );
     }
     
     /**
@@ -531,6 +550,29 @@ public class DefaultConfiguration
      * configuration element.
      *
      * @param other the {@link Configuration} element
+     * @param deepCopy true will cause clones of the children to be added,
+     *                 false will add the original instances and is thus
+     *                 faster.
+     *
+     * throws ConfigurationException If there are any problems cloning the
+     *                               children.
+     */
+    public void addAll( final Configuration other, final boolean deepCopy )
+        throws ConfigurationException
+    {
+        checkWriteable();
+        
+        setValue( other.getValue( null ) );
+        addAllAttributes( other );
+        addAllChildren( other, deepCopy );
+    }
+    
+    /**
+     * Add all the attributes, children and value
+     * from specified configuration element to current
+     * configuration element.
+     *
+     * @param other the {@link Configuration} element
      */
     public void addAll( final Configuration other )
     {
@@ -557,6 +599,38 @@ public class DefaultConfiguration
             final String name = attributes[ i ];
             final String value = other.getAttribute( name, null );
             setAttribute( name, value );
+        }
+    }
+    
+    /**
+     * Add all child <code>Configuration</code> objects from specified
+     * configuration element to current configuration element.
+     *
+     * @param deepCopy true will cause clones of the children to be added,
+     *                 false will add the original instances and is thus
+     *                 faster.
+     *
+     * @param other the other {@link Configuration} value
+     *
+     * throws ConfigurationException If there are any problems cloning the
+     *                               children.
+     */
+    public void addAllChildren( final Configuration other, final boolean deepCopy )
+        throws ConfigurationException
+    {
+        checkWriteable();
+        
+        final Configuration[] children = other.getChildren();
+        for( int i = 0; i < children.length; i++ )
+        {
+            if ( deepCopy )
+            {
+                addChild( new DefaultConfiguration( children[ i ], true ) );
+            }
+            else
+            {
+                addChild( children[ i ] );
+            }
         }
     }
     
