@@ -606,7 +606,7 @@ public class ContextManager
         else
         {
             // Create a role manager with the configured roles
-            rm = new ConfigurableRoleManager( frm, classLcp oader );
+            rm = new ConfigurableRoleManager( frm, classLoader );
         }
 
         ContainerUtil.enableLogging(rm, rmLogger );
