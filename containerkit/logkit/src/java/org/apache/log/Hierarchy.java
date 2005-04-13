@@ -196,7 +196,7 @@ public class Hierarchy
             throw new NullPointerException( "loggerListener" );
         }
 
-        if( null != m_loggerListener && m_loggerListener == loggerListener ) ;
+        if( null != m_loggerListener && m_loggerListener == loggerListener )
         {
             m_loggerListener = null;
         }
