@@ -217,7 +217,7 @@ public class JdbcConnectionFactory extends AbstractLogEnabled implements ObjectF
             throw new NoValidConnectionException( e.getMessage() );
         }
 
-        ContainerUtil.enableLogging( jdbcConnection, getLogger() );
+        ContainerUtil.enableLogging( jdbcConnection, getLogger().getChildLogger( "conn" ) );
 
         // Not all drivers are friendly to explicitly setting autocommit
         if( jdbcConnection.getAutoCommit() != m_autoCommit )
