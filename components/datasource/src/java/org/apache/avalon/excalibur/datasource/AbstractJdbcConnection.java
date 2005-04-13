@@ -55,6 +55,10 @@ public class AbstractJdbcConnection
 
     private Object m_proxy;
     protected Pool m_pool;
+    
+    /** Flag to keep track of whether or not an error has been thrown since the last
+     *   time the DB was pinged. */
+    protected boolean m_encounteredError;
 
     /** The maximum time since a connection was last used before it will be pinged. */
     protected int m_testAge;
@@ -209,27 +213,66 @@ public class AbstractJdbcConnection
             return true;
         }
 
-        long age = System.currentTimeMillis() - m_lastUsed;
-
-        // If the connection has not been used for for longer than the keep alive age,
-        //  then make sure it is still alive.
-        if ( ( m_testStatement != null ) && ( age > m_testAge ) )
+        if ( m_testStatement == null )
         {
-            if( getLogger().isDebugEnabled() )
+            // No test statement was configured so it is not possible to ping the DB to
+            //  revalidate the connection.
+            if ( m_encounteredError )
             {
-                getLogger().debug( "Pinging database after " + age + "ms of inactivity." );
-            }
-
-            try
-            {
-                ResultSet rs = m_testStatement.executeQuery();
-                rs.close();
-            }
-            catch( final SQLException se )
-            {
-                getLogger().debug( "Ping of connection failed.", se );
-                this.dispose();
+                // There is no way to guarantee that this connection is still good.
+                //  Cause the connection to be invalidated.
                 return true;
+            }
+        }
+        else
+        {
+            // A ping statement was configured.
+            long age = System.currentTimeMillis() - m_lastUsed;
+            boolean ping = false;
+            if ( age > m_testAge )
+            {
+                if( getLogger().isDebugEnabled() )
+                {
+                    getLogger().debug( "Pinging database after " + age + "ms of inactivity." );
+                }
+                ping = true;
+            }
+            else if ( m_encounteredError )
+            {
+                // If an error was encountered since the last time the DB has been pinged we want
+                //  to force a ping.
+                // If a client is attempting to query a DB once every couple seconds then the
+                //  connection will never be unused for long enough to cause a ping on its own.
+                //  This means that if any reocurring error, like the socket being closed, occurrs
+                //  the pool would normally never invalidate the connection.  Ideally the underlying
+                //  Connection's isClosed() method should return false in such a case, but it does
+                //  not always do so. (Oracle for example)
+                //
+                // The encounteredError flag is only set if an error is thrown from a Connection
+                //  method.  It will not be set if an exception is thrown by a Statement or other
+                //  object obtained from the Connection.  We are mainly worried about low level
+                //  socket problems here however so this should not be a problem.  A failed query
+                //  caused by bad SQL does not mean the connection might fail for future calls.
+                getLogger().debug( "Pinging database after a previously thrown error." );
+                ping = true;
+            }
+            
+            // Always reset the flag here in case the connection was old and there was an error.
+            m_encounteredError = false;
+            
+            if( ping )
+            {
+                try
+                {
+                    ResultSet rs = m_testStatement.executeQuery();
+                    rs.close();
+                }
+                catch( final SQLException se )
+                {
+                    getLogger().debug( "Ping of connection failed.", se );
+                    this.dispose();
+                    return true;
+                }
             }
         }
 
@@ -345,6 +388,9 @@ public class AbstractJdbcConnection
     public Object invoke( Object proxy, Method method, Object[] args )
             throws Throwable
     {
+        // NOTE - getLogger() will return null in here before the enableLogging method
+        //  has been called.
+        
         Object retVal = null;
         Method executeMethod = (Method)m_methods.get( method.getName() );
 
@@ -361,6 +407,10 @@ public class AbstractJdbcConnection
         }
         catch( InvocationTargetException e )
         {
+            // Remember that an error of some sort was thrown so we can make sure to retest
+            //  the connection before it is once again used by a client.
+            m_encounteredError = true;
+            
             throw e.getTargetException();
         }
 
