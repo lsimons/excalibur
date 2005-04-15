@@ -67,8 +67,10 @@ public class StoreJanitorImpl extends AbstractLogEnabled
                               implements StoreJanitor, Parameterizable, ThreadSafe,
                                          Runnable, Startable
 {
-
+    //
     // Configuration parameters
+    //
+
     private int minFreeMemory = -1;
     private int maxHeapSize = -1;
     private int threadInterval = -1;
@@ -77,12 +79,16 @@ public class StoreJanitorImpl extends AbstractLogEnabled
     private int priority = -1;
     private double fraction;
 
+    /** Should the gc be called on low memory? */
+    protected boolean invokeGC;
+
+    //
+    // Runtime state
+    //
+
     private Runtime jvm;
     private ArrayList storelist;
     private int index = -1;
-
-    /** Should the gc be called on low memory? */
-    protected boolean invokeGC;
 
     private boolean doRun;
 
@@ -92,7 +98,11 @@ public class StoreJanitorImpl extends AbstractLogEnabled
      */
     protected long inUse;
 
+    /** Flag to ignore memory bursts during startup (1st janitor run) */
     private boolean firstRun = true;
+
+    /** Flag to ignore memory bursts during startup (2nd janitor run) */
+    private boolean secondRun = true;
 
     /** The calculated delay for the next checker run in ms */
     protected long interval = Long.MAX_VALUE;
@@ -192,8 +202,9 @@ public class StoreJanitorImpl extends AbstractLogEnabled
             catch (InterruptedException ignore) {}
 
             // Ignore change in memory during the first run (startup)
-            if (this.firstRun)
+            if (this.firstRun || this.secondRun)
             {
+                this.secondRun = this.firstRun;
                 this.firstRun = false;
                 this.inUse = memoryInUse();
             }
@@ -267,20 +278,26 @@ public class StoreJanitorImpl extends AbstractLogEnabled
      */
     private boolean memoryLow()
     {
-        if (getLogger().isDebugEnabled())
-        {
-            getLogger().debug("JVM Memory total: " + getJVM().totalMemory()
-                              + ", free: " + getJVM().freeMemory());
-        }
-
         if ((getJVM().totalMemory() >= getMaxHeapSize())
                 && (getJVM().freeMemory() < getMinFreeMemory()))
         {
-            getLogger().debug("Memory is low!");
+            if (getLogger().isWarnEnabled())
+            {
+                getLogger().warn("Memory total: " + getJVM().totalMemory() +
+                                 ", free: " + getJVM().freeMemory() +
+                                 ". Memory is low!");
+            }
+
             return true;
         }
         else
         {
+            if (getLogger().isInfoEnabled())
+            {
+                getLogger().info("Memory total: " + getJVM().totalMemory() +
+                                 ", free: " + getJVM().freeMemory());
+            }
+
             return false;
         }
     }
@@ -392,11 +409,11 @@ public class StoreJanitorImpl extends AbstractLogEnabled
             // Delete proportionate elements out of the store as configured.
             Store store = (Store)getStoreList().get(getIndex());
             int limit = calcToFree(store);
-            if (getLogger().isDebugEnabled())
+            if (getLogger().isInfoEnabled())
             {
-                getLogger().debug("Freeing " + limit + " items from store N " + getIndex());
+                getLogger().info("Freeing " + limit + " items from store N " + getIndex());
             }
-            for (int i=0; i < limit; i++)
+            for (int i = 0; i < limit; i++)
             {
                 try
                 {
@@ -410,7 +427,7 @@ public class StoreJanitorImpl extends AbstractLogEnabled
         }
         catch (Exception e)
         {
-            getLogger().error("Error in freeMemory()", e);
+            getLogger().error("Exception in freeMemory()", e);
         }
         catch (OutOfMemoryError e)
         {
@@ -436,6 +453,7 @@ public class StoreJanitorImpl extends AbstractLogEnabled
             }
             return 0;
         }
+
         final int res = (int)(cnt * fraction);
         if ( getLogger().isDebugEnabled() )
         {
