@@ -162,10 +162,10 @@ public class URLSource extends AbstractSource implements Source
                     }
                 }
                 setLastModified(m_connection.getLastModified());
-                setContentLength(m_connection.getContentLength());
                 m_mimeType = m_connection.getContentType();
-                m_exists = true;
-            }
+                int contentLength = m_connection.getContentLength();
+                setContentLength(contentLength);
+                m_exists = contentLength >= 0;            }
             catch (IOException ignore)
             {
                 super.getInfos();
