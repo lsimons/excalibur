@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2002-2004 The Apache Software Foundation
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.Map;
 
 import org.apache.excalibur.source.ModifiableSource;
@@ -38,9 +39,9 @@ import sun.net.ftp.FtpClient;
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  */
 public class FTPSource extends URLSource implements ModifiableSource
-{   
+{
     private boolean m_isAscii;
-    
+
     public FTPSource()
     {
         super();
@@ -50,21 +51,21 @@ public class FTPSource extends URLSource implements ModifiableSource
      * Initialize a new object from a <code>URL</code>.
      * @param parameters This is optional
      */
-    public void init(final URL url, final Map parameters) throws IOException
+    public void init( final URL url, final Map parameters ) throws IOException
     {
         final String systemId = url.toExternalForm();
-        setSystemId(systemId);
-        setScheme(SourceUtil.getScheme(systemId));
+        setSystemId( systemId );
+        setScheme( SourceUtil.getScheme( systemId ) );
 
         m_url = url;
         m_isAscii = false;
 
-        if (parameters != null)
+        if ( parameters != null )
         {
-            m_parameters = (SourceParameters) parameters.get(SourceResolver.URI_PARAMETERS);
-            final String method = (String) parameters.get(SourceResolver.METHOD);
+            m_parameters = (SourceParameters) parameters.get( SourceResolver.URI_PARAMETERS );
+            final String method = (String) parameters.get( SourceResolver.METHOD );
 
-            if ("ASCII".equalsIgnoreCase(method))
+            if ( "ASCII".equalsIgnoreCase( method ) )
             {
                 m_isAscii = true;
             }
@@ -74,12 +75,12 @@ public class FTPSource extends URLSource implements ModifiableSource
     /**
      * Can the data sent to an <code>OutputStream</code> returned by
      * {@link #getOutputStream()} be cancelled ?
-     *
+     * 
      * @return <code>true</code> if the stream can be cancelled
      */
     public boolean canCancel( final OutputStream stream )
     {
-        if (stream instanceof FTPSourceOutputStream)
+        if ( stream instanceof FTPSourceOutputStream )
         {
             FTPSourceOutputStream fsos = (FTPSourceOutputStream) stream;
             if ( fsos.getSource() == this )
@@ -99,7 +100,7 @@ public class FTPSource extends URLSource implements ModifiableSource
      */
     public void cancel( final OutputStream stream ) throws IOException
     {
-        if (stream instanceof FTPSourceOutputStream)
+        if ( stream instanceof FTPSourceOutputStream )
         {
             FTPSourceOutputStream fsos = (FTPSourceOutputStream) stream;
             if ( fsos.getSource() == this )
@@ -128,7 +129,7 @@ public class FTPSource extends URLSource implements ModifiableSource
         try
         {
             ftpClient = getFtpClient();
-            final String relativePath = m_url.getPath().substring( 1 );
+            final String relativePath = URLDecoder.decode( m_url.getPath().substring( 1 ), "UTF-8" );
             ftpClient.delete( relativePath );
         }
         catch ( IOException e )
@@ -153,9 +154,9 @@ public class FTPSource extends URLSource implements ModifiableSource
                     ftpClient.closeServer();
                 }
                 catch ( IOException e ) {}
+                }
             }
         }
-    }
 
     /**
      * Get the last modification date and content length of the source.
@@ -167,23 +168,23 @@ public class FTPSource extends URLSource implements ModifiableSource
         m_exists = false;
         try
         {
-            if (null == m_connection)
+            if ( null == m_connection )
             {
                 m_connection = m_url.openConnection();
-                //String userInfo = m_url.getUserInfo();
+                String userInfo = URLDecoder.decode( m_url.getUserInfo(), "UTF-8" );
             }
-            setLastModified(m_connection.getLastModified());
-            setContentLength(m_connection.getContentLength());
+            setLastModified( m_connection.getLastModified() );
+            setContentLength( m_connection.getContentLength() );
             // getting the content type here seems to screw up=20
             // the InputStream on the URLConnection.
-//            m_mimeType = m_connection.getContentType();
+            // m_mimeType = m_connection.getContentType();
             m_mimeType = null;
             m_exists = true;
         }
-        catch (IOException ignore)
+        catch ( IOException ignore )
         {
-            setContentLength(-1);
-            setLastModified(0);
+            setContentLength( -1 );
+            setLastModified( 0 );
         }
     }
 
@@ -196,7 +197,7 @@ public class FTPSource extends URLSource implements ModifiableSource
     {
         return new FTPSourceOutputStream( this );
     }
-    
+
     /**
      * Creates an FtpClient and logs in the current user.
      */
@@ -208,25 +209,30 @@ public class FTPSource extends URLSource implements ModifiableSource
         ftpClient.login( getUser(), getPassword() );
         return ftpClient;
     }
-    
+
     /**
      * @return the user part of the user info string, 
      * <code>null</code> if there is no user info.
      */
-    private final String getUser() 
+    private final String getUser()
     {
         final String userInfo = m_url.getUserInfo();
+        // decode after splitting
         if ( userInfo != null )
         {
             int index = userInfo.indexOf( ':' );
             if ( index != -1 )
             {
-                return userInfo.substring( 0, index );
+                try
+                {
+                    return URLDecoder.decode( userInfo.substring( 0, index ), "UTF-8" );
+                }
+                catch ( java.io.UnsupportedEncodingException e ) {}
             }
         }
         return null;
     }
-    
+
     /**
      * @return the password part of the user info string, 
      * <code>null</code> if there is no user info.
@@ -234,34 +240,39 @@ public class FTPSource extends URLSource implements ModifiableSource
     private final String getPassword()
     {
         final String userInfo = m_url.getUserInfo();
+        // decode after splitting
         if ( userInfo != null )
         {
             int index = userInfo.indexOf( ':' );
             if ( index != -1 && userInfo.length() > index + 1 )
             {
-                return userInfo.substring( index + 1 );
+                try
+                {
+                    return URLDecoder.decode( userInfo.substring( index + 1 ), "UTF-8" );
+                }
+                catch ( java.io.UnsupportedEncodingException e ) { }
             }
         }
         return null;
     }
-    
+
     /**
      * Need to extend FtpClient in order to get to protected issueCommand
      * and implement additional functionality.
      */
     private static class EnhancedFtpClient extends FtpClient
     {
-        
+
         private EnhancedFtpClient( String host ) throws IOException
         {
             super( host );
         }
-        
+
         void delete( final String path ) throws IOException
         {
             issueCommand( "DELE " + path );
         }
-        
+
         /**
          * Create a directory in the current working directory.
          */
@@ -269,7 +280,7 @@ public class FTPSource extends URLSource implements ModifiableSource
         {
             issueCommand( "MKD " + directoryName );
         }
-        
+
         /**
          * Create all directories along a directory path if they
          * do not already exist.
@@ -306,11 +317,11 @@ public class FTPSource extends URLSource implements ModifiableSource
                 }
                 mkdir( directoryName );
                 cd( directoryName );
-            }           
+            }
         }
-                    
+
     }
-    
+
     /**
      * Buffers the output in a byte array and only writes to the remote 
      * FTP location at closing time.
@@ -318,16 +329,16 @@ public class FTPSource extends URLSource implements ModifiableSource
     private static class FTPSourceOutputStream extends ByteArrayOutputStream
     {
         private final FTPSource m_source;
-        private boolean m_isClosed = false;
-        
+        private boolean         m_isClosed = false;
+
         FTPSourceOutputStream( final FTPSource source )
         {
             super( 8192 );
             m_source = source;
         }
-        
+
         public void close() throws IOException
-        {           
+        {
             if ( !m_isClosed )
             {
                 EnhancedFtpClient ftpClient = null;
@@ -342,7 +353,7 @@ public class FTPSource extends URLSource implements ModifiableSource
                     }
                     String parentPath = null;
                     String fileName = null;
-                    final String relativePath = m_source.m_url.getPath().substring( 1 );
+                    final String relativePath = URLDecoder.decode( m_source.m_url.getPath(), "UTF-8" ).substring( 1 );
                     final int index = relativePath.lastIndexOf( '/' );
                     if ( index != -1 )
                     {
@@ -358,7 +369,7 @@ public class FTPSource extends URLSource implements ModifiableSource
                     final byte[] bytes = toByteArray();
                     out.write( bytes );
                 }
-                finally 
+                finally
                 {
                     if ( out != null )
                     {
@@ -375,12 +386,12 @@ public class FTPSource extends URLSource implements ModifiableSource
                             ftpClient.closeServer();
                         }
                         catch ( IOException e ) {}
-                    }
+                        }
                     m_isClosed = true;
                 }
             }
         }
-        
+
         boolean canCancel()
         {
             return !m_isClosed;
@@ -396,12 +407,12 @@ public class FTPSource extends URLSource implements ModifiableSource
             }
             m_isClosed = true;
         }
-        
+
         FTPSource getSource()
         {
             return m_source;
         }
-        
+
     }
 
 }
