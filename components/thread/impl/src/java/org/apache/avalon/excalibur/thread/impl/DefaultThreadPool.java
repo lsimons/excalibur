@@ -73,6 +73,7 @@ public class DefaultThreadPool
     public void dispose()
     {
         m_pool.dispose();
+        this.destroy();
     }
 
     public Object newInstance()
