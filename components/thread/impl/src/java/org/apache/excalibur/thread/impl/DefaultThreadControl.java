@@ -58,7 +58,7 @@ final class DefaultThreadControl
     {
         if (! isFinished() )
         {
-            m_thread.join(milliSeconds);
+            m_thread.wait(milliSeconds);
         }
     }
 
