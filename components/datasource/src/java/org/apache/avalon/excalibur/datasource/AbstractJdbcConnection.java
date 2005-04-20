@@ -21,9 +21,14 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
+import java.sql.Array;
+import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ParameterMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
@@ -413,7 +418,105 @@ public class AbstractJdbcConnection
             
             throw e.getTargetException();
         }
+        
+        // See if the return value is an object that needs to be proxied.
+        if ( retVal != null )
+        {
+            // The order of the classes below is important to make sure that all implemented
+            //  interfaces are taken into account.
+            if ( retVal instanceof CallableStatement )
+            {
+                retVal = Proxy.newProxyInstance( CallableStatement.class.getClassLoader(),
+                    new Class[] { CallableStatement.class }, new ProxiedObject( retVal ) );
+            }
+            else if ( retVal instanceof PreparedStatement )
+            {
+                retVal = Proxy.newProxyInstance( PreparedStatement.class.getClassLoader(),
+                    new Class[] { PreparedStatement.class }, new ProxiedObject( retVal ) );
+            }
+            else if ( retVal instanceof Statement )
+            {
+                retVal = Proxy.newProxyInstance( Statement.class.getClassLoader(),
+                    new Class[] { Statement.class }, new ProxiedObject( retVal ) );
+            }
+            else if ( retVal instanceof DatabaseMetaData )
+            {
+                retVal = Proxy.newProxyInstance( DatabaseMetaData.class.getClassLoader(),
+                    new Class[] { DatabaseMetaData.class }, new ProxiedObject( retVal ) );
+            }
+            else
+            {
+                // Leave the retVal alone and unproxied.
+            }
+        }
 
         return retVal;
+    }
+
+    private class ProxiedObject
+        implements InvocationHandler
+    {
+        Object m_originalObject;
+        
+        private ProxiedObject( Object originalObject )
+        {
+            m_originalObject = originalObject;
+        }
+        
+        public Object invoke( Object proxy, Method method, Object[] args )
+            throws Throwable
+        {
+            // We want to pass all method calls through to the original object but
+            //  we want to catch and make a not of any exceptions thrown along the
+            //  way.  This is critical to make sure that connections that have gone
+            //  bad are not reused without being retested.
+            
+            Object retVal;
+            try
+            {
+                retVal = method.invoke( m_originalObject, args );
+            }
+            catch( InvocationTargetException e )
+            {
+                // Remember that an error of some sort was thrown so we can make sure to retest
+                //  the connection before it is once again used by a client.
+                m_encounteredError = true;
+                
+                throw e.getTargetException();
+            }
+            
+            // See if the return value is an object that needs to be proxied.
+            if ( retVal != null )
+            {
+                // The order of the classes below is important to make sure that all implemented
+                //  interfaces are taken into account.
+                if ( retVal instanceof Array )
+                {
+                    retVal = Proxy.newProxyInstance( Array.class.getClassLoader(),
+                        new Class[] { Array.class }, new ProxiedObject( retVal ) );
+                }
+                else if ( retVal instanceof ResultSet )
+                {
+                    retVal = Proxy.newProxyInstance( ResultSet.class.getClassLoader(),
+                        new Class[] { ResultSet.class }, new ProxiedObject( retVal ) );
+                }
+                else if ( retVal instanceof ResultSetMetaData )
+                {
+                    retVal = Proxy.newProxyInstance( ResultSetMetaData.class.getClassLoader(),
+                        new Class[] { ResultSetMetaData.class }, new ProxiedObject( retVal ) );
+                }
+                else if ( retVal instanceof ParameterMetaData )
+                {
+                    retVal = Proxy.newProxyInstance( ParameterMetaData.class.getClassLoader(),
+                        new Class[] { ParameterMetaData.class }, new ProxiedObject( retVal ) );
+                }
+                else
+                {
+                    // Leave the retVal alone and unproxied.
+                }
+            }
+            
+            return retVal;
+        }
     }
 }
