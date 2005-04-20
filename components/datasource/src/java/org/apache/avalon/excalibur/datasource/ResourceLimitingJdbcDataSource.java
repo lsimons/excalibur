@@ -23,10 +23,8 @@ import java.sql.SQLException;
 import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.avalon.framework.logger.AbstractLogEnabled;
 
-import org.apache.excalibur.instrument.Instrument;
-import org.apache.excalibur.instrument.Instrumentable;
+import org.apache.excalibur.instrument.AbstractLogEnabledInstrumentable;
 
 import org.apache.avalon.excalibur.pool.InstrumentedResourceLimitingPool;
 
@@ -152,15 +150,12 @@ import org.apache.avalon.excalibur.pool.InstrumentedResourceLimitingPool;
  * @since 4.1
  */
 public class ResourceLimitingJdbcDataSource
-    extends AbstractLogEnabled
-    implements DataSourceComponent, Instrumentable, Disposable
+    extends AbstractLogEnabledInstrumentable
+    implements DataSourceComponent, Disposable
 {
     private boolean m_configured;
     private boolean m_disposed;
     protected InstrumentedResourceLimitingPool m_pool;
-
-    /** Instrumentable Name assigned to this Instrumentable */
-    private String m_instrumentableName;
 
     /*---------------------------------------------------------------
      * Constructors
@@ -324,6 +319,8 @@ public class ResourceLimitingJdbcDataSource
                 factory, l_max, maxStrict, blocking, timeout, trimInterval, autoCommit );
 
             m_pool.enableLogging( getLogger() );
+            
+            addChildInstrumentable( m_pool );
         }
         catch( Exception e )
         {
@@ -336,67 +333,6 @@ public class ResourceLimitingJdbcDataSource
         }
 
         m_configured = true;
-    }
-
-    /*---------------------------------------------------------------
-     * Instrumentable Methods
-     *-------------------------------------------------------------*/
-    /**
-     * Sets the name for the Instrumentable.  The Instrumentable Name is used
-     *  to uniquely identify the Instrumentable during the configuration of
-     *  the InstrumentManager and to gain access to an InstrumentableDescriptor
-     *  through the InstrumentManager.  The value should be a string which does
-     *  not contain spaces or periods.
-     * <p>
-     * This value may be set by a parent Instrumentable, or by the
-     *  InstrumentManager using the value of the 'instrumentable' attribute in
-     *  the configuration of the component.
-     *
-     * @param name The name used to identify a Instrumentable.
-     */
-    public void setInstrumentableName( String name )
-    {
-        m_instrumentableName = name;
-    }
-
-    /**
-     * Gets the name of the Instrumentable.
-     *
-     * @return The name used to identify a Instrumentable.
-     */
-    public String getInstrumentableName()
-    {
-        return m_instrumentableName;
-    }
-
-    /**
-     * Obtain a reference to all the Instruments that the Instrumentable object
-     *  wishes to expose.  All sampling is done directly through the
-     *  Instruments as opposed to the Instrumentable interface.
-     *
-     * @return An array of the Instruments available for profiling.  Should
-     *         never be null.  If there are no Instruments, then
-     *         EMPTY_INSTRUMENT_ARRAY can be returned.  This should never be
-     *         the case though unless there are child Instrumentables with
-     *         Instruments.
-     */
-    public Instrument[] getInstruments()
-    {
-        return Instrumentable.EMPTY_INSTRUMENT_ARRAY;
-    }
-
-    /**
-     * Any Object which implements Instrumentable can also make use of other
-     *  Instrumentable child objects.  This method is used to tell the
-     *  InstrumentManager about them.
-     *
-     * @return An array of child Instrumentables.  This method should never
-     *         return null.  If there are no child Instrumentables, then
-     *         EMPTY_INSTRUMENTABLE_ARRAY can be returned.
-     */
-    public Instrumentable[] getChildInstrumentables()
-    {
-        return new Instrumentable[]{ m_pool };
     }
 
     /*---------------------------------------------------------------
