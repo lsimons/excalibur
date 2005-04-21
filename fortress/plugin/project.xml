@@ -20,7 +20,7 @@ limitations under the License.
     <artifactId>maven-fortress-plugin</artifactId>
     <name>Maven Fortress Plugin</name>
     <groupId>maven-fortress-plugin</groupId>
-    <currentVersion>0.1</currentVersion>
+    <currentVersion>0.2</currentVersion>
     <organization>
         <name>Excalibur</name>
         <url>http://excalibur.apache.org/</url>
@@ -47,8 +47,8 @@ limitations under the License.
     <dependencies>
         <dependency>
             <groupId>excalibur-fortress</groupId>
-            <artifactId>excalibur-fortress-tools</artifactId>
-            <version>1.0</version>
+            <artifactId>excalibur-fortress-meta</artifactId>
+            <version>1.2-RC1</version>
             <type>jar</type>
             <properties/>
         </dependency>
@@ -61,8 +61,8 @@ limitations under the License.
         </dependency>
     </dependencies>
     <build>
-        <sourceDirectory>main/src/java</sourceDirectory>
-        <unitTestSourceDirectory>main/test/java</unitTestSourceDirectory>
+        <sourceDirectory>src/java</sourceDirectory>
+        <unitTestSourceDirectory>src/java</unitTestSourceDirectory>
         <unitTest>
             <includes>
                 <include>**/*Test.java</include>
@@ -70,7 +70,7 @@ limitations under the License.
         </unitTest>
         <resources>
             <resource>
-                <directory>${basedir}/main/plugin-resources</directory>
+                <directory>${basedir}/plugin-resources</directory>
                 <targetPath>plugin-resources</targetPath>
                 <filtering>false</filtering>
             </resource>

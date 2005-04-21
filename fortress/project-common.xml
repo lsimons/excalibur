@@ -19,7 +19,7 @@ limitations under the License.
     <extend>${basedir}/../buildsystem/project-common.xml</extend>
 
     <groupId>excalibur-fortress</groupId>
-    <currentVersion>1.2</currentVersion>
+    <currentVersion>1.2-RC1</currentVersion>
     <inceptionYear>2003</inceptionYear>
 
 </project>
