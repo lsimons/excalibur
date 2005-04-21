@@ -17,5 +17,5 @@ limitations under the License.
 -->
 <project>
     <extend>${basedir}/../buildsystem/project-common.xml</extend>
-    <currentVersion>1.2</currentVersion>
+    <currentVersion>2.1-RC1</currentVersion>
 </project>
