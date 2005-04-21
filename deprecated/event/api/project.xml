@@ -16,12 +16,11 @@
  limitations under the License.
 -->
 <project>
-  <extend>${basedir}/../../../buildsystem/project-common.xml</extend>
+  <extend>${basedir}/../../project-common.xml</extend>
 
   <name>Excalibur Event API</name>
   <id>excalibur-event-api</id>
   <groupId>excalibur-event</groupId>
-  <currentVersion>2.0</currentVersion>
   <shortDescription>Excalibur Event API</shortDescription>
   <description>Excalibur Event API</description>
 
@@ -29,7 +28,7 @@
     <dependency>
       <groupId>avalon-framework</groupId>
       <artifactId>avalon-framework-api</artifactId>
-      <version>4.1.5</version>
+      <version>4.3-RC1</version>
     </dependency>
   </dependencies>
 
