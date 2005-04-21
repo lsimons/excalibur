@@ -24,6 +24,5 @@ limitations under the License.
   <id>excalibur-pool</id>
   <package>org.apache.excalibur.pool</package>
   <inceptionYear>2001</inceptionYear>
-  <currentVersion>2.0.0</currentVersion>
 
 </project>

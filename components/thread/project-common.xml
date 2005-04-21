@@ -24,6 +24,5 @@ limitations under the License.
   <id>excalibur-thread</id>
   <package>org.apache.excalibur.thread</package>
   <inceptionYear>2000</inceptionYear>
-  <currentVersion>2.0.0</currentVersion>
 
 </project>
