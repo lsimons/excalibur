@@ -27,7 +27,7 @@
         <dependency>
             <groupId>avalon-framework</groupId>
             <artifactId>avalon-framework-api</artifactId>
-            <version>4.3-dev</version>
+            <version>4.3-RC1</version>
         </dependency>
         
         <dependency>
@@ -54,7 +54,7 @@
         </dependency>
         <dependency>
             <id>xalan</id>
-            <version>2.5.1</version>
+            <version>2.6.0</version>
             <properties note="Only required if not provided by JVM.">
                 <optional>true</optional>
             </properties>
@@ -62,7 +62,7 @@
         
         <dependency>
             <id>log4j</id>
-            <version>1.2.7</version>
+            <version>1.2.8</version>
             <properties note="Only required if log4j features are used.">
                 <optional>true</optional>
             </properties>
@@ -70,7 +70,7 @@
         <dependency>
             <groupId>avalon-logkit</groupId>
             <artifactId>avalon-logkit</artifactId>
-            <version>2.0</version>
+            <version>2.1-RC1</version>
         </dependency>
         <dependency>
             <id>junit</id>

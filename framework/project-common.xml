@@ -19,7 +19,7 @@ limitations under the License.
     <extend>${basedir}/../buildsystem/project-common.xml</extend>
 
     <groupId>avalon-framework</groupId>
-    <currentVersion>4.3-dev</currentVersion>
+    <currentVersion>4.3-RC1</currentVersion>
     <inceptionYear>1997</inceptionYear>
     <package>org.apache.avalon.framework</package>
 
