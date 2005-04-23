@@ -62,9 +62,9 @@ public class URLSourceTestCase extends TestCase
         assertFalse( m_urlSource.exists() );
     }
 
-    public void testHttpDoesNotExist() throws Exception
+    public void testHttpHostDoesNotExist() throws Exception
     {
-        m_urlSource.init( new URL( "http://localhost/no_such_file" ),
+        m_urlSource.init( new URL( "http://some.invalid.host/no_such_file" ),
                 Collections.EMPTY_MAP );
         assertFalse( m_urlSource.exists() );
     }
