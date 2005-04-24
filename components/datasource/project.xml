@@ -48,7 +48,7 @@ necessary issues from there.
         -->
         <dependency>
             <id>hsqldb</id>
-            <version>1.7.3.0</version>
+            <version>1.7.1</version>
             <properties note="Only required by tests.">
                 <build>true</build>
             </properties>
