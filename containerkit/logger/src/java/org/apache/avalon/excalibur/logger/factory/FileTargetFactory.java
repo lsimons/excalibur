@@ -1,16 +1,16 @@
 /*
- * Copyright 2002-2004 The Apache Software Foundation
+ * Copyright 2002-2005 The Apache Software Foundation
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at 
- * 
+ * You may obtain a copy of the License at
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed  under the  License is distributed on an "AS IS" BASIS,
  * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
  * implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
 */
@@ -125,7 +125,7 @@ import org.apache.log.output.io.rotate.UniqueFileStrategy;
  * </dl>
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
- * @version CVS $Revision: 1.13 $ $Date: 2004/03/10 13:54:50 $
+ * @version SVN $Id$
  * @since 4.0
  */
 public class FileTargetFactory
@@ -140,21 +140,25 @@ public class FileTargetFactory
     {
         final Configuration confFilename = configuration.getChild( "filename" );
         final String filename = getFilename( confFilename.getValue() );
+        final File file = new File( filename );
 
-        final Configuration confRotation = configuration.getChild( "rotation", false );
+        final LogTarget logtarget = createTarget( file, configuration );
+        return logtarget;
+    }
 
-        final Configuration confFormat = configuration.getChild( "format" );
-
+    protected LogTarget createTarget( final File file, final Configuration configuration )
+        throws ConfigurationException
+    {
         final Configuration confAppend = configuration.getChild( "append" );
         final boolean append = confAppend.getValueAsBoolean( false );
 
-        final LogTarget logtarget;
-
-        final File file = new File( filename );
+        final Configuration confFormat = configuration.getChild( "format" );
         final Formatter formatter = getFormatter( confFormat );
 
+        final LogTarget logtarget;
         try
         {
+            final Configuration confRotation = configuration.getChild( "rotation", false );
             if( null == confRotation )
             {
                 logtarget = new FileTarget( file, append, formatter );
@@ -163,7 +167,7 @@ public class FileTargetFactory
             {
                 if( confRotation.getChildren().length == 0 )
                 {
-                    final String error = 
+                    final String error =
                       "Missing file rotation strategy element [or|size|date|interval|time]";
                     throw new ConfigurationException( error );
                 }
@@ -191,7 +195,7 @@ public class FileTargetFactory
     private static final long KILOBYTE = 1000;
     private static final long MEGABYTE = 1000 * KILOBYTE;
 
-    private RotateStrategy getRotateStrategy( final Configuration conf )
+    protected RotateStrategy getRotateStrategy( final Configuration conf )
     {
         final String type = conf.getName();
 
