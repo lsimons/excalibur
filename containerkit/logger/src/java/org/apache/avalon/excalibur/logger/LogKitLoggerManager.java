@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2004 The Apache Software Foundation
+ * Copyright 2002-2005 The Apache Software Foundation
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
  * You may obtain a copy of the License at
@@ -43,7 +43,7 @@ import org.apache.log.util.Closeable;
  * from a configuration file.
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
- * @version CVS $Revision: 1.21 $ $Date: 2004/03/10 13:54:50 $
+ * @version SVN $Id$
  * @since 4.0
  */
 public class LogKitLoggerManager extends AbstractLoggerManager
@@ -478,6 +478,9 @@ public class LogKitLoggerManager extends AbstractLoggerManager
         for( int i = 0; i < categories.length; i++ )
         {
             final String category = categories[ i ].getAttribute( "name" );
+            final String fullCategory =
+                    LoggerUtil.getFullCategoryName( parentCategory, category );
+
             final String loglevel = categories[ i ].getAttribute( "log-level" ).toUpperCase();
             final boolean additive = categories[ i ].
                 getAttributeAsBoolean( "additive", defaultAdditive );
@@ -488,6 +491,12 @@ public class LogKitLoggerManager extends AbstractLoggerManager
             {
                 final String id = targets[ j ].getAttribute( "id-ref" );
                 logTargets[ j ] = targetManager.getLogTarget( id );
+                if (logTargets[ j ] == null)
+                {
+                    throw new ConfigurationException("Category <" + fullCategory + ">: " +
+                                                     "Target <" + id + "> is not defined.");
+                }
+
                 if( !m_targets.contains( logTargets[ j ] ) )
                 {
                     m_targets.add( logTargets[ j ] );
@@ -500,9 +509,6 @@ public class LogKitLoggerManager extends AbstractLoggerManager
                 m_hierarchy.setDefaultLogTargets( logTargets );
                 rootLoggerAlive = true;
             }
-
-            final String fullCategory =
-                    LoggerUtil.getFullCategoryName( parentCategory, category );
 
             final org.apache.log.Logger logger = m_hierarchy.getLoggerFor( fullCategory );
             m_loggers.put( fullCategory, new LogKitLogger( logger ) );
