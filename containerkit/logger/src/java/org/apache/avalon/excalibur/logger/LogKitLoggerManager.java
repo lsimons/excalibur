@@ -2,15 +2,15 @@
  * Copyright 2002-2004 The Apache Software Foundation
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at 
- * 
+ * You may obtain a copy of the License at
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed  under the  License is distributed on an "AS IS" BASIS,
  * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
  * implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
 */
@@ -75,7 +75,7 @@ public class LogKitLoggerManager extends AbstractLoggerManager
      * Please also invoke <code>enableLogging()</code>
      * to supply a fallback logger.
      *
-     * @param prefix to prepended to category name on each 
+     * @param prefix to prepended to category name on each
      *         invocation of <code>getLoggerForCategory()</code>.
      */
     public LogKitLoggerManager( final String prefix )
@@ -98,7 +98,7 @@ public class LogKitLoggerManager extends AbstractLoggerManager
      * l.configure( loggerManagerConfiguration );
      * </pre>
      *
-     * @param prefix to prepended to category name on each 
+     * @param prefix to prepended to category name on each
      *         invocation of <code>getLoggerForCategory()</code>.
      * @param switchToCategory if this parameter is not null
      *         after <code>start()</code>
@@ -115,17 +115,17 @@ public class LogKitLoggerManager extends AbstractLoggerManager
     }
 
     /**
-     * Creates a new <code>LogKitLoggerManager</code> 
+     * Creates a new <code>LogKitLoggerManager</code>
      * with an existing <code>Hierarchy</code>;
      * use with caution.
      *
      * Please also invoke <code>enableLogging()</code>
      * to supply a fallback logger.
-     * See <a href="#h-warning">comments on the root constructor</a> 
-     * for details on why constructors supplying an existing hierarchy 
+     * See <a href="#h-warning">comments on the root constructor</a>
+     * for details on why constructors supplying an existing hierarchy
      * should be used with caution.
      *
-     * @param prefix to prepended to category name on each 
+     * @param prefix to prepended to category name on each
      *         invocation of <code>getLoggerForCategory()</code>.
      * @param switchToCategory if this parameter is not null
      *         after <code>start()</code>
@@ -143,14 +143,14 @@ public class LogKitLoggerManager extends AbstractLoggerManager
     }
 
     /**
-     * Creates a new <code>LogKitLoggerManager</code> 
+     * Creates a new <code>LogKitLoggerManager</code>
      * with an existing <code>Hierarchy</code>;
      * use with caution.
      *
      * Please also invoke <code>enableLogging()</code>
      * to supply a fallback logger.
-     * See <a href="#h-warning">comments on the root constructor</a> 
-     * for details on why constructors supplying an existing hierarchy 
+     * See <a href="#h-warning">comments on the root constructor</a>
+     * for details on why constructors supplying an existing hierarchy
      * should be used with caution.
      */
     public LogKitLoggerManager( final Hierarchy hierarchy )
@@ -159,17 +159,17 @@ public class LogKitLoggerManager extends AbstractLoggerManager
     }
 
     /**
-     * Creates a new <code>LogKitLoggerManager</code> 
+     * Creates a new <code>LogKitLoggerManager</code>
      * with an existing <code>Hierarchy</code>;
      * use with caution.
      *
      * Please also invoke <code>enableLogging()</code>
      * to supply a fallback logger.
-     * See <a href="#h-warning">comments on the root constructor</a> 
-     * for details on why constructors supplying an existing hierarchy 
+     * See <a href="#h-warning">comments on the root constructor</a>
+     * for details on why constructors supplying an existing hierarchy
      * should be used with caution.
      *
-     * @param prefix to prepended to category name on each 
+     * @param prefix to prepended to category name on each
      *         invocation of <code>getLoggerForCategory()</code>.
      */
     public LogKitLoggerManager( final String prefix, final Hierarchy hierarchy )
@@ -191,8 +191,8 @@ public class LogKitLoggerManager extends AbstractLoggerManager
      * use logger supplied by this constructor.
      *
      * <p>
-     * See <a href="#h-warning">comments on the root constructor</a> 
-     * for details on why constructors supplying an existing hierarchy 
+     * See <a href="#h-warning">comments on the root constructor</a>
+     * for details on why constructors supplying an existing hierarchy
      * should be used with caution.
      *
      * <p>
@@ -200,9 +200,9 @@ public class LogKitLoggerManager extends AbstractLoggerManager
      * a subsequent <code>enableLogging()</code> stage is unnecessary.
      * Moreover, it will fail.
      *
-     * @param prefix to prepended to category name on each 
+     * @param prefix to prepended to category name on each
      *         invocation of <code>getLoggerForCategory()</code>.
-     * @param defaultOverrideAndFallback the logger used to 
+     * @param defaultOverrideAndFallback the logger used to
      *         a) <strong>forcibly</strong>
      *         override the root logger that will further be obtained from
      *         the configuration and b) as the fallback logger. Note that
@@ -216,7 +216,7 @@ public class LogKitLoggerManager extends AbstractLoggerManager
     public LogKitLoggerManager( final String prefix, final Hierarchy hierarchy,
                                 final Logger defaultOverrideAndFallback )
     {
-        this( prefix, hierarchy, (String)null, 
+        this( prefix, hierarchy, (String)null,
                 defaultOverrideAndFallback, defaultOverrideAndFallback );
     }
 
@@ -227,15 +227,15 @@ public class LogKitLoggerManager extends AbstractLoggerManager
      * the default logger and to provide a fallback logger;
      * compatibility constructor.
      *
-     * See <a href="#h-warning">comments on the root constructor</a> 
-     * for details on why constructors supplying an existing hierarchy 
+     * See <a href="#h-warning">comments on the root constructor</a>
+     * for details on why constructors supplying an existing hierarchy
      * should be used with caution.
      * <p>
      * As this constructor provides a logger to be used as a fallback
      * a subsequent <code>enableLogging()</code> stage is unnecessary.
      * Moreover, it will fail.
      *
-     * @param prefix to prepended to category name on each 
+     * @param prefix to prepended to category name on each
      *         invocation of <code>getLoggerForCategory()</code>.
      * @param defaultLoggerOverride the logger to be used to <strong>forcibly</strong>
      *         override the root logger that will further be obtained from
@@ -245,7 +245,7 @@ public class LogKitLoggerManager extends AbstractLoggerManager
      *         to invoke <code>enableLogging()</code>)
      */
     public LogKitLoggerManager( final String prefix, final Hierarchy hierarchy,
-                                final Logger defaultLoggerOverride, 
+                                final Logger defaultLoggerOverride,
                                 final Logger fallbackLogger )
     {
         this( prefix, hierarchy, (String)null, defaultLoggerOverride, fallbackLogger );
@@ -299,7 +299,7 @@ public class LogKitLoggerManager extends AbstractLoggerManager
      * </p>
      *
      * <p>The <code>defaultLoggerOverride</code> and <code>fallbackLogger</code>
-     * are a special case too. <code>defaultLoggerOverride</code> 
+     * are a special case too. <code>defaultLoggerOverride</code>
      * <strong>forcibly overrides</strong>
      * the root logger configured via <code>configure()</code>.
      * As there is little reason to take away users's freedom to configure
@@ -309,19 +309,19 @@ public class LogKitLoggerManager extends AbstractLoggerManager
      *
      * <p>There is nothing wrong with passing <code>fallbackLogger</code>
      * via this constructor, but as this constructor is not convinient to
-     * be invoked (too many arguments, some of them likely to be null) and the 
+     * be invoked (too many arguments, some of them likely to be null) and the
      * {@link #LogKitLoggerManager(String,Hierarchy,Logger)}
      * constructor is broken
-     * in using its <code>Logger</code> argument both as 
-     * <code>fallbackLogger</code> (which is okay) and as 
-     * a <code>defaultLoggerOverride</code> (which is probably not 
-     * desired for the reasons given above) it is preferrable not to 
+     * in using its <code>Logger</code> argument both as
+     * <code>fallbackLogger</code> (which is okay) and as
+     * a <code>defaultLoggerOverride</code> (which is probably not
+     * desired for the reasons given above) it is preferrable not to
      * specify a logger
      * as a constructor argument but rather supply it via
      * <code>enableLogging()</code> call, like this happens with all
      * other normal Avalon components after all.
      *
-     * @param prefix to prepended to category name on each 
+     * @param prefix to prepended to category name on each
      *         invocation of <code>getLoggerForCategory()</code>.
      * @param switchToCategory if this parameter is not null
      *         after <code>start()</code>
@@ -331,7 +331,7 @@ public class LogKitLoggerManager extends AbstractLoggerManager
      *         <code>this.getLoggerForCategory( switchToCategory )</code>.
      *         Note that prefix will be prepended to
      *         the value of <code>switchToCategory</code> also.
-     * @param defaultLoggerOverride the logger to be used to 
+     * @param defaultLoggerOverride the logger to be used to
      *         <strong>forcibly override</strong>
      *         the root logger that would further be obtained from
      *         the configuration
@@ -341,7 +341,7 @@ public class LogKitLoggerManager extends AbstractLoggerManager
      */
     public LogKitLoggerManager( final String prefix, final Hierarchy hierarchy,
                                 final String switchToCategory,
-                                final Logger defaultLoggerOverride, 
+                                final Logger defaultLoggerOverride,
                                 final Logger fallbackLogger )
     {
         super( prefix, switchToCategory, defaultLoggerOverride );
@@ -379,7 +379,7 @@ public class LogKitLoggerManager extends AbstractLoggerManager
 
     /**
      * Actually create a logger for the given category.
-     * The result will be cached by 
+     * The result will be cached by
      * <code>AbstractLoggerManager.getLoggerForCategory()</code>.
      */
     protected Logger doGetLoggerForCategory( final String fullCategoryName )
@@ -501,7 +501,7 @@ public class LogKitLoggerManager extends AbstractLoggerManager
                 rootLoggerAlive = true;
             }
 
-            final String fullCategory = 
+            final String fullCategory =
                     LoggerUtil.getFullCategoryName( parentCategory, category );
 
             final org.apache.log.Logger logger = m_hierarchy.getLoggerFor( fullCategory );
@@ -547,7 +547,7 @@ public class LogKitLoggerManager extends AbstractLoggerManager
 
     private static class OurErrorHandler implements ErrorHandler
     {
-        /** 
+        /**
          * This will be initialized to an instance of LoggerSwitch.SwitchingLogger;
          * that is really reliable.
          */
@@ -594,7 +594,7 @@ public class LogKitLoggerManager extends AbstractLoggerManager
             else
             {
                 /** This just plainly can't happen :-)*/
-                m_reliableLogger.error( "unrecognized priority " + nestedMessage, 
+                m_reliableLogger.error( "unrecognized priority " + nestedMessage,
                     event.getThrowable() );
             }
         }
