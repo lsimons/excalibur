@@ -141,7 +141,9 @@ public class SequenceIdGenerator
         }
         catch( SQLException e )
         {
-            throw new IdException( "Unable to allocate an Id", e );
+            String msg = "Unable to allocate an Id";
+            getLogger().error( msg );
+            throw new IdException( msg, e );
         }
     }
 
@@ -188,7 +190,7 @@ public class SequenceIdGenerator
         {
             String msg = "Unable to allocate an Id";
             getLogger().error( msg );
-            throw new IdException( msg );
+            throw new IdException( msg, e );
         }
     }
 
