@@ -19,7 +19,7 @@
         </license>
     </licenses>
 
-    <package>org.apache.avalon</package>
+    <package>org.apache</package>
     <gumpRepositoryId>avalon-excalibur</gumpRepositoryId>
 
     <url>http://excalibur.apache.org/</url>
