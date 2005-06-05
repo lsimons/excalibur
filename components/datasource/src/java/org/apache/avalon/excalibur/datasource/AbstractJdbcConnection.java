@@ -56,7 +56,6 @@ public class AbstractJdbcConnection
         implements PoolSettable, Disposable, ProxiedJdbcConnection
 {
     protected Connection m_connection;
-    protected boolean m_autoCommit;
 
     private Object m_proxy;
     protected Pool m_pool;
@@ -200,14 +199,6 @@ public class AbstractJdbcConnection
     public Connection getConnection()
     {
         return m_connection;
-    }
-
-    /**
-     * @see org.apache.avalon.excalibur.datasource.PoolSettable#setAutoCommit
-     * @todo this method only stores the auto commit flag but does not modify the connection.  Should it?
-     */
-    public void setAutoCommit(boolean autoCommit){
-        m_autoCommit = autoCommit;
     }
 
     public boolean isClosed()

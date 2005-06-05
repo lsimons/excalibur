@@ -36,9 +36,5 @@ public interface PoolSettable extends Recyclable
      * @param pool
      */
     void setPool( Pool pool );
-    
-    boolean isClosed() throws SQLException;
-    
-    void setAutoCommit( boolean autoCommit ) throws SQLException;
 }
 

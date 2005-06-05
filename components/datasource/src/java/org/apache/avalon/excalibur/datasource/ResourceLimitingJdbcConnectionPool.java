@@ -124,7 +124,7 @@ public class ResourceLimitingJdbcConnectionPool
             //  used for a while.  Is this a problem because the m_semaphore
             //  is currently locked?  I am thinking no because isClosed() will
             //  return immediately when connections are being used frequently.
-            if( conn.isClosed() )
+            if( ((Connection)conn).isClosed() )
             {
                 getLogger().debug( "JdbcConnection was closed." );
                 return false;
@@ -132,7 +132,7 @@ public class ResourceLimitingJdbcConnectionPool
             
             // Always reset the auto commit flag in case a previous user has modified it.
             //  If the user forgot to commit then this may cause a commit.
-            conn.setAutoCommit( m_autoCommit );
+            ((Connection)conn).setAutoCommit( m_autoCommit );
         }
         catch( SQLException e )
         {

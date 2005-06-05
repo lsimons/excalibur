@@ -151,7 +151,7 @@ public class JdbcConnectionPool
 
         PoolSettable obj = (PoolSettable)super.get();
 
-        if( obj.isClosed() )
+        if( ((Connection)obj).isClosed() )
         {
             if( getLogger().isDebugEnabled() )
             {
