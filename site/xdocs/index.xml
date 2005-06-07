@@ -37,7 +37,7 @@
 
             <p>
                 Inversion of control, also known as the hollywood principle ("don't call us,
-                we'll call you") is a simple put powerful concept. The idea is that we
+                we'll call you"), is simply put a powerful concept. The idea is that we
                 don't "wire up" all the pieces that make up an application (the "components") by
                 writing lots of this-component-uses-that-one-like-so code, nor do we use some
                 kind of lookup directory (like
@@ -49,7 +49,7 @@
             <p>
                 Fortress (and also its predecessor, "ECM") is such a container. It is
                 <em>lightweight</em>, by which we mean that it doesn't need a lot of resources,
-                take a lot of disk or memory, or impose all sorts of demans on its environment. Fortress
+                take a lot of disk or memory, or impose all sorts of demands on its environment. Fortress
                 is also <em>embeddable</em>, by which we mean that you can use fortress inside just
                 about every java environment. More concretely, you can use it as the basis of a
                 large standalone development platform (like the
