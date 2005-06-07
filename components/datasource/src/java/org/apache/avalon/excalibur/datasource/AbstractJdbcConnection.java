@@ -486,6 +486,13 @@ public class AbstractJdbcConnection
                     retVal = Proxy.newProxyInstance( Array.class.getClassLoader(),
                         new Class[] { Array.class }, new ProxiedObject( retVal ) );
                 }
+                else if ( ( retVal instanceof ResultSet ) && ( retVal instanceof ResultSetMetaData ) )
+                {
+                    // The HSQLDB driver needs this to make things work correctly.
+                    retVal = Proxy.newProxyInstance( ResultSet.class.getClassLoader(),
+                        new Class[] { ResultSet.class, ResultSetMetaData.class },
+                        new ProxiedObject( retVal ) );
+                }
                 else if ( retVal instanceof ResultSet )
                 {
                     retVal = Proxy.newProxyInstance( ResultSet.class.getClassLoader(),
