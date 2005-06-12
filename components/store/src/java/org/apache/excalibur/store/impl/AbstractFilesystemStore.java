@@ -189,10 +189,10 @@ implements Store, ThreadSafe {
      */
     protected void doClear() 
     {
-        Enumeration enum = this.keys();
-        while (enum.hasMoreElements()) 
+        Enumeration enumer = this.keys();
+        while (enumer.hasMoreElements()) 
         {
-            Object key = enum.nextElement();
+            Object key = enumer.nextElement();
             if (key == null) 
             {
                 continue;
@@ -219,9 +219,9 @@ implements Store, ThreadSafe {
      */
     protected Enumeration doGetKeys() 
     {
-        final FSEnumeration enum = new FSEnumeration();
-        this.addKeys(enum, this.m_directoryFile);
-        return enum;
+        final FSEnumeration enumer = new FSEnumeration();
+        this.addKeys(enumer, this.m_directoryFile);
+        return enumer;
     }
 
     /**
@@ -233,7 +233,7 @@ implements Store, ThreadSafe {
         return countKeys(this.m_directoryFile);
     }
 
-    protected void addKeys(FSEnumeration enum, File directory) 
+    protected void addKeys(FSEnumeration enumer, File directory) 
     {
         final int subStringBegin = this.m_directoryFile.getAbsolutePath().length() + 1;
         final File[] files = directory.listFiles();
@@ -241,11 +241,11 @@ implements Store, ThreadSafe {
          {
             if (files[i].isDirectory()) 
             {
-                this.addKeys(enum, files[i]);
+                this.addKeys(enumer, files[i]);
             } 
             else 
             {
-                enum.add(this.decode(files[i].getAbsolutePath().substring(subStringBegin)));
+                enumer.add(this.decode(files[i].getAbsolutePath().substring(subStringBegin)));
             }
         }
     }
