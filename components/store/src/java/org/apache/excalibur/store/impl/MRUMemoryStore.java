@@ -148,10 +148,10 @@ public class MRUMemoryStore
             if( m_persistent )
             {
                 getLogger().debug( "Final cache size: " + m_cache.size() );
-                Enumeration enum = m_cache.keys();
-                while( enum.hasMoreElements() )
+                Enumeration enumer = m_cache.keys();
+                while( enumer.hasMoreElements() )
                 {
-                    Object key = enum.nextElement();
+                    Object key = enumer.nextElement();
                     if( key == null )
                     {
                         continue;
@@ -298,10 +298,10 @@ public class MRUMemoryStore
      */
     public synchronized void clear()
     {
-        Enumeration enum = m_cache.keys();
-        while( enum.hasMoreElements() )
+        Enumeration enumer = m_cache.keys();
+        while( enumer.hasMoreElements() )
         {
-            Object key = enum.nextElement();
+            Object key = enumer.nextElement();
             if( key == null )
             {
                 continue;
