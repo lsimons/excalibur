@@ -152,7 +152,7 @@ public class RevolvingFileStrategy
 
         final int[] rotations = calculateRotations( matchingFiles );
 
-        //First we go through and look for maximumRotation
+        //First we go through and look for maximum rotation
         int maxRotation = 0;
         for( int i = 0; i < rotations.length; i++ )
         {
@@ -160,6 +160,19 @@ public class RevolvingFileStrategy
             if( rotation > maxRotation )
             {
                 maxRotation = rotation;
+            }
+        }
+
+        //Now that we know maximum rotation, find minimum rotation, and index in array
+        int minRotation = maxRotation; //don't assume min is 0
+        int minRotationIndex = 0; //not correct now, but we will set in the loop below
+        for( int i = 0; i < rotations.length; i++ )
+        {
+            final int rotation = rotations[ i ];
+            if (rotation <= minRotation) 
+            {
+                minRotation = rotation;
+                minRotationIndex = i;
             }
         }
 
@@ -172,10 +185,10 @@ public class RevolvingFileStrategy
         }
 
         //Okay now we need to calculate the youngest file for our rotation
-        long time = matchingFiles[ 0 ].lastModified();
+        long time = matchingFiles[ minRotationIndex ].lastModified();
 
         //index of oldest file
-        int oldest = rotations[ 0 ];
+        int oldest = rotations[ minRotationIndex ];
         for( int i = 0; i < matchingFiles.length; i++ )
         {
             final File file = matchingFiles[ i ];
