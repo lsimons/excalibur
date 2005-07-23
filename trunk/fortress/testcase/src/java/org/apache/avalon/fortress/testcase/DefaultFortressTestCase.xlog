@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<logkit logger="system.logkit" log-level="INFO">
+    <factories>
+        <factory type="stream" class="org.apache.avalon.excalibur.logger.factory.StreamTargetFactory"/>
+    </factories>
+    
+    <targets>
+        <stream id="console">
+            <stream>System.out</stream>
+            <format type="extended">
+                %7.7{priority} [%32.32{category}] (%{context}): %{message}\n%{throwable}
+            </format>
+        </stream>
+    </targets>
+    
+    <categories>
+        <!-- Log output from the default logger -->
+        <category name="" log-level="INFO">
+            <log-target id-ref="console"/>
+        </category>
+        
+        <!-- Log output from the fortress system -->
+        <category name="system" log-level="INFO">
+            <log-target id-ref="console"/>
+            
+            <category name="meta" log-level="INFO">
+                <log-target id-ref="console"/>
+            </category>
+            
+            <category name="roles" log-level="INFO">
+                <log-target id-ref="console"/>
+                
+                <!-- Avoid the warning messages for default roles which are not installed. -->
+                <category name="defaults" log-level="ERROR">
+                    <log-target id-ref="console"/>
+                </category>
+            </category>
+            
+            <category name="instrument" log-level="INFO">
+                <log-target id-ref="console"/>
+                
+                <category name="values" log-level="INFO">
+                    <log-target id-ref="console"/>
+                </category>
+                
+                <category name="connector" log-level="INFO">
+                    <log-target id-ref="console"/>
+                </category>
+            </category>
+        </category>
+    </categories>
+</logkit>
