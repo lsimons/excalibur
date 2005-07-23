@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document>
+
+  <properties>
+    <title>Avalon Framework - Overview</title>
+    <author email="dev@excalibur.apache.org">Excalibur Documentation Team</author>
+  </properties>
+
+  <body>
+    <section name="Introduction">
+      <p>
+        Apache Excalibur hosts the Apache Avalon Framework.  The documentation
+        in this section has been taken from the original Avalon site and has not
+        been updated to reflect recent changes.  Please feel free to submit patches
+        and improvements to the Excalibur developer team.
+      </p>
+      <p>
+        The Avalon Framework consists of interfaces
+        that define relationships between commonly used application components,
+        best-of-practice pattern enforcements, and several
+        lightweight convenience implementations of the generic components.
+      </p>      
+      <subsection name="Target Audience">
+          <p>
+            This documentation is aimed towards developers who:
+          </p>
+            <ul>
+                <li>are familiar with <a href="./best-practices.html">OO Programming</a></li>
+                <li>are interested in the design principles of Avalon</li>
+                <li>wish to develop code that will be incorporated into Avalon</li>
+                <li>wish to reuse Avalon concepts in their own application</li>
+            </ul>
+      </subsection>
+    </section>
+  </body>
+</document>
