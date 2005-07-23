@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project>
+
+  <extend>${basedir}/../project-common.xml</extend> 
+
+  <id>cornerstone-scheduler-api</id>
+  <name>Cornerstone Scheduler API</name>
+  <package>org.apache.avalon.cornerstone.services.scheduler</package>
+  <inceptionYear>2001</inceptionYear>
+  <shortDescription>Cornerstone Scheduler API</shortDescription>
+  
+  <dependencies>
+
+    <!-- avalon dependencies -->
+
+    <dependency>
+      <groupId>avalon-framework</groupId>
+      <artifactId>avalon-framework-api</artifactId>
+      <version>4.3-RC1</version>
+    </dependency>
+
+    <!-- pre JDK 1.4 dependencies -->
+
+    <dependency>
+      <id>xml-apis</id>
+      <version>2.0.2</version>
+      <url>http://xml.apache.org/xerces2-j/</url>
+    </dependency>
+
+    <dependency>
+      <id>xerces</id>
+      <version>2.4.0</version>
+      <url>http://xml.apache.org/xerces2-j/</url>
+    </dependency>
+
+  </dependencies>
+  
+</project>

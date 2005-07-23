@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project>
+
+  <extend>${basedir}/../project-common.xml</extend> 
+
+  <id>cornerstone-sockets-api</id>
+  <name>Cornerstone Sockets API</name>
+  <package>org.apache.avalon.cornerstone.services.sockets</package>
+  <inceptionYear>2001</inceptionYear>
+  <shortDescription>Cornerstone Sockets API</shortDescription>
+
+</project>
