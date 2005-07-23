@@ -71,7 +71,7 @@ public class URLSourceTestCase extends TestCase
 
     public void testHttpDoesExist() throws Exception
     {
-        m_urlSource.init( new URL( "http://www.example.com/" ),
+        m_urlSource.init( new URL( "http://excalibur.apache.org/" ),
                 Collections.EMPTY_MAP );
         assertTrue( m_urlSource.exists() );
     }
