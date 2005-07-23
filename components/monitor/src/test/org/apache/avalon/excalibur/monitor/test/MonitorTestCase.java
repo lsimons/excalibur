@@ -20,7 +20,9 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
+import org.apache.avalon.excalibur.monitor.FileResource;
 import org.apache.avalon.excalibur.monitor.Monitor;
+import org.apache.avalon.excalibur.monitor.Resource;
 import org.apache.avalon.excalibur.testcase.CascadingAssertionFailedError;
 import org.apache.avalon.excalibur.testcase.ExcaliburTestCase;
 import org.apache.avalon.framework.component.Component;
@@ -103,6 +105,53 @@ public class MonitorTestCase
             selector.release( (Component)passiveMonitor );
             manager.release( selector );
         }
+    }
+
+    public void testActiveMonitorThreadSafety() throws CascadingAssertionFailedError
+    {
+        ComponentSelector selector = null;
+        Monitor activeMonitor = null;
+
+        try
+        {
+            selector = (ComponentSelector) manager.lookup( Monitor.ROLE + "Selector" );
+            activeMonitor = (Monitor) selector.select( "active" );
+            final Monitor monitor = activeMonitor;
+            getLogger().info( "Aquired Active monitor" );
+            for ( int i = 0; i < 500; i++ )
+            {
+                final int threadNum = i;
+                final Thread thread = new Thread() {
+                    Resource resource = new FileResource( "testts-" + threadNum + ".txt" );
+
+                    public void run()
+                    {
+                        while ( true )
+                        {
+                            monitor.addResource( resource );
+                            monitor.removeResource( resource );
+                        }
+                    }
+                };
+                thread.start();
+            }
+        }
+        catch ( final Exception e )
+        {
+            if ( getLogger().isDebugEnabled() )
+            {
+                getLogger().debug( "There was an error in the ActiveMonitor test", e );
+            }
+
+            throw new CascadingAssertionFailedError( "There was an error in the ActiveMonitor test", e );
+        }
+        finally
+        {
+           assertTrue( "The monitor selector could not be retrieved.", null != selector );
+           selector.release( (Component)activeMonitor );
+           manager.release( selector );
+        }
+
     }
 
     private void internalTestProcedure( final Monitor testMonitor,

@@ -86,7 +86,7 @@ public abstract class AbstractMonitor
     }
 
     /**
-     * Remove a monitored resource by key.
+     * Remove a monitored resource by key. Will throw NPE, if no resource with given key.
      */
     public final void removeResource( final String key )
     {
@@ -99,7 +99,7 @@ public abstract class AbstractMonitor
     }
 
     /**
-     * Remove a monitored resource by reference.
+     * Remove a monitored resource by reference. Will throw NPE, if resource has been removed from monitor.
      */
     public final void removeResource( final Resource resource )
     {
@@ -113,8 +113,11 @@ public abstract class AbstractMonitor
      */
     protected Resource[] getResources()
     {
-        final Collection collection = m_resources.values();
-        return (Resource[])collection.toArray( new Resource[ collection.size() ] );
+        synchronized( m_resources )
+        {
+            final Collection collection = m_resources.values();
+            return (Resource[])collection.toArray( new Resource[ collection.size() ] );
+        }
     }
 
     /**
