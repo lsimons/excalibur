@@ -393,7 +393,7 @@ public class LogKitLoggerManager extends AbstractLoggerManager
      * @param configuration  The configuration object.
      * @throws ConfigurationException if the configuration is malformed
      */
-    public final void configure( final Configuration configuration )
+    public void configure( final Configuration configuration )
         throws ConfigurationException
     {
         final Configuration factories = configuration.getChild( "factories" );
