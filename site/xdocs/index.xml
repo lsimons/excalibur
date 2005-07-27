@@ -37,7 +37,7 @@
 
             <p>
                 Inversion of control, also known as the hollywood principle ("don't call us,
-                we'll call you"), is simply put a powerful concept. The idea is that we
+                we'll call you"), is a simple but powerful concept. The idea is that we
                 don't "wire up" all the pieces that make up an application (the "components") by
                 writing lots of this-component-uses-that-one-like-so code, nor do we use some
                 kind of lookup directory (like
