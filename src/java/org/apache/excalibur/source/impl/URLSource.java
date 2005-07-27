@@ -165,7 +165,32 @@ public class URLSource extends AbstractSource implements Source
                 m_mimeType = m_connection.getContentType();
                 int contentLength = m_connection.getContentLength();
                 setContentLength(contentLength);
-                m_exists = contentLength >= 0;
+                if ( m_connection instanceof HttpURLConnection )
+                {
+                    // check the status code for exists
+                    // if the url does not exists we might also get an IOException here!
+                    try 
+                    {
+                        final int statusCode = ((HttpURLConnection)m_connection).getResponseCode();
+                        if ( statusCode == 200 || statusCode == 303 || statusCode == 304 )
+                        {
+                            m_exists = true;
+                        } 
+                        else
+                        {
+                            m_exists = false;
+                        }                        
+                    }
+                    catch (IOException ignore)
+                    {
+                        m_exists = false;
+                    }
+                        
+                } 
+                else 
+                {
+                    m_exists = contentLength >= 0;
+                }
             }
             catch (IOException ignore)
             {
