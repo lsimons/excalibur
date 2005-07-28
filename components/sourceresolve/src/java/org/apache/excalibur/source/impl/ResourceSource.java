@@ -28,6 +28,7 @@ import org.apache.excalibur.source.SourceNotFoundException;
 import org.apache.excalibur.source.SourceUtil;
 import org.apache.excalibur.source.SourceValidity;
 import org.apache.excalibur.source.impl.validity.NOPValidity;
+import org.apache.excalibur.source.impl.validity.TimeStampValidity;
 
 /**
  * Description of a source which is described by the resource protocol
@@ -62,24 +63,31 @@ public final class ResourceSource
         return m_location != null;
     }
     
-    protected void checkInfos()
+    protected void getInfos()
     {
-        super.checkInfos();
-
-        URLConnection connection = null;
+        // Reset infos
+        super.getInfos();
+        m_mimeType = null;
+        
+        if (m_location == null) {
+            // Does not exist
+            return;
+        }
+        
+        URLConnection connection;
         try
         {
             connection = m_location.openConnection();
-            setLastModified(connection.getLastModified());
-            setContentLength(connection.getContentLength());
-            m_mimeType = connection.getContentType();
         }
         catch(IOException ioe)
         {
-            setLastModified(0);
-            setContentLength(-1);
-            m_mimeType = null;
+            // Exists but unable to open it??
+            return;
         }
+
+        setLastModified(connection.getLastModified());
+        setContentLength(connection.getContentLength());
+        m_mimeType = connection.getContentType();
     }
     
     public String getMimeType()
@@ -95,21 +103,20 @@ public final class ResourceSource
     public InputStream getInputStream()
         throws IOException, SourceException
     {
-
-        InputStream in = m_location.openStream();
-        if ( in == null )
-          throw new SourceNotFoundException( "Source '"+m_location+"' was not found" );
-        return in;
+        if (!exists())
+        {
+            throw new SourceNotFoundException(getURI());
+        }
+        
+        return m_location.openStream();
     }
 
     /**
-     * Returns {@link NOPValidity#SHARED_INSTANCE} since a resource doesn't change.
-     * 
+     * Returns {@link TimeStampValidity} as resources may change in a directory-based classloader.
      */
     public SourceValidity getValidity()
     {
-        // we are always valid
-        return NOPValidity.SHARED_INSTANCE;
+        return new TimeStampValidity(getLastModified());
     }
     
     protected ClassLoader getClassLoader() {
