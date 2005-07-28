@@ -172,7 +172,7 @@ public class URLSource extends AbstractSource implements Source
                     try 
                     {
                         final int statusCode = ((HttpURLConnection)m_connection).getResponseCode();
-                        if ( statusCode == 200 || statusCode == 303 || statusCode == 304 )
+                        if ( statusCode == 200 || statusCode == 304 )
                         {
                             m_exists = true;
                         } 
