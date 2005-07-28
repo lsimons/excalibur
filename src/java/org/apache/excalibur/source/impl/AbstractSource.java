@@ -51,6 +51,10 @@ public abstract class AbstractSource
         this.m_lastModificationDate = 0;
     }
 
+    /**
+     * Call {@link #getInfos()} if it hasn't already been called since the last
+     * call to {@link #refresh()}.
+     */
     protected void checkInfos()
     {
         if( !m_gotInfos )
