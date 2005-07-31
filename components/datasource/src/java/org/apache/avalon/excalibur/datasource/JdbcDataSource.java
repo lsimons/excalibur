@@ -159,7 +159,7 @@ public class JdbcDataSource
             {
                 if( getLogger().isWarnEnabled() )
                 {
-                    getLogger().warn( "Minumum number of connections specified must be at least 1." );
+                    getLogger().warn( "Minimum number of connections specified must be at least 1." );
                 }
 
                 l_min = 1;
