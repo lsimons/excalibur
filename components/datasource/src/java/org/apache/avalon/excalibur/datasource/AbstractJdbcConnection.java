@@ -115,7 +115,7 @@ public class AbstractJdbcConnection
 
     /**
      * @param connection a driver specific JDBC connection to be wrapped.
-     * @param keepAlive a query which will be used to check the statis of the connection after it
+     * @param keepAlive a query which will be used to check the status of the connection after it
      *                  has been idle.  A null value will cause the keep alive feature to
      *                  be disabled.
      * @param keepAliveAge the maximum age in milliseconds since a connection was last
