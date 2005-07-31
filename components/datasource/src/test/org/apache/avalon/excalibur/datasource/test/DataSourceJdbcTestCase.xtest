@@ -22,7 +22,7 @@
       <stream id="console">
         <stream>System.out</stream>
         <format type="avalon">
-          %7.7{priority} %5.5{time}   [%8.8{category}] (%{context}): %{message}\n%{throwable}
+          %7.7{priority} %5.5{time}   [%20.20{category}] (%{context}): %{message}\n%{throwable}
         </format>
       </stream>
       <file id="file">
@@ -53,9 +53,11 @@
   -->
   <components>
     <datasource logger="test">
-      <pool-controller min="1" max="10"/>
+      <pool-controller min="1" max="10">
+        <keep-alive disable="true"/>
+      </pool-controller>
       <driver>org.hsqldb.jdbcDriver</driver>
-      <dburl>jdbc:hsqldb:test</dburl>
+      <dburl>jdbc:hsqldb:mem:test</dburl>
       <user>sa</user>
       <password/>
     </datasource>
