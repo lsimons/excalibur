@@ -508,7 +508,7 @@ public class XSLTProcessorImpl
         // we must augment the template ID with the factory classname since one
         // transformer implementation cannot handle the instances of a
         // template created by another one.
-        String key = id + m_factory.getClass().getName();
+        String key = id + '(' + m_factory.getClass().getName() + ')';
 
         if( getLogger().isDebugEnabled() )
         {
@@ -619,7 +619,7 @@ public class XSLTProcessorImpl
         // we must augment the template ID with the factory classname since one
         // transformer implementation cannot handle the instances of a
         // template created by another one.
-        String key = id + m_factory.getClass().getName();
+        String key = id + '(' + m_factory.getClass().getName() + ')';
 
         // only stylesheets with a last modification date are stored
         SourceValidity validity = stylesheet.getValidity();
