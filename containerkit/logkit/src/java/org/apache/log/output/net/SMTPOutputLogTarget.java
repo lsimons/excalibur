@@ -234,6 +234,8 @@ public class SMTPOutputLogTarget extends AbstractOutputTarget
             catch( MessagingException e )
             {
                 getErrorHandler().error( "Error creating message", e, null );
+                m_message = null;
+                return;
             }
             
             m_buffer = new StringBuffer();
