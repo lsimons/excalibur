@@ -39,7 +39,7 @@
     
     <postGoal name="dist:prepare-bin-filesystem">
         <ant:copy toDir="${maven.dist.bin.assembly.dir}">
-            <fileset dir="${avalon.buildsystem}/site">
+            <fileset dir="${basedir}">
                 <include name="LICENSE*"/>
                 <include name="NOTICE*"/>
             </fileset>
@@ -48,7 +48,7 @@
     
     <postGoal name="dist:prepare-src-filesystem">
         <ant:copy toDir="${maven.dist.src.assembly.dir}">
-            <fileset dir="${avalon.buildsystem}/site">
+            <fileset dir="${basedir}">
                 <include name="LICENSE*"/>
                 <include name="NOTICE*"/>
             </fileset>
