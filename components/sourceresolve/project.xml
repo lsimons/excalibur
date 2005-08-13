@@ -39,12 +39,12 @@ limitations under the License.
         <dependency>
             <groupId>avalon-framework</groupId>
             <artifactId>avalon-framework-api</artifactId>
-            <version>4.3-RC1</version>
+            <version>4.3-RC2</version>
         </dependency>
         <dependency>
             <groupId>avalon-framework</groupId>
             <artifactId>avalon-framework-impl</artifactId>
-            <version>4.3-RC1</version>
+            <version>4.3-RC2</version>
         </dependency>
         <dependency>
             <groupId>commons-vfs</groupId>
@@ -70,12 +70,12 @@ limitations under the License.
         <dependency>
             <groupId>excalibur-fortress</groupId>
             <artifactId>excalibur-fortress-container-api</artifactId>
-            <version>1.2-RC1</version>
+            <version>1.2-RC2</version>
         </dependency>
         <dependency>
             <groupId>excalibur-fortress</groupId>
             <artifactId>excalibur-fortress-meta</artifactId>
-            <version>1.2-RC1</version>
+            <version>1.2-RC2</version>
         </dependency>
         <dependency>
             <!-- for metadata generation only -->
