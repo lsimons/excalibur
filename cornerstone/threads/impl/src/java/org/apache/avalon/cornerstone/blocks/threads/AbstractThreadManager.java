@@ -18,15 +18,18 @@
 package org.apache.avalon.cornerstone.blocks.threads;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.avalon.cornerstone.services.threads.ThreadManager;
 
 import org.apache.excalibur.thread.ThreadPool;
 
+import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.apache.avalon.framework.container.ContainerUtil;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 
 /**
@@ -36,7 +39,7 @@ import org.apache.avalon.framework.logger.AbstractLogEnabled;
  */
 public abstract class AbstractThreadManager
     extends AbstractLogEnabled
-    implements ThreadManager, Configurable
+    implements ThreadManager, Configurable, Disposable
 {
     ///Map of thread pools for application
     private HashMap m_threadPools = new HashMap();
@@ -55,6 +58,15 @@ public abstract class AbstractThreadManager
         for( int i = 0; i < groups.length; i++ )
         {
             configureThreadPool( m_threadPools, groups[ i ] );
+        }
+    }
+
+    public void dispose()
+    {
+        final Iterator pools = m_threadPools.values().iterator();
+        while( pools.hasNext() )
+        {
+            ContainerUtil.dispose( pools.next() );
         }
     }
 
