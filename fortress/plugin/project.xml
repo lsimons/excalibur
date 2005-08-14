@@ -48,7 +48,7 @@ limitations under the License.
         <dependency>
             <groupId>excalibur-fortress</groupId>
             <artifactId>excalibur-fortress-meta</artifactId>
-            <version>1.2-RC1</version>
+            <version>1.2-RC2</version>
             <type>jar</type>
             <properties/>
         </dependency>
