@@ -22,7 +22,7 @@
     <id>excalibur-datasource</id>
 
     <inceptionYear>2003</inceptionYear>
-    <shortDescription>Excalibur's Datasourc component</shortDescription>
+    <shortDescription>Excalibur's Datasource component</shortDescription>
     <description>
 Avalon Excalibur's DataSource package allows you
 to manage pooled connections in one of two ways.  You can have
@@ -48,7 +48,7 @@ necessary issues from there.
         -->
         <dependency>
             <id>hsqldb</id>
-            <version>1.7.3.3</version>
+            <version>1.8.0</version>
             <properties note="Only required by tests.">
                 <build>true</build>
             </properties>
