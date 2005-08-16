@@ -27,7 +27,7 @@
   <dependencies>
 
     <dependency>
-      <groupId>excalibur-lifecycle</groupId>
+      <groupId>excalibur-lifecycle-api</groupId>
       <artifactId>excalibur-lifecycle-api</artifactId>
       <version>2.1-RC2</version>
     </dependency>
