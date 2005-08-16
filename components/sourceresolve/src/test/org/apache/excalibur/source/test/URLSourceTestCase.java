@@ -19,6 +19,7 @@ package org.apache.excalibur.source.test;
 import junit.framework.TestCase;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.net.URL;
 import java.util.Collections;
 import org.apache.excalibur.source.impl.URLSource;
@@ -33,30 +34,35 @@ public class URLSourceTestCase extends TestCase
 {
 
     URLSource m_urlSource;
+    File tempFile;
 
     protected void setUp() throws Exception
     {
+        super.setUp();
         m_urlSource = new URLSource();
+
+        tempFile = File.createTempFile( "filesource", "test-exists" );
+	FileOutputStream out = new FileOutputStream(tempFile);
+	out.write(1);
+	out.close();
+    }
+
+    protected void tearDown() throws Exception
+    {
+        super.tearDown();
+
+        tempFile.delete();
     }
 
     public void testFileExists() throws Exception
     {
-        File tempFile = File.createTempFile( "filesource", "test" );
-        try
-        {
-            m_urlSource.init( tempFile.toURL(), Collections.EMPTY_MAP );
-            assertTrue( m_urlSource.exists() );
-        }
-        finally
-        {
-            tempFile.delete();
-        }
+        m_urlSource.init( tempFile.toURL(), Collections.EMPTY_MAP );
+        assertTrue( m_urlSource.exists() );
     }
 
     public void testFileDoesNotExist() throws Exception
     {
-        File tempFile = File.createTempFile( "filesource", "test" );
-        tempFile.delete();
+        File tempFile = new File("phantom-file");
 
         m_urlSource.init( tempFile.toURL(), Collections.EMPTY_MAP );
         assertFalse( m_urlSource.exists() );
