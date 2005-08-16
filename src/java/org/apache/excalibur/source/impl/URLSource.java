@@ -189,7 +189,7 @@ public class URLSource extends AbstractSource implements Source
                 } 
                 else 
                 {
-                    m_exists = contentLength >= 0;
+                    m_exists = contentLength > 0;
                 }
             }
             catch (IOException ignore)
