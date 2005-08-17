@@ -32,10 +32,10 @@ import org.jmock.MockObjectTestCase;
  * Test case for CommonsLogger class.
  * 
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
- * @version $Id:$
+ * @version $Id$
  * @since 4.3
  */
-public class CommonsLoggerTest extends MockObjectTestCase
+public class CommonsLoggerTestCase extends MockObjectTestCase
 {
 
     private Mock mockLog;
