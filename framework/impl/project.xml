@@ -67,6 +67,13 @@
                 <optional>true</optional>
             </properties>
         </dependency>
+		<dependency>
+            <id>commons-logging</id>
+            <version>1.0.4</version>
+            <properties note="Only required if commons-logging features are used.">
+                <optional>true</optional>
+            </properties>
+        </dependency>
         <dependency>
             <groupId>avalon-logkit</groupId>
             <artifactId>avalon-logkit</artifactId>
