@@ -20,7 +20,7 @@
     <extend>${basedir}/../project-common.xml</extend>
     
     <name>Avalon Framework Implementation</name>
-    <id>avalon-framework-impl</id>
+    <artifactId>avalon-framework-impl</artifactId>
     <shortDescription>Avalon Framework Implementation</shortDescription>
     
     <dependencies>

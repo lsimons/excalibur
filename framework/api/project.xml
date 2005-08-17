@@ -19,7 +19,7 @@
     <extend>${basedir}/../project-common.xml</extend>
     
     <name>Avalon Framework API</name>
-    <id>avalon-framework-api</id>
+    <artifactId>avalon-framework-api</artifactId>
     <shortDescription>Avalon Framework API</shortDescription>
     <package>org.apache.avalon.framework</package>
     
