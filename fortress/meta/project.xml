@@ -19,7 +19,7 @@ limitations under the License.
     <extend>${basedir}/../project-common.xml</extend>
 
     <name>Excalibur Fortress Meta Generator</name>
-    <id>excalibur-fortress-meta</id>
+    <artifactId>excalibur-fortress-meta</artifactId>
     
     <shortDescription>Excalibur Fortress Meta Generation</shortDescription>
     <description>

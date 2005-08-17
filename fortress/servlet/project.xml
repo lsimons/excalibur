@@ -19,7 +19,7 @@ limitations under the License.
     <extend>${basedir}/../project-common.xml</extend>
 
     <name>Excalibur Fortress Servlet</name>
-    <id>excalibur-fortress-servlet</id>
+    <artifactId>excalibur-fortress-servlet</artifactId>
     
     <shortDescription>Excalibur Fortress Servlet</shortDescription>
     <description>

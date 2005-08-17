@@ -21,7 +21,7 @@ limitations under the License.
 
   <name>Excalibur Pool</name>
   <groupId>excalibur-pool</groupId>
-  <id>excalibur-pool</id>
+  <artifactId>excalibur-pool</artifactId>
   <package>org.apache.excalibur.pool</package>
   <inceptionYear>2001</inceptionYear>
 

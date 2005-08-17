@@ -19,19 +19,19 @@ limitations under the License.
 
   <extend>${basedir}/../project-common.xml</extend>
 
-  <id>excalibur-pool-instrumented</id>
+  <artifactId>excalibur-pool-instrumented</artifactId>
 
   <name>Excalibur Pool Instrumented Implementation</name>
   <shortDescription>Excalibur Pool Instrumented Implementation</shortDescription>
   
   <dependencies>
     <dependency>
-      <groupId>excalibur-pool-api</groupId>
+      <groupId>excalibur-pool</groupId>
       <artifactId>excalibur-pool-api</artifactId>
       <version>2.1-RC2</version>
     </dependency>
     <dependency>
-      <groupId>excalibur-pool-impl</groupId>
+      <groupId>excalibur-pool</groupId>
       <artifactId>excalibur-pool-impl</artifactId>
       <version>2.1-RC2</version>
     </dependency>

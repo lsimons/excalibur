@@ -20,7 +20,7 @@
 
   <name>Excalibur Lifecycle</name>
   <groupId>excalibur-lifecycle</groupId>
-  <id>excalibur-lifecycle</id>
+  <artifactId>excalibur-lifecycle</artifactId>
   <inceptionYear>2002</inceptionYear>
 
   <package>org.apache.avalon.lifecycle</package>

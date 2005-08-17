@@ -19,7 +19,7 @@ limitations under the License.
     <extend>${basedir}/../project-common.xml</extend>
 
     <name>Excalibur Fortress TestCase</name>
-    <id>excalibur-fortress-testcase</id>
+    <artifactId>excalibur-fortress-testcase</artifactId>
     
     <shortDescription>The Excalibur Fortress TestCase</shortDescription>
     <description>

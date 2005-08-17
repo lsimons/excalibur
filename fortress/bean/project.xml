@@ -19,7 +19,7 @@ limitations under the License.
     <extend>${basedir}/../project-common.xml</extend>
 
     <name>Excalibur Fortress Bean</name>
-    <id>excalibur-fortress-bean</id>
+    <artifactId>excalibur-fortress-bean</artifactId>
     
     <shortDescription>Excalibur Fortress Bean component</shortDescription>
     <description>

@@ -20,7 +20,7 @@
   <extend>${basedir}/../project-common.xml</extend>
 
   <name>Excalibur Instrument Manager Implementation</name>
-  <id>excalibur-instrument-mgr-impl</id>
+  <artifactId>excalibur-instrument-mgr-impl</artifactId>
   <shortDescription>Excalibur Instrument Manager Implementation</shortDescription>
 
   <dependencies>

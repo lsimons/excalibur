@@ -20,7 +20,7 @@
 
   <extend>${basedir}/../project-common.xml</extend>
 
-  <id>excalibur-thread-instrumented</id>
+  <artifactId>excalibur-thread-instrumented</artifactId>
 
   <name>Excalibur Thread Instrumented Implementation</name>
   <package>org.apache.avalon.excalibur.thread</package>

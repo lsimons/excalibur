@@ -19,7 +19,7 @@ limitations under the License.
     <extend>${basedir}/../project-common.xml</extend>
 
     <name>Excalibur Fortress CLI</name>
-    <id>excalibur-fortress-cli</id>
+    <artifactId>excalibur-fortress-cli</artifactId>
     
     <shortDescription>The Excalibur Fortress CLI interface</shortDescription>
     <description>

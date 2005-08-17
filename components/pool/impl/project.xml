@@ -19,14 +19,14 @@ limitations under the License.
 
   <extend>${basedir}/../project-common.xml</extend>
 
-  <id>excalibur-pool-impl</id>
+  <artifactId>excalibur-pool-impl</artifactId>
 
   <name>Excalibur Pool Implementation</name>
   <shortDescription>Excalibur Pool Implementation</shortDescription>
   
   <dependencies>
     <dependency>
-      <groupId>excalibur-pool-api</groupId>
+      <groupId>excalibur-pool</groupId>
       <artifactId>excalibur-pool-api</artifactId>
       <version>2.1-RC2</version>
     </dependency>

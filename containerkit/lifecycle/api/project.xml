@@ -19,7 +19,7 @@
   <extend>${basedir}/../project-common.xml</extend>
 
   <name>Excalibur Lifecycle Extension API</name>
-  <id>excalibur-lifecycle-api</id>
+  <artifactId>excalibur-lifecycle-api</artifactId>
 
   <shortDescription>Excalibur Lifecycle Extension API</shortDescription>
   <description>Excalibur Lifecycle Extension API</description>

@@ -20,7 +20,7 @@
   <extend>${basedir}/../project-common.xml</extend>
 
   <name>Excalibur Instrument Manager API</name>
-  <id>excalibur-instrument-mgr-api</id>
+  <artifactId>excalibur-instrument-mgr-api</artifactId>
   <shortDescription>Excalibur Instrument Manager API</shortDescription>
 
   <dependencies>

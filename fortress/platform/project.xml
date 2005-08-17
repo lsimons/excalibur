@@ -19,7 +19,7 @@ limitations under the License.
     <extend>${basedir}/../project-common.xml</extend>
 
     <name>Excalibur Fortress Platform</name>
-    <id>excalibur-fortress-platform</id>
+    <artifactId>excalibur-fortress-platform</artifactId>
     
     <shortDescription>the Avalon-Fortress-Platform</shortDescription>
     <description>

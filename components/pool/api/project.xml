@@ -19,7 +19,7 @@ limitations under the License.
 
   <extend>${basedir}/../project-common.xml</extend>
 
-  <id>excalibur-pool-api</id>
+  <artifactId>excalibur-pool-api</artifactId>
   <name>Excalibur Pool API</name>
 
   <shortDescription>Excalibur Pool API</shortDescription>

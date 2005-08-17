@@ -21,7 +21,7 @@ limitations under the License.
 
   <name>Excalibur Thread</name>
   <groupId>excalibur-thread</groupId>
-  <id>excalibur-thread</id>
+  <artifactId>excalibur-thread</artifactId>
   <package>org.apache.excalibur.thread</package>
   <inceptionYear>2000</inceptionYear>
 
