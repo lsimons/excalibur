@@ -28,7 +28,7 @@
     <dependency>
       <groupId>avalon-framework</groupId>
       <artifactId>avalon-framework-api</artifactId>
-      <version>4.3-RC2</version>
+      <version>4.3-RC3</version>
     </dependency>
   </dependencies>
 </project>
