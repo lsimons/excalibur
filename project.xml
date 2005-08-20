@@ -19,13 +19,13 @@
     <dependency>
       <groupId>cornerstone-scheduler</groupId>
       <artifactId>cornerstone-scheduler-api</artifactId>
-      <version>2.1-RC2</version>
+      <version>2.1-RC3</version>
     </dependency>
 
     <dependency>
       <groupId>cornerstone-threads</groupId>
       <artifactId>cornerstone-threads-api</artifactId>
-      <version>2.1-RC2</version>
+      <version>2.1-RC3</version>
     </dependency>
 
     <!-- excalibur api dependencies -->
@@ -33,7 +33,7 @@
     <dependency>
       <groupId>excalibur-thread</groupId>
       <artifactId>excalibur-thread-api</artifactId>
-      <version>2.1-RC2</version>
+      <version>2.1-RC3</version>
     </dependency>
 
     <!-- avalon dependencies -->
@@ -41,12 +41,12 @@
     <dependency>
       <groupId>avalon-framework</groupId>
       <artifactId>avalon-framework-api</artifactId>
-      <version>4.3-RC2</version>
+      <version>4.3-RC3</version>
     </dependency>
     <dependency>
       <groupId>avalon-framework</groupId>
       <artifactId>avalon-framework-impl</artifactId>
-      <version>4.3-RC2</version>
+      <version>4.3-RC3</version>
     </dependency>
 
     <!-- pre JDK 1.4 dependencies -->
