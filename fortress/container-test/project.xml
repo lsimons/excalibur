@@ -34,32 +34,32 @@ easy embedding into various environments like servlet engines.
         <dependency>
             <groupId>excalibur-fortress</groupId>
             <artifactId>excalibur-fortress-container-api</artifactId>
-            <version>1.2-RC2</version>
+            <version>1.2-RC3</version>
         </dependency>
         <dependency>
             <groupId>excalibur-fortress</groupId>
             <artifactId>excalibur-fortress-container-impl</artifactId>
-            <version>1.2-RC2</version>
+            <version>1.2-RC3</version>
         </dependency>
         <dependency>
             <groupId>excalibur-fortress</groupId>
             <artifactId>excalibur-fortress-meta</artifactId>
-            <version>1.2-RC2</version>
+            <version>1.2-RC3</version>
         </dependency>
         <dependency>
             <groupId>avalon-framework</groupId>
             <artifactId>avalon-framework-api</artifactId>
-            <version>4.3-RC2</version>
+            <version>4.3-RC3</version>
         </dependency>
         <dependency>
             <groupId>avalon-framework</groupId>
             <artifactId>avalon-framework-impl</artifactId>
-            <version>4.3-RC2</version>
+            <version>4.3-RC3</version>
         </dependency>
         <dependency>
             <groupId>avalon-logkit</groupId>
             <artifactId>avalon-logkit</artifactId>
-            <version>2.1-RC2</version>
+            <version>2.1-RC3</version>
         </dependency>
         <dependency>
             <id>commons-collections</id>
@@ -77,17 +77,17 @@ easy embedding into various environments like servlet engines.
         <dependency>
             <groupId>excalibur-instrument</groupId>
             <artifactId>excalibur-instrument-api</artifactId>
-            <version>2.1-RC2</version>
+            <version>2.1-RC3</version>
         </dependency>
         <dependency>
             <groupId>excalibur-instrument</groupId>
             <artifactId>excalibur-instrument-mgr-api</artifactId>
-            <version>2.1-RC2</version>
+            <version>2.1-RC3</version>
         </dependency>
         <dependency>
             <groupId>excalibur-instrument</groupId>
             <artifactId>excalibur-instrument-mgr-impl</artifactId>
-            <version>2.1-RC2</version>
+            <version>2.1-RC3</version>
         </dependency>
         <dependency>
             <groupId>d-haven-event</groupId>
@@ -105,21 +105,21 @@ easy embedding into various environments like servlet engines.
         </dependency>
         <dependency>
             <id>excalibur-logger</id>
-            <version>2.1-RC2</version>
+            <version>2.1-RC3</version>
         </dependency>
         <dependency>
             <id>excalibur-sourceresolve</id>
-            <version>2.1-RC2</version>
+            <version>2.1-RC3</version>
         </dependency>
         <dependency>
             <groupId>excalibur-lifecycle</groupId>
             <artifactId>excalibur-lifecycle-api</artifactId>
-            <version>2.1-RC2</version>
+            <version>2.1-RC3</version>
         </dependency>
         <dependency>
             <groupId>excalibur-lifecycle</groupId>
             <artifactId>excalibur-lifecycle-impl</artifactId>
-            <version>2.1-RC2</version>
+            <version>2.1-RC3</version>
         </dependency>
         <dependency>
             <id>xml-apis</id>
@@ -138,7 +138,7 @@ easy embedding into various environments like servlet engines.
 
         <dependency>
             <id>excalibur-fortress-bean</id>
-            <version>1.2-RC2</version>
+            <version>1.2-RC3</version>
             <groupId>excalibur-fortress</groupId>
         </dependency>
 
