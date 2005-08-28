@@ -56,37 +56,37 @@ necessary issues from there.
         <dependency>
             <groupId>avalon-framework</groupId>
             <artifactId>avalon-framework-api</artifactId>
-            <version>4.3-RC3</version>
+            <version>4.3</version>
         </dependency>
         <dependency>
             <groupId>avalon-framework</groupId>
             <artifactId>avalon-framework-impl</artifactId>
-            <version>4.3-RC3</version>
+            <version>4.3</version>
         </dependency>
         <dependency>
             <groupId>avalon-logkit</groupId>
             <artifactId>avalon-logkit</artifactId>
-            <version>2.1-RC3</version>
+            <version>2.1</version>
         </dependency>
         <dependency>
             <groupId>excalibur-instrument</groupId>
             <artifactId>excalibur-instrument-api</artifactId>
-            <version>2.1-RC3</version>
+            <version>2.1</version>
         </dependency>
         <dependency>
             <groupId>excalibur-pool</groupId>
             <artifactId>excalibur-pool-api</artifactId>
-            <version>2.1-RC3</version>
+            <version>2.1</version>
         </dependency>
         <dependency>
             <groupId>excalibur-pool</groupId>
             <artifactId>excalibur-pool-impl</artifactId>
-            <version>2.1-RC3</version>
+            <version>2.1</version>
         </dependency>
         <dependency>
             <groupId>excalibur-pool</groupId>
             <artifactId>excalibur-pool-instrumented</artifactId>
-            <version>2.1-RC3</version>
+            <version>2.1</version>
         </dependency>
         <dependency>
             <id>commons-collections</id>
@@ -99,7 +99,7 @@ necessary issues from there.
         <dependency>
             <groupId>excalibur-component</groupId>
             <artifactId>excalibur-testcase</artifactId>
-            <version>2.1-RC3</version>
+            <version>2.1</version>
             <properties note="Only required by tests.">
                 <build>true</build>
             </properties>
@@ -107,21 +107,21 @@ necessary issues from there.
         <dependency>
             <groupId>excalibur-component</groupId>
             <artifactId>excalibur-component</artifactId>
-            <version>2.1-RC3</version>
+            <version>2.1</version>
             <properties note="Only required by tests.">
                 <build>true</build>
             </properties>
         </dependency>
         <dependency>
             <id>excalibur-logger</id>
-            <version>2.1-RC3</version>
+            <version>2.1</version>
         </dependency>
 
         <dependency>
             <!-- for metadata generation only -->
             <groupId>excalibur-fortress</groupId>
             <artifactId>excalibur-fortress-container-api</artifactId>
-            <version>1.2-RC3</version>
+            <version>1.2</version>
             <properties note="Used for META generation at build time.">
                 <build>true</build>
             </properties>
@@ -130,7 +130,7 @@ necessary issues from there.
             <!-- for metadata generation only -->
             <groupId>excalibur-fortress</groupId>
             <artifactId>excalibur-fortress-meta</artifactId>
-            <version>1.2-RC3</version>
+            <version>1.2</version>
             <properties note="Used for META generation at build time.">
                 <build>true</build>
             </properties>

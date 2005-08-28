@@ -16,7 +16,7 @@
     <dependency>
       <groupId>cornerstone-store</groupId>
       <artifactId>cornerstone-store-api</artifactId>
-      <version>2.1-RC3</version>
+      <version>2.1</version>
     </dependency>
 
     <!-- avalon dependencies -->
@@ -24,12 +24,12 @@
     <dependency>
       <groupId>avalon-framework</groupId>
       <artifactId>avalon-framework-api</artifactId>
-      <version>4.3-RC3</version>
+      <version>4.3</version>
     </dependency>
     <dependency>
       <groupId>avalon-framework</groupId>
       <artifactId>avalon-framework-impl</artifactId>
-      <version>4.3-RC3</version>
+      <version>4.3</version>
     </dependency>
 
     <!-- pre JDK 1.4 dependencies -->

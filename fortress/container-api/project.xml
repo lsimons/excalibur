@@ -33,12 +33,12 @@ easy embedding into various environments like servlet engines.
         <dependency>
             <groupId>avalon-framework</groupId>
             <artifactId>avalon-framework-api</artifactId>
-            <version>4.3-RC3</version>
+            <version>4.3</version>
         </dependency>
         <dependency>
             <groupId>avalon-framework</groupId>
             <artifactId>avalon-framework-impl</artifactId>
-            <version>4.3-RC3</version>
+            <version>4.3</version>
         </dependency>
         <dependency>
             <groupId>d-haven-event</groupId>

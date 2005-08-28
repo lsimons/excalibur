@@ -17,7 +17,7 @@ limitations under the License.
 -->
 <project>
     <extend>${basedir}/../buildsystem/project-common.xml</extend>
-    <currentVersion>2.1-RC3</currentVersion>
+    <currentVersion>2.1</currentVersion>
     <inceptionYear>1997</inceptionYear>
     <package>org.apache.avalon.cornerstone</package>
 </project>

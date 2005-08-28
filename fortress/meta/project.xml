@@ -29,18 +29,18 @@ Generates Meta information for Fortress components.
     <dependencies>
         <dependency>
             <id>excalibur-fortress-container-api</id>
-            <version>1.2-RC3</version>
+            <version>1.2</version>
             <groupId>excalibur-fortress</groupId>
         </dependency>
         <dependency>
             <groupId>avalon-framework</groupId>
             <artifactId>avalon-framework-api</artifactId>
-            <version>4.3-RC3</version>
+            <version>4.3</version>
         </dependency>
         <dependency>
             <groupId>avalon-framework</groupId>
             <artifactId>avalon-framework-impl</artifactId>
-            <version>4.3-RC3</version>
+            <version>4.3</version>
         </dependency>
         <dependency>
             <id>qdox</id>

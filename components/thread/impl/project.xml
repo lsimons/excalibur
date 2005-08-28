@@ -31,27 +31,27 @@
     <dependency>
       <groupId>avalon-framework</groupId>
       <artifactId>avalon-framework-api</artifactId>
-      <version>4.3-RC3</version>
+      <version>4.3</version>
     </dependency>
     <dependency>
       <groupId>avalon-framework</groupId>
       <artifactId>avalon-framework-impl</artifactId>
-      <version>4.3-RC3</version>
+      <version>4.3</version>
     </dependency>
     <dependency>
       <groupId>excalibur-thread</groupId>
       <artifactId>excalibur-thread-api</artifactId>
-      <version>2.1-RC3</version>
+      <version>2.1</version>
     </dependency>
     <dependency>
       <groupId>excalibur-pool</groupId>
       <artifactId>excalibur-pool-api</artifactId>
-      <version>2.1-RC3</version>
+      <version>2.1</version>
     </dependency>
     <dependency>
       <groupId>excalibur-pool</groupId>
       <artifactId>excalibur-pool-impl</artifactId>
-      <version>2.1-RC3</version>
+      <version>2.1</version>
     </dependency>
     <dependency>
       <groupId>commons-collections</groupId>

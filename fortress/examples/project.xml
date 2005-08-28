@@ -44,17 +44,17 @@ limitations under the License.
         <dependency>
           <groupId>avalon-framework</groupId>
           <artifactId>avalon-framework-api</artifactId>
-          <version>4.3-RC3</version>
+          <version>4.3</version>
         </dependency>
         <dependency>
           <groupId>avalon-framework</groupId>
           <artifactId>avalon-framework-impl</artifactId>
-          <version>4.3-RC3</version>
+          <version>4.3</version>
         </dependency>
         <dependency>
             <groupId>avalon-logkit</groupId>
             <artifactId>avalon-logkit</artifactId>
-            <version>2.1-RC3</version>
+            <version>2.1</version>
         </dependency>
         <dependency>
             <id>commons-collections</id>
@@ -69,34 +69,34 @@ limitations under the License.
         <dependency>
             <groupId>excalibur-fortress</groupId>
             <artifactId>excalibur-fortress-container-api</artifactId>
-            <version>1.2-RC3</version>
+            <version>1.2</version>
         </dependency>
         <dependency>
             <groupId>excalibur-fortress</groupId>
             <artifactId>excalibur-fortress-container-impl</artifactId>
-            <version>1.2-RC3</version>
+            <version>1.2</version>
         </dependency>
         <dependency>
             <groupId>excalibur-fortress</groupId>
             <artifactId>excalibur-fortress-meta</artifactId>
-            <version>1.2-RC3</version>
+            <version>1.2</version>
         </dependency>
 
         <dependency>
             <groupId>excalibur-instrument</groupId>
             <artifactId>excalibur-instrument-api</artifactId>
-            <version>2.1-RC3</version>
+            <version>2.1</version>
         </dependency>
         
         <dependency>
             <groupId>excalibur-lifecycle</groupId>
             <artifactId>excalibur-lifecycle-api</artifactId>
-            <version>2.1-RC3</version>
+            <version>2.1</version>
         </dependency>
         <dependency>
             <groupId>excalibur-lifecycle</groupId>
             <artifactId>excalibur-lifecycle-impl</artifactId>
-            <version>2.1-RC3</version>
+            <version>2.1</version>
         </dependency>
         
         <!-- dependencies for tools -->
