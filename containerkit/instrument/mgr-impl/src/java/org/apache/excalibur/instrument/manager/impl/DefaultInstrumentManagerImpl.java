@@ -298,10 +298,18 @@ public class DefaultInstrumentManagerImpl
                     }
                     catch( Exception e )
                     {
-                        getLogger().error(
-                            "Unable to load the instrument manager state.  The configuration " +
-                            "may have been corruptped.  A backup may have been made in the same " +
-                            "directory when it was saved.", e );
+                        String msg = "Unable to load the instrument manager state.  The "
+                            + "configuration may have been corrupted.  A backup may have been "
+                            + "made in the same directory when it was saved.";
+                        
+                        if ( getLogger().isDebugEnabled() )
+                        {
+                            getLogger().error( msg, e );
+                        }
+                        else
+                        {
+                            getLogger().error( msg + " : " + e.toString() );
+                        }
                     }
                 }
             }
@@ -1251,7 +1259,15 @@ public class DefaultInstrumentManagerImpl
         }
         catch ( Exception e )
         {
-            getLogger().warn( "Unable to save the Instrument Manager state", e );
+            String msg = "Unable to save the Instrument Manager state";
+            if ( getLogger().isDebugEnabled() )
+            {
+                getLogger().warn( msg, e );
+            }
+            else
+            {
+                getLogger().warn( msg + " : " + e.toString() );
+            }
         }
         
         m_stateSavesInstrument.increment();
