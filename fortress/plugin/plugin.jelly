@@ -33,7 +33,7 @@
           prereqs="fortress:metadata"/>
     
     <!-- Generates fortress metadata into built classes directory -->
-    <goal name="fortress:metadata" description="Generates Fortress metadata" prereqs="init">
+    <goal name="fortress:metadata" description="Generates Fortress metadata" prereqs="fortress:init">
     
         <echo>Generating Fortress metadata</echo> 
         
@@ -45,7 +45,7 @@
     </goal> 
 
     <!-- Initialization -->
-    <goal name="init" description="Initializes Plugin">
+    <goal name="fortress:init" description="Initializes Plugin">
     
       <!-- Create an ant task definition for the metadata collector -->
       <ant:taskdef name="fortress-collect-metainfo"
