@@ -16,6 +16,7 @@
  limitations under the License.
 -->
 <project>
+  <currentVersion>2.2-dev</currentVersion>
 
   <extend>${basedir}/../project-common.xml</extend>
 
