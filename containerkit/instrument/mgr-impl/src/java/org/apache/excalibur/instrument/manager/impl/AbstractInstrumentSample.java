@@ -534,6 +534,7 @@ abstract class AbstractInstrumentSample
      * @return True if state information exists which should be written to
      *         a state file.
      */
+    /*
     public boolean hasState()
     {
         // If this sample is not configured and its lease time is 0, then it
@@ -545,6 +546,7 @@ abstract class AbstractInstrumentSample
         
         return true;
     }
+    */
     
     /**
      * Writes the current state to a PrintWriter as XML.
@@ -566,59 +568,69 @@ abstract class AbstractInstrumentSample
 
         synchronized( this )
         {
+            
             // Always update the sample so its state will be correct when saved.
             long now = System.currentTimeMillis();
             update = update( now, false );
             value = getValueInner();
             time = m_time;
             
-            // Open the node.
-            out.print( "<sample name=\"" );
-            out.print( XMLUtil.getXMLSafeString( m_name ) );
-            out.print( "\" type=\"" );
-            out.print( InstrumentSampleUtils.getInstrumentSampleTypeName( getType() ) );
-            out.print( "\" interval=\"" );
-            out.print( m_interval );
-            out.print( "\" size=\"" );
-            out.print( m_size );
-            out.print( "\" time=\"" );
-            out.print( m_time );
-            out.print( "\"" );
-            if( getLeaseExpirationTime() > 0 )
-            {
-                out.print( " lease-expiration=\"" );
-                out.print( getLeaseExpirationTime() );
-                out.print( "\"" );
-                
-                // If the sample is permanent then its description will be set in the configuration
-                //  file and does not need to be saved here as well.
-                out.print( " description=\"" );
-                out.print( XMLUtil.getXMLSafeString( m_description ) );
-                out.print( "\"" );
-            }
-
-            // Let subclasses add additional attributes.
-            writeStateAttributes( out );
-            
             String history = getHistoryList();
             
-            if ( history == null )
+            if( ( getLeaseExpirationTime() == 0 ) && ( history == null ) )
             {
-                // No history.  Childless node.
-                out.println( "/>" );
+                // This is a permanent sample with no data points,  there is no point therefor
+                //  in writing it to the state file.
+                // Do nothing.  We may have updated though so handle that below.
             }
             else
             {
-                // Have history.
-                out.println( ">" );
+                // Open the node.
+                out.print( "<sample name=\"" );
+                out.print( XMLUtil.getXMLSafeString( m_name ) );
+                out.print( "\" type=\"" );
+                out.print( InstrumentSampleUtils.getInstrumentSampleTypeName( getType() ) );
+                out.print( "\" interval=\"" );
+                out.print( m_interval );
+                out.print( "\" size=\"" );
+                out.print( m_size );
+                out.print( "\" time=\"" );
+                out.print( m_time );
+                out.print( "\"" );
+                if( getLeaseExpirationTime() != 0 )
+                {
+                    out.print( " lease-expiration=\"" );
+                    out.print( getLeaseExpirationTime() );
+                    out.print( "\"" );
+                    
+                    // If the sample is permanent then its description will be set in the configuration
+                    //  file and does not need to be saved here as well.
+                    out.print( " description=\"" );
+                    out.print( XMLUtil.getXMLSafeString( m_description ) );
+                    out.print( "\"" );
+                }
+    
+                // Let subclasses add additional attributes.
+                writeStateAttributes( out );
                 
-                // Save the history samples so that the newest is first.
-                out.print( "<history>" );
-                out.print( history );
-                out.println( "</history>" );
-                
-                // Close the node.
-                out.println( "</sample>" );
+                if ( history == null )
+                {
+                    // No history.  Childless node.
+                    out.println( "/>" );
+                }
+                else
+                {
+                    // Have history.
+                    out.println( ">" );
+                    
+                    // Save the history samples so that the newest is first.
+                    out.print( "<history>" );
+                    out.print( history );
+                    out.println( "</history>" );
+                    
+                    // Close the node.
+                    out.println( "</sample>" );
+                }
             }
         }
 

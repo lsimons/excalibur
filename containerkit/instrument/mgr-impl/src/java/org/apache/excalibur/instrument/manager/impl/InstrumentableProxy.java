@@ -336,6 +336,48 @@ class InstrumentableProxy
         
         stateChanged();
     }
+    
+    /**
+     *
+     */
+    InstrumentableProxy getChildInstrumentableProxy( String childInstrumentableName,
+                                                     boolean create )
+    {
+        synchronized( this )
+        {
+            InstrumentableProxy childInstrumentableProxy =
+                (InstrumentableProxy)m_childInstrumentableProxies.get( childInstrumentableName );
+            if ( ( childInstrumentableProxy == null ) && create )
+            {
+                //getLogger().debug( "     New Child Instrumentable" );
+                // Not found, create it.
+                int pos = childInstrumentableName.lastIndexOf( '.' );
+                String childName;
+                if ( pos >= 0 )
+                {
+                    childName = childInstrumentableName.substring( pos + 1 );
+                }
+                else
+                {
+                    childName = childInstrumentableName;
+                }
+                
+                childInstrumentableProxy = new InstrumentableProxy(
+                    m_instrumentManager, this, childInstrumentableName, childName );
+                childInstrumentableProxy.enableLogging( getLogger() );
+                m_instrumentManager.incrementInstrumentableCount();
+                m_childInstrumentableProxies.put(
+                    childInstrumentableName, childInstrumentableProxy );
+
+                // Clear the optimized arrays
+                m_childInstrumentableProxyArray = null;
+                m_childInstrumentableDescriptorArray = null;
+            }
+            
+            //getLogger().debug( "  -> " + childInstrumentableProxy );
+            return childInstrumentableProxy;
+        }
+    }
 
     /**
      * Returns a child InstrumentableProxy based on its name or the name of any
@@ -502,6 +544,45 @@ class InstrumentableProxy
     }
 
     /**
+     *
+     */
+    InstrumentProxy getInstrumentProxy( String instrumentName, boolean create )
+    {
+        synchronized( this )
+        {
+            InstrumentProxy instrumentProxy =
+                (InstrumentProxy)m_instrumentProxies.get( instrumentName );
+            if ( ( instrumentProxy == null ) && create )
+            {
+                //getLogger().debug( "     New Instrument" );
+                // Not found, create it.
+                int pos = instrumentName.lastIndexOf( '.' );
+                String instName;
+                if ( pos >= 0 )
+                {
+                    instName = instrumentName.substring( pos + 1 );
+                }
+                else
+                {
+                    instName = instrumentName;
+                }
+                
+                instrumentProxy = new InstrumentProxy( this, instrumentName, instName );
+                instrumentProxy.enableLogging( getLogger() );
+                m_instrumentManager.incrementInstrumentCount();
+                m_instrumentProxies.put( instrumentName, instrumentProxy );
+
+                // Clear the optimized arrays
+                m_instrumentProxyArray = null;
+                m_instrumentDescriptorArray = null;
+            }
+            
+            //getLogger().debug( "  -> " + instrumentProxy );
+            return instrumentProxy;
+        }
+    }
+
+    /**
      * Returns a InstrumentProxy based on its name or the name of any
      *  of its children.
      *
@@ -641,151 +722,28 @@ class InstrumentableProxy
     }
     
     /**
-     * Used to test whether or not any state information exists prior to
-     *  writeState() being called.  This process is not synchronized so it
-     *  is possible that the return value will no longer be accurate when
-     *  writeState is actually called.  For the purpose of writing the
-     *  state however this is accurate enough.
-     *
-     * @return True if state information exists which should be written to
-     *         a state file.
-     */
-    boolean hasState()
-    {
-        // Check instruments first as they are "closer".
-        InstrumentProxy[] proxies = getInstrumentProxies();
-        for( int i = 0; i < proxies.length; i++ )
-        {
-            InstrumentProxy instrument = proxies[i];
-            if ( instrument.hasState() )
-            {
-                return true;
-            }
-        }
-        
-        // Check child instrumentables.
-        InstrumentableProxy[] childProxies = getChildInstrumentableProxies();
-        for( int i = 0; i < childProxies.length; i++ )
-        {
-            InstrumentableProxy instrumentable = childProxies[i];
-            if ( instrumentable.hasState() )
-            {
-                return true;
-            }
-        }
-        
-        return false;
-    }
-    
-    /**
      * Writes the current state to a PrintWriter as XML.
      *
      * @param out The PrintWriter to which the state should be written.
      */
     void writeState( PrintWriter out )
     {
-        // Open the node.
-        out.print( "<instrumentable name=\"" );
-        out.print( XMLUtil.getXMLSafeString( m_name ) );
-        out.println( "\">" );
+        // Samples are the only things written to the state, so all we need to do is drill down
+        //  to them.
         
         // Write out the states of any child instrumentables.
         InstrumentableProxy[] childProxies = getChildInstrumentableProxies();
         for( int i = 0; i < childProxies.length; i++ )
         {
-            InstrumentableProxy instrumentable = childProxies[i];
-            if ( instrumentable.hasState() )
-            {
-                instrumentable.writeState( out );
-            }
+            childProxies[i].writeState( out );
         }
         
         // Write out the states of any instruments.
         InstrumentProxy[] proxies = getInstrumentProxies();
         for( int i = 0; i < proxies.length; i++ )
         {
-            InstrumentProxy instrument = proxies[i];
-            if ( instrument.hasState() )
-            {
-                instrument.writeState( out );
-            }
+            proxies[i].writeState( out );
         }
-        
-        // Close the node.
-        out.println( "</instrumentable>" );
-    }
-
-    /**
-     * Loads the state into the Instrumentable.
-     *
-     * @param state Configuration object to load state from.
-     *
-     * @throws ConfigurationException If there were any problems loading the
-     *                                state.
-     */
-    void loadState( Configuration state ) throws ConfigurationException
-    {
-        synchronized( this )
-        {
-            // Load the child Instrumentables
-            Configuration[] childConfs = state.getChildren( "instrumentable" );
-            for( int i = 0; i < childConfs.length; i++ )
-            {
-                Configuration childConf = childConfs[ i ];
-                String fullChildName = childConf.getAttribute( "name" );
-                InstrumentableProxy childProxy = getChildInstrumentableProxy( fullChildName );
-                if( childProxy == null )
-                {
-                    // The child Instrumentable was in the state file, but has
-                    //  not yet been registered.  It is possible that it will
-                    //  be registered at a later time.  For now it needs to be
-                    //  created.
-                    String childName = ( fullChildName.startsWith( m_name + "." ) ?
-                        fullChildName.substring( m_name.length() + 1 ) : "BADNAME." + fullChildName );
-                    
-                    childProxy = new InstrumentableProxy(
-                        m_instrumentManager, this, fullChildName, childName );
-                    childProxy.enableLogging( getLogger() );
-                    m_instrumentManager.incrementInstrumentableCount();
-                    m_childInstrumentableProxies.put( fullChildName, childProxy );
-    
-                    // Clear the optimized arrays
-                    m_childInstrumentableProxyArray = null;
-                    m_childInstrumentableDescriptorArray = null;
-                }
-                childProxy.loadState( childConf );
-            }
-            
-            // Load the direct Instruments
-            Configuration[] instrumentConfs = state.getChildren( "instrument" );
-            for( int i = 0; i < instrumentConfs.length; i++ )
-            {
-                Configuration instrumentConf = instrumentConfs[ i ];
-                String fullInstrumentName = instrumentConf.getAttribute( "name" );
-                InstrumentProxy instrumentProxy = getInstrumentProxy( fullInstrumentName );
-                if( instrumentProxy == null )
-                {
-                    // The Instrument was in the state file, but has not yet been
-                    //  registered.  It is possible that it will be registered
-                    //  at a later time.  For now it needs to be created.
-                    String instrumentName = ( fullInstrumentName.startsWith( m_name + "." ) ?
-                        fullInstrumentName.substring( m_name.length() + 1 ) : "BADNAME." + fullInstrumentName );
-                    
-                    instrumentProxy =
-                        new InstrumentProxy( this, fullInstrumentName, instrumentName );
-                    instrumentProxy.enableLogging( getLogger() );
-                    m_instrumentManager.incrementInstrumentCount();
-                    m_instrumentProxies.put( fullInstrumentName, instrumentProxy );
-    
-                    // Clear the optimized arrays
-                    m_instrumentProxyArray = null;
-                    m_instrumentDescriptorArray = null;
-                }
-                instrumentProxy.loadState( instrumentConf );
-            }
-        }
-        
-        stateChanged();
     }
     
     /**

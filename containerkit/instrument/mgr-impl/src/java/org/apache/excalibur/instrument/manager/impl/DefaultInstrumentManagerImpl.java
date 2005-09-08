@@ -30,6 +30,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.activity.Initializable;
@@ -88,7 +90,7 @@ public class DefaultInstrumentManagerImpl
     private long m_maxLeasedSampleLease;
     
     /** List of configured connectors. */
-    private ArrayList m_connectors = new ArrayList();
+    private List m_connectors = new ArrayList();
 
     /** State file. */
     private File m_stateFile;
@@ -103,7 +105,7 @@ public class DefaultInstrumentManagerImpl
     private Object m_semaphore = new Object();
 
     /** HashMap of all of the registered InstrumentableProxies by their keys. */
-    private HashMap m_instrumentableProxies = new HashMap();
+    private Map m_instrumentableProxies = new HashMap();
 
     /** Optimized array of the InstrumentableProxies. */
     private InstrumentableProxy[] m_instrumentableProxyArray;
@@ -112,10 +114,19 @@ public class DefaultInstrumentManagerImpl
     private InstrumentableDescriptor[] m_instrumentableDescriptorArray;
 
     /** List of leased InstrumentSamples. */
-    private ArrayList m_leasedInstrumentSamples = new ArrayList();
+    private List m_leasedInstrumentSamples = new ArrayList();
     
     /** Optimized array of the leased InstrumentSamples. */
     private InstrumentSample[] m_leasedInstrumentSampleArray;
+    
+    /** Logger dedicated to logging translations. */
+    private Logger m_translationLogger;
+    
+    /** Map of all registered translations. */
+    private Map m_nameTranslations = new HashMap();
+    
+    /** Optimized array of the registered translations. */
+    private String[][] m_nameTranslationArray;
     
     /**
      * Thread used to keep the instruments published by the InstrumentManager
@@ -226,6 +237,8 @@ public class DefaultInstrumentManagerImpl
     public void configure( Configuration configuration )
         throws ConfigurationException
     {
+        m_translationLogger = getLogger().getChildLogger( "translation" );
+        
         // Register the InstrumentManager as an Instrumentable.  This must be done before
         //  the configuration and state file is loaded or our own instruments will not yet
         //  have proxies.
@@ -253,6 +266,24 @@ public class DefaultInstrumentManagerImpl
                 configuration.getChild( "max-leased-sample-size" ).getValueAsInteger( 2048 );
             m_maxLeasedSampleLease = 1000L *
                 configuration.getChild( "max-leased-sample-lease" ).getValueAsInteger( 86400 );
+            
+            // Configure any translations
+            Configuration translationsConf = configuration.getChild( "translations" );
+            Configuration[] translationConfs = translationsConf.getChildren( "translation" );
+            for( int i = 0; i < translationConfs.length; i++ )
+            {
+                Configuration translationConf = translationConfs[i];
+                String source = translationConf.getAttribute( "source" );
+                String target = translationConf.getAttribute( "target" );
+                try
+                {
+                    registerNameTranslationInner( source, target );
+                }
+                catch ( IllegalArgumentException e )
+                {
+                    throw new ConfigurationException( e.getMessage(), translationConf );
+                }
+            }
             
             // Configure the instrumentables.
             Configuration instrumentablesConf = configuration.getChild( "instrumentables" );
@@ -541,6 +572,36 @@ public class DefaultInstrumentManagerImpl
     public String getDescription()
     {
         return m_description;
+    }
+    
+    /**
+     * Registers a name translation that will be applied to all named based
+     *  lookups of instrumentables, instruments, and samples.   The more
+     *  translations that are registered, the greater the impact on name
+     *  based lookups will be.
+     * <p>
+     * General operation of the instrument manager will not be affected as
+     *  collection on sample data is always done using direct object
+     *  references.
+     * <p>
+     * Translations can be registered for exact name matches, or for
+     *  the bases of names.  Any translation which ends in a '.' will
+     *  imply a translation to any name beginning with that name base.
+     *  If the source ends with a '.' then the target must as well.
+     * 
+     * @param source The source name or name base of the translation.
+     * @param target The target name or name base of the translation.
+     *
+     * @throws IllegalArgumentException If the one but not both of the source
+     *                                  and target parameters end in '.'.
+     */
+    public void registerNameTranslation( String source, String target )
+        throws IllegalArgumentException
+    {
+        synchronized( m_semaphore )
+        {
+            registerNameTranslationInner( source, target );
+        }
     }
     
     /**
@@ -940,32 +1001,100 @@ public class DefaultInstrumentManagerImpl
     public void loadStateFromConfiguration( Configuration state )
         throws ConfigurationException
     {
+        // When loading state, the only thing that we are really interrested in are the samples.
+        //  Don't bother looking anything up until one is found.  Doing it this way is also
+        //  critical to make name translations work correctly.
+        
+        // Drill down into Instrumentables and Instruments by recursing into this method.
+        //  This is not used by state files saved with version 2.2 or newer, but older
+        //  versions of the instrument manager saved their states in a tree structure.
         Configuration[] instrumentableConfs = state.getChildren( "instrumentable" );
         for( int i = 0; i < instrumentableConfs.length; i++ )
         {
-            Configuration instrumentableConf = instrumentableConfs[ i ];
-            String instrumentableName = instrumentableConf.getAttribute( "name" );
-            InstrumentableProxy instrumentableProxy = getInstrumentableProxy( instrumentableName );
-            if( instrumentableProxy == null )
-            {
-                // The Instrumentable was in the state file, but has not yet
-                //  been registered.  It is possible that it will be registered
-                //  at a later time.  For now it needs to be created.
-                instrumentableProxy = new InstrumentableProxy(
-                    this, null, instrumentableName, instrumentableName );
-                instrumentableProxy.enableLogging( getLogger() );
-                incrementInstrumentableCount();
-                m_instrumentableProxies.put( instrumentableName, instrumentableProxy );
-
-                // Clear the optimized arrays
-                m_instrumentableProxyArray = null;
-                m_instrumentableDescriptorArray = null;
-            }
-            
-            instrumentableProxy.loadState( instrumentableConf );
+            loadStateFromConfiguration( instrumentableConfs[i] );
+        }
+        Configuration[] instrumentConfs = state.getChildren( "instrument" );
+        for( int i = 0; i < instrumentConfs.length; i++ )
+        {
+            loadStateFromConfiguration( instrumentConfs[i] );
         }
         
-        stateChanged();
+        // Look for any samples.
+        Configuration[] sampleConfs = state.getChildren( "sample" );
+        for( int i = 0; i < sampleConfs.length; i++ )
+        {
+            Configuration sampleConf = sampleConfs[i];
+            
+            // Obtain and translate the sample name.
+            String sampleName = getTranslatedName( sampleConf.getAttribute( "name" ) );
+            
+            // Before we do anything, decide how we want to handle the sample.
+            long now = System.currentTimeMillis();
+            long leaseExpirationTime = state.getAttributeAsLong( "lease-expiration", 0 );
+            if ( leaseExpirationTime == 0 )
+            {
+                // This is the saved state of a permanent sample.  We only want to load it
+                //  if the instrument and sample exists.  If it does not exist then it means
+                //  that the user changed the configuration so the sample is no longer
+                //  permanent.
+                
+                // Look for the existing instrument proxy.
+                InstrumentProxy instrumentProxy = getInstrumentProxyForSample( sampleName, false );
+                if ( instrumentProxy == null )
+                {
+                    // The instrument did not exist, so we want to skip this state.
+                    getLogger().info(
+                        "Skipping old permantent sample from state due to missing instrument: "
+                        + sampleName );
+                }
+                else
+                {
+                    // The instrument exists, but the sample may not.  That is decided within
+                    //  the instrument.
+                    InstrumentSample sample = instrumentProxy.loadSampleState( sampleConf );
+                    if ( sample == null )
+                    {
+                        getLogger().info(
+                            "Skipping old permantent sample from state: " + sampleName );
+                    }
+                    else
+                    {
+                        if ( getLogger().isDebugEnabled() )
+                        {
+                            getLogger().debug( "Load permanent sample state: " + sampleName );
+                        }
+                    }
+                }
+            }
+            else if ( leaseExpirationTime > now )
+            {
+                // This is a leased sample that has not yet expired.  Even if the sample
+                //  or even its instrument does not yet exist, we want to go ahead and
+                //  create it.  It is possible for instruments and samples to be created
+                //  a while after the application has been started.
+                
+                // Get the instrument.  Will never return null.
+                InstrumentProxy instrumentProxy = getInstrumentProxyForSample( sampleName, true );
+                
+                // Load the sample state.
+                instrumentProxy.loadSampleState( sampleConf );
+                
+                if ( getLogger().isDebugEnabled() )
+                {
+                    getLogger().debug( "Load leased sample state : " + sampleName );
+                }
+            }
+            else
+            {
+                // This sample has expired since the state was saved.  Do nothing.
+                if ( getLogger().isDebugEnabled() )
+                {
+                    getLogger().debug( "Skip expired sample state: " + sampleName );
+                }
+            }
+        }
+        
+        // If anything was actually loaded then stateChanged() will be called from the samples.
     }
 
     /**
@@ -1104,11 +1233,7 @@ public class DefaultInstrumentManagerImpl
         
         for( int i = 0; i < instrumentableProxies.length; i++ )
         {
-            InstrumentableProxy instrumentable = instrumentableProxies[i];
-            if ( instrumentable.hasState() )
-            {
-                instrumentable.writeState( out );
-            }
+            instrumentableProxies[i].writeState( out );
         }
     
         // Close off the main node.
@@ -1273,7 +1398,203 @@ public class DefaultInstrumentManagerImpl
         m_stateSavesInstrument.increment();
         m_stateSaveTimeInstrument.setValue( (int)( System.currentTimeMillis() - now ) );
     }
-
+    
+    /**
+     * Updates the cached array of registered name translations taking
+     *  synchronization into account.
+     *
+     * @return An array of the String[2]s representing the registered name
+     *         translations.
+     */
+    private String[][] updateNameTranslationArray()
+    {
+        synchronized( m_semaphore )
+        {
+            String[][] nameTranslations = new String[m_nameTranslations.size()][2];
+            int i = 0;
+            for ( Iterator iter = m_nameTranslations.entrySet().iterator(); iter.hasNext(); i++ )
+            {
+                Map.Entry entry = (Map.Entry)iter.next();
+                nameTranslations[i][0] = (String)entry.getKey();
+                nameTranslations[i][1] = (String)entry.getValue();
+            }
+            
+            // Once we are done modifying this array, set it to the variable accessable outside
+            //  of synchronization.
+            m_nameTranslationArray = nameTranslations;
+            
+            return nameTranslations;
+        }
+    }
+    
+    /**
+     * Translates a item name depending on a set of configured translations.
+     *  If the name does not exist as a translation then the requested name will
+     *  be returned unmodified.
+     *
+     * @param name Requested name.
+     *
+     * @return target name.
+     */
+    String getTranslatedName( String name )
+    {
+        String[][] nameTranslations = m_nameTranslationArray;
+        if( nameTranslations == null )
+        {
+            nameTranslations = updateNameTranslationArray();
+        }
+        
+        for ( int i = 0; i < nameTranslations.length; i++ )
+        {
+            String[] nameTranslation = nameTranslations[i];
+            
+            if ( name.startsWith( nameTranslation[0] ) )
+            {
+                // Match
+                if ( name.equals( nameTranslation[0] ) )
+                {
+                    // Exact match
+                    String newName = nameTranslation[1];
+                    
+                    if ( m_translationLogger.isDebugEnabled() )
+                    {
+                        m_translationLogger.debug(
+                            "Translate \"" + name + "\" to \"" + newName + "\"" );
+                    }
+                    
+                    return newName;
+                }
+                else if ( nameTranslation[0].endsWith( "." ) )
+                {
+                    // Beginning match
+                    String newName =
+                        nameTranslation[1] + name.substring( nameTranslation[0].length() );
+                    
+                    if ( m_translationLogger.isDebugEnabled() )
+                    {
+                        m_translationLogger.debug(
+                            "Translate \"" + name + "\" to \"" + newName + "\"" );
+                    }
+                    
+                    return newName;
+                }
+                else
+                {
+                    // The name happened to match the beginning of this name, but it was not meant
+                    //  as a base translation.
+                }
+            }
+        }
+        
+        // No match.
+        return name;
+    }
+    
+    /**
+     */
+    private InstrumentableProxy getInstrumentableProxy( String instrumentableName, boolean create )
+    {
+        //getLogger().debug( "getInstrumentableProxy( " + instrumentableName + ", " + create + " )" );
+        // The instrumable name may begin with the name of a parent Instrumentable
+        int pos = instrumentableName.lastIndexOf( '.' );
+        if ( pos <= 0 )
+        {
+            // This is a root level instrumentable.  Look for it within the Instrument Manager.
+            InstrumentableProxy instrumentableProxy;
+            synchronized( m_semaphore )
+            {
+                instrumentableProxy =
+                    (InstrumentableProxy)m_instrumentableProxies.get( instrumentableName );
+                
+                if ( ( instrumentableProxy == null ) && create )
+                {
+                    //getLogger().debug( "     New Instrumentable" );
+                    // Not found, create it.
+                    instrumentableProxy = new InstrumentableProxy(
+                        this, null, instrumentableName, instrumentableName );
+                    instrumentableProxy.enableLogging( getLogger() );
+                    incrementInstrumentableCount();
+                    m_instrumentableProxies.put( instrumentableName, instrumentableProxy );
+    
+                    // Clear the optimized arrays
+                    m_instrumentableProxyArray = null;
+                    m_instrumentableDescriptorArray = null;
+                }
+            }
+            
+            //getLogger().debug( "  -> " + instrumentableProxy );
+            return instrumentableProxy;
+        }
+        else
+        {
+            String parentInstrumentableName = instrumentableName.substring( 0, pos );
+            
+            // See if the parent Instrumentable exists.
+            InstrumentableProxy parentInstrumentableProxy =
+                getInstrumentableProxy( parentInstrumentableName, create );
+            if ( parentInstrumentableProxy == null )
+            {
+                // Parent Instrumentable did not exist, so the Instrumentable did not exist.
+                //  Will not get here if create is true.
+                return null;
+            }
+            
+            // Locate the Instrumentable within the parent Instrumentable.
+            return parentInstrumentableProxy.getChildInstrumentableProxy(
+                instrumentableName, create );
+        }
+    }
+    
+    /**
+     * @throws IllegalArgumentException If the specified instrumentName is invalid.
+     */
+    private InstrumentProxy getInstrumentProxy( String instrumentName, boolean create )
+        throws IllegalArgumentException
+    {
+        //getLogger().debug( "getInstrumentProxy( " + instrumentName + ", " + create + " )" );
+        // The instrument name must always begin with the name of an Instrumentable
+        int pos = instrumentName.lastIndexOf( '.' );
+        if ( pos <= 0 )
+        {
+            throw new IllegalArgumentException(
+                "\"" + instrumentName + "\" is not a valid instrument name." );
+        }
+        String instrumentableName = instrumentName.substring( 0, pos );
+        
+        // See if the Instrumentable exists.
+        InstrumentableProxy instrumentableProxy =
+            getInstrumentableProxy( instrumentableName, create );
+        if ( instrumentableProxy == null )
+        {
+            // Instrumentable did not exist, so the instrument did not exist.  Will not get here
+            //  if create is true.
+            return null;
+        }
+        
+        // Locate the instrument within the Instrumentable.
+        return instrumentableProxy.getInstrumentProxy( instrumentName, create );
+    }
+    
+    /**
+     * @throws IllegalArgumentException If the specified sampleName is invalid.
+     */
+    private InstrumentProxy getInstrumentProxyForSample( String sampleName, boolean create )
+        throws IllegalArgumentException
+    {
+        //getLogger().debug( "getInstrumentProxyForSample( " + sampleName + ", " + create + " )" );
+        // The sample name must always begin with the name of an Instrument
+        int pos = sampleName.lastIndexOf( '.' );
+        if ( pos <= 0 )
+        {
+            throw new IllegalArgumentException(
+                "\"" + sampleName + "\" is not a valid instrument sample name." );
+        }
+        String instrumentName = sampleName.substring( 0, pos );
+        
+        // Lookup the Instrument.
+        return getInstrumentProxy( instrumentName, create );
+    }
+    
     /**
      * Returns a InstrumentableDescriptor based on its name or the name of any
      *  of its children.
@@ -1497,6 +1818,56 @@ public class DefaultInstrumentManagerImpl
 
             return m_instrumentableDescriptorArray;
         }
+    }
+    
+    /**
+     * Registers a name translation that will be applied to all named based
+     *  lookups of instrumentables, instruments, and samples.   The more
+     *  translations that are registered, the greater the impact on name
+     *  based lookups will be.
+     * <p>
+     * General operation of the instrument manager will not be affected as
+     *  collection on sample data is always done using direct object
+     *  references.
+     * <p>
+     * Translations can be registered for translations of sample names up to
+     *  and including the name of the instrument.  This means that all source
+     *  and target names must end in a '.'.
+     * <p>
+     * This method should only be called when m_semaphore is synchronized.
+     * 
+     * @param source The source name or name base of the translation.
+     * @param target The target name or name base of the translation.
+     *
+     * @throws IllegalArgumentException If either the source or target does
+     *                                  not end in a '.' or is invalid.
+     */
+    private void registerNameTranslationInner( String source, String target )
+        throws IllegalArgumentException
+    {
+        if ( !source.endsWith( "." ) )
+        {
+            throw new IllegalArgumentException( "The translation source must end with a '.'." );
+        }
+        if ( !target.endsWith( "." ) )
+        {
+            throw new IllegalArgumentException( "The translation target must end with a '.'." );
+        }
+        
+        // No component of the source or target name may be 0 length.
+        if ( source.startsWith( "." ) || ( source.indexOf( ".." ) >= 0 ) )
+        {
+            throw new IllegalArgumentException(
+                "The translation source is invalid: \"" + source + "\"." );
+        }
+        if ( target.startsWith( "." ) || ( target.indexOf( ".." ) >= 0 ) )
+        {
+            throw new IllegalArgumentException(
+                "The translation target is invalid: \"" + target + "\"." );
+        }
+        
+        m_nameTranslations.put( source, target );
+        m_nameTranslationArray = null;
     }
 
     /**

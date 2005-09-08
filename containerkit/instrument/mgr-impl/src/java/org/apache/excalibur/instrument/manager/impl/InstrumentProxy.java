@@ -674,15 +674,15 @@ public class InstrumentProxy
     /**
      * Returns a InstrumentSample based on its name.
      *
-     * @param InstrumentSampleName Name of the InstrumentSample being requested.
+     * @param instrumentSampleName Name of the InstrumentSample being requested.
      *
      * @return The requested InstrumentSample or null if does not exist.
      */
-    InstrumentSample getInstrumentSample( String InstrumentSampleName )
+    InstrumentSample getInstrumentSample( String instrumentSampleName )
     {
         synchronized(this)
         {
-            return (InstrumentSample)m_samples.get( InstrumentSampleName );
+            return (InstrumentSample)m_samples.get( instrumentSampleName );
         }
     }
     
@@ -729,9 +729,12 @@ public class InstrumentProxy
                                              long sampleLease,
                                              int sampleType )
     {
-        getLogger().debug( "Create new sample for " + m_name + ": interval=" + sampleInterval +
-            ", size=" + sampleSize + ", lease=" + sampleLease + ", type=" +
-            InstrumentSampleUtils.getInstrumentSampleTypeName( sampleType ) );
+        if ( getLogger().isDebugEnabled() )
+        {
+            getLogger().debug( "Create new sample for " + m_name + ": interval=" + sampleInterval +
+                ", size=" + sampleSize + ", lease=" + sampleLease + ", type=" +
+                InstrumentSampleUtils.getInstrumentSampleTypeName( sampleType ) );
+        }
         
         DefaultInstrumentManagerImpl manager = m_instrumentableProxy.getInstrumentManager();
         
@@ -991,124 +994,96 @@ public class InstrumentProxy
     }
     
     /**
-     * Used to test whether or not any state information exists prior to
-     *  writeState() being called.  This process is not synchronized so it
-     *  is possible that the return value will no longer be accurate when
-     *  writeState is actually called.  For the purpose of writing the
-     *  state however this is accurate enough.
-     *
-     * @return True if state information exists which should be written to
-     *         a state file.
-     */
-    boolean hasState()
-    {
-        // Check samples.
-        InstrumentSample[] samples = getInstrumentSamples();
-        for ( int i = 0; i < samples.length; i++ )
-        {
-            InstrumentSample sample = samples[i];
-            if ( sample.hasState() )
-            {
-                return true;
-            }
-        }
-        
-        return false;
-    }
-    
-    /**
      * Writes the current state to a PrintWriter as XML.
      *
      * @param out The PrintWriter to which the state should be written.
      */
     void writeState( PrintWriter out )
     {
-        // Open the node.
-        out.print( "<instrument name=\"" );
-        out.print( XMLUtil.getXMLSafeString( m_name ) );
-        out.println( "\">" );
+        // Samples are the only things written to the state, so all we need to do is drill down
+        //  to them.
         
         // Write out the states of any samples.
         InstrumentSample[] samples = getInstrumentSamples();
         for ( int i = 0; i < samples.length; i++ )
         {
-            InstrumentSample sample = samples[i];
-            if ( sample.hasState() )
-            {
-                sample.writeState( out );
-            }
+            samples[i].writeState( out );
         }
-        
-        // Close the node.
-        out.println( "</instrument>" );
     }
     
     /**
-     * Loads the state into the Instrument.
+     * Loads the state of an Instrument Sample.  If the does not exist and the
+     *  sample is leased then it will be created.
      *
      * @param state Configuration object to load state from.
+     *
+     * @return The sample into which the state was loaded.  If the sample
+     *         did not exist and was not created then null is returned.
      *
      * @throws ConfigurationException If there were any problems loading the
      *                                state.
      */
-    void loadState( Configuration state ) throws ConfigurationException
+    InstrumentSample loadSampleState( Configuration state ) throws ConfigurationException
     {
+        //getLogger().debug( "instrument loadSampleState() " + m_name + " to " + this );
+        InstrumentSample sample;
         synchronized( this )
         {
-            Configuration[] instrumentSampleConfs = state.getChildren( "sample" );
-            for ( int i = 0; i < instrumentSampleConfs.length; i++ )
+            Configuration instrumentSampleConf = state;
+            
+            int sampleType = InstrumentSampleUtils.resolveInstrumentSampleType(
+                instrumentSampleConf.getAttribute( "type" ) );
+            long sampleInterval = instrumentSampleConf.getAttributeAsLong( "interval" );
+            int sampleSize = instrumentSampleConf.getAttributeAsInteger( "size", 1 );
+            
+            // Build the sample name from its attributes.  This makes it
+            //  possible to avoid forcing the user to maintain a name as well.
+            String fullSampleName = InstrumentSampleUtils.generateFullInstrumentSampleName(
+                m_name, sampleType, sampleInterval, sampleSize );
+            sample = getInstrumentSample( fullSampleName );
+            if ( sample == null )
             {
-                Configuration instrumentSampleConf = instrumentSampleConfs[i];
-                
-                int sampleType = InstrumentSampleUtils.resolveInstrumentSampleType(
-                    instrumentSampleConf.getAttribute( "type" ) );
-                long sampleInterval = instrumentSampleConf.getAttributeAsLong( "interval" );
-                int sampleSize = instrumentSampleConf.getAttributeAsInteger( "size", 1 );
-                
-                // Build the sample name from its attributes.  This makes it
-                //  possible to avoid forcing the user to maintain a name as well.
-                String fullSampleName = InstrumentSampleUtils.generateFullInstrumentSampleName(
-                    m_name, sampleType, sampleInterval, sampleSize );
-                InstrumentSample sample = getInstrumentSample( fullSampleName );
-                if ( sample == null )
+                // Sample does not exist, see if it is a leased sample.
+                long leaseExpirationTime =
+                    instrumentSampleConf.getAttributeAsLong( "lease-expiration", 0 );
+                if ( leaseExpirationTime > 0 )
                 {
-                    // Sample does not exist, see if it is a leased sample.
-                    long leaseExpirationTime =
-                        instrumentSampleConf.getAttributeAsLong( "lease-expiration", 0 );
-                    if ( leaseExpirationTime > 0 )
-                    {
-                        
-                        String sampleName = InstrumentSampleUtils.generateInstrumentSampleName(
-                            sampleType, sampleInterval, sampleSize );
-                        String sampleDescription =
-                            instrumentSampleConf.getAttribute( "description", sampleName );
-                        
-                        // Create the sample with an expiration time of 1.  This will be expired
-                        //  but not permanent.  It will be set with the correct
-                        //  expiration time will be set when its state is loaded.
-                        AbstractInstrumentSample instrumentSample = 
-                            (AbstractInstrumentSample)InstrumentSampleFactory.getInstrumentSample(
-                            this, sampleType, fullSampleName, sampleInterval, sampleSize,
-                            sampleDescription, 1 );
-                        instrumentSample.enableLogging( getLogger() );
-                        instrumentSample.loadState( instrumentSampleConf );
-                        
-                        addInstrumentSample( instrumentSample );
-                    }
-                    else
-                    {
-                        getLogger().debug( "InstrumentSample entry ignored while loading state " +
-                            "because the sample does not exist: " + fullSampleName );
-                    }
+                    
+                    String sampleName = InstrumentSampleUtils.generateInstrumentSampleName(
+                        sampleType, sampleInterval, sampleSize );
+                    String sampleDescription =
+                        instrumentSampleConf.getAttribute( "description", sampleName );
+                    
+                    // Create the sample with an expiration time of 1.  This will be expired
+                    //  but not permanent.  It will be set with the correct
+                    //  expiration time will be set when its state is loaded.
+                    AbstractInstrumentSample instrumentSample = 
+                        (AbstractInstrumentSample)InstrumentSampleFactory.getInstrumentSample(
+                        this, sampleType, fullSampleName, sampleInterval, sampleSize,
+                        sampleDescription, 1 );
+                    instrumentSample.enableLogging( getLogger() );
+                    instrumentSample.loadState( instrumentSampleConf );
+                    
+                    addInstrumentSample( instrumentSample );
+                    
+                    sample = instrumentSample;
                 }
                 else
                 {
-                    sample.loadState( instrumentSampleConf );
+                    // Permantent sample which no longer exists.
+                    getLogger().info( "InstrumentSample entry ignored while loading state " +
+                        "because the sample does not exist: " + fullSampleName );
                 }
+            }
+            else
+            {
+                sample.loadState( instrumentSampleConf );
             }
         }
         
-        stateChanged();
+        //  If the sample's state was changed then it will call stateChanged for the instrument
+        
+        return sample;
     }
     
     /**
