@@ -1770,13 +1770,14 @@ public class DefaultInstrumentManagerImpl
     {
         synchronized( m_semaphore )
         {
-            m_instrumentableProxyArray = new InstrumentableProxy[ m_instrumentableProxies.size() ];
-            m_instrumentableProxies.values().toArray( m_instrumentableProxyArray );
+            InstrumentableProxy[] instrumentableProxyArray =
+                new InstrumentableProxy[ m_instrumentableProxies.size() ];
+            m_instrumentableProxies.values().toArray( instrumentableProxyArray );
 
             // Sort the array.  This is not a performance problem because this
             //  method is rarely called and doing it here saves cycles in the
             //  client.
-            Arrays.sort( m_instrumentableProxyArray, new Comparator()
+            Arrays.sort( instrumentableProxyArray, new Comparator()
                 {
                     public int compare( Object o1, Object o2 )
                     {
@@ -1790,7 +1791,11 @@ public class DefaultInstrumentManagerImpl
                     }
                 } );
             
-            return m_instrumentableProxyArray;
+            // Once we are done modifying this array, set it to the variable accessable outside
+            //  of synchronization.
+            m_instrumentableProxyArray = instrumentableProxyArray;
+            
+            return instrumentableProxyArray;
         }
     }
 
@@ -1804,19 +1809,27 @@ public class DefaultInstrumentManagerImpl
     {
         synchronized( m_semaphore )
         {
-            if( m_instrumentableProxyArray == null )
+            // Get the proxy array. This is done in synchronization so it is not possible that it
+            //  will be reset before we obtain the descriptor array.  They are both set to null
+            //  at the same time when there is a change.
+            InstrumentableProxy[] instrumentableProxyArray = m_instrumentableProxyArray;
+            if ( instrumentableProxyArray == null )
             {
-                updateInstrumentableProxyArray();
+                instrumentableProxyArray = updateInstrumentableProxyArray();
             }
-
-            m_instrumentableDescriptorArray =
-                new InstrumentableDescriptor[ m_instrumentableProxyArray.length ];
-            for( int i = 0; i < m_instrumentableProxyArray.length; i++ )
+            
+            InstrumentableDescriptor[] instrumentableDescriptorArray =
+                new InstrumentableDescriptor[ instrumentableProxyArray.length ];
+            for( int i = 0; i < instrumentableProxyArray.length; i++ )
             {
-                m_instrumentableDescriptorArray[ i ] = m_instrumentableProxyArray[ i ].getDescriptor();
+                instrumentableDescriptorArray[ i ] = instrumentableProxyArray[ i ].getDescriptor();
             }
-
-            return m_instrumentableDescriptorArray;
+            
+            // Once we are done modifying this array, set it to the variable accessable outside
+            //  of synchronization.
+            m_instrumentableDescriptorArray = instrumentableDescriptorArray;
+            
+            return instrumentableDescriptorArray;
         }
     }
     

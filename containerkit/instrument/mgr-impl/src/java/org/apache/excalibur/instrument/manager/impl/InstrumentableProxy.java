@@ -463,14 +463,14 @@ class InstrumentableProxy
     {
         synchronized( this )
         {
-            m_childInstrumentableProxyArray =
+            InstrumentableProxy[] childInstrumentableProxyArray =
                 new InstrumentableProxy[ m_childInstrumentableProxies.size() ];
-            m_childInstrumentableProxies.values().toArray( m_childInstrumentableProxyArray );
+            m_childInstrumentableProxies.values().toArray( childInstrumentableProxyArray );
 
             // Sort the array.  This is not a performance problem because this
             //  method is rarely called and doing it here saves cycles in the
             //  client.
-            Arrays.sort( m_childInstrumentableProxyArray, new Comparator()
+            Arrays.sort( childInstrumentableProxyArray, new Comparator()
                 {
                     public int compare( Object o1, Object o2 )
                     {
@@ -484,7 +484,11 @@ class InstrumentableProxy
                     }
                 } );
             
-            return m_childInstrumentableProxyArray;
+            // Once we are done modifying this array, set it to the variable accessable outside
+            //  of synchronization.
+            m_childInstrumentableProxyArray = childInstrumentableProxyArray;
+            
+            return childInstrumentableProxyArray;
         }
     }
 
@@ -498,20 +502,28 @@ class InstrumentableProxy
     {
         synchronized( this )
         {
-            if( m_childInstrumentableProxyArray == null )
+            // Get the proxy array. This is done in synchronization so it is not possible that it
+            //  will be reset before we obtain the descriptor array.  They are both set to null
+            //  at the same time when there is a change.
+            InstrumentableProxy[] childInstrumentableProxyArray = m_childInstrumentableProxyArray;
+            if( childInstrumentableProxyArray == null )
             {
-                updateChildInstrumentableProxyArray();
+                childInstrumentableProxyArray = updateChildInstrumentableProxyArray();
             }
 
-            m_childInstrumentableDescriptorArray =
-                new InstrumentableDescriptor[ m_childInstrumentableProxyArray.length ];
-            for( int i = 0; i < m_childInstrumentableProxyArray.length; i++ )
+            InstrumentableDescriptor[] childInstrumentableDescriptorArray =
+                new InstrumentableDescriptor[ childInstrumentableProxyArray.length ];
+            for( int i = 0; i < childInstrumentableProxyArray.length; i++ )
             {
-                m_childInstrumentableDescriptorArray[ i ] =
-                    m_childInstrumentableProxyArray[ i ].getDescriptor();
+                childInstrumentableDescriptorArray[ i ] =
+                    childInstrumentableProxyArray[ i ].getDescriptor();
             }
 
-            return m_childInstrumentableDescriptorArray;
+            // Once we are done modifying this array, set it to the variable accessable outside
+            //  of synchronization.
+            m_childInstrumentableDescriptorArray = childInstrumentableDescriptorArray;
+            
+            return childInstrumentableDescriptorArray;
         }
     }
 
@@ -671,13 +683,14 @@ class InstrumentableProxy
     {
         synchronized( this )
         {
-            m_instrumentProxyArray = new InstrumentProxy[ m_instrumentProxies.size() ];
-            m_instrumentProxies.values().toArray( m_instrumentProxyArray );
+            InstrumentProxy[] instrumentProxyArray =
+                new InstrumentProxy[ m_instrumentProxies.size() ];
+            m_instrumentProxies.values().toArray( instrumentProxyArray );
 
             // Sort the array.  This is not a performance problem because this
             //  method is rarely called and doing it here saves cycles in the
             //  client.
-            Arrays.sort( m_instrumentProxyArray, new Comparator()
+            Arrays.sort( instrumentProxyArray, new Comparator()
                 {
                     public int compare( Object o1, Object o2 )
                     {
@@ -691,7 +704,11 @@ class InstrumentableProxy
                     }
                 } );
             
-            return m_instrumentProxyArray;
+            // Once we are done modifying this array, set it to the variable accessable outside
+            //  of synchronization.
+            m_instrumentProxyArray = instrumentProxyArray;
+            
+            return instrumentProxyArray;
         }
     }
 
@@ -705,19 +722,27 @@ class InstrumentableProxy
     {
         synchronized( this )
         {
-            if( m_instrumentProxyArray == null )
+            // Get the proxy array. This is done in synchronization so it is not possible that it
+            //  will be reset before we obtain the descriptor array.  They are both set to null
+            //  at the same time when there is a change.
+            InstrumentProxy[] instrumentProxyArray = m_instrumentProxyArray;
+            if( instrumentProxyArray == null )
             {
-                updateInstrumentProxyArray();
+                instrumentProxyArray = updateInstrumentProxyArray();
             }
-
-            m_instrumentDescriptorArray =
-                new InstrumentDescriptor[ m_instrumentProxyArray.length ];
-            for( int i = 0; i < m_instrumentProxyArray.length; i++ )
+            
+            InstrumentDescriptor[] instrumentDescriptorArray =
+                new InstrumentDescriptor[ instrumentProxyArray.length ];
+            for( int i = 0; i < instrumentProxyArray.length; i++ )
             {
-                m_instrumentDescriptorArray[ i ] = m_instrumentProxyArray[ i ].getDescriptor();
+                instrumentDescriptorArray[ i ] = instrumentProxyArray[ i ].getDescriptor();
             }
-
-            return m_instrumentDescriptorArray;
+            
+            // Once we are done modifying this array, set it to the variable accessable outside
+            //  of synchronization.
+            m_instrumentDescriptorArray = instrumentDescriptorArray;
+            
+            return instrumentDescriptorArray;
         }
     }
     

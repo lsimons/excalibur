@@ -943,13 +943,13 @@ public class InstrumentProxy
     {
         synchronized(this)
         {
-            m_sampleArray = new InstrumentSample[ m_samples.size() ];
-            m_samples.values().toArray( m_sampleArray );
+            InstrumentSample[] sampleArray = new InstrumentSample[ m_samples.size() ];
+            m_samples.values().toArray( sampleArray );
             
             // Sort the array.  This is not a performance problem because this
             //  method is rarely called and doing it here saves cycles in the
             //  client.
-            Arrays.sort( m_sampleArray, new Comparator()
+            Arrays.sort( sampleArray, new Comparator()
                 {
                     public int compare( Object o1, Object o2 )
                     {
@@ -963,7 +963,12 @@ public class InstrumentProxy
                     }
                 } );
             
-            return m_sampleArray;
+            
+            // Once we are done modifying this array, set it to the variable accessable outside
+            //  of synchronization.
+            m_sampleArray = sampleArray;
+            
+            return sampleArray;
         }
     }
     
@@ -977,19 +982,27 @@ public class InstrumentProxy
     {
         synchronized(this)
         {
-            if ( m_sampleArray == null )
+            // Get the proxy array. This is done in synchronization so it is not possible that it
+            //  will be reset before we obtain the descriptor array.  They are both set to null
+            //  at the same time when there is a change.
+            InstrumentSample[] sampleArray = m_sampleArray;
+            if ( sampleArray == null )
             {
-                updateInstrumentSampleArray();
+                sampleArray = updateInstrumentSampleArray();
             }
             
-            m_sampleDescriptorArray =
+            InstrumentSampleDescriptor[] sampleDescriptorArray =
                 new InstrumentSampleDescriptor[ m_sampleArray.length ];
-            for ( int i = 0; i < m_sampleArray.length; i++ )
+            for ( int i = 0; i < sampleArray.length; i++ )
             {
-                m_sampleDescriptorArray[i] = m_sampleArray[i].getDescriptor();
+                sampleDescriptorArray[i] = sampleArray[i].getDescriptor();
             }
             
-            return m_sampleDescriptorArray;
+            // Once we are done modifying this array, set it to the variable accessable outside
+            //  of synchronization.
+            m_sampleDescriptorArray = sampleDescriptorArray;
+            
+            return sampleDescriptorArray;
         }
     }
     
