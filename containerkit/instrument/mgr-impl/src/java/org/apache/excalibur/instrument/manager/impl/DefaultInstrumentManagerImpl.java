@@ -1030,7 +1030,7 @@ public class DefaultInstrumentManagerImpl
             
             // Before we do anything, decide how we want to handle the sample.
             long now = System.currentTimeMillis();
-            long leaseExpirationTime = state.getAttributeAsLong( "lease-expiration", 0 );
+            long leaseExpirationTime = sampleConf.getAttributeAsLong( "lease-expiration", 0 );
             if ( leaseExpirationTime == 0 )
             {
                 // This is the saved state of a permanent sample.  We only want to load it
