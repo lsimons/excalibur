@@ -1,16 +1,16 @@
-/* 
- * Copyright 1999-2004 The Apache Software Foundation
+/*
+ * Copyright 1999-2005 The Apache Software Foundation
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at 
- * 
+ * You may obtain a copy of the License at
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed  under the  License is distributed on an "AS IS" BASIS,
  * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
  * implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -60,13 +60,13 @@ public final class ContextMap
      *
      * @return the current ContextMap
      */
-    public static final ContextMap getCurrentContext()
+    public static ContextMap getCurrentContext()
     {
         return getCurrentContext( true );
     }
 
     /**
-     * Get the Current ContextMap.
+     * Get current ContextMap.
      * This method returns a ContextMap associated with current thread.
      * If the thread doesn't have a ContextMap associated with it and
      * autocreate is true then a new ContextMap is created.
@@ -74,7 +74,7 @@ public final class ContextMap
      * @param autocreate true if a ContextMap is to be created if it doesn't exist
      * @return the current ContextMap
      */
-    public static final ContextMap getCurrentContext( final boolean autocreate )
+    public static ContextMap getCurrentContext( final boolean autocreate )
     {
         //Check security permission here???
         ContextMap context = (ContextMap)c_localContext.get();
@@ -93,7 +93,7 @@ public final class ContextMap
      *
      * @param context the context map (may be null)
      */
-    public static final void bind( final ContextMap context )
+    public static void bind( final ContextMap context )
     {
         //Check security permission here??
         c_localContext.set( context );
@@ -179,7 +179,7 @@ public final class ContextMap
     {
         if( key == null )
             return null;
-            
+
         final Object result = m_map.get( key );
 
         if( null == result && null != m_parent )
