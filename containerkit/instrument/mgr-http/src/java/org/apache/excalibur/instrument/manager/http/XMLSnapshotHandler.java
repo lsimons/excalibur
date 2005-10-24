@@ -41,12 +41,13 @@ public class XMLSnapshotHandler
     /**
      * Creates a new XMLSnapshotHandler.
      *
-     * @param path The path handled by this handler.
-     * @param contentType The content type.
+     * @param manager Reference to the DefaultInstrumentManager.
+     * @param connector The InstrumentManagerHTTPConnector.
      */
-    public XMLSnapshotHandler( DefaultInstrumentManager manager )
+    public XMLSnapshotHandler( DefaultInstrumentManager manager,
+                               InstrumentManagerHTTPConnector connector )
     {
-        super( "/snapshot.xml", manager );
+        super( "/snapshot.xml", manager, connector );
     }
     
     /*---------------------------------------------------------------

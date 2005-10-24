@@ -41,8 +41,10 @@ public class HTMLRootHandler
      * Creates a new HTMLRootHandler.
      *
      * @param manager Reference to the DefaultInstrumentManager.
+     * @param connector The InstrumentManagerHTTPConnector.
      */
-    public HTMLRootHandler( DefaultInstrumentManager manager )
+    public HTMLRootHandler( DefaultInstrumentManager manager,
+                            InstrumentManagerHTTPConnector connector )
     {
         super( "/", manager );
     }

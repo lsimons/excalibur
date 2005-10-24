@@ -32,6 +32,9 @@ public abstract class AbstractHandler
     /** The instrument manager */
     private DefaultInstrumentManager m_manager;
     
+    /** Reference to the connector. */
+    private InstrumentManagerHTTPConnector m_connector;
+    
     /*---------------------------------------------------------------
      * Constructors
      *-------------------------------------------------------------*/
@@ -41,14 +44,17 @@ public abstract class AbstractHandler
      * @param path The path handled by this handler.
      * @param contentType The content type.
      * @param manager Reference to the instrument manager interface.
+     * @param connector The InstrumentManagerHTTPConnector.
      */
     public AbstractHandler( String path,
                             String contentType,
-                            DefaultInstrumentManager manager )
+                            DefaultInstrumentManager manager,
+                            InstrumentManagerHTTPConnector connector )
     {
         super( path, contentType, InstrumentManagerHTTPConnector.ENCODING );
         
         m_manager = manager;
+        m_connector = connector;
     }
     
     /*---------------------------------------------------------------
@@ -62,6 +68,11 @@ public abstract class AbstractHandler
     public DefaultInstrumentManager getInstrumentManager()
     {
         return m_manager;
+    }
+    
+    protected InstrumentManagerHTTPConnector getConnector()
+    {
+        return m_connector;
     }
 }
 

@@ -41,12 +41,13 @@ public class XMLInstrumentableHandler
     /**
      * Creates a new XMLInstrumentableHandler.
      *
-     * @param path The path handled by this handler.
-     * @param contentType The content type.
+     * @param manager Reference to the DefaultInstrumentManager.
+     * @param connector The InstrumentManagerHTTPConnector.
      */
-    public XMLInstrumentableHandler( DefaultInstrumentManager manager )
+    public XMLInstrumentableHandler( DefaultInstrumentManager manager,
+                                     InstrumentManagerHTTPConnector connector )
     {
-        super( "/instrumentable.xml", manager );
+        super( "/instrumentable.xml", manager, connector );
     }
     
     /*---------------------------------------------------------------

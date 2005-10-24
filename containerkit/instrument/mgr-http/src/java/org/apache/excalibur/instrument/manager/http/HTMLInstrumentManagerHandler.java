@@ -33,9 +33,6 @@ import org.apache.excalibur.instrument.manager.InstrumentableDescriptor;
 public class HTMLInstrumentManagerHandler
     extends AbstractHTMLHandler
 {
-    /** Reference to the connector. */
-    private InstrumentManagerHTTPConnector m_connector;
-    
     /*---------------------------------------------------------------
      * Constructors
      *-------------------------------------------------------------*/
@@ -49,8 +46,6 @@ public class HTMLInstrumentManagerHandler
                                          InstrumentManagerHTTPConnector connector )
     {
         super( "/instrument-manager.html", manager );
-        
-        m_connector = connector;
     }
     
     /*---------------------------------------------------------------

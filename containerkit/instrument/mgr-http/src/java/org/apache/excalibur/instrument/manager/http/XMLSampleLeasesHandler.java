@@ -34,9 +34,6 @@ import org.apache.excalibur.instrument.manager.NoSuchInstrumentSampleException;
 public class XMLSampleLeasesHandler
     extends AbstractXMLHandler
 {
-    /** Reference to the connector. */
-    private InstrumentManagerHTTPConnector m_connector;
-    
     /*---------------------------------------------------------------
      * Constructors
      *-------------------------------------------------------------*/
@@ -50,8 +47,6 @@ public class XMLSampleLeasesHandler
                                    InstrumentManagerHTTPConnector connector )
     {
         super( "/sample-leases.xml", manager );
-        
-        m_connector = connector;
     }
     
     /*---------------------------------------------------------------

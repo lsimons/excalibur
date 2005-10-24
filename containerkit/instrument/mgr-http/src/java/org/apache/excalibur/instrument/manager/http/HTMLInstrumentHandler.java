@@ -36,9 +36,6 @@ import org.apache.excalibur.instrument.manager.NoSuchInstrumentException;
 public class HTMLInstrumentHandler
     extends AbstractHTMLHandler
 {
-    /** Reference to the connector. */
-    private InstrumentManagerHTTPConnector m_connector;
-    
     /*---------------------------------------------------------------
      * Constructors
      *-------------------------------------------------------------*/
@@ -52,8 +49,6 @@ public class HTMLInstrumentHandler
                                   InstrumentManagerHTTPConnector connector )
     {
         super( "/instrument.html", manager );
-        
-        m_connector = connector;
     }
     
     /*---------------------------------------------------------------

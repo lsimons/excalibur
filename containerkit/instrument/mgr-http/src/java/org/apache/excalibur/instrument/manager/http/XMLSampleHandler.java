@@ -41,12 +41,13 @@ public class XMLSampleHandler
     /**
      * Creates a new XMLSampleHandler.
      *
-     * @param path The path handled by this handler.
-     * @param contentType The content type.
+     * @param manager Reference to the DefaultInstrumentManager.
+     * @param connector The InstrumentManagerHTTPConnector.
      */
-    public XMLSampleHandler( DefaultInstrumentManager manager )
+    public XMLSampleHandler( DefaultInstrumentManager manager,
+                             InstrumentManagerHTTPConnector connector )
     {
-        super( "/sample.xml", manager );
+        super( "/sample.xml", manager, connector );
     }
     
     /*---------------------------------------------------------------

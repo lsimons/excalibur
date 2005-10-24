@@ -45,8 +45,11 @@ public abstract class AbstractXMLHandler
      *
      * @param path The path handled by this handler.
      * @param manager Reference to the instrument manager interface.
+     * @param connector The InstrumentManagerHTTPConnector.
      */
-    public AbstractXMLHandler( String path, DefaultInstrumentManager manager )
+    public AbstractXMLHandler( String path,
+                               DefaultInstrumentManager manager,
+                               InstrumentManagerHTTPConnector connector )
     {
         super( path, CONTENT_TYPE_TEXT_XML, manager );
     }

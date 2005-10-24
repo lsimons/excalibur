@@ -41,10 +41,12 @@ public class XMLGCHandler
      * Creates a new XMLGCHandler.
      *
      * @param manager Reference to the DefaultInstrumentManager.
+     * @param connector The InstrumentManagerHTTPConnector.
      */
-    public XMLGCHandler( DefaultInstrumentManager manager )
+    public XMLGCHandler( DefaultInstrumentManager manager,
+                         InstrumentManagerHTTPConnector connector )
     {
-        super( "/gc.xml", manager );
+        super( "/gc.xml", manager, connector );
     }
     
     /*---------------------------------------------------------------

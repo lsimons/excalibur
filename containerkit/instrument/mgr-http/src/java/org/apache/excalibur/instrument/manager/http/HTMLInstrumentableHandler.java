@@ -43,8 +43,10 @@ public class HTMLInstrumentableHandler
      * Creates a new HTMLInstrumentableHandler.
      *
      * @param manager Reference to the DefaultInstrumentManager.
+     * @param connector The InstrumentManagerHTTPConnector.
      */
-    public HTMLInstrumentableHandler( DefaultInstrumentManager manager )
+    public HTMLInstrumentableHandler( DefaultInstrumentManager manager,
+                                      InstrumentManagerHTTPConnector connector )
     {
         super( "/instrumentable.html", manager );
     }

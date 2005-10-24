@@ -37,6 +37,9 @@ import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
 public abstract class AbstractHTMLHandler
     extends AbstractHandler
 {
+    /** Reference to the connector. */
+    private InstrumentManagerHTTPConnector m_connector;
+    
     /*---------------------------------------------------------------
      * Constructors
      *-------------------------------------------------------------*/
@@ -45,10 +48,13 @@ public abstract class AbstractHTMLHandler
      *
      * @param path The path handled by this handler.
      * @param manager Reference to the instrument manager interface.
+     * @param connector The InstrumentManagerHTTPConnector.
      */
-    public AbstractHTMLHandler( String path, DefaultInstrumentManager manager )
+    public AbstractHTMLHandler( String path,
+                                DefaultInstrumentManager manager,
+                                InstrumentManagerHTTPConnector connector )
     {
-        super( path, CONTENT_TYPE_TEXT_HTML, manager );
+        super( path, CONTENT_TYPE_TEXT_HTML, manager, connector );
     }
     
     /*---------------------------------------------------------------
@@ -71,6 +77,15 @@ public abstract class AbstractHTMLHandler
     
     protected void breadCrumbs( PrintWriter out, boolean link )
     {
+        String rootURL = getConnector().getRootBreadCrumbURL();
+        if ( rootURL != null )
+        {
+            // Always shown as a link
+            String rootLabel = getConnector().getRootBreadCrumbLabel();
+            out.println( "<a href='" + rootURL + "'>" + rootLabel + "</a>" );
+            out.print( " <b>&gt;</b> " );
+        }
+        
         if ( link )
         {
             out.println( "<a href='instrument-manager.html'>"

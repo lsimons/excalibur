@@ -32,9 +32,6 @@ import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
 public class XMLInstrumentManagerHandler
     extends AbstractXMLHandler
 {
-    /** Reference to the connector. */
-    private InstrumentManagerHTTPConnector m_connector;
-    
     /*---------------------------------------------------------------
      * Constructors
      *-------------------------------------------------------------*/
@@ -47,9 +44,7 @@ public class XMLInstrumentManagerHandler
     public XMLInstrumentManagerHandler( DefaultInstrumentManager manager,
                                         InstrumentManagerHTTPConnector connector )
     {
-        super( "/instrument-manager.xml", manager );
-        
-        m_connector = connector;
+        super( "/instrument-manager.xml", manager, connector );
     }
     
     /*---------------------------------------------------------------

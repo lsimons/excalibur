@@ -42,10 +42,12 @@ public class XMLSnapshotsHandler
      * Creates a new XMLSnapshotsHandler.
      *
      * @param manager Reference to the DefaultInstrumentManager.
+     * @param connector The InstrumentManagerHTTPConnector.
      */
-    public XMLSnapshotsHandler( DefaultInstrumentManager manager )
+    public XMLSnapshotsHandler( DefaultInstrumentManager manager,
+                                InstrumentManagerHTTPConnector connector )
     {
-        super( "/snapshots.xml", manager );
+        super( "/snapshots.xml", manager, connector );
     }
     
     /*---------------------------------------------------------------

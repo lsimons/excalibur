@@ -37,9 +37,6 @@ import org.apache.excalibur.instrument.manager.NoSuchInstrumentException;
 public class XMLCreateSamplesHandler
     extends AbstractXMLHandler
 {
-    /** Reference to the connector. */
-    private InstrumentManagerHTTPConnector m_connector;
-    
     /*---------------------------------------------------------------
      * Constructors
      *-------------------------------------------------------------*/
@@ -52,9 +49,7 @@ public class XMLCreateSamplesHandler
     public XMLCreateSamplesHandler( DefaultInstrumentManager manager,
                                     InstrumentManagerHTTPConnector connector )
     {
-        super( "/create-samples.xml", manager );
-        
-        m_connector = connector;
+        super( "/create-samples.xml", manager, connector );
     }
     
     /*---------------------------------------------------------------

@@ -42,8 +42,10 @@ public class HTMLGCHandler
      * Creates a new HTMLGCHandler.
      *
      * @param manager Reference to the DefaultInstrumentManager.
+     * @param connector The InstrumentManagerHTTPConnector.
      */
-    public HTMLGCHandler( DefaultInstrumentManager manager )
+    public HTMLGCHandler( DefaultInstrumentManager manager,
+                          InstrumentManagerHTTPConnector connector )
     {
         super( "/gc.html", manager );
     }
