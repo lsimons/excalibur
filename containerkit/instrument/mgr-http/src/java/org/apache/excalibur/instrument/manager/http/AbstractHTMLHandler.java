@@ -37,6 +37,10 @@ import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
 public abstract class AbstractHTMLHandler
     extends AbstractHandler
 {
+    /** Version of the package. */
+    private static final String m_packageVersion =
+        AbstractHTMLHandler.class.getPackage().getImplementationVersion();
+    
     /*---------------------------------------------------------------
      * Constructors
      *-------------------------------------------------------------*/
@@ -224,8 +228,10 @@ public abstract class AbstractHTMLHandler
         out.print( "<font size='-1' color='#888888'>" );
         out.print( "<center>" );
         out.print( "<a href='http://excalibur.apache.org/instrument/html-client.html'>" );
-        out.print( "Excalibur Instrument - HTTP Client" );
-        out.print( "</a><br>" );
+        out.print( "Excalibur Instrument HTTP Client" );
+        out.print( "</a> Version " );
+        out.print( m_packageVersion );
+        out.print( "<br>" );
         out.print( "Copyright&copy; 2002-2004 The Apache Software Foundation.  All rights reserved." );
         out.print( "</center>" );
         out.println( "</font>" );
