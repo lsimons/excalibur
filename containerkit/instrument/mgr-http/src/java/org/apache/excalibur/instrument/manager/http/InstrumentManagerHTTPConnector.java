@@ -95,6 +95,12 @@ public class InstrumentManagerHTTPConnector
      *   Instrument Manager. */
     private boolean m_readOnly;
     
+    /** The root bread crumb URL if configured. */
+    private String m_rootBreadCrumbURL;
+    
+    /** The root bread crumb label if configured. */
+    private String m_rootBreadCrumbLabel;
+    
     private HTTPServer m_httpServer;
 
     /*---------------------------------------------------------------
@@ -166,6 +172,10 @@ public class InstrumentManagerHTTPConnector
         
         m_readOnly = configuration.getAttributeAsBoolean( "read-only", false );
         
+        m_rootBreadCrumbURL = configuration.getAttribute( "root-bread-crumb-url", null );
+        m_rootBreadCrumbLabel = configuration.getAttribute(
+            "root-bread-crumb-label", m_rootBreadCrumbURL );
+        
         String accessLogFile = configuration.getAttribute( "access-log", null );
         
         m_httpServer = new HTTPServer( m_port, m_bindAddr );
@@ -188,13 +198,13 @@ public class InstrumentManagerHTTPConnector
             String nameBase = "xml-";
             initAndRegisterHandler( new XMLInstrumentManagerHandler( m_manager, this ),
                 nameBase + "instrument-manager" );
-            initAndRegisterHandler( new XMLInstrumentableHandler( m_manager ),
+            initAndRegisterHandler( new XMLInstrumentableHandler( m_manager, this ),
                 nameBase + "instrumentable" );
-            initAndRegisterHandler(	new XMLInstrumentHandler( m_manager ),
+            initAndRegisterHandler(	new XMLInstrumentHandler( m_manager, this ),
                 nameBase + "instrument" );
-            initAndRegisterHandler( new XMLSampleHandler( m_manager ), nameBase + "sample" );
-            initAndRegisterHandler(	new XMLSnapshotHandler( m_manager ), nameBase + "snapshot" );
-            initAndRegisterHandler(	new XMLSnapshotsHandler( m_manager ), nameBase + "snapshots" );
+            initAndRegisterHandler( new XMLSampleHandler( m_manager, this ), nameBase + "sample" );
+            initAndRegisterHandler(	new XMLSnapshotHandler( m_manager, this ), nameBase + "snapshot" );
+            initAndRegisterHandler(	new XMLSnapshotsHandler( m_manager, this ), nameBase + "snapshots" );
             
             if ( !m_readOnly )
             {
@@ -206,7 +216,7 @@ public class InstrumentManagerHTTPConnector
                     new XMLCreateSampleHandler( m_manager, this ), nameBase + "create-sample" );
                 initAndRegisterHandler(
                     new XMLCreateSamplesHandler( m_manager, this ), nameBase + "create-samples" );
-                initAndRegisterHandler(	new XMLGCHandler( m_manager ), nameBase + "gc" );
+                initAndRegisterHandler(	new XMLGCHandler( m_manager, this ), nameBase + "gc" );
             }
         }
         
@@ -216,7 +226,7 @@ public class InstrumentManagerHTTPConnector
             String nameBase = "html-";
             initAndRegisterHandler( new HTMLInstrumentManagerHandler( m_manager, this ),
                 nameBase + "instrument-manager" );
-            initAndRegisterHandler( new HTMLInstrumentableHandler( m_manager ),
+            initAndRegisterHandler( new HTMLInstrumentableHandler( m_manager, this ),
                 nameBase + "instrumentable" );
             initAndRegisterHandler( new HTMLInstrumentHandler( m_manager, this ),
                 nameBase + "instrument" );
@@ -232,11 +242,11 @@ public class InstrumentManagerHTTPConnector
                     new HTMLSampleLeaseHandler( m_manager, this ), nameBase + "sample-lease" );
                 initAndRegisterHandler(
                     new HTMLCreateSampleHandler( m_manager, this ), nameBase + "create-sample" );
-                initAndRegisterHandler(	new HTMLGCHandler( m_manager ), nameBase + "gc" );
+                initAndRegisterHandler(	new HTMLGCHandler( m_manager, this ), nameBase + "gc" );
             }
         
             // The root handler must be registered last as it will handle any URL.
-            initAndRegisterHandler( new HTMLRootHandler( m_manager ), nameBase + "root" );
+            initAndRegisterHandler( new HTMLRootHandler( m_manager, this ), nameBase + "root" );
         }
         
         getLogger().debug( "Starting Instrument Manager HTTP Connector" );
@@ -295,6 +305,26 @@ public class InstrumentManagerHTTPConnector
     boolean isReadOnly()
     {
         return m_readOnly;
+    }
+    
+    /**
+     * Returns the root bread crumb URL or null if not configured.
+     *
+     * @return The root bread crumb URL or null if not configured.
+     */
+    String getRootBreadCrumbURL()
+    {
+        return m_rootBreadCrumbURL;
+    }
+    
+    /**
+     * Returns the root bread crumb label or null if not configured.
+     *
+     * @return The root bread crumb label or null if not configured.
+     */
+    String getRootBreadCrumbLabel()
+    {
+        return m_rootBreadCrumbLabel;
     }
     
     private void initAndRegisterHandler( AbstractHTTPURLHandler handler, String name )

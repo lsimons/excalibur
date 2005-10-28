@@ -48,7 +48,7 @@ public class HTMLInstrumentableHandler
     public HTMLInstrumentableHandler( DefaultInstrumentManager manager,
                                       InstrumentManagerHTTPConnector connector )
     {
-        super( "/instrumentable.html", manager );
+        super( "/instrumentable.html", manager, connector );
     }
     
     /*---------------------------------------------------------------

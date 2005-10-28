@@ -47,7 +47,7 @@ public class HTMLGCHandler
     public HTMLGCHandler( DefaultInstrumentManager manager,
                           InstrumentManagerHTTPConnector connector )
     {
-        super( "/gc.html", manager );
+        super( "/gc.html", manager, connector );
     }
     
     /*---------------------------------------------------------------

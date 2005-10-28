@@ -49,7 +49,7 @@ public class XMLCreateSampleHandler
     public XMLCreateSampleHandler( DefaultInstrumentManager manager,
                                    InstrumentManagerHTTPConnector connector )
     {
-        super( "/create-sample.xml", manager );
+        super( "/create-sample.xml", manager, connector );
     }
     
     /*---------------------------------------------------------------
@@ -87,10 +87,10 @@ public class XMLCreateSampleHandler
         // The instrument manager will do its own tests of the lease, but the
         //  restrictions on this connector may be stronger so they must be tested
         //  here as well.
-        size = Math.max( 1, Math.min( size, m_connector.getMaxLeasedSampleSize() ) );
-        lease = Math.max( 1, Math.min( lease, m_connector.getMaxLeasedSampleLease() ) );
+        size = Math.max( 1, Math.min( size, getConnector().getMaxLeasedSampleSize() ) );
+        lease = Math.max( 1, Math.min( lease, getConnector().getMaxLeasedSampleLease() ) );
         
-        if ( getInstrumentManager().getLeaseSampleCount() >= m_connector.getMaxLeasedSamples() )
+        if ( getInstrumentManager().getLeaseSampleCount() >= getConnector().getMaxLeasedSamples() )
         {
             lease = 1;
         }

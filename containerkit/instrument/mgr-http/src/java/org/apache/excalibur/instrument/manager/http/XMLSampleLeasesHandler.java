@@ -46,7 +46,7 @@ public class XMLSampleLeasesHandler
     public XMLSampleLeasesHandler( DefaultInstrumentManager manager,
                                    InstrumentManagerHTTPConnector connector )
     {
-        super( "/sample-leases.xml", manager );
+        super( "/sample-leases.xml", manager, connector );
     }
     
     /*---------------------------------------------------------------
@@ -98,9 +98,11 @@ public class XMLSampleLeasesHandler
                     // The instrument manager will do its own tests of the lease, but the
                     //  restrictions on this connector may be stronger so they must be tested
                     //  here as well.
-                    lease = Math.max( 1, Math.min( lease, m_connector.getMaxLeasedSampleLease() ) );
+                    lease = Math.max(
+                        1, Math.min( lease, getConnector().getMaxLeasedSampleLease() ) );
                     
-                    if ( getInstrumentManager().getLeaseSampleCount() >= m_connector.getMaxLeasedSamples() )
+                    if ( getInstrumentManager().getLeaseSampleCount() >=
+                        getConnector().getMaxLeasedSamples() )
                     {
                         lease = 1;
                     }

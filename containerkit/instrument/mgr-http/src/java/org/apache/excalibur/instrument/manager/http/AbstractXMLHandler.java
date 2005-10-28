@@ -51,7 +51,7 @@ public abstract class AbstractXMLHandler
                                DefaultInstrumentManager manager,
                                InstrumentManagerHTTPConnector connector )
     {
-        super( path, CONTENT_TYPE_TEXT_XML, manager );
+        super( path, CONTENT_TYPE_TEXT_XML, manager, connector );
     }
     
     /*---------------------------------------------------------------

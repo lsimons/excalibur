@@ -46,7 +46,7 @@ public class HTMLRootHandler
     public HTMLRootHandler( DefaultInstrumentManager manager,
                             InstrumentManagerHTTPConnector connector )
     {
-        super( "/", manager );
+        super( "/", manager, connector );
     }
     
     /*---------------------------------------------------------------

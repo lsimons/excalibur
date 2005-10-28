@@ -37,9 +37,6 @@ import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
 public abstract class AbstractHTMLHandler
     extends AbstractHandler
 {
-    /** Reference to the connector. */
-    private InstrumentManagerHTTPConnector m_connector;
-    
     /*---------------------------------------------------------------
      * Constructors
      *-------------------------------------------------------------*/

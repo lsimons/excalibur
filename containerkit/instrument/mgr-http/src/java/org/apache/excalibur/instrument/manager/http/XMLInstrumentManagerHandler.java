@@ -65,7 +65,7 @@ public class XMLInstrumentManagerHandler
         
         out.println( InstrumentManagerHTTPConnector.XML_BANNER );
         outputInstrumentManager(
-            out, getInstrumentManager(), "", recurse, packed, m_connector.isReadOnly() );
+            out, getInstrumentManager(), "", recurse, packed, getConnector().isReadOnly() );
     }
             
     /*---------------------------------------------------------------

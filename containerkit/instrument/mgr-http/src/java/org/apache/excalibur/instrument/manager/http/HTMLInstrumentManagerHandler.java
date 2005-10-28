@@ -45,7 +45,7 @@ public class HTMLInstrumentManagerHandler
     public HTMLInstrumentManagerHandler( DefaultInstrumentManager manager,
                                          InstrumentManagerHTTPConnector connector )
     {
-        super( "/instrument-manager.html", manager );
+        super( "/instrument-manager.html", manager, connector );
     }
     
     /*---------------------------------------------------------------
@@ -85,7 +85,7 @@ public class HTMLInstrumentManagerHandler
         tableRow( out, 0, "Name", getInstrumentManager().getName() );
         tableRow( out, 0, "Description", getInstrumentManager().getDescription() );
         
-        if ( !m_connector.isReadOnly() )
+        if ( !getConnector().isReadOnly() )
         {
             tableRow( out, 0, "GC", gcLabel );
         }

@@ -49,7 +49,7 @@ public class HTMLSampleHandler
     public HTMLSampleHandler( DefaultInstrumentManager manager,
                               InstrumentManagerHTTPConnector connector )
     {
-        super( "/sample.html", manager );
+        super( "/sample.html", manager, connector );
     }
     
     /*---------------------------------------------------------------
@@ -133,7 +133,7 @@ public class HTMLSampleHandler
             
             String value = new Date( desc.getLeaseExpirationTime() ).toString();
             
-            if ( !m_connector.isReadOnly() )
+            if ( !getConnector().isReadOnly() )
             {
                 value = value + " (Renew <a href='" + renewUrl + "600000'>10min</a>, "
                     + "<a href='" + renewUrl + "3600000'>1hr</a>, "

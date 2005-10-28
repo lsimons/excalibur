@@ -48,7 +48,7 @@ public class HTMLInstrumentHandler
     public HTMLInstrumentHandler( DefaultInstrumentManager manager,
                                   InstrumentManagerHTTPConnector connector )
     {
-        super( "/instrument.html", manager );
+        super( "/instrument.html", manager, connector );
     }
     
     /*---------------------------------------------------------------
@@ -177,10 +177,10 @@ public class HTMLInstrumentHandler
         if ( samples.length > 0 )
         {
             out.println( "<h2>Registered Samples</h2>" );
-            outputInstrumentSamples( out, samples, m_connector.isReadOnly() );
+            outputInstrumentSamples( out, samples, getConnector().isReadOnly() );
         }
         
-        if ( !m_connector.isReadOnly() )
+        if ( !getConnector().isReadOnly() )
         {
             out.println( "<h2>Register Sample</h2>" );
             out.println( "<SCRIPT LANGUAGE=\"JavaScript\">" );
