@@ -199,6 +199,7 @@ public class TraceableResourceLimitingPool
                 // Go back and extract the state.
                 Thread[] threads = new Thread[count];
                 TraceException[] traceExceptions = new TraceException[count];
+                long[] traceTimes = new long[count];
                 if ( count > 0 )
                 {
                     int i = 0;
@@ -209,12 +210,13 @@ public class TraceableResourceLimitingPool
                         {
                             threads[i] = element.m_thread;
                             traceExceptions[i] = element.m_traceException;
+                            traceTimes[i] = element.m_time;
                             i++;
                         }
                     }
                 }
                 
-                return new State( getSize(), getReadySize(), threads, traceExceptions );
+                return new State( getSize(), getReadySize(), threads, traceExceptions, traceTimes );
             }
         }
         else
@@ -232,13 +234,18 @@ public class TraceableResourceLimitingPool
         private int m_readySize;
         private Thread[] m_threads;
         private TraceException[] m_traceExceptions;
+        private long[] m_traceTimes;
         
-        private State( int size, int readySize, Thread[] threads, TraceException[] traceExceptions )
+        private State( int size, int readySize,
+                       Thread[] threads,
+                       TraceException[] traceExceptions,
+                       long[] traceTimes )
         {
             m_size = size;
             m_readySize = readySize;
             m_threads = threads;
             m_traceExceptions = traceExceptions;
+            m_traceTimes = traceTimes;
         }
         
         public int getSize()
@@ -260,6 +267,11 @@ public class TraceableResourceLimitingPool
         {
             return m_traceExceptions;
         }
+        
+        public long[] getTraceTimes()
+        {
+            return m_traceTimes;
+        }
     }
     
     private static class PoolElement
@@ -267,6 +279,7 @@ public class TraceableResourceLimitingPool
         private Poolable m_poolable;
         private Thread m_thread;
         private TraceException m_traceException;
+        private long m_time;
         
         private PoolElement( Poolable poolable )
         {
@@ -278,6 +291,7 @@ public class TraceableResourceLimitingPool
             m_thread = Thread.currentThread();
             m_traceException = new TraceException();
             m_traceException.fillInStackTrace();
+            m_time = System.currentTimeMillis();
         }
         
         private void clear()
