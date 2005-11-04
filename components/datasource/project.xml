@@ -16,6 +16,8 @@
  limitations under the License.
 -->
 <project>
+    <currentVersion>2.2-dev</currentVersion>
+
     <extend>${basedir}/../project-common.xml</extend>
 
     <name>Excalibur Datasource</name>
@@ -86,7 +88,7 @@ necessary issues from there.
         <dependency>
             <groupId>excalibur-pool</groupId>
             <artifactId>excalibur-pool-instrumented</artifactId>
-            <version>2.1</version>
+            <version>2.2-dev</version>
         </dependency>
         <dependency>
             <id>commons-collections</id>

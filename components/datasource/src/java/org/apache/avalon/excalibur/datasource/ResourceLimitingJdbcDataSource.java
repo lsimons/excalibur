@@ -26,7 +26,7 @@ import org.apache.avalon.framework.configuration.ConfigurationException;
 
 import org.apache.excalibur.instrument.AbstractLogEnabledInstrumentable;
 
-import org.apache.avalon.excalibur.pool.InstrumentedResourceLimitingPool;
+import org.apache.avalon.excalibur.pool.TraceableResourceLimitingPool;
 
 /**
  * The ResourceLimiting implementation for DataSources in Avalon.
@@ -142,6 +142,7 @@ import org.apache.avalon.excalibur.pool.InstrumentedResourceLimitingPool;
  * 
  * @avalon.component
  * @avalon.service type=DataSourceComponent
+ * @avalon.service type=TraceableDataSourceComponent
  * @x-avalon.info name=rl-jdbc
  * @x-avalon.lifestyle type=singleton
  *
@@ -151,11 +152,11 @@ import org.apache.avalon.excalibur.pool.InstrumentedResourceLimitingPool;
  */
 public class ResourceLimitingJdbcDataSource
     extends AbstractLogEnabledInstrumentable
-    implements DataSourceComponent, Disposable
+    implements TraceableDataSourceComponent, Disposable
 {
     private boolean m_configured;
     private boolean m_disposed;
-    protected InstrumentedResourceLimitingPool m_pool;
+    protected TraceableResourceLimitingPool m_pool;
 
     /*---------------------------------------------------------------
      * Constructors
@@ -213,6 +214,16 @@ public class ResourceLimitingJdbcDataSource
         return (Connection)connection;
     }
 
+    /**
+     * Returns a snapshot of the current state of the pool.
+     *
+     * @return A snapshot of the current pool state.
+     */
+    public TraceableResourceLimitingPool.State getState()
+    {
+        return m_pool.getState();
+    }
+
     /*---------------------------------------------------------------
      * DataSourceComponent (Configurable) Methods
      *-------------------------------------------------------------*/
@@ -243,6 +254,7 @@ public class ResourceLimitingJdbcDataSource
         final boolean blocking = controller.getAttributeAsBoolean( "blocking", true );
         final long timeout = controller.getAttributeAsLong( "timeout", 0 );
         final long trimInterval = controller.getAttributeAsLong( "trim-interval", 60000 );
+        final boolean trace = controller.getAttributeAsBoolean( "trace", false );
         final boolean oradb = controller.getAttributeAsBoolean( "oradb", false );
 
         final boolean autoCommit = configuration.getChild( "auto-commit" ).getValueAsBoolean( true );
@@ -316,7 +328,7 @@ public class ResourceLimitingJdbcDataSource
         try
         {
             m_pool = new ResourceLimitingJdbcConnectionPool(
-                factory, l_max, maxStrict, blocking, timeout, trimInterval, autoCommit );
+                factory, l_max, maxStrict, blocking, timeout, trimInterval, trace, autoCommit );
 
             m_pool.enableLogging( getLogger() );
             
