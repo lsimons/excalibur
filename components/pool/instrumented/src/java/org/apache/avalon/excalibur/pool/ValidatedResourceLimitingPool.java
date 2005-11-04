@@ -25,7 +25,7 @@ package org.apache.avalon.excalibur.pool;
  * @since 4.1
  */
 public class ValidatedResourceLimitingPool
-    extends InstrumentedResourceLimitingPool
+    extends TraceableResourceLimitingPool
 {
     /*---------------------------------------------------------------
      * Private Fields
@@ -54,6 +54,34 @@ public class ValidatedResourceLimitingPool
      *  block before an exception is thrown.  A value of 0 implies an indefinate wait.
      * @param trimInterval The minimum interval with which old unused poolables will be removed
      *  from the pool.  A value of 0 will cause the pool to never trim poolables.
+     * @param trace True if tracing of gets is enabled for the pool.
+     */
+    public ValidatedResourceLimitingPool( final ObjectFactory factory,
+                                          int max,
+                                          boolean maxStrict,
+                                          boolean blocking,
+                                          long blockTimeout,
+                                          long trimInterval,
+                                          boolean trace )
+    {
+        super( factory, max, maxStrict, blocking, blockTimeout, trimInterval, trace );
+    }
+    
+    /**
+     * Creates a new ValidatedResourceLimitingPool
+     *
+     * @param factory The ObjectFactory which will be used to create new Poolables as needed by
+     *  the pool.
+     * @param max Maximum number of Poolables which can be stored in the pool, 0 implies no limit.
+     * @param maxStrict true if the pool should never allow more than max Poolable to be created.
+     *  Will cause an exception to be thrown if more than max Poolables are requested and blocking
+     *  is false.
+     * @param blocking true if the pool should cause a thread calling get() to block when Poolables
+     *  are not currently available on the pool.
+     * @param blockTimeout The maximum amount of time, in milliseconds, that a call to get() will
+     *  block before an exception is thrown.  A value of 0 implies an indefinate wait.
+     * @param trimInterval The minimum interval with which old unused poolables will be removed
+     *  from the pool.  A value of 0 will cause the pool to never trim poolables.
      */
     public ValidatedResourceLimitingPool( final ObjectFactory factory,
                                           int max,
@@ -62,8 +90,7 @@ public class ValidatedResourceLimitingPool
                                           long blockTimeout,
                                           long trimInterval )
     {
-
-        super( factory, max, maxStrict, blocking, blockTimeout, trimInterval );
+        this( factory, max, maxStrict, blocking, blockTimeout, trimInterval, false );
     }
 
     /*---------------------------------------------------------------
