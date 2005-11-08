@@ -458,8 +458,6 @@ public final class DefaultConfigurationBuilderTestCase
     {
         DefaultConfigurationBuilder builder = new DefaultConfigurationBuilder();
  
-        MyEntityResolver customResolver = new MyEntityResolver();
- 
         builder.setEntityResolver( new MyEntityResolver() );
         File basedir = getWorkDir();
         File testFile = new File( basedir, TEST_PATH );

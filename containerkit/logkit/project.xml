@@ -30,7 +30,7 @@ Log4j-like logging toolkit.
     <dependencies>
       <dependency>
         <id>log4j</id>
-        <version>1.2.11</version>
+        <version>1.2.12</version>
       </dependency>
       <dependency>
         <id>servletapi</id>

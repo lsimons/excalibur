@@ -76,35 +76,35 @@ package org.apache.avalon.framework.configuration;
  * <code>conf.{@link #getAttributeNames getAttributeNames}().length</code>
  * </td><td>2</td><td>1</td></tr>
  * <tr align="center"><td align="left">
- * <code>conf.{@link #getChildren getChildren}().length</code>
+ * <code>conf.{@link #getChildren() getChildren}().length</code>
  * </td><td colspan="2">2</td></tr>
  * <tr align="center"><td align="left">
- * <code>conf.{@link #getAttributeAsFloat getAttributeAsFloat}("version")</code>
+ * <code>conf.{@link #getAttributeAsFloat(String) getAttributeAsFloat}("version")</code>
  * </td><td colspan="2">1.3</td></tr>
  * <tr align="center"><td align="left">
- * <code>conf.{@link #getChild getChild}("widget").{@link #getAttribute getAttribute}("name")</code>
+ * <code>conf.{@link #getChild(String) getChild}("widget").{@link #getAttribute(String) getAttribute}("name")</code>
  * </td><td colspan="2">fooWidget</td></tr>
  * <tr align="center"><td align="left">
- * <code>conf.{@link #getChild getChild}("widget")
- * .{@link #getAttributeAsBoolean getAttributeAsBoolean}("threadsafe")</code></td><td colspan="2">
+ * <code>conf.{@link #getChild(String) getChild}("widget")
+ * .{@link #getAttributeAsBoolean(String) getAttributeAsBoolean}("threadsafe")</code></td><td colspan="2">
  * <code>true</code></td></tr>
  * <tr align="center"><td align="left">
- * <code>conf.{@link #getChild getChild}("widget").{@link #getLocation getLocation}()</code>
+ * <code>conf.{@link #getChild(String) getChild}("widget").{@link #getLocation getLocation}()</code>
  * </td><td colspan="2">file:///home/jeff/tmp/java/avalon/src/java/new.xconf:4:60</td></tr>
  * <tr align="center"><td align="left">
- * <code>conf.{@link #getChild getChild}("desc").{@link #getName getName}()</code>
+ * <code>conf.{@link #getChild(String) getChild}("desc").{@link #getName getName}()</code>
  * </td><td>desc (see {@link #getChild(String)})</td><td>desc</td></tr>
  * <tr align="center"><td align="left">
- * <code>conf.{@link #getChild getChild}("doc:desc").{@link #getName getName}()</code>
+ * <code>conf.{@link #getChild(String) getChild}("doc:desc").{@link #getName getName}()</code>
  * </td><td>doc:desc</td><td>doc:desc (see {@link #getChild(String)})</td></tr>
  * <tr align="center"><td align="left">
- * <code>conf.{@link #getChild getChild}("desc").{@link #getValue getValue}()</code>
+ * <code>conf.{@link #getChild(String) getChild}("desc").{@link #getValue() getValue}()</code>
  * </td><td>{@link ConfigurationException}</td><td>This is a highly fictitious config file</td></tr>
  * <tr align="center"><td align="left">
- * <code>conf.{@link #getChild getChild}("doc:desc").{@link #getValue getValue}()</code>
+ * <code>conf.{@link #getChild(String) getChild}("doc:desc").{@link #getValue() getValue}()</code>
  * </td><td>This is a highly fictitious config file</td><td>{@link ConfigurationException}</td></tr>
  * <tr align="center"><td align="left">
- * <code>conf.{@link #getChild getChild}("desc").{@link #getNamespace getNamespace}()</code>
+ * <code>conf.{@link #getChild(String) getChild}("desc").{@link #getNamespace getNamespace}()</code>
  * </td><td>&nbsp;</td><td>http://myco.com/documentation"</td></tr>
  * </table>
  * </p>
@@ -116,7 +116,7 @@ package org.apache.avalon.framework.configuration;
  * <h3>Miscellanea</h3>
  * <p>
  * Currently, the configuration tree can only be traversed one node at a time,
- * eg., through {@link #getChild getChild("foo")} or {@link #getChildren}. In
+ * eg., through {@link #getChild(String) getChild("foo")} or {@link #getChildren()}. In
  * a future release, it may be possible to access child nodes with an XPath-like
  * syntax.
  * </p>

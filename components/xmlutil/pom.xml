@@ -33,16 +33,19 @@
       <artifactId>saxon</artifactId>
       <groupId>saxon</groupId>
       <version>6.5.3</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <artifactId>saxon7</artifactId>
       <groupId>saxon</groupId>
       <version>7.9.1</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>xml-resolver</groupId>
       <artifactId>xml-resolver</artifactId>
       <version>1.1</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>avalon-framework</groupId>
@@ -63,6 +66,7 @@
       <groupId>avalon-logkit</groupId>
       <artifactId>avalon-logkit</artifactId>
       <version>2.1</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>excalibur-pool</groupId>

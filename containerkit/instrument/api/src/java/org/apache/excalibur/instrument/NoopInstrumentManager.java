@@ -36,8 +36,6 @@ public class NoopInstrumentManager
      *
      * @param instrumentable Instrumentable to register with the InstrumentManager.
      * @param instrumentableName The name to use when registering the Instrumentable.
-     *
-     * @throws Exception If there were any problems registering the Instrumentable.
      */
     public void registerInstrumentable( Instrumentable instrumentable, String instrumentableName )
     {
