@@ -33,19 +33,19 @@
       <artifactId>saxon</artifactId>
       <groupId>saxon</groupId>
       <version>6.5.3</version>
-      <scope>compile</scope>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <artifactId>saxon7</artifactId>
       <groupId>saxon</groupId>
       <version>7.9.1</version>
-      <scope>compile</scope>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>xml-resolver</groupId>
       <artifactId>xml-resolver</artifactId>
       <version>1.1</version>
-      <scope>compile</scope>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>avalon-framework</groupId>
@@ -61,12 +61,13 @@
       <groupId>excalibur-logger</groupId>
       <artifactId>excalibur-logger</artifactId>
       <version>2.1</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>avalon-logkit</groupId>
       <artifactId>avalon-logkit</artifactId>
       <version>2.1</version>
-      <scope>compile</scope>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>excalibur-pool</groupId>
@@ -77,16 +78,19 @@
       <groupId>excalibur-pool</groupId>
       <artifactId>excalibur-pool-impl</artifactId>
       <version>2.1</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>excalibur-pool</groupId>
       <artifactId>excalibur-pool-instrumented</artifactId>
       <version>2.1</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>excalibur-instrument</groupId>
       <artifactId>excalibur-instrument-api</artifactId>
       <version>2.1</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>excalibur-sourceresolve</groupId>
@@ -120,11 +124,13 @@
       <groupId>saxpath</groupId>
       <artifactId>saxpath</artifactId>
       <version>1.0-FCS</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>jaxen</groupId>
       <artifactId>jaxen</artifactId>
       <version>1.0-FCS</version>
+      <scope>provided</scope>
     </dependency>
     <!-- TESTING
       <dependency>
@@ -141,16 +147,19 @@
       <groupId>jtidy</groupId>
       <artifactId>jtidy</artifactId>
       <version>4aug2000r7-dev</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>excalibur-fortress</groupId>
       <artifactId>excalibur-fortress-container-api</artifactId>
       <version>1.2</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>excalibur-fortress</groupId>
       <artifactId>excalibur-fortress-meta</artifactId>
       <version>1.2</version>
+      <scope>provided</scope>
     </dependency>
     <!-- for metadata generation only 
       <dependency>

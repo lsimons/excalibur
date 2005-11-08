@@ -53,11 +53,13 @@
       <groupId>avalon-logkit</groupId>
       <artifactId>avalon-logkit</artifactId>
       <version>2.1</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>excalibur-instrument</groupId>
       <artifactId>excalibur-instrument-api</artifactId>
       <version>2.1</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>excalibur-pool</groupId>
@@ -68,11 +70,13 @@
       <groupId>excalibur-pool</groupId>
       <artifactId>excalibur-pool-impl</artifactId>
       <version>2.1</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>excalibur-pool</groupId>
       <artifactId>excalibur-pool-instrumented</artifactId>
       <version>2.1</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>commons-collections</groupId>
@@ -100,6 +104,7 @@
       <groupId>excalibur-logger</groupId>
       <artifactId>excalibur-logger</artifactId>
       <version>2.1</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <!-- for metadata generation only -->

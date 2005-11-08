@@ -46,11 +46,13 @@
       <groupId>avalon-logkit</groupId>
       <artifactId>avalon-logkit</artifactId>
       <version>2.1</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>excalibur-logger</groupId>
       <artifactId>excalibur-logger</artifactId>
       <version>2.1</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>excalibur-sourceresolve</groupId>
@@ -103,16 +105,19 @@
       <groupId>excalibur-fortress</groupId>
       <artifactId>excalibur-fortress-container-api</artifactId>
       <version>1.2</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>excalibur-fortress</groupId>
       <artifactId>excalibur-fortress-meta</artifactId>
       <version>1.2</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>qdox</groupId>
       <artifactId>qdox</artifactId>
       <version>1.5</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
   <build>
