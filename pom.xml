@@ -30,4 +30,18 @@
     <module>fortress</module>
     <module>deprecated</module>
   </modules>
+  <repositories>
+    <repository>
+      <id>d-haven</id>
+      <name>D-Haven.org repository</name>
+      <url>http://dist.d-haven.org</url>
+      <layout>legacy</layout>
+    </repository>
+    <repository>
+      <id>apache-cvs</id>
+      <name>Apache CVS Repository</name>
+      <url>http://cvs.apache.org/repository</url>
+      <layout>legacy</layout>
+    </repository>    
+  </repositories>
 </project>

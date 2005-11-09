@@ -17,6 +17,11 @@
 -->
 
 <project>
+  <parent>
+    <groupId>excalibur</groupId>
+    <artifactId>excalibur</artifactId>
+    <version>2.1</version>
+  </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>Excalibur XMLUtil</name>
   <groupId>excalibur-xmlutil</groupId>
@@ -36,8 +41,8 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <artifactId>saxon7</artifactId>
-      <groupId>saxon</groupId>
+      <artifactId>saxon</artifactId>
+      <groupId>saxon7</groupId>
       <version>7.9.1</version>
       <scope>provided</scope>
     </dependency>
