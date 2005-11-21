@@ -16,6 +16,11 @@
   limitations under the License.
 -->
 <project>
+  <parent>
+    <groupId>excalibur</groupId>
+    <artifactId>excalibur</artifactId>
+    <version>1.0</version>
+  </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>excalibur-datasource</groupId>
   <artifactId>excalibur-datasource</artifactId>
@@ -31,8 +36,13 @@
     The DataSource package requires that you load the necessary driver classes at init time, but it will take
     care of all necessary issues from there.
   </description>
-
   <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
@@ -128,4 +138,19 @@
       <scope>provided</scope>
     </dependency>
   </dependencies>
+  <build>
+    <sourceDirectory>src/java</sourceDirectory>
+    <testSourceDirectory>src/test</testSourceDirectory>
+    <resources>
+      <resource>
+        <directory>${basedir}</directory>
+        <targetPath>META-INF</targetPath>
+        <includes>
+          <include>LICENSE.txt</include>
+          <include>NOTICE.txt</include>
+        </includes>
+      </resource>
+    </resources>
+  </build>
+
 </project>
