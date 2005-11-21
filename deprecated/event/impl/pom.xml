@@ -15,6 +15,11 @@
   limitations under the License.
 -->
 <project>
+  <parent>
+    <groupId>excalibur</groupId>
+    <artifactId>excalibur</artifactId>
+    <version>1.0</version>
+  </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>Excalibur Event Implementation</name>
   <artifactId>excalibur-event-impl</artifactId>
@@ -65,5 +70,16 @@
   </dependencies>
   <build>
     <sourceDirectory>src/java</sourceDirectory>
+    <testSourceDirectory>src/test</testSourceDirectory>
+    <resources>
+      <resource>
+        <directory>${basedir}</directory>
+        <targetPath>META-INF</targetPath>
+        <includes>
+          <include>LICENSE.txt</include>
+          <include>NOTICE.txt</include>
+        </includes>
+      </resource>
+    </resources>
   </build>
 </project>
