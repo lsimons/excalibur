@@ -20,7 +20,7 @@
   <parent>
     <groupId>excalibur</groupId>
     <artifactId>excalibur</artifactId>
-    <version>2.1</version>
+    <version>1.0</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>Excalibur XMLUtil</name>
@@ -83,19 +83,16 @@
       <groupId>excalibur-pool</groupId>
       <artifactId>excalibur-pool-impl</artifactId>
       <version>2.1</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>excalibur-pool</groupId>
       <artifactId>excalibur-pool-instrumented</artifactId>
       <version>2.1</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>excalibur-instrument</groupId>
       <artifactId>excalibur-instrument-api</artifactId>
       <version>2.1</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>excalibur-sourceresolve</groupId>
@@ -137,17 +134,17 @@
       <version>1.0-FCS</version>
       <scope>provided</scope>
     </dependency>
-    <!-- TESTING
-      <dependency>
-      <id>commons-collections</id>
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
       <version>3.1</version>
-      </dependency>
-      <dependency>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>excalibur-component</groupId>
       <artifactId>excalibur-testcase</artifactId>
       <version>2.1</version>
-      </dependency>
-    -->
+    </dependency>
     <dependency>
       <groupId>jtidy</groupId>
       <artifactId>jtidy</artifactId>
@@ -166,6 +163,12 @@
       <version>1.2</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
     <!-- for metadata generation only 
       <dependency>
       <id>qdox</id>
@@ -175,5 +178,16 @@
   </dependencies>
   <build>
     <sourceDirectory>src/java</sourceDirectory>
+    <testSourceDirectory>src/test</testSourceDirectory>
+    <resources>
+      <resource>
+        <directory>${basedir}</directory>
+        <targetPath>META-INF</targetPath>
+        <includes>
+          <include>LICENSE.txt</include>
+          <include>NOTICE.txt</include>
+        </includes>
+      </resource>
+    </resources>
   </build>
 </project>

@@ -16,6 +16,11 @@
   limitations under the License.
 -->
 <project>
+  <parent>
+    <groupId>excalibur</groupId>
+    <artifactId>excalibur</artifactId>
+    <version>1.0</version>
+  </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>Excalibur Sourceresolve</name>
   <groupId>excalibur-sourceresolve</groupId>
@@ -29,7 +34,6 @@
     standard protocols like HTTP, FTP or file can be handled in the same way, like dealing with custom,
     self-build protocols such as myxmldatabase://root/documents/test.xml.
   </description>
-
   <dependencies>
     <dependency>
       <groupId>avalon-framework</groupId>
@@ -47,6 +51,12 @@
       <version>20050307052300</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>provided</scope>
+    </dependency>    
     <dependency>
       <groupId>commons-httpclient</groupId>
       <artifactId>commons-httpclient</artifactId>
@@ -87,6 +97,16 @@
   </dependencies>
   <build>
     <sourceDirectory>src/java</sourceDirectory>
+    <testSourceDirectory>src/test</testSourceDirectory>
+    <resources>
+      <resource>
+        <directory>${basedir}</directory>
+        <targetPath>META-INF</targetPath>
+        <includes>
+          <include>LICENSE.txt</include>
+          <include>NOTICE.txt</include>
+        </includes>
+      </resource>
+    </resources>
   </build>
-
 </project>
