@@ -20,17 +20,22 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>excalibur</groupId>
   <artifactId>excalibur</artifactId>
-  <version>2.1</version>
+  <version>1.0</version>
   <name>Excalibur Components</name>
   <packaging>pom</packaging>
   <modules>
     <module>components</module>
     <module>containerkit</module>
-    <module>framework</module>
     <module>fortress</module>
     <module>deprecated</module>
+    <module>framework</module>
   </modules>
   <repositories>
+    <repository>
+      <id>local-maven2</id>
+      <name>Local Maven2 repository</name>
+      <url>file:///home/jorg/maven-repository</url>
+    </repository>
     <repository>
       <id>d-haven</id>
       <name>D-Haven.org repository</name>
@@ -42,6 +47,21 @@
       <name>Apache CVS Repository</name>
       <url>http://cvs.apache.org/repository</url>
       <layout>legacy</layout>
-    </repository>    
+    </repository>
   </repositories>
+  <distributionManagement>
+    <repository>
+      <id>maven2@local</id>
+      <name>Local Maven 2 Repository</name>
+      <url>file:///c:/temp/maven-deploy-repository</url>
+    </repository>
+    <!--
+      <repository>
+      <id>maven2@apache</id>
+      <name>Apache Maven 2 Repository</name>
+      <url>scpexe://cvs.apache.org/x1/www/cvs.apache.org/maven-snapshot-repository</url>
+      </repository>
+    -->
+  </distributionManagement>
+
 </project>
