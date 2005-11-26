@@ -525,30 +525,6 @@ abstract class AbstractInstrumentSample
     }
     
     /**
-     * Used to test whether or not any state information exists prior to
-     *  writeState() being called.  This process is not synchronized so it
-     *  is possible that the return value will no longer be accurate when
-     *  writeState is actually called.  For the purpose of writing the
-     *  state however this is accurate enough.
-     *
-     * @return True if state information exists which should be written to
-     *         a state file.
-     */
-    /*
-    public boolean hasState()
-    {
-        // If this sample is not configured and its lease time is 0, then it
-        //  is an artifact of a previous state file, so it should not be saved.
-        if( ( !isConfigured() ) && ( getLeaseExpirationTime() <= 0 ) )
-        {
-            return false;
-        }
-        
-        return true;
-    }
-    */
-    
-    /**
      * Writes the current state to a PrintWriter as XML.
      *
      * @param out The PrintWriter to which the state should be written.
