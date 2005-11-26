@@ -56,6 +56,7 @@ import org.apache.excalibur.instrument.manager.DefaultInstrumentManagerConnector
 import org.apache.excalibur.instrument.manager.InstrumentableDescriptor;
 import org.apache.excalibur.instrument.manager.InstrumentDescriptor;
 import org.apache.excalibur.instrument.manager.InstrumentSampleDescriptor;
+import org.apache.excalibur.instrument.manager.InstrumentSampleUtils;
 import org.apache.excalibur.instrument.manager.NoSuchInstrumentException;
 import org.apache.excalibur.instrument.manager.NoSuchInstrumentSampleException;
 import org.apache.excalibur.instrument.manager.NoSuchInstrumentableException;
@@ -1001,6 +1002,12 @@ public class DefaultInstrumentManagerImpl
     public void loadStateFromConfiguration( Configuration state )
         throws ConfigurationException
     {
+        loadStateFromConfiguration( state, null );
+    }
+    
+    private void loadStateFromConfiguration( Configuration state, String parentName )
+        throws ConfigurationException
+    {
         // When loading state, the only thing that we are really interrested in are the samples.
         //  Don't bother looking anything up until one is found.  Doing it this way is also
         //  critical to make name translations work correctly.
@@ -1011,12 +1018,14 @@ public class DefaultInstrumentManagerImpl
         Configuration[] instrumentableConfs = state.getChildren( "instrumentable" );
         for( int i = 0; i < instrumentableConfs.length; i++ )
         {
-            loadStateFromConfiguration( instrumentableConfs[i] );
+            loadStateFromConfiguration(
+                instrumentableConfs[i], instrumentableConfs[i].getAttribute( "name", null ) );
         }
         Configuration[] instrumentConfs = state.getChildren( "instrument" );
         for( int i = 0; i < instrumentConfs.length; i++ )
         {
-            loadStateFromConfiguration( instrumentConfs[i] );
+            loadStateFromConfiguration(
+                instrumentConfs[i], instrumentConfs[i].getAttribute( "name", null ) );
         }
         
         // Look for any samples.
@@ -1026,7 +1035,27 @@ public class DefaultInstrumentManagerImpl
             Configuration sampleConf = sampleConfs[i];
             
             // Obtain and translate the sample name.
-            String sampleName = getTranslatedName( sampleConf.getAttribute( "name" ) );
+            String sampleName = sampleConf.getAttribute( "name", null );
+            if ( sampleName == null )
+            {
+                // The sample name was missing.  This can happen for very old state files.
+                //  Build the name.
+                if ( parentName == null )
+                {
+                    throw new ConfigurationException(
+                        "Unable to resolve sample name.", sampleConf );
+                }
+                
+                int sampleType = InstrumentSampleUtils.resolveInstrumentSampleType(
+                    sampleConf.getAttribute( "type" ) );
+                long sampleInterval = sampleConf.getAttributeAsLong( "interval" );
+                int sampleSize = sampleConf.getAttributeAsInteger( "size" );
+                
+                sampleName = InstrumentSampleUtils.generateFullInstrumentSampleName(
+                    parentName, sampleType, sampleInterval, sampleSize );
+            }
+            // Translate the resulting name.
+            sampleName = getTranslatedName( sampleName );
             
             // Before we do anything, decide how we want to handle the sample.
             long now = System.currentTimeMillis();
