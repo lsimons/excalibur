@@ -17,14 +17,14 @@
 -->
 <project>
   <parent>
-    <groupId>excalibur</groupId>
+    <groupId>org.apache.excalibur</groupId>
     <artifactId>excalibur</artifactId>
     <version>1.0</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>Avalon Logkit</name>
   <artifactId>avalon-logkit</artifactId>
-  <groupId>avalon-logkit</groupId>
+  <groupId>org.apache.avalon.logkit</groupId>
   <version>2.1</version>
   <inceptionYear>1997</inceptionYear>
   <description>Excalibur's Logkit package</description>

@@ -17,14 +17,14 @@
 -->
 <project>
   <parent>
-    <groupId>excalibur</groupId>
+    <groupId>org.apache.excalibur</groupId>
     <artifactId>excalibur</artifactId>
     <version>1.0</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>Excalibur Fortress Bean</name>
   <artifactId>excalibur-fortress-bean</artifactId>
-  <groupId>excalibur-fortress-bean</groupId>
+  <groupId>org.apache.excalibur.fortress.bean</groupId>
   <version>2.1</version>
   <description>Excalibur Fortress Bean component</description>
   <dependencies>

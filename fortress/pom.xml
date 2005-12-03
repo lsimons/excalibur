@@ -17,12 +17,12 @@
 -->
 <project>
   <parent>
-    <groupId>excalibur</groupId>
+    <groupId>org.apache.excalibur</groupId>
     <artifactId>excalibur</artifactId>
     <version>1.0</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>excalibur-fortress</groupId>
+  <groupId>org.apache.excalibur.fortress</groupId>
   <artifactId>excalibur-fortress</artifactId>
   <version>1.0</version>
   <inceptionYear>2003</inceptionYear>

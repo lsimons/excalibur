@@ -17,29 +17,29 @@
 -->
 <project>
   <parent>
-    <groupId>excalibur</groupId>
+    <groupId>org.apache.excalibur</groupId>
     <artifactId>excalibur</artifactId>
     <version>1.0</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>Excalibur Lifecycle Extension Impl</name>
-  <groupId>excalibur-lifecycle</groupId>
+  <groupId>org.apache.excalibur.containerkit.lifecycle</groupId>
   <artifactId>excalibur-lifecycle-impl</artifactId>
   <description>Excalibur Lifecycle Extension Implementation</description>
   <version>2.1</version>
   <dependencies>
     <dependency>
-      <groupId>excalibur-lifecycle</groupId>
+      <groupId>org.apache.excalibur.containerkit.lifecycle</groupId>
       <artifactId>excalibur-lifecycle-api</artifactId>
       <version>2.1</version>
     </dependency>
     <dependency>
-      <groupId>avalon-framework</groupId>
+      <groupId>org.apache.avalon.framework</groupId>
       <artifactId>avalon-framework-api</artifactId>
       <version>4.3</version>
     </dependency>
     <dependency>
-      <groupId>avalon-framework</groupId>
+      <groupId>org.apache.avalon.framework</groupId>
       <artifactId>avalon-framework-impl</artifactId>
       <version>4.3</version>
     </dependency>

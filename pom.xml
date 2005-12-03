@@ -18,7 +18,7 @@
 
 <project>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>excalibur</groupId>
+  <groupId>org.apache.excalibur</groupId>
   <artifactId>excalibur</artifactId>
   <version>1.0</version>
   <name>Excalibur Components</name>
@@ -31,21 +31,23 @@
     <module>framework</module>
   </modules>
   <repositories>
+  <!-- 
     <repository>
       <id>local-maven2</id>
       <name>Local Maven2 repository</name>
-      <url>file:///home/jorg/maven-repository</url>
+      <url>file:///c:/temp/maven-repository</url>
+    </repository>
+     -->
+    <repository>
+      <id>apache-cvs</id>
+      <name>Apache CVS Repository</name>
+      <url>http://cvs.apache.org/repository</url>
+      <layout>legacy</layout>
     </repository>
     <repository>
       <id>d-haven</id>
       <name>D-Haven.org repository</name>
       <url>http://dist.d-haven.org</url>
-      <layout>legacy</layout>
-    </repository>
-    <repository>
-      <id>apache-cvs</id>
-      <name>Apache CVS Repository</name>
-      <url>http://cvs.apache.org/repository</url>
       <layout>legacy</layout>
     </repository>
   </repositories>

@@ -17,13 +17,13 @@
 -->
 <project>
   <parent>
-    <groupId>excalibur</groupId>
+    <groupId>org.apache.excalibur</groupId>
     <artifactId>excalibur</artifactId>
     <version>1.0</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>Avalon Framework</name>
-  <groupId>avalon-framework</groupId>
+  <groupId>org.apache.avalon</groupId>
   <artifactId>avalon-framework</artifactId>
   <description>Avalon Framework</description>
   <version>4.3</version>

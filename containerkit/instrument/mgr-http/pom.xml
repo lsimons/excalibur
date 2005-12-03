@@ -17,7 +17,7 @@
 -->
 <project>
   <parent>
-    <groupId>excalibur</groupId>
+    <groupId>org.apache.excalibur</groupId>
     <artifactId>excalibur</artifactId>
     <version>1.0</version>
   </parent>
@@ -25,33 +25,33 @@
   <version>2.1</version>
   <name>Excalibur Instrument Manager HTTP Connector</name>
   <artifactId>excalibur-instrument-mgr-http</artifactId>
-  <groupId>excalibur-instrument</groupId>
+  <groupId>org.apache.excalibur.containerkit.instrument</groupId>
   <description>Excalibur Instrument Manager HTTP Connector</description>
   <dependencies>
     <dependency>
-      <groupId>avalon-framework</groupId>
+      <groupId>org.apache.avalon.framework</groupId>
       <artifactId>avalon-framework-api</artifactId>
       <version>4.3</version>
     </dependency>
     <dependency>
-      <groupId>avalon-framework</groupId>
+      <groupId>org.apache.avalon.framework</groupId>
       <artifactId>avalon-framework-impl</artifactId>
       <version>4.3</version>
     </dependency>
     <dependency>
-      <groupId>excalibur-instrument</groupId>
+      <groupId>org.apache.excalibur.containerkit.instrument</groupId>
       <artifactId>excalibur-instrument-api</artifactId>
       <version>2.1</version>
     </dependency>
     <dependency>
-      <groupId>excalibur-instrument</groupId>
+      <groupId>org.apache.excalibur.containerkit.instrument</groupId>
       <artifactId>excalibur-instrument-mgr-api</artifactId>
       <version>2.1</version>
     </dependency>
     <dependency>
       <groupId>xml-apis</groupId>
       <artifactId>xml-apis</artifactId>
-      <version>2.0.2</version>
+      <version>1.0.b2</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>

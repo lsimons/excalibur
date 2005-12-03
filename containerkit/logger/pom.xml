@@ -17,13 +17,13 @@
 -->
 <project>
   <parent>
-    <groupId>excalibur</groupId>
+    <groupId>org.apache.excalibur</groupId>
     <artifactId>excalibur</artifactId>
     <version>1.0</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>Excalibur Logger</name>
-  <groupId>excalibur-logger</groupId>
+  <groupId>org.apache.excalibur.containerkit.logger</groupId>
   <artifactId>excalibur-logger</artifactId>
   <version>2.1</version>
   <inceptionYear>1997</inceptionYear>
@@ -34,17 +34,17 @@
   </description>
   <dependencies>
     <dependency>
-      <groupId>avalon-framework</groupId>
+      <groupId>org.apache.avalon.framework</groupId>
       <artifactId>avalon-framework-api</artifactId>
       <version>4.3</version>
     </dependency>
     <dependency>
-      <groupId>avalon-framework</groupId>
+      <groupId>org.apache.avalon.framework</groupId>
       <artifactId>avalon-framework-impl</artifactId>
       <version>4.3</version>
     </dependency>
     <dependency>
-      <groupId>avalon-logkit</groupId>
+      <groupId>org.apache.avalon.logkit</groupId>
       <artifactId>avalon-logkit</artifactId>
       <version>2.1</version>
     </dependency>
@@ -75,7 +75,7 @@
     <dependency>
       <artifactId>xml-apis</artifactId>
       <groupId>xml-apis</groupId>
-      <version>2.0.2</version>
+      <version>1.0.b2</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>

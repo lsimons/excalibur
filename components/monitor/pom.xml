@@ -17,12 +17,12 @@
 -->
 <project>
   <parent>
-    <groupId>excalibur</groupId>
+    <groupId>org.apache.excalibur</groupId>
     <artifactId>excalibur</artifactId>
     <version>1.0</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>excalibur-monitor</groupId>
+  <groupId>org.apache.excalibur.components.monitor</groupId>
   <artifactId>excalibur-monitor</artifactId>
   <version>2.1</version>
   <name>Excalibur Monitor</name>
@@ -38,29 +38,29 @@
   </description>
   <dependencies>
     <dependency>
-      <groupId>avalon-framework</groupId>
+      <groupId>org.apache.avalon.framework</groupId>
       <artifactId>avalon-framework-api</artifactId>
       <version>4.3</version>
     </dependency>
     <dependency>
-      <groupId>avalon-framework</groupId>
+      <groupId>org.apache.avalon.framework</groupId>
       <artifactId>avalon-framework-impl</artifactId>
       <version>4.3</version>
     </dependency>
     <dependency>
-      <groupId>avalon-logkit</groupId>
+      <groupId>org.apache.avalon.logkit</groupId>
       <artifactId>avalon-logkit</artifactId>
       <version>2.1</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>excalibur-logger</groupId>
+      <groupId>org.apache.excalibur.containerkit.logger</groupId>
       <artifactId>excalibur-logger</artifactId>
       <version>2.1</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>excalibur-sourceresolve</groupId>
+      <groupId>org.apache.excalibur.components.sourceresolve</groupId>
       <artifactId>excalibur-sourceresolve</artifactId>
       <version>2.1</version>
     </dependency>
@@ -71,49 +71,49 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>excalibur-component</groupId>
+      <groupId>org.apache.excalibur.component</groupId>
       <artifactId>excalibur-component</artifactId>
       <version>2.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>excalibur-component</groupId>
+      <groupId>org.apache.excalibur.testcase</groupId>
       <artifactId>excalibur-testcase</artifactId>
       <version>2.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>excalibur-pool</groupId>
+      <groupId>org.apache.excalibur.components.pool</groupId>
       <artifactId>excalibur-pool-api</artifactId>
       <version>2.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>excalibur-pool</groupId>
+      <groupId>org.apache.excalibur.components.pool</groupId>
       <artifactId>excalibur-pool-impl</artifactId>
       <version>2.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>excalibur-pool</groupId>
+      <groupId>org.apache.excalibur.components.pool</groupId>
       <artifactId>excalibur-pool-instrumented</artifactId>
       <version>2.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>excalibur-instrument</groupId>
+      <groupId>org.apache.excalibur.containerkit.instrument</groupId>
       <artifactId>excalibur-instrument-api</artifactId>
       <version>2.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>excalibur-fortress</groupId>
+      <groupId>org.apache.excalibur.fortress.container</groupId>
       <artifactId>excalibur-fortress-container-api</artifactId>
       <version>1.2</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>excalibur-fortress</groupId>
+      <groupId>org.apache.excalibur.fortress.meta</groupId>
       <artifactId>excalibur-fortress-meta</artifactId>
       <version>1.2</version>
       <scope>provided</scope>

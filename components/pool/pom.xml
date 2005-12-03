@@ -18,12 +18,12 @@
 
 <project>
   <parent>
-    <groupId>excalibur</groupId>
+    <groupId>org.apache.excalibur</groupId>
     <artifactId>excalibur</artifactId>
     <version>1.0</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>excalibur-pool</groupId>
+  <groupId>org.apache.excalibur.components.pool</groupId>
   <artifactId>excalibur-pool</artifactId>
   <version>1.0</version>
   <name>Excalibur Pool</name>
