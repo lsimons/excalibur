@@ -53,17 +53,23 @@
   </repositories>
   <distributionManagement>
     <repository>
-      <id>maven2@local</id>
-      <name>Local Maven 2 Repository</name>
-      <url>file:///c:/temp/maven-deploy-repository</url>
-    </repository>
-    <!--
-      <repository>
-      <id>maven2@apache</id>
-      <name>Apache Maven 2 Repository</name>
+      <id>apache-maven-snapshot</id>
+      <name>repository</name>
       <url>scpexe://cvs.apache.org/x1/www/cvs.apache.org/maven-snapshot-repository</url>
-      </repository>
-    -->
+    </repository>
+    <snapshotRepository>
+      <id>apache-maven-snapshot</id>
+      <name>repository</name>
+      <url>scpexe://cvs.apache.org/x1/www/cvs.apache.org/maven-snapshot-repository</url>
+    </snapshotRepository>
   </distributionManagement>
-
+  <build>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+         <artifactId>wagon-ssh-external</artifactId>
+         <version>1.0-alpha-6-SNAPSHOT</version>
+      </extension>
+    </extensions>
+  </build>
 </project>
