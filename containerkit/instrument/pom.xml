@@ -32,7 +32,7 @@
   <groupId>org.apache.excalibur.containerkit.instrument</groupId>
   <artifactId>excalibur-instrument</artifactId>
   <inceptionYear>1997</inceptionYear>
-  <version>2.1</version>
+  <version>1.0</version>
   <packaging>pom</packaging>
   <modules>
     <module>api</module>
@@ -41,4 +41,12 @@
     <module>mgr-http</module>
     <module>mgr-impl</module>
   </modules>
+  <scm>
+    <connection>
+      scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/containerkit/instrument
+    </connection>
+    <url>
+      http://svn.apache.org/viewcvs.cgi/excalibur/trunk/containerkit/instrument
+    </url>
+  </scm>
 </project>

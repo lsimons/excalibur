@@ -32,4 +32,12 @@
     <module>api</module>
     <module>impl</module>
   </modules>
+  <scm>
+    <connection>
+      scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/containerkit/lifecycle
+    </connection>
+    <url>
+      http://svn.apache.org/viewcvs.cgi/excalibur/trunk/containerkit/lifecycle
+    </url>
+  </scm>
 </project>
