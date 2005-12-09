@@ -31,18 +31,10 @@
     <module>framework</module>
   </modules>
   <repositories>
-  <!-- 
     <repository>
-      <id>local-maven2</id>
-      <name>Local Maven2 repository</name>
-      <url>file:///c:/temp/maven-repository</url>
-    </repository>
-     -->
-    <repository>
-      <id>apache-cvs</id>
-      <name>Apache CVS Repository</name>
-      <url>http://cvs.apache.org/repository</url>
-      <layout>legacy</layout>
+      <id>maven-snapshot</id>
+      <name>Maven Snapshot Repository</name>
+      <url>http://snapshots.maven.codehaus.org/maven2</url>
     </repository>
     <repository>
       <id>d-haven</id>
@@ -51,24 +43,45 @@
       <layout>legacy</layout>
     </repository>
   </repositories>
+  <ciManagement>
+    <system>continuum</system>
+    <notifiers>
+      <notifier>
+        <type>mail</type>
+        <configuration>
+          <address>jheymans@apache.org</address>
+        </configuration>
+      </notifier>
+    </notifiers>
+  </ciManagement>
+  <scm>
+    <connection>
+      scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/
+    </connection>
+    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk</url>
+  </scm>
   <distributionManagement>
     <repository>
       <id>apache-maven-snapshot</id>
       <name>repository</name>
-      <url>scpexe://cvs.apache.org/x1/www/cvs.apache.org/maven-snapshot-repository</url>
+      <url>
+        scpexe://cvs.apache.org/x1/www/cvs.apache.org/maven-snapshot-repository
+      </url>
     </repository>
     <snapshotRepository>
       <id>apache-maven-snapshot</id>
       <name>repository</name>
-      <url>scpexe://cvs.apache.org/x1/www/cvs.apache.org/maven-snapshot-repository</url>
+      <url>
+        scpexe://cvs.apache.org/x1/www/cvs.apache.org/maven-snapshot-repository
+      </url>
     </snapshotRepository>
   </distributionManagement>
   <build>
     <extensions>
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
-         <artifactId>wagon-ssh-external</artifactId>
-         <version>1.0-alpha-6-SNAPSHOT</version>
+        <artifactId>wagon-ssh-external</artifactId>
+        <version>1.0-alpha-6-SNAPSHOT</version>
       </extension>
     </extensions>
   </build>
