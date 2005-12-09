@@ -28,9 +28,11 @@
   <version>2.1</version>
   <inceptionYear>1997</inceptionYear>
   <description>
-    Excalibur-Logger integrates neatly into Avalon-ECM and Excalibur Fortress. The main goal is to be able to
-    define the log categories on a component basis by specifying a 'logger' attribute which denotes the log
-    category to use for a particular component (given the component is LogEnabled or Loggable).
+    Excalibur-Logger integrates neatly into Avalon-ECM and Excalibur
+    Fortress. The main goal is to be able to define the log categories
+    on a component basis by specifying a 'logger' attribute which
+    denotes the log category to use for a particular component (given
+    the component is LogEnabled or Loggable).
   </description>
   <dependencies>
     <dependency>
@@ -53,7 +55,7 @@
       <groupId>log4j</groupId>
       <version>1.2.11</version>
       <scope>provided</scope>
-    </dependency>    
+    </dependency>
     <dependency>
       <artifactId>servlet-api</artifactId>
       <groupId>javax.servlet</groupId>
@@ -79,6 +81,14 @@
       <scope>provided</scope>
     </dependency>
   </dependencies>
+  <scm>
+    <connection>
+      scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/containerkit/logger
+    </connection>
+    <url>
+      http://svn.apache.org/viewcvs.cgi/excalibur/trunk/containerkit/logger
+    </url>
+  </scm>
   <build>
     <sourceDirectory>src/java</sourceDirectory>
     <testSourceDirectory>src/test</testSourceDirectory>

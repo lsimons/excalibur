@@ -25,7 +25,9 @@
   <name>Excalibur Lifecycle Extension Impl</name>
   <groupId>org.apache.excalibur.containerkit.lifecycle</groupId>
   <artifactId>excalibur-lifecycle-impl</artifactId>
-  <description>Excalibur Lifecycle Extension Implementation</description>
+  <description>
+    Excalibur Lifecycle Extension Implementation
+  </description>
   <version>2.1</version>
   <dependencies>
     <dependency>
@@ -44,6 +46,14 @@
       <version>4.3</version>
     </dependency>
   </dependencies>
+  <scm>
+    <connection>
+      scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/containerkit/lifecycle/impl
+    </connection>
+    <url>
+      http://svn.apache.org/viewcvs.cgi/excalibur/trunk/containerkit/lifecycle/impl
+    </url>
+  </scm>
   <build>
     <sourceDirectory>src/java</sourceDirectory>
     <testSourceDirectory>src/test</testSourceDirectory>

@@ -28,10 +28,12 @@
   <version>2.1</version>
   <inceptionYear>1997</inceptionYear>
   <description>
-    Excalibur Instrument is an instrumentation utility that allows you to attach a separate JVM to your
-    running application to determine its health. Instrumentation is the process of exposing the internal state
-    in a way that is easy for an administrator or help desk personell to digest. Excalibur Instrumentation is
-    such a package that you can use for your Avalon based projects.
+    Excalibur Instrument is an instrumentation utility that allows you
+    to attach a separate JVM to your running application to determine
+    its health. Instrumentation is the process of exposing the internal
+    state in a way that is easy for an administrator or help desk
+    personell to digest. Excalibur Instrumentation is such a package
+    that you can use for your Avalon based projects.
   </description>
   <dependencies>
     <dependency>
@@ -50,8 +52,16 @@
       <groupId>junit</groupId>
       <version>3.8.1</version>
       <scope>test</scope>
-    </dependency>    
+    </dependency>
   </dependencies>
+  <scm>
+    <connection>
+      scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/containerkit/instrument/api
+    </connection>
+    <url>
+      http://svn.apache.org/viewcvs.cgi/excalibur/trunk/containerkit/instrument/api
+    </url>
+  </scm>
   <build>
     <sourceDirectory>src/java</sourceDirectory>
     <testSourceDirectory>src/test</testSourceDirectory>

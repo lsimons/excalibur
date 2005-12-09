@@ -45,6 +45,14 @@
       <version>4.3</version>
     </dependency>
   </dependencies>
+  <scm>
+    <connection>
+      scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/containerkit/instrument/client
+    </connection>
+    <url>
+      http://svn.apache.org/viewcvs.cgi/excalibur/trunk/containerkit/instrument/client
+    </url>
+  </scm>
   <build>
     <sourceDirectory>src/java</sourceDirectory>
     <testSourceDirectory>src/test</testSourceDirectory>
