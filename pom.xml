@@ -37,6 +37,11 @@
       <url>http://snapshots.maven.codehaus.org/maven2</url>
     </repository>
     <repository>
+      <id>apache-maven-snapshot</id>
+      <name>Maven Snapshot Repository @ Apache.org</name>
+      <url>http://cvs.apache.org/maven-snapshot-repository</url>
+    </repository>
+    <repository>
       <id>d-haven</id>
       <name>D-Haven.org repository</name>
       <url>http://dist.d-haven.org</url>
