@@ -52,12 +52,6 @@
     <system>continuum</system>
     <notifiers>
       <notifier>
-        <type>mail</type>
-        <configuration>
-          <address>jheymans@apache.org</address>
-        </configuration>
-      </notifier>
-      <notifier>
         <type>irc</type>
         <configuration>
           <host>irc.codehaus.org</host>
