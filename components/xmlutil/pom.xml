@@ -29,9 +29,11 @@
   <version>2.1</version>
   <inceptionYear>1997</inceptionYear>
   <description>
-    Excalibur's XML Utilities provide simplified wrappers for XML parsers, transformers and XPath evaluators.
-    It also provides interfaces and classes useful for constructing a pipeline of XML components by defining
-    interfaces for consuming and producing XML in either SAX or DOM formats.
+    Excalibur's XML Utilities provide simplified wrappers for XML
+    parsers, transformers and XPath evaluators. It also provides
+    interfaces and classes useful for constructing a pipeline of XML
+    components by defining interfaces for consuming and producing XML in
+    either SAX or DOM formats.
   </description>
   <dependencies>
     <dependency>
@@ -190,4 +192,12 @@
       </resource>
     </resources>
   </build>
+  <scm>
+    <connection>
+      scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/components/xmlutil
+    </connection>
+    <url>
+      http://svn.apache.org/viewcvs.cgi/excalibur/trunk/components/xmlutil
+    </url>
+  </scm>
 </project>

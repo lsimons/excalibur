@@ -82,4 +82,12 @@
       </resource>
     </resources>
   </build>
+  <scm>
+    <connection>
+      scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/deprecated/event/impl
+    </connection>
+    <url>
+      http://svn.apache.org/viewcvs.cgi/excalibur/trunk/deprecated/event/impl
+    </url>
+  </scm>
 </project>

@@ -35,4 +35,12 @@
     <module>platform</module>
     <module>examples</module>
   </modules>
+  <scm>
+    <connection>
+      scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/fortress
+    </connection>
+    <url>
+      http://svn.apache.org/viewcvs.cgi/excalibur/trunk/fortress
+    </url>
+  </scm>
 </project>

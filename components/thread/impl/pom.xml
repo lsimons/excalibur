@@ -92,4 +92,12 @@
       </resource>
     </resources>
   </build>
+  <scm>
+    <connection>
+      scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/components/thread/impl
+    </connection>
+    <url>
+      http://svn.apache.org/viewcvs.cgi/excalibur/trunk/components/thread/impl
+    </url>
+  </scm>
 </project>

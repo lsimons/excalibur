@@ -147,4 +147,12 @@
       </resource>
     </resources>
   </build>
+  <scm>
+    <connection>
+      scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/fortress/container-impl
+    </connection>
+    <url>
+      http://svn.apache.org/viewcvs.cgi/excalibur/trunk/fortress/container-impl
+    </url>
+  </scm>
 </project>

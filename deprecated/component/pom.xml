@@ -120,4 +120,12 @@
       </resource>
     </resources>
   </build>
+  <scm>
+    <connection>
+      scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/deprecated/component
+    </connection>
+    <url>
+      http://svn.apache.org/viewcvs.cgi/excalibur/trunk/deprecated/component
+    </url>
+  </scm>
 </project>

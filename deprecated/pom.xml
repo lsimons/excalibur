@@ -32,4 +32,12 @@
     <module>component</module>
     <module>testcase</module>
   </modules>
+  <scm>
+    <connection>
+      scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/deprecated
+    </connection>
+    <url>
+      http://svn.apache.org/viewcvs.cgi/excalibur/trunk/deprecated
+    </url>
+  </scm>
 </project>

@@ -37,4 +37,12 @@
     <module>monitor</module>
     <module>datasource</module>
   </modules>
+  <scm>
+    <connection>
+      scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/components
+    </connection>
+    <url>
+      http://svn.apache.org/viewcvs.cgi/excalibur/trunk/components
+    </url>
+  </scm>
 </project>
