@@ -1,24 +1,27 @@
 Excalibur Fortress Platform
 
+ To Build
+ --------
+ * Check out Excalibur from svn
+ * Run maven multiproject:install to build Excalibur
+ * Move to the Platform directory
+ * Run "maven dist" on this project to get the distribution
+ * (if you get issues about gpg, you'll still get a binary distribution)
 
-At the moment this project is rather raw.  To build, you'll need a full checkout
-of the Excalibur svn repository.  Then run: maven:build-dist.  If you get warnings
-about GPG, don't worry about it.
+ To Run
+ ------
+ * Download a copy of this distribution
+ * Unzip into your favorite directory
+ * From the distribution root, run:
+    - For Windows: bin/fortress.bat console
+    - For Linux: bin/fortress.sh console
+    - For OS X or other Unix: bin/run.sh (you may need to modify this script)
 
-You'll find two distributables in target/distributions.  You should be able
-to unzip these anywhere and run "bin/fortress.bat console" (or bin/fortress.sh) to startup
-the simple Hello World Translator.
+ What's Included
+ ---------------
+ * All required libraries and dependencies for Fortress 1.2
+ * Example startup scripts for running Fortress as a daemon or NT Service
+   - For this, we take advantage of the Java Service Wrapper
+ * An example Fortress application with included configuration files
 
-Yeah, there's lots of work todo.  Here's a couple ideas:
-
-  1. Use a different example.  Better yet, clean up the ../examples project.
-  2. Provide some useful documentation for end users who would actually
-     download this thing
-  3. Identify "optional" libraries and put them in /lib/optional/
-  4. Move this list into some sort of xdocs/tasks or better yet JIRA
-  5. Right now we build off of maven:dist.  Maybe use some other target?
-     maven:dist creates a jar that we don't need.  Or maybe merge this
-     subproject with the examples subproject?
-     
-So..much..to..do..
-
+ NOTE: this software bundle is currently in ALPHA state.  Please report any issues.
