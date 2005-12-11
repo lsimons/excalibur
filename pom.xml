@@ -21,7 +21,7 @@
   <groupId>org.apache.excalibur</groupId>
   <artifactId>excalibur</artifactId>
   <version>1.0</version>
-  <name>Excalibur Components</name>
+  <name>Excalibur</name>
   <packaging>pom</packaging>
   <modules>
     <module>components</module>
@@ -29,6 +29,7 @@
     <module>fortress</module>
     <module>deprecated</module>
     <module>framework</module>
+    <module>cornerstone</module>
   </modules>
   <repositories>
     <repository>

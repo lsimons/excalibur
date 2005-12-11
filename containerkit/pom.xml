@@ -34,7 +34,7 @@
     <module>lifecycle</module>
     <module>instrument</module>
   </modules>
-    <scm>
+  <scm>
     <connection>
       scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/containerkit
     </connection>
