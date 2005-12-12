@@ -26,7 +26,7 @@
   <groupId>org.apache.avalon.cornerstone.datasources</groupId>
   <artifactId>cornerstone-datasources-impl</artifactId>
   <version>2.1</version>
-  <name>Cornerstone datasources Implementation</name>
+  <name>Cornerstone Datasources Implementation</name>
   <dependencies>
     <dependency>
       <groupId>org.apache.excalibur.components.pool</groupId>
