@@ -39,24 +39,24 @@ public final class Main
     public static void main( String[] args )
         throws Exception
     {
-    	
-    	String containerConfig = "resource://org/apache/avalon/fortress/examples/swing/SwingContainer.xconf";
-    	String loggerConfig = "resource://org/apache/avalon/fortress/examples/swing/SwingContainer.xlog";
-    	
-    	if(args.length >= 1)
-    		containerConfig = args[0];
-    	if(args.length >= 2)
-    		loggerConfig = args[1];
-    	
+        
+        String containerConfig = "resource://org/apache/avalon/fortress/examples/swing/SwingContainer.xconf";
+        String loggerConfig = "resource://org/apache/avalon/fortress/examples/swing/SwingContainer.xlog";
+        String instrumentConfig = "resource://org/apache/avalon/fortress/examples/swing/SwingContainer.instruments";
+        
+        if(args.length >= 1)
+            containerConfig = args[0];
+        if(args.length >= 2)
+            loggerConfig = args[1];
+        if(args.length >= 3)
+            instrumentConfig = args[2];
+        
         // Set up all the preferences for Fortress
         final FortressConfig config = new FortressConfig();
         config.setContainerClass( SwingContainer.class );
         config.setContainerConfiguration( containerConfig );
         config.setLoggerManagerConfiguration( loggerConfig );
-
-        // need the altrmi binaries
-
-	//   config.setInstrumentManagerConfiguration( "resource://org/apache/avalon/fortress/examples/swing/SwingContainer.instruments" );
+        config.setInstrumentManagerConfiguration( instrumentConfig );
 
         // Get the root container initialized
         ContainerManager cm = new DefaultContainerManager( config.getContext() );

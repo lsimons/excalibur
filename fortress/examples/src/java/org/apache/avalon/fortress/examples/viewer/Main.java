@@ -47,9 +47,7 @@ public final class Main
             config.setContainerClass( ComponentViewer.class );
             config.setContainerConfiguration( "resource://org/apache/avalon/fortress/examples/viewer/ComponentViewer.xconf" );
             config.setLoggerManagerConfiguration( "resource://org/apache/avalon/fortress/examples/viewer/ComponentViewer.xlog" );
-
-            // needs the altrmi binaries
-	    //   config.setInstrumentManagerConfiguration( "resource://org/apache/avalon/fortress/examples/viewer/ComponentViewer.instruments" );
+            config.setInstrumentManagerConfiguration( "resource://org/apache/avalon/fortress/examples/viewer/ComponentViewer.instruments" );
 
             cm = new DefaultContainerManager( config.getContext() );
             org.apache.avalon.framework.container.ContainerUtil.initialize( cm );
