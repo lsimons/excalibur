@@ -43,6 +43,12 @@
       <url>http://cvs.apache.org/maven-snapshot-repository</url>
     </repository>
     <repository>
+      <id>apache-cvs</id>
+      <name>Apache CVS Repository</name>
+      <url>http://cvs.apache.org/repository</url>
+      <layout>legacy</layout>
+    </repository>
+    <repository>
       <id>d-haven</id>
       <name>D-Haven.org repository</name>
       <url>http://dist.d-haven.org</url>
