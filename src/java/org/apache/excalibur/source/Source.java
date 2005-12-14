@@ -51,10 +51,10 @@ import java.io.InputStream;
  * calling refresh() should do no harm.
  * After that an up-to-date validity object can retrieved by calling
  * getValidity(). This can be used to test if the content is still valid
- * as discribed in the source validity documentation.
+ * as described in the source validity documentation.
  * If the content is still valid, the cache knows what to do, if not,
- * the new content can be get using getInputStream().
- * So either after a call to getValidity() or the getInputStream the
+ * the new content can be obtained using getInputStream().
+ * So either after a call to getValidity() or the getInputStream() the
  * validity object must be the same until refresh is called!
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
