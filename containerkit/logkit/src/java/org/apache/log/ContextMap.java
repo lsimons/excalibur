@@ -32,8 +32,10 @@ import java.util.Hashtable;
  * <li>caller    -&gt;com.biz.MyCaller.method(MyCaller.java:18)</li>
  * <li>source    -&gt;1.6.3.2:33</li>
  * </ul>
+ *
  * The context is bound to a thread (and inherited by sub-threads) but
- * it can also be added to by LogTargets.
+ * it can also be added to by LogTargets. Use {@link #removeCurrentContext}
+ * to unbind context from the thread.
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  * @author Peter Donald
@@ -53,7 +55,7 @@ public final class ContextMap
     private transient boolean m_readOnly;
 
     /**
-     * Get the Current ContextMap.
+     * Get current ContextMap.
      * This method returns a ContextMap associated with current thread. If the
      * thread doesn't have a ContextMap associated with it then a new
      * ContextMap is created.
@@ -89,7 +91,9 @@ public final class ContextMap
     }
 
     /**
-     * Remove ContextMap associated with the current thread.
+     * Remove current ContextMap.
+     * This method removes a ContextMap associated with current thread,
+     * if there is any.
      */
     public static void removeCurrentContext()
     {
@@ -103,7 +107,7 @@ public final class ContextMap
      */
     public static void bind( final ContextMap context )
     {
-        //Check security permission here??
+        //Check security permission here???
         c_localContext.set( context );
     }
 
