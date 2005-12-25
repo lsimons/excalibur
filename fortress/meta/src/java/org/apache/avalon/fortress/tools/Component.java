@@ -17,19 +17,28 @@
 
 package org.apache.avalon.fortress.tools;
 
-import com.thoughtworks.qdox.model.*;
-import org.apache.avalon.fortress.MetaInfoEntry;
-import org.apache.avalon.fortress.util.dag.Vertex;
-import org.apache.tools.ant.BuildException;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
+import java.util.Set;
+
+import org.apache.avalon.fortress.MetaInfoEntry;
+import org.apache.avalon.fortress.util.dag.Vertex;
+import org.apache.tools.ant.BuildException;
+
+import com.thoughtworks.qdox.model.DocletTag;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaMethod;
+import com.thoughtworks.qdox.model.JavaSource;
+import com.thoughtworks.qdox.model.Type;
 
 /**
  * Represents a component, and output the meta information.

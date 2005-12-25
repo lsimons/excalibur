@@ -1,55 +1,57 @@
-/* 
+/*
  * Copyright 2003-2004 The Apache Software Foundation
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at 
- * 
+ * You may obtain a copy of the License at
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed  under the  License is distributed on an "AS IS" BASIS,
  * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
  * implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
 
 package org.apache.avalon.fortress.tools;
 
-import com.thoughtworks.qdox.ant.AbstractQdoxTask;
-import com.thoughtworks.qdox.model.DocletTag;
-import com.thoughtworks.qdox.model.JavaClass;
-
-import org.apache.avalon.fortress.util.dag.CyclicDependencyException;
-import org.apache.avalon.fortress.util.dag.DirectedAcyclicGraphVerifier;
-
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.avalon.fortress.util.dag.CyclicDependencyException;
+import org.apache.avalon.fortress.util.dag.DirectedAcyclicGraphVerifier;
+
+import com.thoughtworks.qdox.model.DocletTag;
+import com.thoughtworks.qdox.model.JavaClass;
+
 /**
- * ANT task to collect all the meta information for the components.
+ * QDox-based engine to collect all the meta information for the components.
+ * This common class is utilized by both Ant and Maven plgins, and possibly
+ * others in the future.
  *
  * @author <a href="mailto:dev@avalon.apache.org">The Avalon Team</a>
  * @version CVS $Revision: 1.1 $ $Date: 2004/04/02 08:29:44 $
  */
-public final class ComponentMetaInfoCollector extends AbstractQdoxTask
+public final class ComponentMetaInfoCollector
 {
     /**
-     * The services to write the meta info for.
+     * To log messages - varies by build system used
      */
-    private final Map m_services = new HashMap();
+    protected BuildLogger m_logger;
+
+    /**
+     * The list of classes to extract metadata from
+     */
+    protected ArrayList m_allClasses;
 
     /**
      * The destination directory for metadata files.
@@ -57,20 +59,16 @@ public final class ComponentMetaInfoCollector extends AbstractQdoxTask
     private File m_destDir;
 
     /**
-     * The service list destination.
+     * The services to write the meta info for.
      */
-    private File m_serviceFile;
+    private final Map m_services = new HashMap();
 
     private static final String TAG_COMPONENT = "avalon.component";
 
-    /**
-     * Set the destination directory for the meta information.
-     *
-     * @param destDir  The destination directory
-     */
-    public void setDestDir( final File destDir )
-    {
-        m_destDir = destDir;
+    private ComponentMetaInfoCollector() {}
+
+    public ComponentMetaInfoCollector(BuildLogger logger) {
+        m_logger = logger;
     }
 
     /**
@@ -79,14 +77,8 @@ public final class ComponentMetaInfoCollector extends AbstractQdoxTask
      * @throws BuildException if there was a problem collecting the info
      */
     public void execute()
-            throws BuildException
+            throws Exception
     {
-        validate();
-
-        log( "Writing Info descriptors as property files (.meta)." );
-
-        super.execute();
-
         try
         {
             collectInfoMetaData();
@@ -94,12 +86,12 @@ public final class ComponentMetaInfoCollector extends AbstractQdoxTask
 
             writeServiceList( m_services.values().iterator() );
 
-            log( "Collecting service information." );
+            m_logger.info( "Collecting service information." );
             writeServices();
         }
         catch ( final Exception e )
         {
-            throw new BuildException( e.toString(), e );
+            throw new Exception( e.getMessage(), e );
         }
         finally
         {
@@ -125,7 +117,7 @@ public final class ComponentMetaInfoCollector extends AbstractQdoxTask
 
         DirectedAcyclicGraphVerifier.verify( dagVerifyList );
     }
-    
+
     /**
      * Write the service list to the "/service.list" file.
      *
@@ -135,7 +127,8 @@ public final class ComponentMetaInfoCollector extends AbstractQdoxTask
     public void writeServiceList( final Iterator it ) throws IOException
     {
         int numServices = 0;
-    
+
+        File m_serviceFile = new File( m_destDir, "services.list" );
         final PrintWriter writer = new PrintWriter(
             new OutputStreamWriter( new ChangedFileOutputStream( m_serviceFile ), "UTF-8" ) );
         try
@@ -158,40 +151,11 @@ public final class ComponentMetaInfoCollector extends AbstractQdoxTask
     }
 
     /**
-     * Validate that the parameters are valid.
-     */
-    private void validate()
-    {
-        if ( null == m_destDir )
-        {
-            final String message =
-                    "DestDir (" + m_destDir + ") not specified";
-            throw new BuildException( message );
-        }
-
-        if ( !m_destDir.isDirectory() )
-        {
-            final String message =
-                    "DestDir (" + m_destDir + ") is not a directory.";
-            throw new BuildException( message );
-        }
-
-        if ( !m_destDir.exists() && !m_destDir.mkdirs() )
-        {
-            final String message =
-                    "DestDir (" + m_destDir + ") could not be created.";
-            throw new BuildException( message );
-        }
-
-        m_serviceFile = new File( m_destDir, "services.list" );
-    }
-
-    /**
      * Output the metadata files.
      */
     private void collectInfoMetaData()
     {
-        final Iterator it = allClasses.iterator();
+        final Iterator it = m_allClasses.iterator();
         while ( it.hasNext() )
         {
             final JavaClass javaClass = (JavaClass) it.next();
@@ -252,15 +216,34 @@ public final class ComponentMetaInfoCollector extends AbstractQdoxTask
         while ( services.hasNext() )
         {
             final Service service = (Service) services.next();
-            log( "Processing service " + service.getType(), Project.MSG_VERBOSE );
+            m_logger.info( "Processing service " + service.getType());
             try
             {
                 service.serialize( m_destDir );
             }
             catch ( Exception e )
             {
-                log( "Could not save information for service " + service.getType(), Project.MSG_WARN );
+                m_logger.warn("Could not save information for service " + service.getType() );
             }
         }
+    }
+
+    /**
+     * Set the list of classes to extract metadata from
+     *
+     * @param allClasses The list of classes
+     */
+    public void setAllClasses(ArrayList allClasses) {
+        m_allClasses = allClasses;
+    }
+
+    /**
+     * Set the destination directory for the meta information.
+     *
+     * @param destDir  The destination directory
+     */
+    public void setDestDir( final File destDir )
+    {
+        m_destDir = destDir;
     }
 }
