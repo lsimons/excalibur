@@ -46,7 +46,7 @@ public final class ComponentMetaInfoCollector
     /**
      * To log messages - varies by build system used
      */
-    protected BuildLogger m_logger;
+    protected BuildLogger m_logger = null;
 
     /**
      * The list of classes to extract metadata from
@@ -65,7 +65,7 @@ public final class ComponentMetaInfoCollector
 
     private static final String TAG_COMPONENT = "avalon.component";
 
-    private ComponentMetaInfoCollector() {}
+//    private ComponentMetaInfoCollector() {}
 
     public ComponentMetaInfoCollector(BuildLogger logger) {
         m_logger = logger;
@@ -86,7 +86,9 @@ public final class ComponentMetaInfoCollector
 
             writeServiceList( m_services.values().iterator() );
 
-            m_logger.info( "Collecting service information." );
+            if (m_logger != null) {
+                m_logger.info( "Collecting service information." );
+            }
             writeServices();
         }
         catch ( final Exception e )
@@ -216,14 +218,18 @@ public final class ComponentMetaInfoCollector
         while ( services.hasNext() )
         {
             final Service service = (Service) services.next();
-            m_logger.info( "Processing service " + service.getType());
+            if (m_logger != null) {
+                m_logger.info( "Processing service " + service.getType());
+            }
             try
             {
                 service.serialize( m_destDir );
             }
             catch ( Exception e )
             {
-                m_logger.warn("Could not save information for service " + service.getType() );
+                if (m_logger != null) {
+                    m_logger.warn("Could not save information for service " + service.getType() );
+                }
             }
         }
     }
