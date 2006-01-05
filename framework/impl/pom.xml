@@ -1,107 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
-  Copyright 2004 The Apache Software Foundation
-  Licensed  under the  Apache License,  Version 2.0  (the "License");
-  you may not use  this file  except in  compliance with the License.
-  You may obtain a copy of the License at 
-  
-  http://www.apache.org/licenses/LICENSE-2.0
-  
-  Unless required by applicable law or agreed to in writing, software
-  distributed  under the  License is distributed on an "AS IS" BASIS,
-  WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
-  implied.
-  
-  See the License for the specific language governing permissions and
-  limitations under the License.
+    Copyright 2004 The Apache Software Foundation
+    Licensed  under the  Apache License,  Version 2.0  (the "License");
+    you may not use  this file  except in  compliance with the License.
+    You may obtain a copy of the License at 
+    
+    http://www.apache.org/licenses/LICENSE-2.0
+    
+    Unless required by applicable law or agreed to in writing, software
+    distributed  under the  License is distributed on an "AS IS" BASIS,
+    WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
+    implied.
+    
+    See the License for the specific language governing permissions and
+    limitations under the License.
 -->
 <project>
-  <parent>
-    <groupId>org.apache.excalibur</groupId>
-    <artifactId>excalibur</artifactId>
-    <version>1.0</version>
-  </parent>
-  <modelVersion>4.0.0</modelVersion>
-  <name>Avalon Framework Implementation</name>
-  <groupId>org.apache.avalon.framework</groupId>
-  <artifactId>avalon-framework-impl</artifactId>
-  <description>Avalon Framework Implementation</description>
-  <version>4.3</version>
-  <dependencies>
-    <dependency>
-      <groupId>org.apache.avalon.framework</groupId>
-      <artifactId>avalon-framework-api</artifactId>
-      <version>4.3</version>
-    </dependency>
-    <dependency>
-      <artifactId>xml-apis</artifactId>
-      <groupId>xml-apis</groupId>
-      <version>1.0.b2</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>xml-apis</groupId>
-      <artifactId>xmlParserAPIs</artifactId>
-      <version>2.0.2</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <artifactId>xerces</artifactId>
-      <groupId>xerces</groupId>
-      <version>2.4.0</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>xalan</groupId>
-      <artifactId>xalan</artifactId>
-      <version>2.6.0</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <artifactId>commons-logging</artifactId>
-      <groupId>commons-logging</groupId>
-      <version>1.0.4</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <artifactId>log4j</artifactId>
-      <groupId>log4j</groupId>
-      <version>1.2.11</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <artifactId>jmock</artifactId>
-      <groupId>jmock</groupId>
-      <version>1.0.1</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <artifactId>junit</artifactId>
-      <groupId>junit</groupId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-  <build>
-    <sourceDirectory>src/java</sourceDirectory>
-    <testSourceDirectory>src/test</testSourceDirectory>
-    <resources>
-      <resource>
-        <directory>${basedir}</directory>
-        <targetPath>META-INF</targetPath>
-        <includes>
-          <include>LICENSE.txt</include>
-          <include>NOTICE.txt</include>
-        </includes>
-      </resource>
-    </resources>
-  </build>
-  <scm>
-    <connection>
-      scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/framework/impl
-    </connection>
-    <url>
-      http://svn.apache.org/viewcvs.cgi/excalibur/trunk/framework/impl
-    </url>
-  </scm>
+    <parent>
+        <groupId>org.apache.excalibur</groupId>
+        <artifactId>excalibur</artifactId>
+        <version>1.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <name>Avalon Framework Implementation</name>
+    <groupId>org.apache.avalon.framework</groupId>
+    <artifactId>avalon-framework-impl</artifactId>
+    <description>Avalon Framework Implementation</description>
+    <version>4.3</version>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.avalon.framework</groupId>
+            <artifactId>avalon-framework-api</artifactId>
+            <version>4.3</version>
+        </dependency>
+        <dependency>
+            <artifactId>commons-logging</artifactId>
+            <groupId>commons-logging</groupId>
+            <version>1.0.4</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <artifactId>log4j</artifactId>
+            <groupId>log4j</groupId>
+            <version>1.2.11</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <artifactId>junit</artifactId>
+            <groupId>junit</groupId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <artifactId>jmock</artifactId>
+            <groupId>jmock</groupId>
+            <version>1.0.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <build></build>
+    <scm>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/framework/impl</connection>
+        <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/framework/impl</url>
+    </scm>
 </project>

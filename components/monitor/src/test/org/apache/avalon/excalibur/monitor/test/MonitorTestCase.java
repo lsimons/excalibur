@@ -38,6 +38,10 @@ import org.apache.avalon.framework.component.ComponentSelector;
 public class MonitorTestCase
     extends ExcaliburTestCase
 {
+    public MonitorTestCase()
+    {
+        this(  "framework-did-not-supply-testname" );
+    }
     /**
      * The constructor for the MonitorTest
      */
@@ -213,7 +217,7 @@ public class MonitorTestCase
 
     private void delay()
     {
-        delay( 10 );
+        delay( 15 );
     }
 
     /**

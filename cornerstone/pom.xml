@@ -1,47 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
-  Copyright 2004 The Apache Software Foundation
-  Licensed  under the  Apache License,  Version 2.0  (the "License");
-  you may not use  this file  except in  compliance with the License.
-  You may obtain a copy of the License at 
-  
-  http://www.apache.org/licenses/LICENSE-2.0
-  
-  Unless required by applicable law or agreed to in writing, software
-  distributed  under the  License is distributed on an "AS IS" BASIS,
-  WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
-  implied.
-  
-  See the License for the specific language governing permissions and
-  limitations under the License.
+    Copyright 2004 The Apache Software Foundation
+    Licensed  under the  Apache License,  Version 2.0  (the "License");
+    you may not use  this file  except in  compliance with the License.
+    You may obtain a copy of the License at 
+    
+    http://www.apache.org/licenses/LICENSE-2.0
+    
+    Unless required by applicable law or agreed to in writing, software
+    distributed  under the  License is distributed on an "AS IS" BASIS,
+    WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
+    implied.
+    
+    See the License for the specific language governing permissions and
+    limitations under the License.
 -->
 
 <project>
-  <parent>
-    <groupId>org.apache.excalibur</groupId>
-    <artifactId>excalibur</artifactId>
+    <parent>
+        <groupId>org.apache.excalibur</groupId>
+        <artifactId>excalibur</artifactId>
+        <version>1.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.apache.avalon.cornerstone</groupId>
+    <artifactId>avalon-cornerstone</artifactId>
     <version>1.0</version>
-  </parent>
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.apache.avalon.cornerstone</groupId>
-  <artifactId>avalon-cornerstone</artifactId>
-  <version>1.0</version>
-  <name>Avalon Cornerstone</name>
-  <packaging>pom</packaging>
-  <modules>
-    <module>connection</module>
-    <module>datasources</module>
-    <module>scheduler</module>
-    <module>sockets</module>
-    <module>store</module>
-    <module>threads</module>
-  </modules>
-  <scm>
-    <connection>
-      scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/cornerstone
-    </connection>
-    <url>
-      http://svn.apache.org/viewcvs.cgi/excalibur/trunk/cornerstone
-    </url>
-  </scm>
+    <name>Avalon Cornerstone</name>
+    <packaging>pom</packaging>
+    <modules>
+        <module>connection</module>
+        <module>datasources</module>
+        <module>scheduler</module>
+        <module>sockets</module>
+        <module>store</module>
+        <module>threads</module>
+    </modules>
+    <scm>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/cornerstone</connection>
+        <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/cornerstone</url>
+    </scm>
 </project>
