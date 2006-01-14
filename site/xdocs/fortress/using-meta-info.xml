@@ -131,7 +131,7 @@ public void service( ServiceManager manager )
   <!-- ... -->
 
   <taskdef name="collect-metainfo"
-           classname="org.apache.avalon.fortress.tools.ComponentMetaInfoCollector">
+           classname="org.apache.avalon.fortress.tools.ComponentMetaAntTask">
     <classpath refid="tools.class.path"/>
   </taskdef>
 

@@ -33,7 +33,7 @@ limitations under the License.
         description="Add fortress meta descriptors to the compiled classes">
 
         <taskdef name="fortress-collect-meta"
-            classname="org.apache.avalon.fortress.tools.ComponentMetaInfoCollector">
+            classname="org.apache.avalon.fortress.tools.ComponentMetaAntTask">
             <classpath>
                 <path refid="maven.dependency.classpath"/>
                 <pathelement path="${java.build.dir}"/>

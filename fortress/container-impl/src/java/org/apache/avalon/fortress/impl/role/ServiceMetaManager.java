@@ -64,7 +64,7 @@ import java.util.*;
  * </p>
  *
  * <pre>
- *   &lt;taskdef name="collect-metainfo" classname="org.apache.avalon.fortress.tools.ComponentMetaInfoCollector"&gt;
+ *   &lt;taskdef name="collect-metainfo" classname="org.apache.avalon.fortress.tools.ComponentMetaAntTask"&gt;
  *     &lt;classpath&gt;
  *       &lt;path refid="project.class.path"/&gt;
  *       &lt;pathelement path="${tools.dir}/guiapp-tools.jar"/&gt;

@@ -49,7 +49,7 @@
     
       <!-- Create an ant task definition for the metadata collector -->
       <ant:taskdef name="fortress-collect-metainfo"
-        classname="org.apache.avalon.fortress.tools.ComponentMetaInfoCollector">
+        classname="org.apache.avalon.fortress.tools.ComponentMetaAntTask">
         <ant:classpath>
           <ant:pathelement location="${plugin.getDependencyPath('excalibur-fortress:excalibur-fortress-tools')}"/>
           <ant:pathelement location="${plugin.getDependencyPath('qdox:qdox')}"/>
