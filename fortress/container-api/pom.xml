@@ -43,7 +43,10 @@
             <version>1.0.3</version>
         </dependency>
     </dependencies>
-    <build></build>
+    <build>
+        <sourceDirectory>${basedir}/src/java</sourceDirectory>
+        <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
+    </build>
     <scm>
         <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/fortress/container-api</connection>
         <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/fortress/container-api</url>
