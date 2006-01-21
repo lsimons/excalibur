@@ -70,23 +70,21 @@
     <build>
         <sourceDirectory>${basedir}/src/java</sourceDirectory>
         <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
-        <!--
-            <plugins>
+        <plugins>
             <plugin>
-            <groupId>org.apache.excalibur.fortress.meta</groupId>
-            <artifactId>maven-fortress-plugin</artifactId>
-            <version>0.0.1</version>
-            <executions>
-            <execution>
-            <phase>compile</phase>
-            <goals>
-            <goal>collect-metainfo</goal>
-            </goals>
-            </execution>
-            </executions>
+                <groupId>org.apache.excalibur.fortress.meta</groupId>
+                <artifactId>maven-fortress-plugin</artifactId>
+                <version>0.0.1</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>collect-metainfo</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
-            </plugins>
-        -->
+        </plugins>
     </build>
     <scm>
         <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/components/store</connection>
