@@ -24,11 +24,11 @@
     <name>Excalibur</name>
     <packaging>pom</packaging>
     <modules>
+        <module>framework</module>
+        <module>fortress</module>
         <module>components</module>
         <module>containerkit</module>
-        <module>fortress</module>
         <module>deprecated</module>
-        <module>framework</module>
         <module>cornerstone</module>
     </modules>
     <repositories>

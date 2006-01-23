@@ -23,9 +23,7 @@
         <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.apache.excalibur.components.pool</groupId>
     <artifactId>excalibur-pool</artifactId>
-    <version>1.0</version>
     <name>Excalibur Pool</name>
     <packaging>pom</packaging>
     <modules>
