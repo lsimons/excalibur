@@ -257,7 +257,15 @@ public class ResourceLimitingJdbcDataSource
         final boolean trace = controller.getAttributeAsBoolean( "trace", false );
         final boolean oradb = controller.getAttributeAsBoolean( "oradb", false );
 
-        final boolean autoCommit = configuration.getChild( "auto-commit" ).getValueAsBoolean( true );
+        // The auto-commit setting is supposed to be defined as an attribute to the
+        //  pool-controller.  There was a bug for a while where it was being looked for
+        //  as a child element of the pool.  To avoid breaking things for users configured
+        //  for use with the buggy version, default to looking for the child element as well.
+        final boolean autoCommitChild =
+            configuration.getChild( "auto-commit" ).getValueAsBoolean( true );
+        final boolean autoCommit =
+            controller.getAttributeAsBoolean( "auto-commit", autoCommitChild );
+        
         // Get the JdbcConnection class.  The factory will resolve one if null.
         final String connectionClass = controller.getAttribute( "connection-class", null );
 
