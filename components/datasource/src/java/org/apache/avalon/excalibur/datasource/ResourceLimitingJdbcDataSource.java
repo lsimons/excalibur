@@ -51,10 +51,11 @@ import org.apache.avalon.excalibur.pool.TraceableResourceLimitingPool;
  *   &lt;rl-jdbc&gt;
  *     &lt;pool-controller max="<i>10</i>" max-strict="<i>true</i>"
  *       blocking="<i>true</i>" timeout="<i>-1</i>"
- *       trim-interval="<i>60000</i>" auto-commit="true"
+ *       trim-interval="<i>60000</i>"
  *       connection-class="<i>my.overrided.ConnectionClass</i>"&gt;
  *       &lt;keep-alive disable="false" age="5000"&gt;select 1&lt;/keep-alive&gt;
  *     &lt;/pool-controller&gt;
+ *     &lt;auto-commit&gt;<i>true</i>&lt;/auto-commit&gt;
  *     &lt;driver&gt;<i>com.database.jdbc.JdbcDriver</i>&lt;/driver&gt;
  *     &lt;dburl&gt;<i>jdbc:driver://host/mydb</i>&lt;/dburl&gt;
  *     &lt;user&gt;<i>username</i>&lt;/user&gt;
@@ -107,10 +108,6 @@ import org.apache.avalon.excalibur.pool.TraceableResourceLimitingPool;
  * org.apache.avalon.excalibur.pool.ResourceLimitingPool#trim()}
  * (Defaults to "60000", 1 minute)</li>
  *
- * <li>The <code>auto-commit</code> attribute is used to determine the
- * default auto-commit mode for the <code>Connection</code>s returned
- * by this <code>DataSource</code>.
- *
  * <li>The <code>connection-class</code> attribute is used to override
  * the Connection class returned by the DataSource from calls to
  * getConnection().  Set this to
@@ -127,6 +124,10 @@ import org.apache.avalon.excalibur.pool.TraceableResourceLimitingPool;
  * Setting the <code>disable</code> attribute to true will disable
  * this feature.  Setting the <code>age</code> allows the 5 second age to
  * be overridden.  (Defaults to a query of "SELECT 1" and being enabled)</li>
+ *
+ * <li>The <code>auto-commit</code> element is used to determine the
+ * default auto-commit mode for the <code>Connection</code>s returned
+ * by this <code>DataSource</code>.
  *
  * <li>The <code>driver</code> element is used to specify the driver
  * to use when connecting to the database.  The specified class must
@@ -256,16 +257,7 @@ public class ResourceLimitingJdbcDataSource
         final long trimInterval = controller.getAttributeAsLong( "trim-interval", 60000 );
         final boolean trace = controller.getAttributeAsBoolean( "trace", false );
         final boolean oradb = controller.getAttributeAsBoolean( "oradb", false );
-
-        // The auto-commit setting is supposed to be defined as an attribute to the
-        //  pool-controller.  There was a bug for a while where it was being looked for
-        //  as a child element of the pool.  To avoid breaking things for users configured
-        //  for use with the buggy version, default to looking for the child element as well.
-        final boolean autoCommitChild =
-            configuration.getChild( "auto-commit" ).getValueAsBoolean( true );
-        final boolean autoCommit =
-            controller.getAttributeAsBoolean( "auto-commit", autoCommitChild );
-        
+        final boolean autoCommit = configuration.getChild( "auto-commit" ).getValueAsBoolean( true );
         // Get the JdbcConnection class.  The factory will resolve one if null.
         final String connectionClass = controller.getAttribute( "connection-class", null );
 
