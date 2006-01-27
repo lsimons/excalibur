@@ -23,6 +23,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <name>Excalibur Pool Instrumented Implementation</name>
+    <groupId>org.apache.excalibur.components</groupId>
     <artifactId>excalibur-pool-instrumented</artifactId>
     <inceptionYear>1997</inceptionYear>
     <description>Excalibur Pool Instrumented Implementation</description>

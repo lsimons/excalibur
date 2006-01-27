@@ -22,6 +22,7 @@
         <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+    <groupId>org.apache.excalibur.components</groupId>
     <artifactId>excalibur-store</artifactId>
     <name>Excalibur Store</name>
     <inceptionYear>1997</inceptionYear>

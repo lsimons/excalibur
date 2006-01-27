@@ -23,6 +23,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <name>Excalibur Pool API</name>
+    <groupId>org.apache.excalibur.components</groupId>
     <artifactId>excalibur-pool-api</artifactId>
     <inceptionYear>1997</inceptionYear>
     <description>Excalibur Pool API</description>
