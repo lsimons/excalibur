@@ -358,7 +358,6 @@ public final class JaxpParser
             
             if( m_nsPrefixes )
             {
-                System.out.println( "NAMESPACE PREFIX!!!!!!!!!!!!!!!!!!!!!!!!!!" );
                 try
                 {
                     m_reader.setFeature( "http://xml.org/sax/features/namespace-prefixes",
