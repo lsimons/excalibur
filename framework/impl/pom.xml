@@ -26,12 +26,11 @@
     <groupId>org.apache.avalon.framework</groupId>
     <artifactId>avalon-framework-impl</artifactId>
     <description>Avalon Framework Implementation</description>
-    <version>4.4-SNAPSHOT</version>
     <dependencies>
         <dependency>
             <groupId>org.apache.avalon.framework</groupId>
             <artifactId>avalon-framework-api</artifactId>
-            <version>4.4-SNAPSHOT</version>
+            <version>${org.apache.avalon.framework.version}</version>
         </dependency>
         <dependency>
             <artifactId>commons-logging</artifactId>
