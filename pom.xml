@@ -18,21 +18,20 @@
 
 <project>
     <parent>
-        <groupId>org.apache.excalibur</groupId>
-        <artifactId>excalibur</artifactId>
-        <version>1.0</version>
+        <groupId>org.apache.avalon.cornerstone.store</groupId>
+        <artifactId>cornerstone-store</artifactId>
+        <version>2.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.avalon.cornerstone.store</groupId>
     <artifactId>cornerstone-store-api</artifactId>
-    <version>2.1</version>
     <name>Cornerstone Store API</name>
     <inceptionYear>2001</inceptionYear>
     <dependencies>
         <dependency>
             <groupId>org.apache.avalon.framework</groupId>
             <artifactId>avalon-framework-api</artifactId>
-            <version>4.3</version>
+            <version>4.4-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build></build>
