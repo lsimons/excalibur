@@ -114,7 +114,7 @@ Bean for working with Avalon-Fortress.
         </dependency>
         <dependency>
             <id>ant</id>
-            <version>1.6.2</version>
+            <version>1.6.5</version>
         </dependency>
         <dependency>
             <id>xml-apis</id>
