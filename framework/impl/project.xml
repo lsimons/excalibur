@@ -62,7 +62,7 @@
         
         <dependency>
             <id>log4j</id>
-            <version>1.2.11</version>
+            <version>1.2.13</version>
             <properties note="Only required if log4j features are used.">
                 <optional>true</optional>
             </properties>
