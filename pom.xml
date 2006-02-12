@@ -18,51 +18,48 @@
 
 <project>
     <parent>
-        <groupId>org.apache.excalibur</groupId>
-        <artifactId>excalibur</artifactId>
-        <version>1.0</version>
+        <groupId>org.apache.avalon.cornerstone.scheduler</groupId>
+        <artifactId>cornerstone-scheduler</artifactId>
+        <version>2.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.avalon.cornerstone.scheduler</groupId>
     <artifactId>cornerstone-scheduler-impl</artifactId>
-    <version>2.1</version>
     <name>Cornerstone Scheduler Implementation</name>
     <dependencies>
         <dependency>
             <groupId>org.apache.avalon.cornerstone.scheduler</groupId>
             <artifactId>cornerstone-scheduler-api</artifactId>
-            <version>2.1</version>
+            <version>2.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.avalon.cornerstone.threads</groupId>
             <artifactId>cornerstone-threads-api</artifactId>
-            <version>2.1</version>
+            <version>2.2-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.excalibur.components.thread</groupId>
+            <groupId>org.apache.excalibur.components</groupId>
             <artifactId>excalibur-thread-api</artifactId>
-            <version>2.1</version>
+            <version>2.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.avalon.framework</groupId>
             <artifactId>avalon-framework-api</artifactId>
-            <version>4.3</version>
+            <version>4.4-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.avalon.framework</groupId>
             <artifactId>avalon-framework-impl</artifactId>
-            <version>4.3</version>
+            <version>4.4-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
-            <version>1.0.b2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>xerces</groupId>
             <artifactId>xerces</artifactId>
-            <version>2.4.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
