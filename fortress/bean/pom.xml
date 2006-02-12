@@ -17,26 +17,24 @@
 -->
 <project>
     <parent>
-        <groupId>org.apache.excalibur</groupId>
-        <artifactId>excalibur</artifactId>
-        <version>1.0</version>
+        <groupId>org.apache.excalibur.fortress</groupId>
+        <artifactId>excalibur-fortress</artifactId>
+        <version>1.3-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <name>Excalibur Fortress Bean</name>
     <artifactId>excalibur-fortress-bean</artifactId>
     <groupId>org.apache.excalibur.fortress.bean</groupId>
-    <version>2.1</version>
     <description>Excalibur Fortress Bean component</description>
     <dependencies>
         <dependency>
             <groupId>org.apache.excalibur.fortress.container</groupId>
             <artifactId>excalibur-fortress-container-impl</artifactId>
-            <version>1.2</version>
+            <version>1.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <artifactId>junit</artifactId>
             <groupId>junit</groupId>
-            <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

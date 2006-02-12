@@ -17,31 +17,30 @@
 -->
 <project>
     <parent>
-        <groupId>org.apache.excalibur</groupId>
-        <artifactId>excalibur</artifactId>
-        <version>1.0</version>
+        <groupId>org.apache.avalon.cornerstone.threads</groupId>
+        <artifactId>cornerstone-threads</artifactId>
+        <version>2.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.avalon.cornerstone.threads</groupId>
     <artifactId>cornerstone-threads-tutorial</artifactId>
-    <version>1.0</version>
     <name>Cornerstone Threads</name>
     <packaging>pom</packaging>
     <dependencies>
         <dependency>
             <groupId>org.apache.avalon.framework</groupId>
             <artifactId>avalon-framework-api</artifactId>
-            <version>4.3</version>
+            <version>4.4-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.avalon.framework</groupId>
             <artifactId>avalon-framework-impl</artifactId>
-            <version>4.3</version>
+            <version>4.4-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.excalibur.components.thread</groupId>
+            <groupId>org.apache.excalibur.components</groupId>
             <artifactId>excalibur-thread-api</artifactId>
-            <version>2.1</version>
+            <version>2.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build></build>

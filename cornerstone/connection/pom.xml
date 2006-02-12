@@ -18,14 +18,13 @@
 
 <project>
     <parent>
-        <groupId>org.apache.excalibur</groupId>
-        <artifactId>excalibur</artifactId>
-        <version>1.0</version>
+        <groupId>org.apache.avalon.cornerstone</groupId>
+        <artifactId>avalon-cornerstone</artifactId>
+        <version>2.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.avalon.cornerstone.connection</groupId>
     <artifactId>cornerstone-connection</artifactId>
-    <version>1.0</version>
     <name>Cornerstone Connections</name>
     <packaging>pom</packaging>
     <modules>

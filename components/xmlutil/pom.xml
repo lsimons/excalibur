@@ -17,9 +17,9 @@
 -->
 <project>
     <parent>
-        <groupId>org.apache.excalibur</groupId>
-        <artifactId>excalibur</artifactId>
-        <version>1.0</version>
+        <groupId>org.apache.excalibur.components</groupId>
+        <artifactId>excalibur-components</artifactId>
+        <version>2.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <name>Excalibur XML Utilities</name>
@@ -35,25 +35,27 @@
         <dependency>
             <artifactId>saxon</artifactId>
             <groupId>saxon</groupId>
-            <version>6.5.3</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <artifactId>saxon</artifactId>
             <groupId>saxon7</groupId>
-            <version>7.9.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>xml-resolver</groupId>
             <artifactId>xml-resolver</artifactId>
-            <version>1.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.avalon.framework</groupId>
             <artifactId>avalon-framework-api</artifactId>
-            <version>4.3</version>
+            <version>4.4-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.excalibur.components</groupId>
+            <artifactId>excalibur-pool-api</artifactId>
+            <version>2.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.excalibur.components</groupId>
@@ -68,13 +70,11 @@
         <dependency>
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
-            <version>1.0.b2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>xerces</groupId>
             <artifactId>xerces</artifactId>
-            <version>2.4.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -86,31 +86,27 @@
         <dependency>
             <groupId>saxpath</groupId>
             <artifactId>saxpath</artifactId>
-            <version>1.0-FCS</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>jaxen</groupId>
             <artifactId>jaxen</artifactId>
-            <version>1.0-FCS</version>
-            <scope>provided</scope>
+           <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.excalibur.testcase</groupId>
             <artifactId>excalibur-testcase</artifactId>
-            <version>2.1</version>
+            <version>2.2-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>jtidy</groupId>
             <artifactId>jtidy</artifactId>
-            <version>4aug2000r7-dev</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

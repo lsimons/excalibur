@@ -17,26 +17,24 @@
 -->
 <project>
     <parent>
-        <groupId>org.apache.excalibur</groupId>
-        <artifactId>excalibur</artifactId>
-        <version>1.0</version>
+        <groupId>org.apache.avalon</groupId>
+        <artifactId>avalon-framework</artifactId>
+        <version>4.4-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <name>Avalon Framework API</name>
     <groupId>org.apache.avalon.framework</groupId>
     <artifactId>avalon-framework-api</artifactId>
     <description>Avalon Framework API</description>
-    <version>4.3</version>
     <dependencies>
         <dependency>
             <groupId>org.apache.avalon.logkit</groupId>
             <artifactId>avalon-logkit</artifactId>
-            <version>2.1</version>
+            <version>2.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <artifactId>junit</artifactId>
             <groupId>junit</groupId>
-            <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
