@@ -18,21 +18,20 @@
 
 <project>
     <parent>
-        <groupId>org.apache.excalibur</groupId>
-        <artifactId>excalibur</artifactId>
-        <version>1.0</version>
+        <groupId>org.apache.avalon.cornerstone.threads</groupId>
+        <artifactId>cornerstone-threads</artifactId>
+        <version>2.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.avalon.cornerstone.threads</groupId>
     <artifactId>cornerstone-threads-api</artifactId>
-    <version>2.1</version>
     <name>Cornerstone Threads API</name>
     <inceptionYear>2001</inceptionYear>
     <dependencies>
         <dependency>
-            <groupId>org.apache.excalibur.components.thread</groupId>
+            <groupId>org.apache.excalibur.components</groupId>
             <artifactId>excalibur-thread-api</artifactId>
-            <version>2.1</version>
+            <version>2.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build></build>
