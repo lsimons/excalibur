@@ -41,6 +41,17 @@
             <artifactId>ant</artifactId>
         </dependency>
     </dependencies>
+    <repositories>
+        <repository>
+            <id>dist.codehaus.org - maven2</id>
+            <url>http://dist.codehaus.org</url>
+        </repository>
+        <repository>
+            <id>dist.codehaus.org - legacy</id>
+            <layout>legacy</layout>
+            <url>http://dist.codehaus.org</url>
+        </repository>
+    </repositories>
     <build>
         <sourceDirectory>${basedir}/src/java</sourceDirectory>
         <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
