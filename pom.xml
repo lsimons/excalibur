@@ -106,6 +106,20 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <configuration>
+                    <attach>true</attach>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>    
+            </plugin>
+            <plugin>
             	<groupId>org.apache.maven.plugins</groupId>
             	<artifactId>maven-antrun-plugin</artifactId>
             	<executions>
@@ -163,6 +177,37 @@
             			</goals>
             		</execution>
             	</executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-eclipse-plugin</artifactId>
+                <configuration>
+                	<!--
+                	This will avoid Maven and Eclipse sharing each-others generated classes
+                	since they use different compilers. 
+                	Make sure to ignore eclipse-classes for SCM checkin/diff in Eclipse: 
+                	Window->Preferences->Team->Ignored Resources
+                	-->
+                    <buildOutputDirectory>${basedir}/eclipse-classes</buildOutputDirectory>
+                    <wtpversion>1.0</wtpversion>
+                    <useProjectReferences>false</useProjectReferences>
+                    <downloadSources>true</downloadSources>
+                    <buildcommands>
+                        <buildcommand>org.eclipse.jdt.core.javabuilder</buildcommand>
+                    </buildcommands>
+                    <!--
+                    <projectnatures>
+                        <projectnature>org.eclipse.jdt.core.javanature</projectnature>
+                    </projectnatures>
+                    -->
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>eclipse</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
