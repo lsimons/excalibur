@@ -15,7 +15,6 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -45,23 +44,51 @@
             <id>maven-snapshot</id>
             <name>Maven Snapshot Repository</name>
             <url>http://snapshots.maven.codehaus.org/maven2</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
         <repository>
             <id>apache-maven-snapshot</id>
             <name>Maven Snapshot Repository @ Apache.org</name>
             <url>http://cvs.apache.org/maven-snapshot-repository</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
         <repository>
             <id>apache-cvs</id>
             <name>Apache CVS Repository</name>
             <url>http://cvs.apache.org/repository</url>
             <layout>legacy</layout>
+            <releases>
+                <enabled>true</enabled> 
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
         </repository>
         <repository>
             <id>d-haven</id>
             <name>D-Haven.org repository</name>
             <url>http://dist.d-haven.org</url>
             <layout>legacy</layout>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
         </repository>
     </repositories>
     <ciManagement>
@@ -168,6 +195,7 @@
 					                    <include name="**/*.roles"/>
 					                    <include name="**/*.xconf"/>
 					                    <include name="**/*.xlog"/>
+					                    <include name="**/*.properties"/>
             						</fileset>
             					</copy>
             				</tasks>
