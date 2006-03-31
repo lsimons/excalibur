@@ -180,12 +180,12 @@ public class URLSource extends AbstractSource implements Source
 
                     Class urlConnectionClass = m_connection.getClass();
                     try {
-                        Method urlConnectionSetConnectTimeoutMethod = urlConnectionClass.getMethod("setConnectTimeout", new Class[]{java.lang.Integer.class});
-                        Method urlConnectionSetReadTimeoutMethod = urlConnectionClass.getMethod("setReadTimeout", new Class[]{java.lang.Integer.class});
+                        Method urlConnectionSetConnectTimeoutMethod = urlConnectionClass.getMethod("setConnectTimeout", new Class[]{int.class});
+                        Method urlConnectionSetReadTimeoutMethod = urlConnectionClass.getMethod("setReadTimeout", new Class[]{int.class});
                         if (connectTimeout != -1)
-                            urlConnectionSetConnectTimeoutMethod.invoke(m_connection, new Object[] {new java.lang.Integer(connectTimeout)});
+                            urlConnectionSetConnectTimeoutMethod.invoke(m_connection, new Object[] {new Integer(connectTimeout)});
                         if (readTimeout != -1)
-                            urlConnectionSetReadTimeoutMethod.invoke(m_connection, new Object[] {new java.lang.Integer(readTimeout)});
+                            urlConnectionSetReadTimeoutMethod.invoke(m_connection, new Object[] {new Integer(readTimeout)});
                     } catch (Exception ignore) {}
                 }
                 setLastModified(m_connection.getLastModified());
