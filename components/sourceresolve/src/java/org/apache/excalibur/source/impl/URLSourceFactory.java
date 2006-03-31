@@ -22,6 +22,9 @@ import java.net.URL;
 import java.util.Map;
 
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
+import org.apache.avalon.framework.parameters.ParameterException;
+import org.apache.avalon.framework.parameters.Parameterizable;
+import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.avalon.framework.thread.ThreadSafe;
 import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceFactory;
@@ -35,18 +38,31 @@ import org.apache.excalibur.source.SourceFactory;
  * @x-avalon.lifestyle type=singleton
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
- * @version $Id: URLSourceFactory.java,v 1.4 2004/02/28 11:47:24 cziegeler Exp $
+ * @version $Id: URLSourceFactory.java 564 2006-03-25 08:33:32Z jbq $
  */
-public class URLSourceFactory extends AbstractLogEnabled implements SourceFactory, ThreadSafe
+public class URLSourceFactory extends AbstractLogEnabled implements Parameterizable, SourceFactory, ThreadSafe
 {
+	Parameters parameters;
 
-    /**
+	/**
+	 * Starting with JDK 1.5, accepts configuration parameters:
+	 * <ul>
+	 * <li><tt>connect-timeout</tt> used to set <tt>URLConnection.setConnectTimeout()</tt></li>
+	 * <li><tt>read-timeout</tt> used to set <tt>URLConnection.setReadTimeout()</tt></li>
+	 * </ul>
+	 */
+	public void parameterize(Parameters par) throws ParameterException {
+		this.parameters = par;
+	}
+
+	/**
      * Create an URL-based source. This class actually creates an {@link URLSource}, but if another
      * implementation is needed, subclasses can override this method.
      */
     protected Source createURLSource(URL url, Map parameters) throws MalformedURLException, IOException
     {
         URLSource result = new URLSource();
+        result.parameterize(this.parameters);
         result.init(url, parameters);
         return result;
     }
