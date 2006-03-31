@@ -19,6 +19,7 @@ package org.apache.excalibur.source.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -26,6 +27,8 @@ import java.net.URLDecoder;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.avalon.framework.parameters.ParameterException;
+import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceException;
 import org.apache.excalibur.source.SourceParameters;
@@ -42,6 +45,9 @@ import org.apache.excalibur.source.impl.validity.TimeStampValidity;
  */
 public class URLSource extends AbstractSource implements Source
 {
+    private static final String CONNECT_TIMEOUT = "connect-timeout";
+    private static final String READ_TIMEOUT = "read-timeout";
+    int connectTimeout, readTimeout;
 
     /** The URL of the source */
     protected URL m_url;
@@ -68,6 +74,8 @@ public class URLSource extends AbstractSource implements Source
 
     /** The content type (if known) */
     protected String m_mimeType;
+    
+    Parameters avalonParameters;
 
     /**
      * Constructor
@@ -107,6 +115,11 @@ public class URLSource extends AbstractSource implements Source
             if (encoding != null && !"".equals(encoding))
                 m_encoding = encoding;
         }
+        
+        if (null != avalonParameters) {
+            connectTimeout = avalonParameters.getParameterAsInteger(CONNECT_TIMEOUT, -1);
+            readTimeout = avalonParameters.getParameterAsInteger(READ_TIMEOUT, -1);
+        }
 
         if (null != m_parameters && m_parameters.hasParameters() && !m_isPost)
         {
@@ -139,6 +152,10 @@ public class URLSource extends AbstractSource implements Source
         }
     }
 
+    public void parameterize(Parameters par) {
+        this.avalonParameters = par;
+    }
+
     /**
      * Get the last modification date and content length of the source.
      * Any exceptions are ignored.
@@ -160,6 +177,16 @@ public class URLSource extends AbstractSource implements Source
                     if (m_url.getProtocol().startsWith("http") && userInfo != null){
                         m_connection.setRequestProperty("Authorization", "Basic " + SourceUtil.encodeBASE64(userInfo));
                     }
+
+                    Class urlConnectionClass = m_connection.getClass();
+                    try {
+                        Method urlConnectionSetConnectTimeoutMethod = urlConnectionClass.getMethod("setConnectTimeout", new Class[]{java.lang.Integer.class});
+                        Method urlConnectionSetReadTimeoutMethod = urlConnectionClass.getMethod("setReadTimeout", new Class[]{java.lang.Integer.class});
+                        if (connectTimeout != -1)
+                            urlConnectionSetConnectTimeoutMethod.invoke(m_connection, new Object[] {new java.lang.Integer(connectTimeout)});
+                        if (readTimeout != -1)
+                            urlConnectionSetReadTimeoutMethod.invoke(m_connection, new Object[] {new java.lang.Integer(readTimeout)});
+                    } catch (Exception ignore) {}
                 }
                 setLastModified(m_connection.getLastModified());
                 m_mimeType = m_connection.getContentType();
