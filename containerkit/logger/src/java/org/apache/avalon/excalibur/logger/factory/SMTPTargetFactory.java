@@ -48,6 +48,7 @@ import org.apache.log.output.net.SMTPOutputLogTarget;
  *   &lt;subject&gt;subject line&lt;/subject&gt;
  *   &lt;maximum-size&gt;number&lt;/maximum-size&gt;
  *   &lt;maximum-delay-time&gt;seconds&lt;/maximum-delay-time&gt;
+ *   &lt;debug&gt;false&lt;/debug&gt;
  * &lt;/smtp&gt;
  * </pre>
  *
@@ -98,7 +99,7 @@ public class SMTPTargetFactory
     {
         try
         {
-            return new SMTPOutputLogTarget(
+            SMTPOutputLogTarget logTarget = new SMTPOutputLogTarget(
                 getSession( config ),
                 getToAddresses( config ),
                 getFromAddress( config ),
@@ -107,6 +108,16 @@ public class SMTPTargetFactory
                 getMaxDelayTime( config ),
                 getFormatter( config )
             );
+            
+            // Only set the debug flag when true.  The flag is global in javamail
+            //  and this makes things work more cleanly with old logkit versions.
+            boolean debug = getDebug( config );
+            if ( debug )
+            {
+                logTarget.setDebug( debug );
+            }
+            
+            return logTarget;
         }
         catch( final ContextException ce )
         {
@@ -255,6 +266,19 @@ public class SMTPTargetFactory
         throws ConfigurationException, AddressException
     {
         return createAddress( config.getChild( "from" ).getValue() );
+    }
+
+    /**
+     * Helper method to obtain the debug glag to use from the given
+     * configuration object.
+     *
+     * @param config a <code>Configuration</code> instance
+     * @return subject line
+     */
+    private boolean getDebug( Configuration config )
+        throws ConfigurationException
+    {
+        return config.getChild( "debug" ).getValueAsBoolean();
     }
 
     /**

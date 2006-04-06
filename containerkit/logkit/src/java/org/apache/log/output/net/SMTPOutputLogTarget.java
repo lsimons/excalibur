@@ -72,6 +72,9 @@ public class SMTPOutputLogTarget extends AbstractOutputTarget
     
     /** Flag which will be set in the close method when it is time to shutdown. */
     private boolean m_shutdown;
+    
+    /** Flag which controls whether debug is enabled for each message. */
+    private boolean m_debug;
 
     /** SMTPOutputLogTarget constructor.
      *
@@ -225,6 +228,8 @@ public class SMTPOutputLogTarget extends AbstractOutputTarget
         {
             try
             {
+                m_session.setDebug( m_debug );  // This is global, so always set it.
+                
                 m_message = new MimeMessage( m_session );
                 m_message.setFrom( m_fromAddress );
                 m_message.setRecipients( Message.RecipientType.TO, m_toAddresses );
@@ -310,11 +315,11 @@ public class SMTPOutputLogTarget extends AbstractOutputTarget
     /**
      * Method to enable/disable debugging on the mail session.
      *
-     * @param flag true to enable debugging, false to disable it
+     * @param debug true to enable debugging, false to disable it
      */
-    public void setDebug( boolean flag )
+    public void setDebug( boolean debug )
     {
-        m_session.setDebug( flag );
+        m_debug = debug;
     }
 
     /**
