@@ -35,8 +35,8 @@
         is easy for an administrator or help desk personell to digest. Excalibur Instrumentation is such a package that
         you can use for your Avalon based projects.
     </description>
-  <groupId>org.apache.excalibur.containerkit.instrument</groupId>
-  <artifactId>excalibur-instrument</artifactId>
+  <groupId>org.apache.excalibur.containerkit</groupId>
+  <artifactId>excalibur-instrument-modules</artifactId>
   <inceptionYear>1997</inceptionYear>
   <packaging>pom</packaging>
   <modules>

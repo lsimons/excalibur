@@ -23,14 +23,15 @@
     +-->
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
-    <groupId>org.apache.excalibur.containerkit.lifecycle</groupId>
-    <artifactId>excalibur-lifecycle</artifactId>
+    <groupId>org.apache.excalibur.containerkit</groupId>
+    <artifactId>excalibur-lifecycle-modules</artifactId>
     <version>1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>Excalibur Lifecycle Extension API</name>
   <artifactId>excalibur-lifecycle-api</artifactId>
-  <groupId>org.apache.excalibur.containerkit.lifecycle</groupId>
+  <groupId>org.apache.excalibur.containerkit</groupId>
+  <version>2.2-SNAPSHOT</version>
   <description>Excalibur Lifecycle Extension API</description>
   <dependencies>
     <dependency>

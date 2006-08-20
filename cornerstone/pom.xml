@@ -29,7 +29,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.avalon.cornerstone</groupId>
-  <artifactId>avalon-cornerstone</artifactId>
+  <artifactId>avalon-cornerstone-modules</artifactId>
   <version>1-SNAPSHOT</version>
   <name>Avalon Cornerstone [modules]</name>
   <packaging>pom</packaging>

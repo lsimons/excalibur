@@ -30,7 +30,7 @@
   <modelVersion>4.0.0</modelVersion>
   <name>Deprecated [modules]</name>
   <groupId>org.apache.excalibur.deprecated</groupId>
-  <artifactId>excalibur-deprecated</artifactId>
+  <artifactId>excalibur-deprecated-modules</artifactId>
   <version>1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <modules>

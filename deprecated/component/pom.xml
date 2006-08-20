@@ -24,13 +24,14 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <groupId>org.apache.excalibur.deprecated</groupId>
-    <artifactId>excalibur-deprecated</artifactId>
+    <artifactId>excalibur-deprecated-modules</artifactId>
     <version>1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>Excalibur Component Manager</name>
   <artifactId>excalibur-component</artifactId>
   <groupId>org.apache.excalibur.component</groupId>
+  <version>2.2-SNAPSHOT</version>
   <inceptionYear>1997</inceptionYear>
   <description>
         This project contains utilities for managing components. ECM is what we call an "avalon container", though it is
@@ -45,7 +46,7 @@
       <version>${orgApacheAvalonFrameworkVersion}</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.excalibur.containerkit.logger</groupId>
+      <groupId>org.apache.excalibur.containerkit</groupId>
       <artifactId>excalibur-logger</artifactId>
       <version>${orgApacheExcaliburContainerkitVersion}</version>
     </dependency>
@@ -65,12 +66,12 @@
       <version>${orgApacheExcaliburComponentsVersion}</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.excalibur.containerkit.instrument</groupId>
+      <groupId>org.apache.excalibur.containerkit</groupId>
       <artifactId>excalibur-instrument-api</artifactId>
       <version>${orgApacheExcaliburContainerkitVersion}</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.excalibur.containerkit.instrument</groupId>
+      <groupId>org.apache.excalibur.containerkit</groupId>
       <artifactId>excalibur-instrument-mgr-impl</artifactId>
       <version>${orgApacheExcaliburContainerkitVersion}</version>
     </dependency>

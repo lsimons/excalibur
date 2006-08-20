@@ -29,8 +29,9 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>Excalibur Logger</name>
-  <groupId>org.apache.excalibur.containerkit.logger</groupId>
+  <groupId>org.apache.excalibur.containerkit</groupId>
   <artifactId>excalibur-logger</artifactId>
+  <version>2.2-SNAPSHOT</version>
   <inceptionYear>1997</inceptionYear>
   <description>
         Excalibur-Logger integrates neatly into Avalon-ECM and Excalibur Fortress. The main goal is to be able to define

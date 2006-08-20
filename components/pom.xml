@@ -29,7 +29,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.excalibur.components</groupId>
-  <artifactId>excalibur-components</artifactId>
+  <artifactId>excalibur-components-modules</artifactId>
   <version>1-SNAPSHOT</version>
   <name>Excalibur Components [modules]</name>
   <packaging>pom</packaging>

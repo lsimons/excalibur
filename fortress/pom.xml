@@ -29,7 +29,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.excalibur.fortress</groupId>
-  <artifactId>excalibur-fortress</artifactId>
+  <artifactId>excalibur-fortress-modules</artifactId>
   <version>1-SNAPSHOT</version>
   <inceptionYear>2003</inceptionYear>
   <name>Excalibur Fortress [modules]</name>

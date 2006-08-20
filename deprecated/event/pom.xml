@@ -24,13 +24,14 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <groupId>org.apache.excalibur.deprecated</groupId>
-    <artifactId>excalibur-deprecated</artifactId>
+    <artifactId>excalibur-deprecated-modules</artifactId>
     <version>1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>Event</name>
   <groupId>org.apache.excalibur.event</groupId>
-  <artifactId>excalibur-event</artifactId>
+  <artifactId>excalibur-event-modules</artifactId>
+  <version>1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <modules>
     <module>api</module>

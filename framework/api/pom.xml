@@ -31,6 +31,7 @@
   <name>Avalon Framework API</name>
   <groupId>org.apache.avalon.framework</groupId>
   <artifactId>avalon-framework-api</artifactId>
+  <version>4.4-SNAPSHOT</version>
   <description>Avalon Framework API</description>
   <dependencies>
     <dependency>
