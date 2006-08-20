@@ -40,12 +40,12 @@
         <dependency>
             <groupId>org.apache.excalibur.fortress.container</groupId>
             <artifactId>excalibur-fortress-container-impl</artifactId>
-            <version>${org.apache.excalibur.fortress.version}</version>
+            <version>${orgApacheExcaliburFortressVersion}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.excalibur.fortress.meta</groupId>
             <artifactId>excalibur-fortress-meta</artifactId>
-            <version>${org.apache.excalibur.fortress.version}</version>
+            <version>${orgApacheExcaliburFortressVersion}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -64,7 +64,7 @@
             <plugin>
                 <groupId>org.apache.excalibur.fortress.meta</groupId>
                 <artifactId>maven-fortress-plugin</artifactId>
-                <version>${org.apache.excalibur.fortress.version}</version>
+                <version>${orgApacheExcaliburFortressVersion}</version>
                 <executions>
                     <execution>
                         <phase>test-compile</phase>

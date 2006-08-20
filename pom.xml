@@ -38,12 +38,12 @@
     <module>cornerstone</module>
   </modules>
   <properties>
-    <org.apache.excalibur.components.version>2.2-SNAPSHOT</org.apache.excalibur.components.version>
-    <org.apache.excalibur.deprecated.version>2.2-SNAPSHOT</org.apache.excalibur.deprecated.version>
-    <org.apache.excalibur.containerkit.version>2.2-SNAPSHOT</org.apache.excalibur.containerkit.version>
-    <org.apache.avalon.framework.version>4.4-SNAPSHOT</org.apache.avalon.framework.version>
-    <org.apache.avalon.cornerstone.version>2.2-SNAPSHOT</org.apache.avalon.cornerstone.version>
-    <org.apache.excalibur.fortress.version>1.3-SNAPSHOT</org.apache.excalibur.fortress.version>
+    <orgApacheExcaliburComponentsVersion>2.2-SNAPSHOT</orgApacheExcaliburComponentsVersion>
+    <orgApacheExcaliburDeprecatedVersion>2.2-SNAPSHOT</orgApacheExcaliburDeprecatedVersion>
+    <orgApacheExcaliburContainerkitVersion>2.2-SNAPSHOT</orgApacheExcaliburContainerkitVersion>
+    <orgApacheAvalonFrameworkVersion>4.4-SNAPSHOT</orgApacheAvalonFrameworkVersion>
+    <orgApacheAvalonCornerstoneVersion>2.2-SNAPSHOT</orgApacheAvalonCornerstoneVersion>
+    <orgApacheExcaliburFortressVersion>1.3-SNAPSHOT</orgApacheExcaliburFortressVersion>
   </properties>
   <repositories>
     <repository>

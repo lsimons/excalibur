@@ -37,12 +37,12 @@
         <dependency>
             <artifactId>excalibur-component</artifactId>
             <groupId>org.apache.excalibur.component</groupId>
-            <version>${org.apache.excalibur.deprecated.version}</version>
+            <version>${orgApacheExcaliburDeprecatedVersion}</version>
         </dependency>
         <dependency>
             <artifactId>excalibur-testcase</artifactId>
             <groupId>org.apache.excalibur.testcase</groupId>
-            <version>${org.apache.excalibur.deprecated.version}</version>
+            <version>${orgApacheExcaliburDeprecatedVersion}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

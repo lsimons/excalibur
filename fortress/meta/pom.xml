@@ -36,7 +36,7 @@
         <dependency>
             <groupId>org.apache.excalibur.fortress.container</groupId>
             <artifactId>excalibur-fortress-container-api</artifactId>
-            <version>${org.apache.excalibur.fortress.version}</version>
+            <version>${orgApacheExcaliburFortressVersion}</version>
         </dependency>
         <dependency>
             <groupId>generama</groupId>

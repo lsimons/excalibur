@@ -40,12 +40,12 @@
         <dependency>
             <groupId>org.apache.excalibur.fortress.container</groupId>
             <artifactId>excalibur-fortress-container-api</artifactId>
-            <version>${org.apache.excalibur.fortress.version}</version>
+            <version>${orgApacheExcaliburFortressVersion}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.excalibur.containerkit.logger</groupId>
             <artifactId>excalibur-logger</artifactId>
-            <version>${org.apache.excalibur.containerkit.version}</version>
+            <version>${orgApacheExcaliburContainerkitVersion}</version>
         </dependency>
         <dependency>
             <artifactId>commons-collections</artifactId>
@@ -58,17 +58,17 @@
         <dependency>
             <groupId>org.apache.excalibur.containerkit.instrument</groupId>
             <artifactId>excalibur-instrument-api</artifactId>
-            <version>${org.apache.excalibur.containerkit.version}</version>
+            <version>${orgApacheExcaliburContainerkitVersion}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.excalibur.containerkit.lifecycle</groupId>
             <artifactId>excalibur-lifecycle-api</artifactId>
-            <version>${org.apache.excalibur.containerkit.version}</version>
+            <version>${orgApacheExcaliburContainerkitVersion}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.excalibur.containerkit.lifecycle</groupId>
             <artifactId>excalibur-lifecycle-impl</artifactId>
-            <version>${org.apache.excalibur.containerkit.version}</version>
+            <version>${orgApacheExcaliburContainerkitVersion}</version>
         </dependency>
         <dependency>
             <artifactId>bcel</artifactId>
@@ -81,17 +81,17 @@
         <dependency>
             <groupId>org.apache.excalibur.components</groupId>
             <artifactId>excalibur-sourceresolve</artifactId>
-            <version>${org.apache.excalibur.components.version}</version>
+            <version>${orgApacheExcaliburComponentsVersion}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.excalibur.containerkit.instrument</groupId>
             <artifactId>excalibur-instrument-mgr-api</artifactId>
-            <version>${org.apache.excalibur.containerkit.version}</version>
+            <version>${orgApacheExcaliburContainerkitVersion}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.excalibur.containerkit.instrument</groupId>
             <artifactId>excalibur-instrument-mgr-impl</artifactId>
-            <version>${org.apache.excalibur.containerkit.version}</version>
+            <version>${orgApacheExcaliburContainerkitVersion}</version>
         </dependency>
     </dependencies>
     <build/>
