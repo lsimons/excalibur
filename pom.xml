@@ -35,27 +35,27 @@
         <dependency>
             <groupId>org.apache.excalibur.components</groupId>
             <artifactId>excalibur-pool-api</artifactId>
-            <version>${org.apache.excalibur.components.version}</version>
+            <version>${orgApacheExcaliburComponentsVersion}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.excalibur.components</groupId>
             <artifactId>excalibur-pool-impl</artifactId>
-            <version>${org.apache.excalibur.components.version}</version>
+            <version>${orgApacheExcaliburComponentsVersion}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.excalibur.components</groupId>
             <artifactId>excalibur-datasource</artifactId>
-            <version>${org.apache.excalibur.components.version}</version>
+            <version>${orgApacheExcaliburComponentsVersion}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.avalon.cornerstone.datasources</groupId>
             <artifactId>cornerstone-datasources-api</artifactId>
-            <version>${org.apache.avalon.cornerstone.version}</version>
+            <version>${orgApacheAvalonCornerstoneVersion}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.avalon.framework</groupId>
             <artifactId>avalon-framework-api</artifactId>
-            <version>${org.apache.avalon.framework.version}</version>
+            <version>${orgApacheAvalonFrameworkVersion}</version>
         </dependency>
         <dependency>
             <groupId>xml-apis</groupId>
