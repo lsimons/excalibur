@@ -42,16 +42,19 @@
       <artifactId>saxon</artifactId>
       <groupId>saxon</groupId>
       <scope>provided</scope>
+      <version>6.5.3</version>
     </dependency>
     <dependency>
       <artifactId>saxon</artifactId>
       <groupId>saxon7</groupId>
       <scope>provided</scope>
+      <version>7.9.1</version>
     </dependency>
     <dependency>
       <groupId>xml-resolver</groupId>
       <artifactId>xml-resolver</artifactId>
       <scope>provided</scope>
+      <version>1.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.avalon.framework</groupId>
@@ -77,11 +80,13 @@
       <groupId>xml-apis</groupId>
       <artifactId>xml-apis</artifactId>
       <scope>provided</scope>
+      <version>1.0.b2</version>
     </dependency>
     <dependency>
       <groupId>xerces</groupId>
       <artifactId>xerces</artifactId>
       <scope>provided</scope>
+      <version>2.4.0</version>
     </dependency>
     <dependency>
       <groupId>xalan</groupId>
@@ -93,11 +98,13 @@
       <groupId>saxpath</groupId>
       <artifactId>saxpath</artifactId>
       <scope>provided</scope>
+      <version>1.0-FCS</version>
     </dependency>
     <dependency>
       <groupId>jaxen</groupId>
       <artifactId>jaxen</artifactId>
       <scope>provided</scope>
+      <version>1.0-FCS</version>
     </dependency>
     <dependency>
       <groupId>org.apache.excalibur.testcase</groupId>
@@ -109,11 +116,13 @@
       <groupId>jtidy</groupId>
       <artifactId>jtidy</artifactId>
       <scope>provided</scope>
+      <version>4aug2000r7-dev</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
+      <version>3.8.2</version>
     </dependency>
   </dependencies>
   <build/>

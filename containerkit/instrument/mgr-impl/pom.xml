@@ -57,11 +57,13 @@
       <groupId>xml-apis</groupId>
       <artifactId>xml-apis</artifactId>
       <scope>provided</scope>
+      <version>1.0.b2</version>
     </dependency>
     <dependency>
       <artifactId>junit</artifactId>
       <groupId>junit</groupId>
       <scope>test</scope>
+      <version>3.8.2</version>
     </dependency>
   </dependencies>
   <build/>

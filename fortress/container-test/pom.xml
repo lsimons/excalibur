@@ -52,11 +52,13 @@
       <groupId>ant</groupId>
       <artifactId>ant</artifactId>
       <scope>test</scope>
+      <version>1.6.2</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
+      <version>3.8.2</version>
     </dependency>
   </dependencies>
   <build>

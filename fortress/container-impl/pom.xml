@@ -50,10 +50,12 @@
     <dependency>
       <artifactId>commons-collections</artifactId>
       <groupId>commons-collections</groupId>
+      <version>3.1</version>
     </dependency>
     <dependency>
       <groupId>d-haven-mpool</groupId>
       <artifactId>managed-pool</artifactId>
+      <version>1.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.excalibur.containerkit.instrument</groupId>
@@ -73,10 +75,12 @@
     <dependency>
       <artifactId>bcel</artifactId>
       <groupId>bcel</groupId>
+      <version>5.1</version>
     </dependency>
     <dependency>
       <groupId>commons-beanutils</groupId>
       <artifactId>commons-beanutils</artifactId>
+      <version>1.7.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.excalibur.components</groupId>
