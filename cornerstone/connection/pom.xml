@@ -22,22 +22,22 @@
     |
     +-->
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <parent>
-        <groupId>org.apache.avalon.cornerstone</groupId>
-        <artifactId>avalon-cornerstone</artifactId>
-        <version>2.2-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>org.apache.avalon.cornerstone.connection</groupId>
-    <artifactId>cornerstone-connection</artifactId>
-    <name>Cornerstone Connections</name>
-    <packaging>pom</packaging>
-    <modules>
-        <module>api</module>
-        <module>impl</module>
-    </modules>
-    <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/cornerstone/connection</connection>
-        <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/cornerstone/connection</url>
-    </scm>
+  <parent>
+    <groupId>org.apache.avalon.cornerstone</groupId>
+    <artifactId>avalon-cornerstone</artifactId>
+    <version>1-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.apache.avalon.cornerstone.connection</groupId>
+  <artifactId>cornerstone-connection</artifactId>
+  <name>Cornerstone Connections</name>
+  <packaging>pom</packaging>
+  <modules>
+    <module>api</module>
+    <module>impl</module>
+  </modules>
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/cornerstone/connection</connection>
+    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/cornerstone/connection</url>
+  </scm>
 </project>

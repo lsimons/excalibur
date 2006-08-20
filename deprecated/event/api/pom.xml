@@ -22,26 +22,26 @@
     |
     +-->
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <parent>
-        <groupId>org.apache.excalibur.event</groupId>
-        <artifactId>excalibur-event</artifactId>
-        <version>2.2-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
-    <name>Excalibur Event API</name>
-    <artifactId>excalibur-event-api</artifactId>
+  <parent>
     <groupId>org.apache.excalibur.event</groupId>
-    <description>Excalibur Event API</description>
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.avalon.framework</groupId>
-            <artifactId>avalon-framework-api</artifactId>
-            <version>${orgApacheAvalonFrameworkVersion}</version>
-        </dependency>
-    </dependencies>
-    <build/>
-    <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/deprecated/event/api</connection>
-        <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/deprecated/event/api</url>
-    </scm>
+    <artifactId>excalibur-event</artifactId>
+    <version>1-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <name>Excalibur Event API</name>
+  <artifactId>excalibur-event-api</artifactId>
+  <groupId>org.apache.excalibur.event</groupId>
+  <description>Excalibur Event API</description>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.avalon.framework</groupId>
+      <artifactId>avalon-framework-api</artifactId>
+      <version>${orgApacheAvalonFrameworkVersion}</version>
+    </dependency>
+  </dependencies>
+  <build/>
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/deprecated/event/api</connection>
+    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/deprecated/event/api</url>
+  </scm>
 </project>

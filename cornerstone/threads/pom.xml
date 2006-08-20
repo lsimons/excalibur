@@ -22,23 +22,23 @@
     |
     +-->
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <parent>
-        <groupId>org.apache.avalon.cornerstone</groupId>
-        <artifactId>avalon-cornerstone</artifactId>
-        <version>2.2-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>org.apache.avalon.cornerstone.threads</groupId>
-    <artifactId>cornerstone-threads</artifactId>
-    <name>Cornerstone Threads</name>
-    <packaging>pom</packaging>
-    <modules>
-        <module>api</module>
-        <module>impl</module>
-        <module>tutorial</module>
-    </modules>
-    <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/cornerstone/threads</connection>
-        <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/cornerstone/threads</url>
-    </scm>
+  <parent>
+    <groupId>org.apache.avalon.cornerstone</groupId>
+    <artifactId>avalon-cornerstone</artifactId>
+    <version>1-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.apache.avalon.cornerstone.threads</groupId>
+  <artifactId>cornerstone-threads</artifactId>
+  <name>Cornerstone Threads</name>
+  <packaging>pom</packaging>
+  <modules>
+    <module>api</module>
+    <module>impl</module>
+    <module>tutorial</module>
+  </modules>
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/cornerstone/threads</connection>
+    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/cornerstone/threads</url>
+  </scm>
 </project>

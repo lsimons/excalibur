@@ -22,47 +22,47 @@
     |
     +-->
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <parent>
-        <groupId>org.apache.excalibur.deprecated</groupId>
-        <artifactId>excalibur-deprecated</artifactId>
-        <version>2.2-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
-    <name>Excalibur Testcase</name>
-    <artifactId>excalibur-testcase</artifactId>
-    <groupId>org.apache.excalibur.testcase</groupId>
-    <inceptionYear>2004</inceptionYear>
-    <description>
+  <parent>
+    <groupId>org.apache.excalibur.deprecated</groupId>
+    <artifactId>excalibur-deprecated</artifactId>
+    <version>1-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <name>Excalibur Testcase</name>
+  <artifactId>excalibur-testcase</artifactId>
+  <groupId>org.apache.excalibur.testcase</groupId>
+  <inceptionYear>2004</inceptionYear>
+  <description>
         This project contains utilities for managing components. ECM is what we call an "avalon container", though it is
         somewhat different in architecture to newer developments like Phoenix and Fortress. Our intend is to someday
         completely replace ECM with Fortress. In particular, this package contains the ExcaliburComponentManager,
         usually abbreviated to ECM.
     </description>
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.avalon.framework</groupId>
-            <artifactId>avalon-framework-api</artifactId>
-            <version>${orgApacheAvalonFrameworkVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.avalon.framework</groupId>
-            <artifactId>avalon-framework-impl</artifactId>
-            <version>${orgApacheAvalonFrameworkVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <artifactId>excalibur-component</artifactId>
-            <groupId>org.apache.excalibur.component</groupId>
-            <version>${orgApacheExcaliburDeprecatedVersion}</version>
-        </dependency>
-    </dependencies>
-    <build/>
-    <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/deprecated/testcase</connection>
-        <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/deprecated/testcase</url>
-    </scm>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.avalon.framework</groupId>
+      <artifactId>avalon-framework-api</artifactId>
+      <version>${orgApacheAvalonFrameworkVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.avalon.framework</groupId>
+      <artifactId>avalon-framework-impl</artifactId>
+      <version>${orgApacheAvalonFrameworkVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <artifactId>excalibur-component</artifactId>
+      <groupId>org.apache.excalibur.component</groupId>
+      <version>${orgApacheExcaliburDeprecatedVersion}</version>
+    </dependency>
+  </dependencies>
+  <build/>
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/deprecated/testcase</connection>
+    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/deprecated/testcase</url>
+  </scm>
 </project>

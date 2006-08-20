@@ -22,47 +22,47 @@
     |
     +-->
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <parent>
-        <groupId>org.apache.excalibur.containerkit</groupId>
-        <artifactId>excalibur-containerkit</artifactId>
-        <version>2.2-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
-    <name>Avalon Logkit</name>
-    <artifactId>avalon-logkit</artifactId>
-    <groupId>org.apache.avalon.logkit</groupId>
-    <inceptionYear>1997</inceptionYear>
-    <description>Excalibur's Logkit package</description>
-    <dependencies>
-        <dependency>
-            <artifactId>log4j</artifactId>
-            <groupId>log4j</groupId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <artifactId>servlet-api</artifactId>
-            <groupId>javax.servlet</groupId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <artifactId>geronimo-spec-javamail</artifactId>
-            <groupId>geronimo-spec</groupId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <artifactId>geronimo-spec-jms</artifactId>
-            <groupId>geronimo-spec</groupId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <artifactId>junit</artifactId>
-            <groupId>junit</groupId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-    <build/>
-    <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/containerkit/logkit</connection>
-        <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/containerkit/logkit</url>
-    </scm>
+  <parent>
+    <groupId>org.apache.excalibur.containerkit</groupId>
+    <artifactId>excalibur-containerkit</artifactId>
+    <version>1-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <name>Avalon Logkit</name>
+  <artifactId>avalon-logkit</artifactId>
+  <groupId>org.apache.avalon.logkit</groupId>
+  <inceptionYear>1997</inceptionYear>
+  <description>Excalibur's Logkit package</description>
+  <dependencies>
+    <dependency>
+      <artifactId>log4j</artifactId>
+      <groupId>log4j</groupId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <artifactId>servlet-api</artifactId>
+      <groupId>javax.servlet</groupId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <artifactId>geronimo-spec-javamail</artifactId>
+      <groupId>geronimo-spec</groupId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <artifactId>geronimo-spec-jms</artifactId>
+      <groupId>geronimo-spec</groupId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <artifactId>junit</artifactId>
+      <groupId>junit</groupId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <build/>
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/containerkit/logkit</connection>
+    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/containerkit/logkit</url>
+  </scm>
 </project>

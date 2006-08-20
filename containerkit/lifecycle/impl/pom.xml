@@ -22,36 +22,36 @@
     |
     +-->
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <parent>
-        <groupId>org.apache.excalibur.containerkit.lifecycle</groupId>
-        <artifactId>excalibur-lifecycle</artifactId>
-        <version>2.2-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
-    <name>Excalibur Lifecycle Extension Impl</name>
+  <parent>
     <groupId>org.apache.excalibur.containerkit.lifecycle</groupId>
-    <artifactId>excalibur-lifecycle-impl</artifactId>
-    <description>Excalibur Lifecycle Extension Implementation</description>
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.excalibur.containerkit.lifecycle</groupId>
-            <artifactId>excalibur-lifecycle-api</artifactId>
-            <version>${orgApacheExcaliburContainerkitVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.avalon.framework</groupId>
-            <artifactId>avalon-framework-api</artifactId>
-            <version>${orgApacheAvalonFrameworkVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.avalon.framework</groupId>
-            <artifactId>avalon-framework-impl</artifactId>
-            <version>${orgApacheAvalonFrameworkVersion}</version>
-        </dependency>
-    </dependencies>
-    <build/>
-    <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/containerkit/lifecycle/impl</connection>
-        <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/containerkit/lifecycle/impl</url>
-    </scm>
+    <artifactId>excalibur-lifecycle</artifactId>
+    <version>1-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <name>Excalibur Lifecycle Extension Impl</name>
+  <groupId>org.apache.excalibur.containerkit.lifecycle</groupId>
+  <artifactId>excalibur-lifecycle-impl</artifactId>
+  <description>Excalibur Lifecycle Extension Implementation</description>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.excalibur.containerkit.lifecycle</groupId>
+      <artifactId>excalibur-lifecycle-api</artifactId>
+      <version>${orgApacheExcaliburContainerkitVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.avalon.framework</groupId>
+      <artifactId>avalon-framework-api</artifactId>
+      <version>${orgApacheAvalonFrameworkVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.avalon.framework</groupId>
+      <artifactId>avalon-framework-impl</artifactId>
+      <version>${orgApacheAvalonFrameworkVersion}</version>
+    </dependency>
+  </dependencies>
+  <build/>
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/containerkit/lifecycle/impl</connection>
+    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/containerkit/lifecycle/impl</url>
+  </scm>
 </project>

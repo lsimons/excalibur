@@ -22,25 +22,25 @@
     |
     +-->
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <parent>
-        <groupId>org.apache.excalibur</groupId>
-        <artifactId>excalibur</artifactId>
-        <version>2.2-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
-    <name>Deprecated</name>
-    <groupId>org.apache.excalibur.deprecated</groupId>
-    <artifactId>excalibur-deprecated</artifactId>
-    <version>2.2-SNAPSHOT</version>
-    <packaging>pom</packaging>
-    <modules>
-        <module>event</module>
-        <module>component</module>
-        <module>component-tests</module>
-        <module>testcase</module>
-    </modules>
-    <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/deprecated</connection>
-        <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/deprecated</url>
-    </scm>
+  <parent>
+    <groupId>org.apache.excalibur</groupId>
+    <artifactId>excalibur</artifactId>
+    <version>1-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <name>Deprecated [modules]</name>
+  <groupId>org.apache.excalibur.deprecated</groupId>
+  <artifactId>excalibur-deprecated</artifactId>
+  <version>1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <modules>
+    <module>event</module>
+    <module>component</module>
+    <module>component-tests</module>
+    <module>testcase</module>
+  </modules>
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/deprecated</connection>
+    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/deprecated</url>
+  </scm>
 </project>

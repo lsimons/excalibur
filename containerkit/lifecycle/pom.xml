@@ -22,23 +22,23 @@
     |
     +-->
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <parent>
-        <groupId>org.apache.excalibur.containerkit</groupId>
-        <artifactId>excalibur-containerkit</artifactId>
-        <version>2.2-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
-    <name>Excalibur Lifecycle</name>
-    <groupId>org.apache.excalibur.containerkit.lifecycle</groupId>
-    <artifactId>excalibur-lifecycle</artifactId>
-    <inceptionYear>2002</inceptionYear>
-    <packaging>pom</packaging>
-    <modules>
-        <module>api</module>
-        <module>impl</module>
-    </modules>
-    <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/containerkit/lifecycle</connection>
-        <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/containerkit/lifecycle</url>
-    </scm>
+  <parent>
+    <groupId>org.apache.excalibur.containerkit</groupId>
+    <artifactId>excalibur-containerkit</artifactId>
+    <version>1-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <name>Excalibur Lifecycle</name>
+  <groupId>org.apache.excalibur.containerkit.lifecycle</groupId>
+  <artifactId>excalibur-lifecycle</artifactId>
+  <inceptionYear>2002</inceptionYear>
+  <packaging>pom</packaging>
+  <modules>
+    <module>api</module>
+    <module>impl</module>
+  </modules>
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/containerkit/lifecycle</connection>
+    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/containerkit/lifecycle</url>
+  </scm>
 </project>
