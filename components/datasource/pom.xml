@@ -1,118 +1,124 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Copyright 2004 The Apache Software Foundation
-    Licensed  under the  Apache License,  Version 2.0  (the "License");
-    you may not use  this file  except in  compliance with the License.
-    You may obtain a copy of the License at
-    
-    http://www.apache.org/licenses/LICENSE-2.0
-    
-    Unless required by applicable law or agreed to in writing, software
-    distributed  under the  License is distributed on an "AS IS" BASIS,
-    WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
-    implied.
-    
-    See the License for the specific language governing permissions and
-    limitations under the License.
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+  http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
 -->
-<project>
-    <parent>
-        <groupId>org.apache.excalibur.components</groupId>
-        <artifactId>excalibur-components</artifactId>
-        <version>2.2-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
+<!--+
+  | @version $Id$
+  |
+  +-->
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
     <groupId>org.apache.excalibur.components</groupId>
-    <artifactId>excalibur-datasource</artifactId>
-    <name>Excalibur Datasource</name>
-    <inceptionYear>2003</inceptionYear>
-    <description>
-        Avalon Excalibur's DataSource package allows you to manage pooled connections in one of two ways. You can have
-        the package handle it for you, or you can use a J2EE server's DataSource management. It provides the same kind
-        of access regardless of which method you choose, since they are obtained through Avalon's Component Manager
-        infrastructure.            
-        The DataSource package requires that you load the necessary driver classes at init time, but it will take care
-        of all necessary issues from there.
-    </description>
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.avalon.framework</groupId>
-            <artifactId>avalon-framework-impl</artifactId>
-            <version>${org.apache.avalon.framework.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.avalon.framework</groupId>
-            <artifactId>avalon-framework-api</artifactId>
-            <version>${org.apache.avalon.framework.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.excalibur.testcase</groupId>
-            <artifactId>excalibur-testcase</artifactId>
-            <version>${org.apache.excalibur.deprecated.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.excalibur.components</groupId>
-            <artifactId>excalibur-pool-api</artifactId>
-            <version>${org.apache.excalibur.components.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.excalibur.components</groupId>
-            <artifactId>excalibur-pool-impl</artifactId>
-            <version>${org.apache.excalibur.components.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.excalibur.containerkit.instrument</groupId>
-            <artifactId>excalibur-instrument-api</artifactId>
-            <version>${org.apache.excalibur.containerkit.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.excalibur.containerkit.logger</groupId>
-            <artifactId>excalibur-logger</artifactId>
-            <version>${org.apache.excalibur.containerkit.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.excalibur.components</groupId>
-            <artifactId>excalibur-pool-instrumented</artifactId>
-            <version>${org.apache.excalibur.components.version}</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
+    <artifactId>excalibur-components</artifactId>
+    <version>2.2-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.apache.excalibur.components</groupId>
+  <artifactId>excalibur-datasource</artifactId>
+  <name>Excalibur Datasource</name>
+  <inceptionYear>2003</inceptionYear>
+  <description>
+    Avalon Excalibur's DataSource package allows you to manage pooled connections in one of two ways. You can
+    have the package handle it for you, or you can use a J2EE server's DataSource management. It provides the
+    same kind of access regardless of which method you choose, since they are obtained through Avalon's
+    Component Manager infrastructure. The DataSource package requires that you load the necessary driver
+    classes at init time, but it will take care of all necessary issues from there.
+  </description>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.avalon.framework</groupId>
+      <artifactId>avalon-framework-impl</artifactId>
+      <version>${org.apache.avalon.framework.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.avalon.framework</groupId>
+      <artifactId>avalon-framework-api</artifactId>
+      <version>${org.apache.avalon.framework.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.excalibur.testcase</groupId>
+      <artifactId>excalibur-testcase</artifactId>
+      <version>${org.apache.excalibur.deprecated.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.excalibur.components</groupId>
+      <artifactId>excalibur-pool-api</artifactId>
+      <version>${org.apache.excalibur.components.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.excalibur.components</groupId>
+      <artifactId>excalibur-pool-impl</artifactId>
+      <version>${org.apache.excalibur.components.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.excalibur.containerkit.instrument</groupId>
+      <artifactId>excalibur-instrument-api</artifactId>
+      <version>${org.apache.excalibur.containerkit.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.excalibur.containerkit.logger</groupId>
+      <artifactId>excalibur-logger</artifactId>
+      <version>${org.apache.excalibur.containerkit.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.excalibur.components</groupId>
+      <artifactId>excalibur-pool-instrumented</artifactId>
+      <version>${org.apache.excalibur.components.version}</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
 
-    <build>
-        <sourceDirectory>${basedir}/src/java</sourceDirectory>
-        <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.excalibur.fortress.meta</groupId>
-                <artifactId>maven-fortress-plugin</artifactId>
-                <version>${org.apache.excalibur.fortress.version}</version>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>collect-metainfo</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-    <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/components/datasource</connection>
-        <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/components/datasource</url>
-    </scm>
+  <build>
+    <sourceDirectory>${basedir}/src/java</sourceDirectory>
+    <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.excalibur.fortress.meta</groupId>
+        <artifactId>maven-fortress-plugin</artifactId>
+        <version>${org.apache.excalibur.fortress.version}</version>
+        <executions>
+          <execution>
+            <phase>compile</phase>
+            <goals>
+              <goal>collect-metainfo</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/components/datasource</connection>
+    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/components/datasource</url>
+  </scm>
 </project>
