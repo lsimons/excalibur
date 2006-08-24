@@ -31,6 +31,7 @@
   <groupId>org.apache.avalon.cornerstone.threads</groupId>
   <artifactId>cornerstone-threads-api</artifactId>
   <name>Cornerstone Threads API</name>
+  <version>2.2-SNAPSHOT</version>
   <inceptionYear>2001</inceptionYear>
   <dependencies>
     <dependency>
