@@ -23,6 +23,11 @@
   +-->
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache</groupId>
+    <artifactId>apache</artifactId>
+    <version>3</version>
+  </parent>
   <groupId>org.apache.excalibur</groupId>
   <artifactId>excalibur</artifactId>
   <version>1-SNAPSHOT</version>
@@ -44,72 +49,23 @@
     <orgApacheAvalonCornerstoneVersion>2.2-SNAPSHOT</orgApacheAvalonCornerstoneVersion>
     <orgApacheExcaliburFortressVersion>1.3-SNAPSHOT</orgApacheExcaliburFortressVersion>
   </properties>
-  <repositories>
-<!--repository>
-      <id>maven-snapshot</id>
-      <name>Maven Snapshot Repository</name>
-      <url>http://snapshots.maven.codehaus.org/maven2</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>apache-maven-snapshot</id>
-      <name>Maven Snapshot Repository @ Apache.org</name>
-      <url>http://cvs.apache.org/maven-snapshot-repository</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>apache-cvs</id>
-      <name>Apache CVS Repository</name>
-      <url>http://cvs.apache.org/repository</url>
-      <layout>legacy</layout>
-      <releases>
-        <enabled>true</enabled>
-        <updatePolicy>never</updatePolicy>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-        <updatePolicy>never</updatePolicy>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>d-haven</id>
-      <name>D-Haven.org repository</name>
-      <url>http://dist.d-haven.org</url>
-      <layout>legacy</layout>
-      <releases>
-        <enabled>true</enabled>
-        <updatePolicy>never</updatePolicy>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-        <updatePolicy>never</updatePolicy>
-      </snapshots>
-    </repository-->
-  </repositories>
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/trunk/</connection>
     <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk</url>
   </scm>
   <distributionManagement>
     <repository>
-      <id>apache-maven-snapshot</id>
+      <id>apache-maven</id>
       <name>repository</name>
-      <url>scpexe://cvs.apache.org/x1/www/cvs.apache.org/maven-snapshot-repository</url>
+      <!-- need to point to a staging repo here -->
+      <url>scpexe://people.apache.org/www/people.apache.org/repo/maven-snapshot-repository</url>
+      <!--url>scpexe://people.apache.org/www/people.apache.org/repo/m2-ibiblio-rsync-repository/</url-->
     </repository>
     <snapshotRepository>
       <id>apache-maven-snapshot</id>
       <name>repository</name>
-      <url>scpexe://cvs.apache.org/x1/www/cvs.apache.org/maven-snapshot-repository</url>
+      <url>scpexe://people.apache.org/www/people.apache.org/repo/m2-snapshot-repository</url>
     </snapshotRepository>
   </distributionManagement>
   <build>
@@ -123,20 +79,6 @@
           <source>1.3</source>
           <target>1.3</target>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <configuration>
-          <attach>true</attach>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
