@@ -30,6 +30,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.avalon.cornerstone.connection</groupId>
   <artifactId>cornerstone-connection-api</artifactId>
+  <version>2.2-SNAPSHOT</version>
   <name>Cornerstone Connections API</name>
   <dependencies>
     <dependency>

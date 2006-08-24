@@ -30,6 +30,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.avalon.cornerstone.scheduler</groupId>
   <artifactId>cornerstone-scheduler-api</artifactId>
+  <version>2.2-SNAPSHOT</version>
   <name>Cornerstone Scheduler API</name>
   <dependencies>
     <dependency>

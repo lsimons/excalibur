@@ -49,7 +49,7 @@
       <artifactId>saxon</artifactId>
       <groupId>net.sf.saxon</groupId>
       <scope>provided</scope>
-      <version>8.7</version>
+      <version>7.9.1</version>
     </dependency>
     <dependency>
       <groupId>xml-resolver</groupId>

@@ -57,6 +57,17 @@
       <groupId>d-haven-mpool</groupId>
       <artifactId>managed-pool</artifactId>
       <version>1.0</version>
+      <exclusions>
+        <exclusion>
+          <groupId>event</groupId>
+          <artifactId>event</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>d-haven-event</groupId>
+      <artifactId>event</artifactId>
+      <version>1.0.2</version>
     </dependency>
     <dependency>
       <groupId>org.apache.excalibur.containerkit</groupId>

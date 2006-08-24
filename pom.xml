@@ -44,8 +44,8 @@
     <orgApacheAvalonCornerstoneVersion>2.2-SNAPSHOT</orgApacheAvalonCornerstoneVersion>
     <orgApacheExcaliburFortressVersion>1.3-SNAPSHOT</orgApacheExcaliburFortressVersion>
   </properties>
-<!-- repositories>
-    <repository>
+<repositories>
+    <!--repository>
       <id>maven-snapshot</id>
       <name>Maven Snapshot Repository</name>
       <url>http://snapshots.maven.codehaus.org/maven2</url>
@@ -94,8 +94,8 @@
         <enabled>false</enabled>
         <updatePolicy>never</updatePolicy>
       </snapshots>
-    </repository>
-  </repositories-->
+    </repository-->
+  </repositories>
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/</connection>
     <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk</url>
