@@ -31,6 +31,7 @@
   <groupId>org.apache.avalon.cornerstone.connection</groupId>
   <artifactId>cornerstone-connection-impl</artifactId>
   <name>Cornerstone Connections Implementation</name>
+  <version>2.2-SNAPSHOT</version>
   <dependencies>
     <dependency>
       <groupId>org.apache.avalon.cornerstone.connection</groupId>
