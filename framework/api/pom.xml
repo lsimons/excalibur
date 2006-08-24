@@ -38,6 +38,7 @@
       <groupId>org.apache.avalon.logkit</groupId>
       <artifactId>avalon-logkit</artifactId>
       <version>${orgApacheExcaliburContainerkitVersion}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <artifactId>junit</artifactId>
