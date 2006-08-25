@@ -1,16 +1,16 @@
-/* 
+/*
  * Copyright 2002-2004 The Apache Software Foundation
  * Licensed  under the  Apache License,  Version 2.0  (the "License");
  * you may not use  this file  except in  compliance with the License.
- * You may obtain a copy of the License at 
- * 
+ * You may obtain a copy of the License at
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed  under the  License is distributed on an "AS IS" BASIS,
  * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
  * implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -93,7 +93,7 @@ import org.xml.sax.ext.LexicalHandler;
  */
 public final class JaxpParser
     extends AbstractLogEnabled
-    implements SAXParser, DOMParser, 
+    implements SAXParser, DOMParser,
                 Poolable, Component, Parameterizable, Serviceable, Disposable, ErrorHandler
 {
     /** the SAX Parser factory */
@@ -133,7 +133,7 @@ public final class JaxpParser
 
     /** The serviec manager */
     private ServiceManager m_manager;
-    
+
     /**
      * Get the Entity Resolver from the component m_manager
      *
@@ -143,7 +143,7 @@ public final class JaxpParser
         throws ServiceException
     {
         m_manager = manager;
-        
+
         if( manager.hasService( EntityResolver.ROLE ) )
         {
             if ( m_resolverHint != null )
@@ -156,7 +156,7 @@ public final class JaxpParser
                 // use default resolver
                 m_resolver = (EntityResolver)manager.lookup( EntityResolver.ROLE );
             }
-    
+
             if( getLogger().isDebugEnabled() )
             {
                 getLogger().debug( "JaxpParser: Using EntityResolver: " + m_resolver );
@@ -167,7 +167,7 @@ public final class JaxpParser
     /* (non-Javadoc)
      * @see org.apache.avalon.framework.activity.Disposable#dispose()
      */
-    public void dispose() 
+    public void dispose()
     {
         if ( m_manager != null )
         {
@@ -280,11 +280,11 @@ public final class JaxpParser
         try
         {
             LexicalHandler theLexicalHandler = null;
-            if ( null == lexicalHandler 
+            if ( null == lexicalHandler
                  && contentHandler instanceof LexicalHandler)
             {
                 theLexicalHandler = (LexicalHandler)contentHandler;
-            }   
+            }
             if( null != lexicalHandler )
             {
                 theLexicalHandler = lexicalHandler;
@@ -331,7 +331,7 @@ public final class JaxpParser
     public void parse( InputSource in, ContentHandler consumer )
         throws SAXException, IOException
     {
-        this.parse( in, consumer, 
+        this.parse( in, consumer,
                     (consumer instanceof LexicalHandler ? (LexicalHandler)consumer : null));
     }
 
@@ -353,9 +353,9 @@ public final class JaxpParser
                 final String message = "Cannot produce a valid parser";
                 throw new SAXException( message, pce );
             }
-            
+
             m_reader.setFeature( "http://xml.org/sax/features/namespaces", true );
-            
+
             if( m_nsPrefixes )
             {
                 try
