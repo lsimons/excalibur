@@ -51,7 +51,7 @@
   </properties>
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/trunk/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/trunk/</developerConnection>
     <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk</url>
   </scm>
   <distributionManagement>
@@ -135,7 +135,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-eclipse-plugin</artifactId>
         <configuration>
-<!--
+          <!--
             This will avoid Maven and Eclipse sharing each-others generated classes
             since they use different compilers. 
             Make sure to ignore eclipse-classes for SCM checkin/diff in Eclipse: 
@@ -148,10 +148,10 @@
           <buildcommands>
             <buildcommand>org.eclipse.jdt.core.javabuilder</buildcommand>
           </buildcommands>
-<!--
-            <projectnatures>
+          <!--
+          <projectnatures>
             <projectnature>org.eclipse.jdt.core.javanature</projectnature>
-            </projectnatures>
+          </projectnatures>
           -->
         </configuration>
         <executions>
