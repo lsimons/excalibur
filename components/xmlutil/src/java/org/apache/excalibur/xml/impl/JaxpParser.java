@@ -317,6 +317,17 @@ public final class JaxpParser
         // Here, parsing was successful : restore reader
         if( m_reuseParsers )
         {
+            try
+            {
+                tmpReader.setProperty( "http://xml.org/sax/properties/lexical-handler",
+                                       null );
+            }
+            catch( final SAXException e )
+            {
+                // Already Logged
+            }
+            tmpReader.setContentHandler( null );
+
             m_reader = tmpReader;
         }
     }
