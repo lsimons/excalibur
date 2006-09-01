@@ -44,6 +44,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.ext.LexicalHandler;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * An XMLParser that is only dependant on JAXP 1.1 compliant parsers.
@@ -96,6 +97,8 @@ public final class JaxpParser
     implements SAXParser, DOMParser,
                 Poolable, Component, Parameterizable, Serviceable, Disposable, ErrorHandler
 {
+    private static final ContentHandler NULL = new DefaultHandler();
+
     /** the SAX Parser factory */
     private SAXParserFactory m_factory;
 
@@ -326,7 +329,7 @@ public final class JaxpParser
             {
                 // Already Logged
             }
-            tmpReader.setContentHandler( null );
+            tmpReader.setContentHandler( NULL );
 
             m_reader = tmpReader;
         }
