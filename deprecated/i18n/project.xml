@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- 
  Copyright 2004 The Apache Software Foundation
  Licensed  under the  Apache License,  Version 2.0  (the "License");
@@ -16,16 +16,12 @@
  limitations under the License.
 -->
 <project>
-  <extend>${basedir}/../buildsystem/project-common.xml</extend>
+  <extend>${basedir}/../project-common.xml</extend>
 
-  <id>excalibur-i18n</id>
   <name>Excalibur I18N</name>
+  <id>excalibur-i18n</id>
+  <groupId>excalibur-i18n</groupId>
   <package>org.apache.avalon.excalibur.i18n</package>
-  <currentVersion>1.2.0-RC1</currentVersion>
-
-  <inceptionYear>2002</inceptionYear>
-  <shortDescription>
-    Internationalization utility for Avalon.
-  </shortDescription>
-
+  <shortDescription>Internationalization utility for Excalibur.</shortDescription>
+  <description>Excalibur I18N</description>
 </project>
