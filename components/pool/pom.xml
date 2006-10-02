@@ -2,12 +2,12 @@
   <parent>
     <groupId>org.apache.excalibur.components</groupId>
     <artifactId>excalibur-components-modules</artifactId>
-    <version>1-SNAPSHOT</version>
+    <version>2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.excalibur.components</groupId>
   <artifactId>excalibur-pool-modules</artifactId>
-  <version>1-SNAPSHOT</version>
+  <version>2-SNAPSHOT</version>
   <name>Excalibur Pool [modules]</name>
   <packaging>pom</packaging>
   <modules>

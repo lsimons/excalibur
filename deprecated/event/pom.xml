@@ -2,13 +2,13 @@
   <parent>
     <groupId>org.apache.excalibur.deprecated</groupId>
     <artifactId>excalibur-deprecated-modules</artifactId>
-    <version>1-SNAPSHOT</version>
+    <version>2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>Event</name>
   <groupId>org.apache.excalibur.event</groupId>
   <artifactId>excalibur-event-modules</artifactId>
-  <version>1-SNAPSHOT</version>
+  <version>2-SNAPSHOT</version>
   <packaging>pom</packaging>
   <modules>
     <module>api</module>

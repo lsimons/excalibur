@@ -2,13 +2,13 @@
   <parent>
     <groupId>org.apache.avalon</groupId>
     <artifactId>avalon-framework</artifactId>
-    <version>1-SNAPSHOT</version>
+    <version>2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>Avalon Framework Implementation</name>
   <groupId>org.apache.avalon.framework</groupId>
   <artifactId>avalon-framework-impl</artifactId>
-  <version>4.4.1-SNAPSHOT</version>
+  <version>4.4.2-SNAPSHOT</version>
   <description>Avalon Framework Implementation</description>
   <dependencies>
     <dependency>
