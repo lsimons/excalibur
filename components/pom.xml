@@ -2,12 +2,12 @@
   <parent>
     <groupId>org.apache.excalibur</groupId>
     <artifactId>excalibur</artifactId>
-    <version>1</version>
+    <version>2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.excalibur.components</groupId>
   <artifactId>excalibur-components-modules</artifactId>
-  <version>1</version>
+  <version>2-SNAPSHOT</version>
   <name>Excalibur Components [modules]</name>
   <packaging>pom</packaging>
   <modules>
@@ -20,8 +20,8 @@
     <module>datasource</module>
   </modules>
   <scm>
-    <connection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-1</connection>
-    <url>https://svn.apache.org/repos/asf/excalibur/tags/excalibur-1</url>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-1</developerConnection>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/components</connection>
+    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/components</url>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/trunk/excalibur-components-modules</developerConnection>
   </scm>
 </project>

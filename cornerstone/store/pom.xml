@@ -2,7 +2,7 @@
   <parent>
     <groupId>org.apache.avalon.cornerstone</groupId>
     <artifactId>avalon-cornerstone-modules</artifactId>
-    <version>1</version>
+    <version>2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.avalon.cornerstone.store</groupId>
@@ -14,8 +14,8 @@
     <module>impl</module>
   </modules>
   <scm>
-    <connection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-1</connection>
-    <url>https://svn.apache.org/repos/asf/excalibur/tags/excalibur-1</url>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-1</developerConnection>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/cornerstone/store</connection>
+    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/cornerstone/store</url>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/trunk/avalon-cornerstone-modules/cornerstone-store</developerConnection>
   </scm>
 </project>

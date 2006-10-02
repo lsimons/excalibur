@@ -2,13 +2,13 @@
   <parent>
     <groupId>org.apache.excalibur.event</groupId>
     <artifactId>excalibur-event-modules</artifactId>
-    <version>1</version>
+    <version>2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>Excalibur Event API</name>
   <artifactId>excalibur-event-api</artifactId>
   <groupId>org.apache.excalibur.event</groupId>
-  <version>2.2.1</version>
+  <version>2.2.2-SNAPSHOT</version>
   <description>Excalibur Event API</description>
   <dependencies>
     <dependency>
@@ -19,8 +19,8 @@
   </dependencies>
   <build />
   <scm>
-    <connection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-1</connection>
-    <url>https://svn.apache.org/repos/asf/excalibur/tags/excalibur-1</url>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-1</developerConnection>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/deprecated/event/api</connection>
+    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/deprecated/event/api</url>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/trunk/excalibur-deprecated-modules/excalibur-event-modules/excalibur-event-api</developerConnection>
   </scm>
 </project>

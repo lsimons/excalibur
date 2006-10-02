@@ -2,12 +2,12 @@
   <parent>
     <groupId>org.apache.excalibur.components</groupId>
     <artifactId>excalibur-thread-modules</artifactId>
-    <version>1</version>
+    <version>2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.excalibur.components</groupId>
   <artifactId>excalibur-thread-instrumented</artifactId>
-  <version>2.2.1</version>
+  <version>2.2.2-SNAPSHOT</version>
   <name>Excalibur Threads Instrumented Implementation</name>
   <inceptionYear>2001</inceptionYear>
   <description>Excalibur Threads Instrumented Implementation</description>
@@ -61,8 +61,8 @@
   </dependencies>
   <build />
   <scm>
-    <connection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-1</connection>
-    <url>https://svn.apache.org/repos/asf/excalibur/tags/excalibur-1</url>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-1</developerConnection>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/components/thread/instrumented</connection>
+    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/components/thread/instrumented</url>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/trunk/excalibur-components-modules/excalibur-thread-modules/excalibur-thread-instrumented</developerConnection>
   </scm>
 </project>

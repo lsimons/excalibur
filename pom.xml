@@ -7,7 +7,7 @@
   </parent>
   <groupId>org.apache.excalibur</groupId>
   <artifactId>excalibur</artifactId>
-  <version>1</version>
+  <version>2-SNAPSHOT</version>
   <name>Excalibur</name>
   <packaging>pom</packaging>
   <modules>
@@ -19,9 +19,9 @@
     <module>cornerstone</module>
   </modules>
   <scm>
-    <connection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-1</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-1</developerConnection>
-    <url>https://svn.apache.org/repos/asf/excalibur/tags/excalibur-1</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/trunk/</developerConnection>
+    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk</url>
   </scm>
   <distributionManagement>
     <repository>
