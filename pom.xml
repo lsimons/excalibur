@@ -2,13 +2,13 @@
   <parent>
     <groupId>org.apache.avalon.cornerstone.connection</groupId>
     <artifactId>cornerstone-connection</artifactId>
-    <version>1</version>
+    <version>2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.avalon.cornerstone.connection</groupId>
   <artifactId>cornerstone-connection-impl</artifactId>
   <name>Cornerstone Connections Implementation</name>
-  <version>2.2.1</version>
+  <version>2.2.2-SNAPSHOT</version>
   <dependencies>
     <dependency>
       <groupId>org.apache.avalon.cornerstone.connection</groupId>
@@ -80,8 +80,8 @@
   </dependencies>
   <build />
   <scm>
-    <connection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-1</connection>
-    <url>https://svn.apache.org/repos/asf/excalibur/tags/excalibur-1</url>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-1</developerConnection>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/cornerstone/connection/impl</connection>
+    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/cornerstone/connection/impl</url>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/trunk/avalon-cornerstone-modules/cornerstone-connection/cornerstone-connection-impl</developerConnection>
   </scm>
 </project>
