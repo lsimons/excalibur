@@ -15,6 +15,7 @@
     <module>component</module>
     <module>component-tests</module>
     <module>testcase</module>
+    <module>i18n</module>
   </modules>
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/deprecated</connection>
