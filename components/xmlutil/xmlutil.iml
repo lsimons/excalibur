@@ -11,6 +11,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="framework" />
+    <orderEntry type="module" module-name="pool" />
+    <orderEntry type="module" module-name="testcase" />
     <orderEntryProperties />
   </component>
 </module>
