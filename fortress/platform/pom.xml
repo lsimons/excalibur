@@ -8,7 +8,7 @@
   <name>Excalibur Fortress Platform</name>
   <artifactId>excalibur-fortress-platform</artifactId>
   <groupId>org.apache.excalibur.fortress.platform</groupId>
-  <version>1.3.2-SNAPSHOT</version>
+  <version>1.3.1-SNAPSHOT</version>
   <description>
         A generic, modular kernel that can run multiple instances of Avalon-Fortress-Container-based containers.
     </description>
@@ -16,7 +16,7 @@
     <dependency>
       <groupId>org.apache.excalibur.fortress.container</groupId>
       <artifactId>excalibur-fortress-container-impl</artifactId>
-      <version>1.3.1</version>
+      <version>1.3.1-SNAPSHOT</version>
     </dependency>
   </dependencies>
   <build />
