@@ -43,13 +43,6 @@
     <module>deprecated</module>
     <module>cornerstone</module>
   </modules>
-  <properties>
-    <orgApacheExcaliburComponentsVersion>2.2-SNAPSHOT</orgApacheExcaliburComponentsVersion>
-    <orgApacheExcaliburDeprecatedVersion>2.2-SNAPSHOT</orgApacheExcaliburDeprecatedVersion>
-    <orgApacheExcaliburContainerkitVersion>2.2-SNAPSHOT</orgApacheExcaliburContainerkitVersion>
-    <orgApacheAvalonCornerstoneVersion>2.2-SNAPSHOT</orgApacheAvalonCornerstoneVersion>
-    <orgApacheExcaliburFortressVersion>1.3-SNAPSHOT</orgApacheExcaliburFortressVersion>
-  </properties>
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/</connection>
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/trunk/</developerConnection>

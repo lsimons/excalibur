@@ -84,7 +84,7 @@
       <plugin>
         <groupId>org.apache.excalibur.fortress.meta</groupId>
         <artifactId>maven-fortress-plugin</artifactId>
-        <version>${orgApacheExcaliburFortressVersion}</version>
+        <version>1.3-SNAPSHOT</version>
         <executions>
           <execution>
             <phase>compile</phase>
