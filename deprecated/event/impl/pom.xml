@@ -14,12 +14,12 @@
     <dependency>
       <groupId>org.apache.avalon.framework</groupId>
       <artifactId>avalon-framework-api</artifactId>
-      <version>4.4.1</version>
+      <version>4.3.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.excalibur.event</groupId>
       <artifactId>excalibur-event-api</artifactId>
-      <version>2.2.1</version>
+      <version>2.2.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>commons-collections</groupId>
@@ -34,22 +34,22 @@
     <dependency>
       <groupId>org.apache.excalibur.containerkit</groupId>
       <artifactId>excalibur-logger</artifactId>
-      <version>2.2.1</version>
+      <version>2.2.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.avalon.logkit</groupId>
       <artifactId>avalon-logkit</artifactId>
-      <version>2.2.1</version>
+      <version>2.2.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.excalibur.containerkit</groupId>
       <artifactId>excalibur-logger</artifactId>
-      <version>2.2.1-SNAPSHOT</version>
+      <version>2.2.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.excalibur.components</groupId>
       <artifactId>excalibur-pool-api</artifactId>
-      <version>2.2.1</version>
+      <version>2.2.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -60,7 +60,7 @@
     <dependency>
       <groupId>org.apache.excalibur.components</groupId>
       <artifactId>excalibur-pool-impl</artifactId>
-      <version>2.2.1</version>
+      <version>2.2.2-SNAPSHOT</version>
     </dependency>
   </dependencies>
   <build />
