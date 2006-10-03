@@ -2,13 +2,13 @@
   <parent>
     <groupId>org.apache.excalibur.fortress</groupId>
     <artifactId>excalibur-fortress-modules</artifactId>
-    <version>2-SNAPSHOT</version>
+    <version>1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>Excalibur Fortress Container Implementation Test</name>
   <groupId>org.apache.excalibur.fortress.container</groupId>
   <artifactId>excalibur-fortress-container-test</artifactId>
-  <version>1.3.2-SNAPSHOT</version>
+  <version>1.3.1-SNAPSHOT</version>
   <description>
         Fortress contains a framework to help you create your own avalon containers. It boasts asynchronous management
         of your component instances, high scalability, easier maintenance of your code, and easy embedding into various
