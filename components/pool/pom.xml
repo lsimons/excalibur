@@ -2,12 +2,12 @@
   <parent>
     <groupId>org.apache.excalibur.components</groupId>
     <artifactId>excalibur-components-modules</artifactId>
-    <version>1-SNAPSHOT</version>
+    <version>1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.excalibur.components</groupId>
   <artifactId>excalibur-pool-modules</artifactId>
-  <version>1-SNAPSHOT</version>
+  <version>1</version>
   <name>Excalibur Pool [modules]</name>
   <packaging>pom</packaging>
   <modules>
@@ -16,8 +16,8 @@
     <module>instrumented</module>
   </modules>
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/components/pool</connection>
-    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/components/pool</url>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/trunk/excalibur-components-modules/excalibur-pool-modules</developerConnection>
+    <connection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</connection>
+    <url>https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</url>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</developerConnection>
   </scm>
 </project>

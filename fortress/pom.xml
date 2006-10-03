@@ -2,12 +2,12 @@
   <parent>
     <groupId>org.apache.excalibur</groupId>
     <artifactId>excalibur</artifactId>
-    <version>1-SNAPSHOT</version>
+    <version>1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.excalibur.fortress</groupId>
   <artifactId>excalibur-fortress-modules</artifactId>
-  <version>1-SNAPSHOT</version>
+  <version>1</version>
   <inceptionYear>2003</inceptionYear>
   <name>Excalibur Fortress [modules]</name>
   <packaging>pom</packaging>
@@ -24,8 +24,8 @@
     <module>bean</module>
   </modules>
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/fortress</connection>
-    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/fortress</url>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/trunk/excalibur-fortress-modules</developerConnection>
+    <connection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</connection>
+    <url>https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</url>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</developerConnection>
   </scm>
 </project>
