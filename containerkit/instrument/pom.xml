@@ -2,7 +2,7 @@
   <parent>
     <groupId>org.apache.excalibur.containerkit</groupId>
     <artifactId>excalibur-containerkit</artifactId>
-    <version>1</version>
+    <version>2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>Excalibur Instrument</name>
@@ -24,8 +24,8 @@
     <module>mgr-impl</module>
   </modules>
   <scm>
-    <connection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</connection>
-    <url>https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</url>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</developerConnection>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/containerkit/instrument</connection>
+    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/containerkit/instrument</url>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/trunk/excalibur-containerkit/excalibur-instrument-modules</developerConnection>
   </scm>
 </project>

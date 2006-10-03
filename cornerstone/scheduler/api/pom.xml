@@ -2,12 +2,12 @@
   <parent>
     <groupId>org.apache.avalon.cornerstone.scheduler</groupId>
     <artifactId>cornerstone-scheduler</artifactId>
-    <version>1</version>
+    <version>2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.avalon.cornerstone.scheduler</groupId>
   <artifactId>cornerstone-scheduler-api</artifactId>
-  <version>2.2.1</version>
+  <version>2.2.2-SNAPSHOT</version>
   <name>Cornerstone Scheduler API</name>
   <dependencies>
     <dependency>
@@ -30,8 +30,8 @@
   </dependencies>
   <build />
   <scm>
-    <connection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</connection>
-    <url>https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</url>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</developerConnection>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/cornerstone/scheduler/api</connection>
+    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/cornerstone/scheduler/api</url>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/trunk/avalon-cornerstone-modules/cornerstone-scheduler/cornerstone-scheduler-api</developerConnection>
   </scm>
 </project>

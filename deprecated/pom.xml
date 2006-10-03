@@ -2,13 +2,13 @@
   <parent>
     <groupId>org.apache.excalibur</groupId>
     <artifactId>excalibur</artifactId>
-    <version>1</version>
+    <version>2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>Deprecated [modules]</name>
   <groupId>org.apache.excalibur.deprecated</groupId>
   <artifactId>excalibur-deprecated-modules</artifactId>
-  <version>1</version>
+  <version>2-SNAPSHOT</version>
   <packaging>pom</packaging>
   <modules>
     <module>event</module>
@@ -17,8 +17,8 @@
     <module>testcase</module>
   </modules>
   <scm>
-    <connection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</connection>
-    <url>https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</url>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</developerConnection>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/deprecated</connection>
+    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/deprecated</url>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/trunk/excalibur-deprecated-modules</developerConnection>
   </scm>
 </project>
