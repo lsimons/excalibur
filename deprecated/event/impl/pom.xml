@@ -42,11 +42,6 @@
       <version>2.2.1</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.excalibur.containerkit</groupId>
-      <artifactId>excalibur-logger</artifactId>
-      <version>2.2.1-SNAPSHOT</version>
-    </dependency>
-    <dependency>
       <groupId>org.apache.excalibur.components</groupId>
       <artifactId>excalibur-pool-api</artifactId>
       <version>2.2.1</version>
