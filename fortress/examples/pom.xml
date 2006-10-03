@@ -2,13 +2,13 @@
   <parent>
     <groupId>org.apache.excalibur.fortress</groupId>
     <artifactId>excalibur-fortress-modules</artifactId>
-    <version>1-SNAPSHOT</version>
+    <version>1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>Excalibur Fortress Examples</name>
   <groupId>org.apache.excalibur.fortress.examples</groupId>
   <artifactId>excalibur-fortress-examples</artifactId>
-  <version>1.3.1-SNAPSHOT</version>
+  <version>1.3.1</version>
   <description>
         Fortress contains a framework to help you create your own avalon containers. It boasts asynchronous management
         of your component instances, high scalability, easier maintenance of your code, and easy embedding into various
@@ -18,7 +18,7 @@
     <dependency>
       <groupId>org.apache.excalibur.fortress.container</groupId>
       <artifactId>excalibur-fortress-container-impl</artifactId>
-      <version>1.3.1-SNAPSHOT</version>
+      <version>1.3.1</version>
     </dependency>
     <dependency>
       <artifactId>servlet-api</artifactId>
@@ -29,8 +29,8 @@
   </dependencies>
   <build />
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/fortress/examples</connection>
-    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/fortress/examples</url>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/trunk/excalibur-fortress-modules/excalibur-fortress-examples</developerConnection>
+    <connection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</connection>
+    <url>https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</url>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</developerConnection>
   </scm>
 </project>

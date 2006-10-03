@@ -2,19 +2,19 @@
   <parent>
     <groupId>org.apache.excalibur.fortress</groupId>
     <artifactId>excalibur-fortress-modules</artifactId>
-    <version>1-SNAPSHOT</version>
+    <version>1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>Excalibur Fortress Meta Generator</name>
   <groupId>org.apache.excalibur.fortress.meta</groupId>
   <artifactId>excalibur-fortress-meta</artifactId>
   <description>Excalibur Fortress Meta Generation</description>
-  <version>1.3.1-SNAPSHOT</version>
+  <version>1.3.1</version>
   <dependencies>
     <dependency>
       <groupId>org.apache.excalibur.fortress.container</groupId>
       <artifactId>excalibur-fortress-container-api</artifactId>
-      <version>1.3.1-SNAPSHOT</version>
+      <version>1.3.1</version>
     </dependency>
     <dependency>
       <groupId>generama</groupId>
@@ -43,8 +43,8 @@
     <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
   </build>
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/fortress/meta</connection>
-    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/fortress/meta</url>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/trunk/excalibur-fortress-modules/excalibur-fortress-meta</developerConnection>
+    <connection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</connection>
+    <url>https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</url>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</developerConnection>
   </scm>
 </project>

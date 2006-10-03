@@ -2,12 +2,12 @@
   <parent>
     <groupId>org.apache.excalibur.fortress</groupId>
     <artifactId>excalibur-fortress-modules</artifactId>
-    <version>1-SNAPSHOT</version>
+    <version>1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.excalibur.fortress.meta</groupId>
   <artifactId>maven-fortress-plugin</artifactId>
-  <version>1.3.1-SNAPSHOT</version>
+  <version>1.3.1</version>
   <name>Maven Fortress Plugin</name>
   <description>Maven Fortress Plugin</description>
   <packaging>maven-plugin</packaging>
@@ -25,7 +25,7 @@
     <dependency>
       <groupId>org.apache.excalibur.fortress.meta</groupId>
       <artifactId>excalibur-fortress-meta</artifactId>
-      <version>1.3.1-SNAPSHOT</version>
+      <version>1.3.1</version>
     </dependency>
   </dependencies>
   <build>
@@ -33,8 +33,8 @@
     <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
   </build>
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/fortress/plugin</connection>
-    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/fortress/plugin</url>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/trunk/excalibur-fortress-modules/maven-fortress-plugin</developerConnection>
+    <connection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</connection>
+    <url>https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</url>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</developerConnection>
   </scm>
 </project>
