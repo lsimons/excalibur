@@ -8,7 +8,7 @@
   <name>Avalon Framework API</name>
   <groupId>org.apache.avalon.framework</groupId>
   <artifactId>avalon-framework-api</artifactId>
-  <version>4.4.1</version>
+  <version>4.3.1</version>
   <description>Avalon Framework API</description>
   <dependencies>
     <dependency>
