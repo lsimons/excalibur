@@ -57,11 +57,6 @@
       <scope>test</scope>
       <version>3.8.2</version>
     </dependency>
-    <dependency>
-      <groupId>org.apache.excalibur.components</groupId>
-      <artifactId>excalibur-pool-impl</artifactId>
-      <version>2.2.2-SNAPSHOT</version>
-    </dependency>
   </dependencies>
   <build />
   <scm>
