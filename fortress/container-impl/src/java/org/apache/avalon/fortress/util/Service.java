@@ -24,6 +24,8 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.*;
 
+import org.apache.avalon.framework.logger.Logger;
+
 /**
  * This class handles looking up service providers on the class path.
  * It implements the system described in:
@@ -71,10 +73,13 @@ public final class Service
      *
      * @param klass  the interface <code>Class</code>
      * @param loader  the <code>ClassLoader to be used.</code>
+     * @param logger  logger to use if any problems are encountered.
      *
      * @return an <code>Iterator</code> for the providers.
      */
-    public static synchronized Iterator providers( final Class klass, ClassLoader loader )
+    public static synchronized Iterator providers( final Class klass,
+                                                   ClassLoader loader,
+                                                   Logger logger )
     {
         final String serviceFile = SERVICES + klass.getName();
 
@@ -131,7 +136,25 @@ public final class Service
                                 if ( line.length() > 0 )
                                 {
                                     // We just want the types, not the instances
-                                    providerSet.add( loader.loadClass( line ) );
+                                    try
+                                    {
+                                        providerSet.add( loader.loadClass( line ) );
+                                    }
+                                    catch ( NoClassDefFoundError e )
+                                    {
+                                        if ( logger != null )
+                                        {
+                                            // Use a child logger so the messages can be filtered.
+                                            logger.getChildLogger( "service").warn(
+                                                "Unable to load and register implementation class '"
+                                                + line + "' for role '" + klass.getName() + "' "
+                                                + "cause: " + e );
+                                        }
+                                        else
+                                        {
+                                            throw e;
+                                        }
+                                    }
                                 }
                             }
                             catch ( Exception e )
@@ -151,6 +174,19 @@ public final class Service
         }
 
         return providerSet.iterator();
+    }
+
+    /**
+     * Get all the providers for the specified services.
+     *
+     * @param klass  the interface <code>Class</code>
+     * @param loader  the <code>ClassLoader to be used.</code>
+     *
+     * @return an <code>Iterator</code> for the providers.
+     */
+    public static synchronized Iterator providers( final Class klass, ClassLoader loader )
+    {
+        return providers( klass, loader, null );
     }
 
     /**
