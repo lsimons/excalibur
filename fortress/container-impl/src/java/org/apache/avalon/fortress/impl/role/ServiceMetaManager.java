@@ -164,7 +164,8 @@ public final class ServiceMetaManager extends AbstractMetaInfoManager implements
     private void setupImplementations( final String role )
         throws ClassNotFoundException
     {
-        final Iterator it = Service.providers( getLoader().loadClass( role ), getLoader() );
+        final Iterator it =
+            Service.providers( getLoader().loadClass( role ), getLoader(), getLogger() );
 
         while ( it.hasNext() )
         {
