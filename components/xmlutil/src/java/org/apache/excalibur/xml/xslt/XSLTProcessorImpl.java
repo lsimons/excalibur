@@ -127,6 +127,9 @@ public class XSLTProcessorImpl
     /** The ServiceManager */
     protected ServiceManager m_manager;
     
+    /** Hold the System ID of the main/base stylesheet */
+    private String m_id;
+    
     /**
      * Compose. Try to get the store
      *
@@ -240,13 +243,13 @@ public class XSLTProcessorImpl
     {
         try
         {
-            final String id = stylesheet.getURI();
-            TransformerHandlerAndValidity handlerAndValidity = getTemplates( stylesheet, id );
+            m_id = stylesheet.getURI();
+            TransformerHandlerAndValidity handlerAndValidity = getTemplates( stylesheet, m_id );
             if( null == handlerAndValidity )
             {
                 if( getLogger().isDebugEnabled() )
                 {
-                    getLogger().debug( "Creating new Templates for " + id );
+                    getLogger().debug( "Creating new Templates for " + m_id );
                 }
 
                 // Create a Templates ContentHandler to handle parsing of the
@@ -256,7 +259,7 @@ public class XSLTProcessorImpl
                 // Set the system ID for the template handler since some
                 // TrAX implementations (XSLTC) rely on this in order to obtain
                 // a meaningful identifier for the Templates instances.
-                templatesHandler.setSystemId( id );
+                templatesHandler.setSystemId( m_id );
                 if( filter != null )
                 {
                     filter.setContentHandler( templatesHandler );
@@ -272,9 +275,12 @@ public class XSLTProcessorImpl
                 SourceValidity validity = stylesheet.getValidity();
                 if( validity != null && m_checkIncludes)
                 {
-                    m_includesMap.put( id, new ArrayList() );
+                    m_includesMap.put( m_id, new ArrayList() );
                 }
-
+                
+                
+//              from here must go recursive!!
+                
                 try
                 {
                     // Process the stylesheet.
@@ -292,7 +298,7 @@ public class XSLTProcessorImpl
                             + stylesheet.getURI() );
                     }
 
-                    putTemplates( template, stylesheet, id );
+                    putTemplates( template, stylesheet, m_id );
 
                     // Create transformer handler
                     final TransformerHandler handler = m_factory.newTransformerHandler( template );
@@ -301,9 +307,13 @@ public class XSLTProcessorImpl
 
                     // Create aggregated validity
                     AggregatedValidity aggregated = null;
+                    
+
+                    
                     if( validity != null && m_checkIncludes)
+                    	
                     {
-                        List includes = (List)m_includesMap.get( id );
+                        List includes = (List)m_includesMap.get( m_id );
                         if( includes != null )
                         {
                             aggregated = new AggregatedValidity();
@@ -321,14 +331,14 @@ public class XSLTProcessorImpl
                 }
                 finally
                 {
-                    if ( m_checkIncludes ) m_includesMap.remove( id );
+                    if ( m_checkIncludes ) m_includesMap.remove( m_id );
                 }
             }
             else
             {
                 if( getLogger().isDebugEnabled() )
                 {
-                    getLogger().debug( "Reusing Templates for " + id );
+                    getLogger().debug( "Reusing Templates for " + m_id );
                 }
             }
 
@@ -659,7 +669,6 @@ public class XSLTProcessorImpl
             getLogger().debug( "resolve(href = " + href +
                                ", base = " + base + "); resolver = " + m_resolver );
         }
-
         Source xslSource = null;
         try
         {
@@ -708,7 +717,8 @@ public class XSLTProcessorImpl
 
             if ( m_checkIncludes ) {
                 // Populate included validities
-                List includes = (List)m_includesMap.get( base );
+            	List includes = (List)m_includesMap.get( m_id );
+            	
                 if( includes != null )
                 {
                     SourceValidity included = xslSource.getValidity();
@@ -719,7 +729,7 @@ public class XSLTProcessorImpl
                     else
                     {
                         // One of the included stylesheets is not cacheable
-                        m_includesMap.remove( base );
+                        m_includesMap.remove( m_id );
                     }
                 }
             }
