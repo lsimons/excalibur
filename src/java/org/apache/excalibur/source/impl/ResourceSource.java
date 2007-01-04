@@ -73,20 +73,38 @@ public final class ResourceSource
             return;
         }
         
-        URLConnection connection;
+        URLConnection connection = null;
         try
         {
-            connection = m_location.openConnection();
+            try
+            {
+                connection = m_location.openConnection();
+            }
+            catch(IOException ioe)
+            {
+                // Exists but unable to open it??
+                return;
+            }
+    
+            setLastModified(connection.getLastModified());
+            setContentLength(connection.getContentLength());
+            m_mimeType = connection.getContentType();
         }
-        catch(IOException ioe)
+        finally
         {
-            // Exists but unable to open it??
-            return;
+            // we close the connection, see EXLBR-32
+            if ( connection != null )
+            {
+                try
+                {
+                    connection.getInputStream().close();
+                }
+                catch (IOException e)
+                {
+                    // ignore
+                }
+            }
         }
-
-        setLastModified(connection.getLastModified());
-        setContentLength(connection.getContentLength());
-        m_mimeType = connection.getContentType();
     }
     
     public String getMimeType()
