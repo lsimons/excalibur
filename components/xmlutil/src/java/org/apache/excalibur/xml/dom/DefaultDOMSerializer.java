@@ -23,7 +23,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXResult;
 
-import org.apache.avalon.framework.component.Component;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.w3c.dom.Document;
 import org.xml.sax.ContentHandler;
@@ -36,7 +35,7 @@ import org.xml.sax.ext.LexicalHandler;
  */
 public class DefaultDOMSerializer
     extends AbstractLogEnabled
-    implements DOMSerializer, Component
+    implements DOMSerializer
 {
     private final TransformerFactory m_factory = TransformerFactory.newInstance();
 

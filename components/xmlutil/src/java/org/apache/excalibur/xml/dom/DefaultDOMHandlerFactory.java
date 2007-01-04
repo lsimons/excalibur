@@ -20,7 +20,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 
-import org.apache.avalon.framework.component.Component;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.thread.ThreadSafe;
 import org.w3c.dom.Document;
@@ -32,7 +31,7 @@ import org.w3c.dom.Document;
  */
 public class DefaultDOMHandlerFactory
     extends AbstractLogEnabled
-    implements DOMHandlerFactory, Component, ThreadSafe
+    implements DOMHandlerFactory, ThreadSafe
 {
     private final SAXTransformerFactory m_transformerFactory = (SAXTransformerFactory) TransformerFactory.newInstance();
 
