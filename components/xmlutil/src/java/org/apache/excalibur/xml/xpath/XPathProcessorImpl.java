@@ -45,7 +45,7 @@ import org.w3c.dom.NodeList;
  */
 public final class XPathProcessorImpl
         extends AbstractProcessorImpl
-        implements XPathProcessor, Configurable, ThreadSafe
+        implements ThreadSafe
 {
     private String m_baseURI;
 

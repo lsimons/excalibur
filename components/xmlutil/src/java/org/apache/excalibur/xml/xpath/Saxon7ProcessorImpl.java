@@ -53,7 +53,7 @@ import java.util.ArrayList;
  */
 public class Saxon7ProcessorImpl
         extends AbstractProcessorImpl
-        implements XPathProcessor, ThreadSafe
+        implements ThreadSafe
 {
     private static final TransformerFactory factory = new TransformerFactoryImpl();
 

@@ -42,7 +42,7 @@ import org.w3c.dom.NodeList;
  */
 public final class JaxenProcessorImpl
         extends AbstractProcessorImpl
-        implements XPathProcessor, ThreadSafe
+        implements ThreadSafe
 {
     /**
      * Evaluate XPath expression within a context.

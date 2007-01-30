@@ -25,6 +25,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.avalon.excalibur.pool.Poolable;
 import org.apache.avalon.framework.activity.Disposable;
+import org.apache.avalon.framework.component.Component;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.parameters.ParameterException;
 import org.apache.avalon.framework.parameters.Parameterizable;
@@ -94,7 +95,7 @@ import org.xml.sax.helpers.DefaultHandler;
 public final class JaxpParser
     extends AbstractLogEnabled
     implements SAXParser, DOMParser,
-                Poolable, Parameterizable, Serviceable, Disposable, ErrorHandler
+                Poolable, Parameterizable, Serviceable, Disposable, ErrorHandler, Component
 {
     private static final ContentHandler NULL = new DefaultHandler();
 

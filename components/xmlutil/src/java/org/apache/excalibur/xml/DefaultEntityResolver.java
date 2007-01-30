@@ -19,6 +19,7 @@ package org.apache.excalibur.xml;
 import java.io.IOException;
 
 import org.apache.avalon.framework.activity.Disposable;
+import org.apache.avalon.framework.component.Component;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.parameters.ParameterException;
 import org.apache.avalon.framework.parameters.Parameterizable;
@@ -56,7 +57,8 @@ public class DefaultEntityResolver extends AbstractLogEnabled
              Serviceable,
              Parameterizable,
              ThreadSafe,
-             Disposable {
+             Disposable,
+             Component {
 
     /** The catalog manager */
     protected CatalogManager catalogManager = new CatalogManager();

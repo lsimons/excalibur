@@ -38,6 +38,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.avalon.excalibur.pool.Recyclable;
 import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.activity.Initializable;
+import org.apache.avalon.framework.component.Component;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.parameters.ParameterException;
 import org.apache.avalon.framework.parameters.Parameterizable;
@@ -78,12 +79,6 @@ import org.xml.sax.XMLFilter;
  * @version 1.0
  * @since   July 11, 2001
  */
-/**
- * @author CZiegeler
- *
- * To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Generation - Code and Comments
- */
 public class XSLTProcessorImpl
     extends AbstractLogEnabled
     implements XSLTProcessor,
@@ -92,7 +87,8 @@ public class XSLTProcessorImpl
     Disposable,
     Parameterizable,
     Recyclable,
-    URIResolver
+    URIResolver,
+    Component
 {
     /** The store service instance */
     protected Store m_store;

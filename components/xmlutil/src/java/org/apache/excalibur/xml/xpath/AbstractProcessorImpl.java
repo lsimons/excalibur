@@ -18,6 +18,7 @@ package org.apache.excalibur.xml.xpath;
 
 import java.util.HashMap;
 
+import org.apache.avalon.framework.component.Component;
 import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
@@ -37,7 +38,7 @@ import org.w3c.dom.NodeList;
  */
 public abstract class AbstractProcessorImpl
         extends AbstractLogEnabled
-        implements XPathProcessor, Configurable, PrefixResolver
+        implements XPathProcessor, Configurable, PrefixResolver, Component
 {
     private final HashMap m_mappings = new HashMap();
 

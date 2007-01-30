@@ -54,7 +54,7 @@ import org.w3c.dom.NodeList;
  */
 public class Saxon6ProcessorImpl
         extends AbstractProcessorImpl
-        implements XPathProcessor, ThreadSafe
+        implements ThreadSafe
 {
     private static final TransformerFactory factory = new TransformerFactoryImpl();
 

@@ -19,6 +19,7 @@ package org.apache.excalibur.xml.impl;
 import java.io.IOException;
 
 import org.apache.avalon.framework.activity.Initializable;
+import org.apache.avalon.framework.component.Component;
 import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.thread.ThreadSafe;
 import org.apache.xerces.dom.DocumentImpl;
@@ -45,7 +46,7 @@ import org.xml.sax.ext.LexicalHandler;
 public final class XercesParser
     extends AbstractLogEnabled
     implements org.apache.excalibur.xml.sax.SAXParser, org.apache.excalibur.xml.dom.DOMParser,
-                ErrorHandler, ThreadSafe, Initializable
+                ErrorHandler, ThreadSafe, Initializable, Component
 {
     public void initialize()
         throws Exception
