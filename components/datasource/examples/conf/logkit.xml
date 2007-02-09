@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <logkit logger="lm" log-level="INFO">
     <factories>
         <factory type="stream" 

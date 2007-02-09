@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <project default="dev" xmlns:maven="jelly:maven" xmlns:j="jelly:core" xmlns:util="jelly:util"
         xmlns:deploy="deploy">
 

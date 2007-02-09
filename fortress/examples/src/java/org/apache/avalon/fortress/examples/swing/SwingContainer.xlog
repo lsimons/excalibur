@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <logkit logger="system.logkit" log-level="INFO">
 
     <factories>
