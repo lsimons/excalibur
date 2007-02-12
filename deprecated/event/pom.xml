@@ -19,21 +19,21 @@
   <parent>
     <groupId>org.apache.excalibur.deprecated</groupId>
     <artifactId>excalibur-deprecated-modules</artifactId>
-    <version>2-SNAPSHOT</version>
+    <version>1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>Event</name>
   <groupId>org.apache.excalibur.event</groupId>
   <artifactId>excalibur-event-modules</artifactId>
-  <version>2-SNAPSHOT</version>
+  <version>1</version>
   <packaging>pom</packaging>
   <modules>
     <module>api</module>
     <module>impl</module>
   </modules>
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/deprecated/event</connection>
-    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/deprecated/event</url>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/trunk/excalibur-deprecated-modules/excalibur-event-modules</developerConnection>
+    <connection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</connection>
+    <url>https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</url>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</developerConnection>
   </scm>
 </project>
