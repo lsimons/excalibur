@@ -19,28 +19,28 @@
   <parent>
     <groupId>org.apache.avalon.cornerstone.store</groupId>
     <artifactId>cornerstone-store</artifactId>
-    <version>1</version>
+    <version>2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.avalon.cornerstone.store</groupId>
   <artifactId>cornerstone-store-impl</artifactId>
-  <version>2.2.1</version>
+  <version>2.2.2-SNAPSHOT</version>
   <name>Cornerstone Store Implementation</name>
   <dependencies>
     <dependency>
       <groupId>org.apache.avalon.cornerstone.store</groupId>
       <artifactId>cornerstone-store-api</artifactId>
-      <version>2.2.1</version>
+      <version>2.2.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.avalon.framework</groupId>
       <artifactId>avalon-framework-api</artifactId>
-      <version>4.3.1</version>
+      <version>4.3.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.avalon.framework</groupId>
       <artifactId>avalon-framework-impl</artifactId>
-      <version>4.3.1</version>
+      <version>4.3.2-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>xml-apis</groupId>
@@ -57,8 +57,8 @@
   </dependencies>
   <build />
   <scm>
-    <connection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</connection>
-    <url>https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</url>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</developerConnection>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/cornerstone/store/impl</connection>
+    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/cornerstone/store/impl</url>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/trunk/avalon-cornerstone-modules/cornerstone-store/cornerstone-store-impl</developerConnection>
   </scm>
 </project>
