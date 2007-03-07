@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.apache.avalon.cornerstone</groupId>
     <artifactId>avalon-cornerstone-modules</artifactId>
-    <version>1</version>
+    <version>2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.avalon.cornerstone.scheduler</groupId>
@@ -31,8 +31,8 @@
     <module>impl</module>
   </modules>
   <scm>
-    <connection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</connection>
-    <url>https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</url>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</developerConnection>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/cornerstone/scheduler</connection>
+    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/cornerstone/scheduler</url>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/trunk/avalon-cornerstone-modules/cornerstone-scheduler</developerConnection>
   </scm>
 </project>
