@@ -280,7 +280,7 @@ public class SMTPTargetFactory
     private boolean getDebug( Configuration config )
         throws ConfigurationException
     {
-        return config.getChild( "debug" ).getValueAsBoolean();
+        return config.getChild( "debug" ).getValueAsBoolean( false );
     }
 
     /**
