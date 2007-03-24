@@ -47,6 +47,7 @@ import org.apache.excalibur.source.URIAbsolutizer;
  * @version $Id$
  */
 public abstract class AbstractSourceResolver
+    implements SourceResolver
 {
 
     /**
