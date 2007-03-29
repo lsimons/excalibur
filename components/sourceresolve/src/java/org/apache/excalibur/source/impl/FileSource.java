@@ -80,7 +80,7 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
 
     /**
      * Builds a FileSource, given an URI scheme and a File.
-     * 
+     *
      * @param scheme
      * @param file
      * @throws SourceException
@@ -98,6 +98,13 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
         try
         {
             uri = file.toURL().toExternalForm();
+            // toExternalForm() is buggy, see e.g. http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4924415
+            // therefore we check if file: is followed by just one slash
+            // TODO when we move to JDK 1.4+, we should use file.toURI().toASCIIString() instead.
+            if ( uri.length() > 6 && uri.startsWith("file:/") && uri.charAt(6) != '/' )
+            {
+                uri = "file://" + uri.substring(6);
+            }
         }
         catch (MalformedURLException mue)
         {
@@ -186,7 +193,7 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
 
     /**
      * Return a validity object based on the file's modification date.
-     * 
+     *
      * @see org.apache.excalibur.source.Source#getValidity()
      */
     public SourceValidity getValidity()
@@ -390,11 +397,11 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
         {
             throw new SourceNotFoundException("Cannot delete non-existing file " + m_file.toString());
         }
-        
+
         if (!m_file.delete())
         {
             throw new SourceException("Could not delete " + m_file.toString() + " (unknown reason)");
-        } 
+        }
     }
 
     //----------------------------------------------------------------------------------
@@ -490,10 +497,10 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
                         m_source.getFile().delete();
                     }
                     // Rename temp file to destination file
-                    if (!m_tmpFile.renameTo(m_source.getFile())) 
+                    if (!m_tmpFile.renameTo(m_source.getFile()))
                     {
-                       throw new IOException("Could not rename " + 
-                         m_tmpFile.getAbsolutePath() + 
+                       throw new IOException("Could not rename " +
+                         m_tmpFile.getAbsolutePath() +
                          " to " + m_source.getFile().getAbsolutePath());
                     }
 
