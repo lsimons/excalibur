@@ -44,10 +44,8 @@ public interface SourceValidity
 {
     final int VALID   = +1;
     final int INVALID = -1;
-    /** @deprecated because it has been misspelled, use UNKNOWN of course */
-    final int UNKNWON = 0;
     final int UNKNOWN = 0;
-    
+
     /**
      * Check if the component is still valid. The possible results are :
      * <ul>
