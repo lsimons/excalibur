@@ -52,6 +52,7 @@ public final class SourceUtil
      * Append parameters to the uri.
      * Each parameter is appended to the uri with "parameter=value",
      * the parameters are separated by "&".
+     * @deprecated Use {@link AvalonSourceUtil#appendParameters(String, Parameters)} instead.
      */
     public static String appendParameters( String uri,
                                            Parameters parameters )
@@ -499,7 +500,7 @@ public final class SourceUtil
                                           destination.getURI()+
                                           "' is not writeable");
             }
-            
+
             IOException firstE = null;
             ModifiableSource modDestination = (ModifiableSource)destination;
             try
@@ -519,7 +520,7 @@ public final class SourceUtil
                             // Remebver the original exception in case there are problems closing
                             //  any streams.
                             firstE = e;
-                            
+
                             // If possible, cancel the destination.
                             if ( modDestination.canCancel( out ) )
                             {
@@ -547,7 +548,7 @@ public final class SourceUtil
                     firstE = ioe;
                 }
             }
-            
+
             // If there were any problems then wrap the original exception in a SourceException.
             if ( firstE != null )
             {

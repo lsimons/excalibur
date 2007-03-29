@@ -95,6 +95,7 @@ public final class SourceParameters
      * children of the configuration.
      * If no children are available <code>null</code>
      * is returned.
+     * @deprecated Use {@link AvalonSourceUtil#createSourceParameters(Configuration)} instead.
      */
     public static SourceParameters create( Configuration conf )
     {
@@ -292,6 +293,8 @@ public final class SourceParameters
     /**
      * Create a Parameters object.
      * The first value of each parameter is added to the Parameters object.
+     * @deprecated Use {@link AvalonSourceUtil#getFirstParameters(SourceParameters)} or
+     *             {@link #getFirstParametersMap}.
      * @return An Parameters object - if no parameters are defined this is an
      *         empty object.
      */
@@ -304,6 +307,25 @@ public final class SourceParameters
         {
             parName = (String)iter.next();
             result.setParameter( parName, this.getParameter( parName ) );
+        }
+        return result;
+    }
+
+    /**
+     * Create a map object.
+     * The first value of each parameter is added to the map.
+     * @return A new map - if no parameters are defined this is an
+     *         empty map.
+     */
+    public Map getFirstParametersMap()
+    {
+        final Map result = new HashMap();
+        Iterator iter = this.getParameterNames();
+        String parName;
+        while( iter.hasNext() )
+        {
+            parName = (String)iter.next();
+            result.put( parName, this.getParameter( parName ) );
         }
         return result;
     }
@@ -487,17 +509,17 @@ public final class SourceParameters
             this.names.remove( name );
         }
     }
-    
+
     /**
-     * Returns an immutable java.util.Map containing parameter names as keys and 
-     * parameter values as map values. The keys in the parameter map are of type String. 
+     * Returns an immutable java.util.Map containing parameter names as keys and
+     * parameter values as map values. The keys in the parameter map are of type String.
      * The values in the parameter map are of type String array.
      */
-    public Map getParameterMap() 
+    public Map getParameterMap()
     {
         final Map m = new HashMap(this.names);
         Iterator entries = m.entrySet().iterator();
-        while (entries.hasNext()) 
+        while (entries.hasNext())
         {
             Map.Entry entry = (Map.Entry)entries.next();
             ArrayList list = (ArrayList)entry.getValue();
