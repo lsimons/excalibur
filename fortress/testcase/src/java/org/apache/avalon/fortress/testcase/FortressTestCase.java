@@ -1,4 +1,4 @@
-/* 
+s/* 
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -142,7 +142,7 @@ public class FortressTestCase
         
         Context context = initializeContext( config.getContext() );
         
-        m_containerManager = new DefaultContainerManager( config.getContext() );
+        m_containerManager = new DefaultContainerManager( context );
         ContainerUtil.initialize( m_containerManager );
         
         m_container = (DefaultContainer)m_containerManager.getContainer();
