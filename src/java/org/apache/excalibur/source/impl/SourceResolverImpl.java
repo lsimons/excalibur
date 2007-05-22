@@ -21,6 +21,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.apache.avalon.framework.activity.Disposable;
+import org.apache.avalon.framework.component.Component;
 import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.Contextualizable;
@@ -61,6 +62,7 @@ public class SourceResolverImpl
     Contextualizable,
     Disposable,
     LogEnabled,
+    Component,
     ThreadSafe
 {
 
@@ -80,7 +82,7 @@ public class SourceResolverImpl
     {
         try
         {
-            return (SourceFactory) m_factorySelector.select(protocol);
+            return (SourceFactory) this.m_factorySelector.select(protocol);
         }
         catch (ServiceException e)
         {
@@ -94,7 +96,7 @@ public class SourceResolverImpl
      */
     protected void releaseSourceFactory(SourceFactory factory)
     {
-        m_factorySelector.release(factory);
+        this.m_factorySelector.release(factory);
     }
 
     /**
@@ -102,12 +104,12 @@ public class SourceResolverImpl
      */
     public void enableLogging(Logger logger)
     {
-        m_logger = logger;
+        this.m_logger = logger;
     }
 
     protected final Logger getLogger()
     {
-        return m_logger;
+        return this.m_logger;
     }
 
     /**
@@ -115,7 +117,7 @@ public class SourceResolverImpl
      */
     protected final void debug(String text)
     {
-        m_logger.debug(text);
+        this.m_logger.debug(text);
     }
 
     /**
@@ -123,7 +125,7 @@ public class SourceResolverImpl
      */
     protected final boolean isDebugEnabled()
     {
-        return m_logger.isDebugEnabled();
+        return this.m_logger.isDebugEnabled();
     }
 
     /**
@@ -136,11 +138,11 @@ public class SourceResolverImpl
         {
             if( context.get( "context-root" ) instanceof URL )
             {
-                m_baseURL = (URL)context.get( "context-root" );
+                this.m_baseURL = (URL)context.get( "context-root" );
             }
             else
             {
-                m_baseURL = ( (File)context.get( "context-root" ) ).toURL();
+                this.m_baseURL = ( (File)context.get( "context-root" ) ).toURL();
             }
         }
         catch( ContextException ce )
@@ -148,21 +150,21 @@ public class SourceResolverImpl
             // set the base URL to the current directory
             try
             {
-                m_baseURL = new File( System.getProperty( "user.dir" ) ).toURL();
-                if( getLogger().isDebugEnabled() )
+                this.m_baseURL = new File( System.getProperty( "user.dir" ) ).toURL();
+                if( this.getLogger().isDebugEnabled() )
                 {
-                    getLogger().debug( "SourceResolver: Using base URL: " + m_baseURL );
+                    this.getLogger().debug( "SourceResolver: Using base URL: " + this.m_baseURL );
                 }
             }
             catch( MalformedURLException mue )
             {
-                getLogger().warn( "Malformed URL for user.dir, and no container.rootDir exists", mue );
+                this.getLogger().warn( "Malformed URL for user.dir, and no container.rootDir exists", mue );
                 throw new ContextException( "Malformed URL for user.dir, and no container.rootDir exists", mue );
             }
         }
         catch( MalformedURLException mue )
         {
-            getLogger().warn( "Malformed URL for container.rootDir", mue );
+            this.getLogger().warn( "Malformed URL for container.rootDir", mue );
             throw new ContextException( "Malformed URL for container.rootDir", mue );
         }
     }
@@ -176,8 +178,8 @@ public class SourceResolverImpl
     public void service( final ServiceManager manager )
         throws ServiceException
     {
-        m_manager = manager;
-        m_factorySelector = (ServiceSelector) m_manager.lookup( SourceFactory.ROLE + "Selector" );
+        this.m_manager = manager;
+        this.m_factorySelector = (ServiceSelector) this.m_manager.lookup( SourceFactory.ROLE + "Selector" );
     }
 
     /**
@@ -185,10 +187,10 @@ public class SourceResolverImpl
      */
     public void dispose()
     {
-        if( null != m_manager )
+        if( null != this.m_manager )
         {
-            m_manager.release( m_factorySelector );
-            m_factorySelector = null;
+            this.m_manager.release( this.m_factorySelector );
+            this.m_factorySelector = null;
         }
     }
 }
