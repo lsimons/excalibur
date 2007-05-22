@@ -54,17 +54,17 @@ public class FileSourceTestCase extends TestCase
     protected void setUp() throws Exception
     {
         // Create a temp file
-        m_tempDir = File.createTempFile("filesource", "test");
+        this.m_tempDir = File.createTempFile("filesource", "test");
         // and make it a directory
-        m_tempDir.delete();
-        m_tempDir.mkdir();
+        this.m_tempDir.delete();
+        this.m_tempDir.mkdir();
     }
 
     public void testDirExistence() throws Exception
     {
-        m_tempDir.mkdirs();
-        long time = m_tempDir.lastModified();
-        FileSource src = new FileSource("file", m_tempDir);
+        this.m_tempDir.mkdirs();
+        long time = this.m_tempDir.lastModified();
+        FileSource src = new FileSource("file", this.m_tempDir);
         assertTrue("Temp dir doesn't exist", src.exists());
         assertTrue("Temp dir is not traversable", src.isCollection());
         // Check it was created less than 1 secs ago
@@ -77,7 +77,7 @@ public class FileSourceTestCase extends TestCase
     {
         final String text = "Writing to a source";
 
-        FileSource src = new FileSource("file", m_tempDir);
+        FileSource src = new FileSource("file", this.m_tempDir);
 
         FileSource child = (FileSource) src.getChild("child.txt");
         assertTrue("New file already exists", !child.exists());
@@ -89,7 +89,7 @@ public class FileSourceTestCase extends TestCase
         assertEquals("Wrong name", "child.txt", child.getName());
 
         // Feed with some content
-        fillSource(child, text);
+        this.fillSource(child, text);
 
         // And test it
         assertEquals(
@@ -113,12 +113,12 @@ public class FileSourceTestCase extends TestCase
     {
         final String text = "Original text";
 
-        FileSource src = new FileSource("file", m_tempDir);
+        FileSource src = new FileSource("file", this.m_tempDir);
 
         FileSource child = (FileSource) src.getChild("child.txt");
         assertTrue("New file already exists", !child.exists());
 
-        fillSource(child, text);
+        this.fillSource(child, text);
         assertTrue("New file doesn't exist", child.exists());
         long length = child.getContentLength();
 
@@ -135,12 +135,12 @@ public class FileSourceTestCase extends TestCase
     {
         final String text = "Original text";
 
-        FileSource src = new FileSource("file", m_tempDir);
+        FileSource src = new FileSource("file", this.m_tempDir);
 
         FileSource child = (FileSource) src.getChild("child.txt");
         assertTrue("New file already exists", !child.exists());
 
-        fillSource(child, text);
+        this.fillSource(child, text);
         assertTrue("New file doesn't exist", child.exists());
         long length = child.getContentLength();
 
@@ -159,11 +159,11 @@ public class FileSourceTestCase extends TestCase
     {
         final String text = "Original text";
 
-        FileSource src = new FileSource("file", m_tempDir);
+        FileSource src = new FileSource("file", this.m_tempDir);
 
         FileSource child = (FileSource) src.getChild("child.txt");
         assertTrue("New file already exists", !child.exists());
-        fillSource(child, text);
+        this.fillSource(child, text);
         assertTrue("New file doesn't exist", child.exists());
 
         child.delete();
@@ -172,7 +172,7 @@ public class FileSourceTestCase extends TestCase
 
     public void testConcurrentAccess() throws Exception
     {
-        FileSource src = new FileSource("file", m_tempDir);
+        FileSource src = new FileSource("file", this.m_tempDir);
 
         FileSource child = (FileSource) src.getChild("child.txt");
         assertTrue("New file already exists", !child.exists());
@@ -195,11 +195,11 @@ public class FileSourceTestCase extends TestCase
     public void testAtomicUpdate() throws Exception
     {
         final String text = "Blah, blah";
-        FileSource src = new FileSource("file", m_tempDir);
+        FileSource src = new FileSource("file", this.m_tempDir);
 
         FileSource child = (FileSource) src.getChild("child.txt");
         assertTrue("New file already exists", !child.exists());
-        fillSource(child, text + " and blah!");
+        this.fillSource(child, text + " and blah!");
 
         long length = child.getContentLength();
 
@@ -222,9 +222,17 @@ public class FileSourceTestCase extends TestCase
         assertEquals("Validity is valid", -1, validity.isValid());
     }
 
+    public void testProtocol() throws Exception
+    {
+        FileSource src = new FileSource("file", this.m_tempDir);
+        final String uri = src.getURI();
+        int indexOfProtocol = uri.indexOf("file://");
+        assertEquals("File uril is invalid.", 0, indexOfProtocol);
+    }
+
     protected void tearDown() throws Exception
     {
-        deleteAll(m_tempDir);
+        this.deleteAll(this.m_tempDir);
     }
 
     // Recursively delete a file or directory
@@ -235,7 +243,7 @@ public class FileSourceTestCase extends TestCase
             File[] children = f.listFiles();
             for (int i = 0; i < children.length; i++)
             {
-                deleteAll(children[i]);
+                this.deleteAll(children[i]);
             }
         }
 
