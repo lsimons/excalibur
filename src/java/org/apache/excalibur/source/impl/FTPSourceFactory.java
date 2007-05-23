@@ -21,24 +21,22 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
-import org.apache.avalon.framework.thread.ThreadSafe;
 import org.apache.excalibur.source.Source;
-import org.apache.excalibur.source.SourceFactory;
 
 /**
  * A factory for an @link FTPSource.
- * 
+ *
  * @avalon.component
  * @avalon.service type=SourceFactory
  * @x-avalon.info name=ftp-source
  * @x-avalon.lifestyle type=singleton
- * 
+ *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  */
-public final class FTPSourceFactory extends URLSourceFactory implements SourceFactory, ThreadSafe
+public final class FTPSourceFactory extends URLSourceFactory
 {
 
-    public FTPSourceFactory() 
+    public FTPSourceFactory()
     {
         super();
     }
@@ -46,12 +44,12 @@ public final class FTPSourceFactory extends URLSourceFactory implements SourceFa
     /**
      * Creates an FTPSource.
      */
-    protected Source createURLSource( final URL url, final Map parameters ) 
-        throws MalformedURLException, IOException 
+    protected Source createURLSource( final URL url, final Map parameters )
+        throws MalformedURLException, IOException
     {
         URLSource result = new FTPSource();
         result.init(url, parameters);
-        return result;  
+        return result;
     }
-    
+
 }
