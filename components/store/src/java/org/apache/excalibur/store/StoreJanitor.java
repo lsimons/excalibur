@@ -18,8 +18,6 @@ package org.apache.excalibur.store;
 
 import java.util.Iterator;
 
-import org.apache.avalon.framework.component.Component;
-
 /**
  * Interface for the StoreJanitors
  *

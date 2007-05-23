@@ -16,16 +16,6 @@
  */
 package org.apache.excalibur.xml.xpath.test;
 
-import org.apache.avalon.excalibur.testcase.ExcaliburTestCase;
-import org.apache.avalon.framework.component.Component;
-import org.apache.excalibur.xml.dom.DOMParser;
-import org.apache.excalibur.xml.xpath.XPathProcessor;
-import org.apache.excalibur.xml.xpath.PrefixResolver;
-import org.xml.sax.InputSource;
-import org.w3c.dom.Document;
-
-import java.io.StringReader;
-
 /**
  * Test Saxon 7 XPath processor
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>

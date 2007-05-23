@@ -1,18 +1,18 @@
-/* 
+/*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed  under the  License is distributed on an "AS IS" BASIS,
  * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
  * implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -25,8 +25,6 @@ import java.util.Map;
 
 import org.apache.excalibur.instrument.manager.http.server.HTTPRedirect;
 import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
-import org.apache.excalibur.instrument.manager.InstrumentSampleDescriptor;
-import org.apache.excalibur.instrument.manager.NoSuchInstrumentSampleException;
 
 /**
  *
@@ -51,7 +49,7 @@ public class HTMLGCHandler
     {
         super( "/gc.html", manager, connector );
     }
-    
+
     /*---------------------------------------------------------------
      * AbstractHTTPURLHandler Methods
      *-------------------------------------------------------------*/
@@ -65,16 +63,16 @@ public class HTMLGCHandler
     public void doGet( String path, Map parameters, PrintWriter out )
         throws IOException
     {
-        long oldMemory = getMemory();
-        
+        long oldMemory = this.getMemory();
+
         System.gc();
-        
-        long newMemory = getMemory();
-        
+
+        long newMemory = this.getMemory();
+
         throw new HTTPRedirect(
             "instrument-manager.html?oldMemory=" + oldMemory + "&newMemory=" + newMemory );
     }
-            
+
     /*---------------------------------------------------------------
      * Methods
      *-------------------------------------------------------------*/

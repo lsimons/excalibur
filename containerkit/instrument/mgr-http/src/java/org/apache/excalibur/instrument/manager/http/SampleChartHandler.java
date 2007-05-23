@@ -1,18 +1,18 @@
-/* 
+/*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed  under the  License is distributed on an "AS IS" BASIS,
  * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
  * implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -28,7 +28,6 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import org.apache.excalibur.instrument.manager.http.server.AbstractHTTPURLHandler;
@@ -50,16 +49,16 @@ public class SampleChartHandler
 {
     /** The instrument manager */
     private DefaultInstrumentManager m_manager;
-    
+
     /** Default width of the image. */
     private int m_width;
-    
+
     /** Default height of the image. */
     private int m_height;
-    
+
     /** Default antialias flag. */
     private boolean m_antialias;
-    
+
     /*---------------------------------------------------------------
      * Constructors
      *-------------------------------------------------------------*/
@@ -78,13 +77,13 @@ public class SampleChartHandler
     {
         super( "/sample-chart.jpg", CONTENT_TYPE_IMAGE_JPEG,
             InstrumentManagerHTTPConnector.ENCODING );
-        
-        m_manager = manager;
-        m_width = width;
-        m_height = height;
-        m_antialias = antialias;
+
+        this.m_manager = manager;
+        this.m_width = width;
+        this.m_height = height;
+        this.m_antialias = antialias;
     }
-    
+
     /*---------------------------------------------------------------
      * AbstractHandler Methods
      *-------------------------------------------------------------*/
@@ -98,11 +97,11 @@ public class SampleChartHandler
     public void doGet( String path, Map parameters, OutputStream os )
         throws IOException
     {
-        String name = getParameter( parameters, "name" );
+        String name = this.getParameter( parameters, "name" );
         InstrumentSampleDescriptor desc;
         try
         {
-            desc = m_manager.locateInstrumentSampleDescriptor( name );
+            desc = this.m_manager.locateInstrumentSampleDescriptor( name );
         }
         catch ( NoSuchInstrumentSampleException e )
         {
@@ -114,7 +113,7 @@ public class SampleChartHandler
                 //  work with 1.3.   Use our own version.
                 String iName = URLCoder.encode( name.substring( 0,  pos ),
                     InstrumentManagerHTTPConnector.ENCODING );
-                
+
                 throw new HTTPRedirect( "instrument.html?name=" + iName );
             }
             else
@@ -122,16 +121,16 @@ public class SampleChartHandler
                 throw new HTTPRedirect( "instrumentable.html" );
             }
         }
-        
-        int width = getIntegerParameter( parameters, "width", m_width );
+
+        int width = this.getIntegerParameter( parameters, "width", this.m_width );
         width = Math.max( 1, Math.min( 2048, width ) );
-        int height = getIntegerParameter( parameters, "height", m_height );
+        int height = this.getIntegerParameter( parameters, "height", this.m_height );
         height = Math.max( 1, Math.min( 1024, height ) );
-        
-        boolean antialias = getBooleanParameter( parameters, "antialias", m_antialias );
-        
+
+        boolean antialias = this.getBooleanParameter( parameters, "antialias", this.m_antialias );
+
         InstrumentSampleSnapshot snapshot = desc.getSnapshot();
-        
+
         // Decide on a line interval based on the interval of the sample.
         long interval = snapshot.getInterval();
         int hInterval;
@@ -186,19 +185,19 @@ public class SampleChartHandler
             format = "{0}/{1}/{2}";
             detailFormat = "{0}/{1}/{2}";
         }
-            
+
         // Actually create the chart and add it to the content pane
         LineChart chart = new LineChart( hInterval, interval, format, detailFormat, 20, antialias );
         chart.setValues( snapshot.getSamples(), snapshot.getTime() );
-        
+
         byte[] imageData = null;
-        
+
         // Create a new BufferedImage onto which the plant will be painted.
         BufferedImage bi = new BufferedImage( width, height, BufferedImage.TYPE_INT_RGB );
-        
+
         // Paint the chart onto the Graphics object of the BufferedImage.
         chart.setSize( bi.getWidth(), bi.getHeight() );
-        
+
         Graphics g;
         try
         {
@@ -208,17 +207,17 @@ public class SampleChartHandler
         {
             // Linux throws NoClassDefFoundError.
             // Solaris throws InternalError
-            
+
             // On Headless UNIX machines this error will be thrown when attempting to
             //  create an graphic.  The AWT libraries require a native library that
             //  only exists on UNIX system which have X-Windows installed.  This is
             //  never a problem on Windows systems.
-            
+
             // Rather than giving the user nothing, send them a preprepared jpeg file
             //  that notifies them of the problem.
             String imageResource = "noawtlibs.jpg";
             BufferedInputStream is =
-                new BufferedInputStream( getClass().getResourceAsStream( imageResource ) );
+                new BufferedInputStream( this.getClass().getResourceAsStream( imageResource ) );
             byte[] noAWTLibs;
             try {
                 noAWTLibs = new byte[is.available()];
@@ -230,7 +229,7 @@ public class SampleChartHandler
             os.write( noAWTLibs );
             return;
         }
-        
+
         chart.paintComponent( g );
 
         // Encode the BufferedImage as a JPEG image and write it to the output stream.

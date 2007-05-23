@@ -1,18 +1,18 @@
-/* 
+/*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed  under the  License is distributed on an "AS IS" BASIS,
  * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
  * implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -33,10 +33,8 @@ import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.configuration.DefaultConfiguration;
 import org.apache.avalon.framework.configuration.DefaultConfigurationBuilder;
-import org.apache.avalon.framework.logger.AbstractLogEnabled;
 import org.apache.avalon.framework.logger.Logger;
 
-import org.apache.excalibur.instrument.client.InstrumentableData;
 import org.apache.excalibur.instrument.client.InstrumentManagerConnection;
 import org.apache.excalibur.instrument.client.InstrumentManagerConnectionListener;
 import org.apache.excalibur.instrument.client.InstrumentManagerData;
@@ -54,18 +52,18 @@ public class HTTPInstrumentManagerConnection
     extends InstrumentManagerConnection
 {
     private URL m_url;
-    
+
     /** Flag which keeps track of whether or not the remote server was there
     *   the last time we attempted to connect. */
     private boolean m_connected;
-    
+
     /** If we ever decide that we are not talking to an Instrument Manager then
      *   disable the connection to avoid pounding the remote server with lots
      *   of 404 requests. */
     private boolean m_disabled;
-    
+
     private HTTPInstrumentManagerData m_manager;
-    
+
     private List m_leasedSamples = new ArrayList();
     private HTTPInstrumentSampleData[] m_leasedSampleAry;
 
@@ -77,21 +75,21 @@ public class HTTPInstrumentManagerConnection
      */
     public HTTPInstrumentManagerConnection( URL url )
     {
-        m_url = url;
-        m_connected = false;
-        
-        m_manager = new HTTPInstrumentManagerData( this );
+        this.m_url = url;
+        this.m_connected = false;
+
+        this.m_manager = new HTTPInstrumentManagerData( this );
     }
-    
+
     /*---------------------------------------------------------------
      * InstrumentManagerConnection Methods
      *-------------------------------------------------------------*/
     public void enableLogging( Logger logger )
     {
         super.enableLogging( logger );
-        m_manager.enableLogging( logger.getChildLogger( "manager" ) );
+        this.m_manager.enableLogging( logger.getChildLogger( "manager" ) );
     }
-    
+
     /**
      * Returns the key used to identify this object.
      *
@@ -99,9 +97,9 @@ public class HTTPInstrumentManagerConnection
      */
     public Object getKey()
     {
-        return m_url;
+        return this.m_url;
     }
-    
+
     /**
      * Returns true if connected.
      *
@@ -109,9 +107,9 @@ public class HTTPInstrumentManagerConnection
      */
     public boolean isConnected()
     {
-        return m_connected;
+        return this.m_connected;
     }
-    
+
     /**
      * Returns the Instrument Manager.
      *
@@ -119,9 +117,9 @@ public class HTTPInstrumentManagerConnection
      */
     public InstrumentManagerData getInstrumentManager()
     {
-        return m_manager;
+        return this.m_manager;
     }
-    
+
     /**
      * Returns the title to display in the tab for the connection.
      *
@@ -129,7 +127,7 @@ public class HTTPInstrumentManagerConnection
      */
     public String getTabTitle()
     {
-        if ( m_disabled )
+        if ( this.m_disabled )
         {
             return "[DISABLED] " + super.getTabTitle();
         }
@@ -144,7 +142,7 @@ public class HTTPInstrumentManagerConnection
      */
     protected void invokeGC()
     {
-        getState( "gc.xml" );
+        this.getState( "gc.xml" );
     }
 
     /**
@@ -157,9 +155,9 @@ public class HTTPInstrumentManagerConnection
         synchronized( this )
         {
             DefaultConfiguration state = (DefaultConfiguration)super.saveState();
-            
-            state.setAttribute( "url", m_url.toExternalForm() );
-            
+
+            state.setAttribute( "url", this.m_url.toExternalForm() );
+
             return state;
         }
     }
@@ -178,11 +176,11 @@ public class HTTPInstrumentManagerConnection
         synchronized( this )
         {
             super.loadState( state );
-            
+
             // URL will have already been set.
         }
     }
-    
+
     /**
      * URL encode the specified string.
      *
@@ -199,11 +197,11 @@ public class HTTPInstrumentManagerConnection
         catch ( UnsupportedEncodingException e )
         {
             // Should never happen.
-            getLogger().error( "Bad encoding.", e );
+            this.getLogger().error( "Bad encoding.", e );
             return val;
         }
     }
-    
+
     /**
      * Updates all registered SampleFrames with the latest data from the
      *  server.  The status of all Sample Frames is also handled by this
@@ -215,13 +213,13 @@ public class HTTPInstrumentManagerConnection
      */
     public void updateSampleFrames()
     {
-        InstrumentSampleFrame[] frames = getSampleFrameArray();
+        InstrumentSampleFrame[] frames = this.getSampleFrameArray();
         if ( frames.length == 0 )
         {
             // Nothing to do.
             return;
         }
-        
+
         // Build up a set of arrays so that all of the snapshots can be requested at once.
         String[] names = new String[frames.length];
         long[] lastTimes = new long[frames.length];
@@ -233,9 +231,9 @@ public class HTTPInstrumentManagerConnection
             names[i] = frame.getInstrumentSampleName();
             lastTimes[i] = frame.getLastSnapshotTime();
         }
-        
+
         // Request the snapshots.  Don't bother if we know we are not connected.
-        if ( isConnected() )
+        if ( this.isConnected() )
         {
             StringBuffer sb = new StringBuffer();
             sb.append( "snapshots.xml?packed=true&compact=true" );
@@ -246,7 +244,7 @@ public class HTTPInstrumentManagerConnection
                 sb.append( "&base-time=" );
                 sb.append( lastTimes[i] );
             }
-            Configuration configuration = getState( sb.toString() );
+            Configuration configuration = this.getState( sb.toString() );
             if ( configuration != null )
             {
                 Configuration[] snapshotConfs = configuration.getChildren( "sample" );
@@ -266,7 +264,7 @@ public class HTTPInstrumentManagerConnection
                                 {
                                     snapshots[j] =
                                         new HTTPInstrumentSampleSnapshotData( this, name );
-                                    snapshots[j].enableLogging( getLogger() );
+                                    snapshots[j].enableLogging( this.getLogger() );
                                     try
                                     {
                                         snapshots[j].update( snapshotConf );
@@ -274,9 +272,9 @@ public class HTTPInstrumentManagerConnection
                                     catch ( ConfigurationException e )
                                     {
                                         // Should not happen.
-                                        getLogger().info( "Snapshot update failed.", e );
-                                        getLogger().info( " URL: " + sb.toString() );
-                                        getLogger().info( " i:" + i + " j:" + j );
+                                        this.getLogger().info( "Snapshot update failed.", e );
+                                        this.getLogger().info( " URL: " + sb.toString() );
+                                        this.getLogger().info( " i:" + i + " j:" + j );
                                         snapshots[j] = null;
                                     }
                                     break;
@@ -287,7 +285,7 @@ public class HTTPInstrumentManagerConnection
                 }
             }
         }
-        
+
         // Now we should have all available snapshots.  Loop back over the frames
         //  and update them as is appropriate.
         for ( int i = 0; i < frames.length; i++ )
@@ -296,7 +294,7 @@ public class HTTPInstrumentManagerConnection
             frame.updateSnapshot( snapshots[i] );
         }
     }
-    
+
     /*---------------------------------------------------------------
      * Methods
      *-------------------------------------------------------------*/
@@ -307,9 +305,9 @@ public class HTTPInstrumentManagerConnection
      */
     URL getURL()
     {
-        return m_url;
+        return this.m_url;
     }
-    
+
     /**
      * Requests the current state of the object at the specified path.
      *  If the request fails for any reason, including not being valid
@@ -321,40 +319,40 @@ public class HTTPInstrumentManagerConnection
      */
     Configuration getState( String path )
     {
-        if ( m_disabled )
+        if ( this.m_disabled )
         {
             return null;
         }
-        
+
         URL url;
         try
         {
-            url = new URL( m_url, path );
+            url = new URL( this.m_url, path );
         }
         catch ( MalformedURLException e )
         {
-            getLogger().debug( "Request failed.", e );
+            this.getLogger().debug( "Request failed.", e );
             return null;
         }
-        
+
         try
         {
             HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-            
-            if ( conn.getResponseCode() == conn.HTTP_OK )
+
+            if ( conn.getResponseCode() == HttpURLConnection.HTTP_OK )
             {
-                boolean oldConnected = m_connected;
-                m_connected = true;
+                boolean oldConnected = this.m_connected;
+                this.m_connected = true;
                 if ( !oldConnected )
                 {
                     // Notify the listeners.
-                    InstrumentManagerConnectionListener[] listenerArray = getListenerArray();
+                    InstrumentManagerConnectionListener[] listenerArray = this.getListenerArray();
                     for ( int i = 0; i < listenerArray.length; i++ )
                     {
                         listenerArray[i].opened( this );
                     }
                 }
-                
+
                 InputStream is = conn.getInputStream();
                 try
                 {
@@ -365,12 +363,12 @@ public class HTTPInstrumentManagerConnection
                     }
                     catch ( ConfigurationException e )
                     {
-                        getLogger().warn( "Invalid XML reveived from the server.", e );
+                        this.getLogger().warn( "Invalid XML reveived from the server.", e );
                         return null;
                     }
                     catch ( org.xml.sax.SAXException e )
                     {
-                        getLogger().warn( "Invalid XML reveived from the server.", e );
+                        this.getLogger().warn( "Invalid XML reveived from the server.", e );
                         return null;
                     }
                 }
@@ -384,13 +382,13 @@ public class HTTPInstrumentManagerConnection
                 if ( ( conn.getResponseCode() == 404 )
                     && path.startsWith( "instrument-manager.xml" ) )
                 {
-                    getLogger().warn( "Requested " + url + " resulted in error code 404.  "
+                    this.getLogger().warn( "Requested " + url + " resulted in error code 404.  "
                         + "Most likely not an Instrument Manager, disabling future requests." );
-                    m_disabled = true;
+                    this.m_disabled = true;
                 }
                 else
                 {
-                    getLogger().debug( "Response: " + conn.getResponseCode() + " : "
+                    this.getLogger().debug( "Response: " + conn.getResponseCode() + " : "
                         + conn.getResponseMessage() );
                 }
                 return null;
@@ -403,30 +401,30 @@ public class HTTPInstrumentManagerConnection
             {
                 msg = e.toString();
             }
-            
+
             if ( msg.indexOf( "Connect" ) >= 0 )
             {
                 // Hide the stack trace as the server is simply down.
-                getLogger().debug( "Request failed.  URL: " + url + "  Error: " + msg );
+                this.getLogger().debug( "Request failed.  URL: " + url + "  Error: " + msg );
             }
             else
             {
-                getLogger().debug( "Request failed.  URL: " + url + "  Error: ", e );
+                this.getLogger().debug( "Request failed.  URL: " + url + "  Error: ", e );
             }
-            
-            
-            boolean oldConnected = m_connected;
-            m_connected = false;
+
+
+            boolean oldConnected = this.m_connected;
+            this.m_connected = false;
             if ( oldConnected )
             {
                 // Notify the listeners.
-                InstrumentManagerConnectionListener[] listenerArray = getListenerArray();
+                InstrumentManagerConnectionListener[] listenerArray = this.getListenerArray();
                 for ( int i = 0; i < listenerArray.length; i++ )
                 {
                     listenerArray[i].closed( this );
                 }
             }
-            
+
             return null;
         }
     }

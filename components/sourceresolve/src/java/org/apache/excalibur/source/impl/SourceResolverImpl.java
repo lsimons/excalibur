@@ -21,7 +21,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.apache.avalon.framework.activity.Disposable;
-import org.apache.avalon.framework.component.Component;
 import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.Contextualizable;
@@ -62,7 +61,6 @@ public class SourceResolverImpl
     Contextualizable,
     Disposable,
     LogEnabled,
-    Component,
     ThreadSafe
 {
 

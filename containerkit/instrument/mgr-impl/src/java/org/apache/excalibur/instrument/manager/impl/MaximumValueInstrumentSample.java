@@ -1,27 +1,23 @@
-/* 
+/*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed  under the  License is distributed on an "AS IS" BASIS,
  * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
  * implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
 
 package org.apache.excalibur.instrument.manager.impl;
-
-import org.apache.avalon.framework.configuration.Configuration;
-import org.apache.avalon.framework.configuration.ConfigurationException;
-import org.apache.avalon.framework.configuration.DefaultConfiguration;
 
 import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
 
@@ -57,7 +53,7 @@ class MaximumValueInstrumentSample
     {
         super( instrumentProxy, name, interval, size, description, lease );
     }
-    
+
     /*---------------------------------------------------------------
      * InstrumentSample Methods
      *-------------------------------------------------------------*/
@@ -70,7 +66,7 @@ class MaximumValueInstrumentSample
     {
         return DefaultInstrumentManager.INSTRUMENT_SAMPLE_TYPE_MAXIMUM;
     }
-    
+
     /*---------------------------------------------------------------
      * AbstractValueInstrumentSample Methods
      *-------------------------------------------------------------*/
@@ -86,39 +82,39 @@ class MaximumValueInstrumentSample
         boolean update;
         int sampleValue;
         long sampleTime;
-        
+
         synchronized(this)
         {
-            update = update( time, false );
-            
+            update = this.update( time, false );
+
             // Always store the last value to use for samples where a value is not set.
-            m_lastValue = value;
-            
-            if ( m_valueCount > 0 )
+            this.m_lastValue = value;
+
+            if ( this.m_valueCount > 0 )
             {
                 // Additional sample
-                m_valueCount++;
-                if ( value > m_value )
+                this.m_valueCount++;
+                if ( value > this.m_value )
                 {
-                    m_value = value;
+                    this.m_value = value;
                     update = true;
                 }
             }
             else
             {
                 // First value of this sample.
-                m_valueCount = 1;
-                m_value = value;
+                this.m_valueCount = 1;
+                this.m_value = value;
                 update = true;
             }
-            
-            sampleValue = m_value;
-            sampleTime = m_time;
+
+            sampleValue = this.m_value;
+            sampleTime = this.m_time;
         }
-        
+
         if ( update )
         {
-            updateListeners( sampleValue, sampleTime );
+            this.updateListeners( sampleValue, sampleTime );
         }
     }
 }

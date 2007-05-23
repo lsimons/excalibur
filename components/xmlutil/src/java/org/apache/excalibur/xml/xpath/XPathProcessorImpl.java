@@ -18,7 +18,6 @@ package org.apache.excalibur.xml.xpath;
 
 import javax.xml.transform.TransformerException;
 
-import org.apache.avalon.framework.configuration.Configurable;
 import org.apache.avalon.framework.configuration.Configuration;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.apache.avalon.framework.thread.ThreadSafe;
@@ -53,7 +52,7 @@ public final class XPathProcessorImpl
     {
         super.configure(configuration);
         final Configuration namespaceMappings = configuration.getChild( "namespace-mappings", true );
-        m_baseURI = namespaceMappings.getAttribute( "base-uri", null );
+        this.m_baseURI = namespaceMappings.getAttribute( "base-uri", null );
     }
 
     /**
@@ -68,13 +67,13 @@ public final class XPathProcessorImpl
     {
         try
         {
-            final XObject result = XPathAPI.eval( contextNode, str, new XalanResolver(resolver, m_baseURI) );
+            final XObject result = XPathAPI.eval( contextNode, str, new XalanResolver(resolver, this.m_baseURI) );
             return result.bool();
         }
         catch( final TransformerException e )
         {
-            if (getLogger().isDebugEnabled()) {
-                getLogger().debug("Failed to evaluate '" + str + "'", e);
+            if (this.getLogger().isDebugEnabled()) {
+                this.getLogger().debug("Failed to evaluate '" + str + "'", e);
             }
 
             // ignore it
@@ -94,13 +93,13 @@ public final class XPathProcessorImpl
     {
         try
         {
-            final XObject result = XPathAPI.eval( contextNode, str, new XalanResolver(resolver, m_baseURI) );
+            final XObject result = XPathAPI.eval( contextNode, str, new XalanResolver(resolver, this.m_baseURI) );
             return new Double( result.num() );
         }
         catch( final TransformerException e )
         {
-            if (getLogger().isDebugEnabled()) {
-                getLogger().debug("Failed to evaluate '" + str + "'", e);
+            if (this.getLogger().isDebugEnabled()) {
+                this.getLogger().debug("Failed to evaluate '" + str + "'", e);
             }
 
             // ignore it
@@ -120,13 +119,13 @@ public final class XPathProcessorImpl
     {
         try
         {
-            final XObject result = XPathAPI.eval( contextNode, str, new XalanResolver(resolver, m_baseURI) );
+            final XObject result = XPathAPI.eval( contextNode, str, new XalanResolver(resolver, this.m_baseURI) );
             return result.str();
         }
         catch( final TransformerException e )
         {
-            if (getLogger().isDebugEnabled()) {
-                getLogger().debug("Failed to evaluate '" + str + "'", e);
+            if (this.getLogger().isDebugEnabled()) {
+                this.getLogger().debug("Failed to evaluate '" + str + "'", e);
             }
 
             // ignore it
@@ -146,13 +145,13 @@ public final class XPathProcessorImpl
     {
         try
         {
-            final XObject result = XPathAPI.eval( contextNode, str, new XalanResolver(resolver, m_baseURI) );
+            final XObject result = XPathAPI.eval( contextNode, str, new XalanResolver(resolver, this.m_baseURI) );
             return result.nodeset().nextNode();
         }
         catch( final TransformerException e )
         {
-            if (getLogger().isDebugEnabled()) {
-                getLogger().debug("Failed to evaluate '" + str + "'", e);
+            if (this.getLogger().isDebugEnabled()) {
+                this.getLogger().debug("Failed to evaluate '" + str + "'", e);
             }
 
             // ignore it
@@ -172,13 +171,13 @@ public final class XPathProcessorImpl
     {
         try
         {
-            final XObject result = XPathAPI.eval( contextNode, str, new XalanResolver(resolver, m_baseURI) );
+            final XObject result = XPathAPI.eval( contextNode, str, new XalanResolver(resolver, this.m_baseURI) );
             return result.nodelist();
         }
         catch( final TransformerException e )
         {
-            if (getLogger().isDebugEnabled()) {
-                getLogger().debug("Failed to evaluate '" + str + "'", e);
+            if (this.getLogger().isDebugEnabled()) {
+                this.getLogger().debug("Failed to evaluate '" + str + "'", e);
             }
 
             // ignore it
@@ -192,25 +191,25 @@ public final class XPathProcessorImpl
     private final static class XalanResolver implements org.apache.xml.utils.PrefixResolver {
         private final PrefixResolver m_resolver;
         private final String m_baseURI;
-        
+
         public XalanResolver(PrefixResolver resolver, String baseURI) {
-            m_resolver = resolver;
-            m_baseURI = baseURI;
+            this.m_resolver = resolver;
+            this.m_baseURI = baseURI;
         }
 
         public String getNamespaceForPrefix(String prefix)
         {
-            return m_resolver.prefixToNamespace(prefix);
+            return this.m_resolver.prefixToNamespace(prefix);
         }
 
         public String getNamespaceForPrefix(String prefix, Node context)
         {
-            return m_resolver.prefixToNamespace(prefix);
+            return this.m_resolver.prefixToNamespace(prefix);
         }
 
         public String getBaseIdentifier()
         {
-            return m_baseURI;
+            return this.m_baseURI;
         }
 
         public boolean handlesNullPrefixes()

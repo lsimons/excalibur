@@ -1,43 +1,30 @@
-/* 
+/*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed  under the  License is distributed on an "AS IS" BASIS,
  * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
  * implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
 
 package org.apache.excalibur.instrument.manager.http;
 
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGEncodeParam;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
-
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import org.apache.excalibur.instrument.manager.http.server.AbstractHTTPURLHandler;
-import org.apache.excalibur.instrument.manager.http.server.HTTPRedirect;
-import org.apache.excalibur.instrument.manager.http.server.URLCoder;
-import org.apache.excalibur.instrument.manager.DefaultInstrumentManager;
-import org.apache.excalibur.instrument.manager.InstrumentSampleDescriptor;
-import org.apache.excalibur.instrument.manager.InstrumentSampleSnapshot;
-import org.apache.excalibur.instrument.manager.NoSuchInstrumentSampleException;
 
 /**
  * Serves up a favicon.ico file.
@@ -60,7 +47,7 @@ public class FavIconHandler
         super( "/favicon.ico", CONTENT_TYPE_IMAGE_X_ICON,
             InstrumentManagerHTTPConnector.ENCODING );
     }
-    
+
     /*---------------------------------------------------------------
      * AbstractHandler Methods
      *-------------------------------------------------------------*/
@@ -76,7 +63,7 @@ public class FavIconHandler
     {
         String imageResource = "favicon.ico";
         BufferedInputStream is =
-            new BufferedInputStream( getClass().getResourceAsStream( imageResource ) );
+            new BufferedInputStream( this.getClass().getResourceAsStream( imageResource ) );
         byte[] favIcon;
         try {
             favIcon = new byte[is.available()];
