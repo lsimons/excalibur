@@ -22,7 +22,7 @@ import java.security.Security;
 import org.apache.avalon.framework.parameters.ParameterException;
 import org.apache.avalon.framework.parameters.Parameters;
 import org.apache.commons.httpclient.protocol.Protocol;
-import org.apache.commons.httpclient.protocol.SecureProtocolSocketFactory;
+import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 
 /**
  * {@link HTTPClientSource} Factory class.
@@ -63,8 +63,8 @@ public class HTTPSClientSourceFactory extends HTTPClientSourceFactory
     {
         super.parameterize( params );
 
-        setProvider( params );
-        setSocketFactory( params );
+        this.setProvider( params );
+        this.setSocketFactory( params );
     }
 
     /**
@@ -88,7 +88,7 @@ public class HTTPSClientSourceFactory extends HTTPClientSourceFactory
             return; // this is ok, means no custom SSL provider
         }
 
-        Security.addProvider( (Provider) getInstance( provider ) );
+        Security.addProvider( (Provider) this.getInstance( provider ) );
     }
 
     /**
@@ -114,9 +114,9 @@ public class HTTPSClientSourceFactory extends HTTPClientSourceFactory
 
         final Protocol protocol =
             new Protocol(
-                HTTPS, 
-                ( SecureProtocolSocketFactory ) getInstance( factoryName ),
-                443 
+                HTTPS,
+                ( ProtocolSocketFactory ) this.getInstance( factoryName ),
+                443
             );
         Protocol.registerProtocol( HTTPS, protocol );
     }

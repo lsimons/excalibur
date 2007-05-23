@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -42,8 +41,11 @@ import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.DeleteMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.HeadMethod;
+import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
+import org.apache.commons.httpclient.util.DateParseException;
+import org.apache.commons.httpclient.util.DateUtil;
 import org.apache.excalibur.source.ModifiableSource;
 import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceException;
@@ -63,7 +65,7 @@ import org.apache.excalibur.source.impl.validity.TimeStampValidity;
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  * @version CVS $Id: HTTPClientSource.java,v 1.4 2004/02/28 11:47:24 cziegeler Exp $
  */
-public class HTTPClientSource extends AbstractLogEnabled 
+public class HTTPClientSource extends AbstractLogEnabled
     implements ModifiableSource, Initializable, Parameterizable
 {
     /**
@@ -100,7 +102,7 @@ public class HTTPClientSource extends AbstractLogEnabled
      * Constant used when obtaining the Last-Modified date from HTTP Headers
      */
     public static final String LAST_MODIFIED  = "Last-Modified";
-    
+
     /**
      * The URI being accessed.
      */
@@ -110,7 +112,7 @@ public class HTTPClientSource extends AbstractLogEnabled
      * Contextual parameters passed via the {@link SourceFactory}.
      */
     private final Map m_parameters;
-    
+
     /**
      * Optional http state passed from SourceFactory
      */
@@ -176,9 +178,9 @@ public class HTTPClientSource extends AbstractLogEnabled
     public HTTPClientSource( final String uri, final Map parameters, final HttpState httpState )
         throws Exception
     {
-        m_uri = uri;
-        m_parameters = parameters == null ? Collections.EMPTY_MAP : parameters;
-        m_httpState = httpState;
+        this.m_uri = uri;
+        this.m_parameters = parameters == null ? Collections.EMPTY_MAP : parameters;
+        this.m_httpState = httpState;
     }
 
     /**
@@ -190,18 +192,18 @@ public class HTTPClientSource extends AbstractLogEnabled
     public void parameterize( final Parameters params )
         throws ParameterException
     {
-        m_proxyHost = params.getParameter( PROXY_HOST, null );
-        m_proxyPort = params.getParameterAsInteger( PROXY_PORT, -1 );
+        this.m_proxyHost = params.getParameter( PROXY_HOST, null );
+        this.m_proxyPort = params.getParameterAsInteger( PROXY_PORT, -1 );
 
-        if ( getLogger().isDebugEnabled() )
+        if ( this.getLogger().isDebugEnabled() )
         {
             final String message =
-                m_proxyHost == null || m_proxyPort == -1
+                this.m_proxyHost == null || this.m_proxyPort == -1
                 ? "No proxy configured"
-                : "Configured with proxy host " 
-                  + m_proxyHost + " port " + m_proxyPort;
+                : "Configured with proxy host "
+                  + this.m_proxyHost + " port " + this.m_proxyPort;
 
-            getLogger().debug( message );
+            this.getLogger().debug( message );
         }
     }
 
@@ -212,31 +214,31 @@ public class HTTPClientSource extends AbstractLogEnabled
      */
     public void initialize() throws Exception
     {
-        m_client = new HttpClient();
+        this.m_client = new HttpClient();
 
-        if ( m_proxyHost != null && m_proxyPort != -1 )
+        if ( this.m_proxyHost != null && this.m_proxyPort != -1 )
         {
-            m_client.getHostConfiguration().setProxy( m_proxyHost, m_proxyPort );
+            this.m_client.getHostConfiguration().setProxy( this.m_proxyHost, this.m_proxyPort );
         }
-        if (m_httpState != null)
+        if (this.m_httpState != null)
         {
-            m_client.setState(m_httpState);
+            this.m_client.setState(this.m_httpState);
         }
 
-        m_dataValid = false;
+        this.m_dataValid = false;
     }
 
     /**
      * Method to discover what kind of request is being made from the
      * parameters map passed in to this Source's constructor.
      *
-     * @return the method type, or if no method type can be found, 
+     * @return the method type, or if no method type can be found,
      *         HTTP GET is assumed.
      */
     private String findMethodType()
     {
         final String method =
-            (String) m_parameters.get( SourceResolver.METHOD );
+            (String) this.m_parameters.get( SourceResolver.METHOD );
         return method == null ? GET : method;
     }
 
@@ -248,19 +250,19 @@ public class HTTPClientSource extends AbstractLogEnabled
      */
     private HttpMethod getMethod()
     {
-        final String method = findMethodType();
+        final String method = this.findMethodType();
 
         // create a POST method if requested
         if ( POST.equals( method ) )
         {
-            return createPostMethod(
-                m_uri, 
-                (SourceParameters) m_parameters.get( SourceResolver.URI_PARAMETERS )
+            return this.createPostMethod(
+                this.m_uri,
+                (SourceParameters) this.m_parameters.get( SourceResolver.URI_PARAMETERS )
             );
         }
 
         // default method is GET
-        return createGetMethod( m_uri );
+        return this.createGetMethod( this.m_uri );
     }
 
     /**
@@ -272,7 +274,7 @@ public class HTTPClientSource extends AbstractLogEnabled
      * @return a {@link PostMethod} instance
      */
     private PostMethod createPostMethod(
-        final String uri, final SourceParameters params 
+        final String uri, final SourceParameters params
     )
     {
         final PostMethod post = new PostMethod( uri );
@@ -311,14 +313,14 @@ public class HTTPClientSource extends AbstractLogEnabled
         final GetMethod method = new GetMethod( uri );
 
         // add all parameters as headers
-        for ( final Iterator i = m_parameters.keySet().iterator(); i.hasNext(); )
+        for ( final Iterator i = this.m_parameters.keySet().iterator(); i.hasNext(); )
         {
             final String key = (String) i.next();
-            final String value = (String) m_parameters.get( key );
+            final String value = (String) this.m_parameters.get( key );
 
-            if ( getLogger().isDebugEnabled() ) 
+            if ( this.getLogger().isDebugEnabled() )
             {
-                getLogger().debug(
+                this.getLogger().debug(
                     "Adding header '" + key + "', with value '" + value + "'"
                 );
             }
@@ -354,9 +356,8 @@ public class HTTPClientSource extends AbstractLogEnabled
         throws IOException
     {
         final PutMethod put = new PutMethod( uri );
-        put.setRequestBody( 
-            new FileInputStream( uploadFile.getAbsolutePath() ) 
-        );
+        put.setRequestEntity(new InputStreamRequestEntity(
+            new FileInputStream( uploadFile.getAbsolutePath() )));
         return put;
     }
 
@@ -378,21 +379,21 @@ public class HTTPClientSource extends AbstractLogEnabled
     private void updateData()
     {
         // no request made so far, attempt to get some response data.
-        if ( !m_dataValid )
+        if ( !this.m_dataValid )
         {
-            if ( GET.equals( findMethodType() ) )
+            if ( GET.equals( this.findMethodType() ) )
             {
-                final HttpMethod head = createHeadMethod( m_uri );
+                final HttpMethod head = this.createHeadMethod( this.m_uri );
                 try
                 {
-                    executeMethod( head );
+                    this.executeMethod( head );
                     return;
                 }
                 catch ( final IOException e )
                 {
-                    if ( getLogger().isDebugEnabled() )
+                    if ( this.getLogger().isDebugEnabled() )
                     {
-                        getLogger().debug(
+                        this.getLogger().debug(
                             "Unable to determine response data, using defaults", e
                         );
                     }
@@ -403,11 +404,11 @@ public class HTTPClientSource extends AbstractLogEnabled
             }
 
             // default values when response data is not available
-            m_exists = false;
-            m_mimeType = null;
-            m_contentLength = -1;
-            m_lastModified = 0;
-            m_dataValid = true;
+            this.m_exists = false;
+            this.m_mimeType = null;
+            this.m_contentLength = -1;
+            this.m_lastModified = 0;
+            this.m_dataValid = true;
         }
     }
 
@@ -423,12 +424,12 @@ public class HTTPClientSource extends AbstractLogEnabled
         throws IOException
     {
 
-        final int response = m_client.executeMethod( method );
+        final int response = this.m_client.executeMethod( method );
 
-        updateExists( method );
-        updateMimeType( method );
-        updateContentLength( method );
-        updateLastModified( method );
+        this.updateExists( method );
+        this.updateMimeType( method );
+        this.updateContentLength( method );
+        this.updateLastModified( method );
 
         // all finished, return response code to the caller.
         return response;
@@ -455,7 +456,7 @@ public class HTTPClientSource extends AbstractLogEnabled
         // 204 & 205 in the future
 
         // resource does not exist if HttpClient returns a 404 or a 410
-        m_exists = (response == HttpStatus.SC_OK ||
+        this.m_exists = (response == HttpStatus.SC_OK ||
                     response == HttpStatus.SC_CREATED ||
                     response == HttpStatus.SC_PARTIAL_CONTENT);
     }
@@ -463,14 +464,14 @@ public class HTTPClientSource extends AbstractLogEnabled
     /**
      * Method to ascertain whether the given resource actually exists.
      *
-     * @return <code>true</code> if the resource pointed to by the 
-     *         URI during construction exists, <code>false</code> 
+     * @return <code>true</code> if the resource pointed to by the
+     *         URI during construction exists, <code>false</code>
      *         otherwise.
      */
     public boolean exists()
     {
-        updateData();
-        return m_exists;
+        this.updateData();
+        return this.m_exists;
     }
 
     /**
@@ -484,70 +485,70 @@ public class HTTPClientSource extends AbstractLogEnabled
     public InputStream getInputStream()
         throws IOException, SourceNotFoundException
     {
-        final HttpMethod method = getMethod();
-        int response = executeMethod( method );
-        m_dataValid = true;
+        final HttpMethod method = this.getMethod();
+        int response = this.executeMethod( method );
+        this.m_dataValid = true;
 
         // throw SourceNotFoundException - according to Source API we
         // need to throw this if the source doesn't exist.
-        if ( !exists() )
+        if ( !this.exists() )
         {
             final StringBuffer error = new StringBuffer();
             error.append( "Unable to retrieve URI: " );
-            error.append( m_uri );
+            error.append( this.m_uri );
             error.append( " (" );
             error.append( response );
             error.append( ")" );
 
             throw new SourceNotFoundException( error.toString() );
         }
-        
+
         return method.getResponseBodyAsStream();
     }
 
     /**
      * Obtain the absolute URI this {@link Source} object references.
-     * 
+     *
      * @return the absolute URI this {@link String} object references.
      */
     public String getURI()
     {
-        return m_uri;
+        return this.m_uri;
     }
 
     /**
-     * Return the URI scheme identifier, ie.  the part preceding the fist ':' 
+     * Return the URI scheme identifier, ie.  the part preceding the fist ':'
      * in the URI (see <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC 2396</a>).
-     * 
+     *
      * @return the URI scheme identifier
      */
     public String getScheme()
     {
-        return SourceUtil.getScheme( m_uri );
+        return SourceUtil.getScheme( this.m_uri );
     }
-    
+
     /**
      * Obtain a {@link SourceValidity} object.
-     * 
-     * @return a {@link SourceValidity} object, or 
+     *
+     * @return a {@link SourceValidity} object, or
      *         <code>null</code> if this is not possible.
      */
     public SourceValidity getValidity()
     {
         // Implementation taken from URLSource.java, Kudos :)
 
-        final long lm = getLastModified();
+        final long lm = this.getLastModified();
 
         if ( lm > 0 )
         {
-            if ( lm == m_cachedLastModificationDate )
+            if ( lm == this.m_cachedLastModificationDate )
             {
-                return m_cachedValidity;
+                return this.m_cachedValidity;
             }
 
-            m_cachedLastModificationDate = lm;
-            m_cachedValidity = new TimeStampValidity( lm );
-            return m_cachedValidity;
+            this.m_cachedLastModificationDate = lm;
+            this.m_cachedValidity = new TimeStampValidity( lm );
+            return this.m_cachedValidity;
         }
 
         return null;
@@ -558,7 +559,7 @@ public class HTTPClientSource extends AbstractLogEnabled
      */
     public void refresh()
     {
-        recycle();
+        this.recycle();
     }
 
     /**
@@ -572,18 +573,18 @@ public class HTTPClientSource extends AbstractLogEnabled
         // REVISIT: should this be the mime-type, or the content-type -> URLSource
         // returns the Content-Type, so we'll follow that for now.
         final Header header = method.getResponseHeader( CONTENT_TYPE );
-        m_mimeType = header == null ? null : header.getValue();
+        this.m_mimeType = header == null ? null : header.getValue();
     }
 
     /**
      * Obtain the mime-type for the referenced resource.
-     * 
+     *
      * @return mime-type for the referenced resource.
      */
     public String getMimeType()
     {
-        updateData();
-        return m_mimeType;
+        this.updateData();
+        return this.m_mimeType;
     }
 
     /**
@@ -596,34 +597,34 @@ public class HTTPClientSource extends AbstractLogEnabled
     {
         try
         {
-            final Header length = 
+            final Header length =
                 method.getResponseHeader( CONTENT_LENGTH );
-            m_contentLength = 
+            this.m_contentLength =
                 length == null ? -1 : Long.parseLong( length.getValue() );
         }
         catch ( final NumberFormatException e )
         {
-            if ( getLogger().isDebugEnabled() )
+            if ( this.getLogger().isDebugEnabled() )
             {
-                getLogger().debug(
-                    "Unable to determine content length, returning -1", e 
+                this.getLogger().debug(
+                    "Unable to determine content length, returning -1", e
                 );
             }
 
-            m_contentLength = -1;
+            this.m_contentLength = -1;
         }
     }
 
     /**
      * Obtain the content length of the referenced resource.
-     * 
-     * @return content length of the referenced resource, or 
+     *
+     * @return content length of the referenced resource, or
      *         -1 if unknown/uncalculatable
      */
     public long getContentLength()
     {
-        updateData();
-        return m_contentLength;
+        this.updateData();
+        return this.m_contentLength;
     }
 
     /**
@@ -635,20 +636,28 @@ public class HTTPClientSource extends AbstractLogEnabled
     private void updateLastModified( final HttpMethod method )
     {
         final Header lastModified = method.getResponseHeader( LAST_MODIFIED );
-        m_lastModified = 
-            lastModified == null ? 0 : Date.parse( lastModified.getValue() );
+        try
+        {
+            this.m_lastModified =
+                lastModified == null ? 0 : DateUtil.parseDate( lastModified.getValue() ).getTime();
+        }
+        catch (DateParseException e)
+        {
+            // we ignore this exception and simply set last modified to 0
+            this.m_lastModified = 0;
+        }
     }
 
     /**
      * Get the last modification date of this source. This date is
      * measured in milliseconds since the Epoch (00:00:00 GMT, January 1, 1970).
-     * 
+     *
      * @return the last modification date or <code>0</code> if unknown.
      */
     public long getLastModified()
     {
-        updateData();
-        return m_lastModified;
+        this.updateData();
+        return this.m_lastModified;
     }
 
     /**
@@ -657,7 +666,7 @@ public class HTTPClientSource extends AbstractLogEnabled
      */
     private void recycle()
     {
-        m_dataValid = false;
+        this.m_dataValid = false;
     }
 
     /////////////////////////// ModifiableSource methods
@@ -675,11 +684,11 @@ public class HTTPClientSource extends AbstractLogEnabled
     public OutputStream getOutputStream() throws IOException
     {
         final File tempFile = File.createTempFile("httpclient", "tmp");
-        return new WrappedFileOutputStream( tempFile, getLogger() );
+        return new WrappedFileOutputStream( tempFile, this.getLogger() );
     }
 
     /**
-     * Internal class which extends {@link FileOutputStream} to 
+     * Internal class which extends {@link FileOutputStream} to
      * automatically upload the data written to it, upon a {@link #close}
      * operation.
      */
@@ -707,8 +716,8 @@ public class HTTPClientSource extends AbstractLogEnabled
             throws IOException
         {
             super( file );
-            m_file = file;
-            m_logger = logger;
+            this.m_file = file;
+            this.m_logger = logger;
         }
 
         /**
@@ -721,11 +730,11 @@ public class HTTPClientSource extends AbstractLogEnabled
         {
             super.close();
 
-            if ( m_file != null )
+            if ( this.m_file != null )
             {
-                upload();
-                m_file.delete();
-                m_file = null;
+                this.upload();
+                this.m_file.delete();
+                this.m_file = null;
             }
         }
 
@@ -736,7 +745,7 @@ public class HTTPClientSource extends AbstractLogEnabled
          */
         public boolean canCancel()
         {
-            return m_file != null;
+            return this.m_file != null;
         }
 
         /**
@@ -746,14 +755,14 @@ public class HTTPClientSource extends AbstractLogEnabled
          */
         public void cancel() throws IOException
         {
-            if ( m_file == null )
+            if ( this.m_file == null )
             {
                 throw new IOException( "Stream already closed" );
             }
 
             super.close();
-            m_file.delete();
-            m_file = null;
+            this.m_file.delete();
+            this.m_file = null;
         }
 
         /**
@@ -765,28 +774,28 @@ public class HTTPClientSource extends AbstractLogEnabled
         private void upload()
             throws IOException
         {
-            final HttpMethod uploader = createPutMethod( m_uri, m_file );
+            final HttpMethod uploader = HTTPClientSource.this.createPutMethod( HTTPClientSource.this.m_uri, this.m_file );
 
-            if ( m_logger.isDebugEnabled() )
+            if ( this.m_logger.isDebugEnabled() )
             {
-                m_logger.debug( "Stream closed, writing data to " + m_uri );
+                this.m_logger.debug( "Stream closed, writing data to " + HTTPClientSource.this.m_uri );
             }
 
             try
             {
-                final int response = executeMethod( uploader );
+                final int response = HTTPClientSource.this.executeMethod( uploader );
 
-                if ( !successfulUpload( response ) )
+                if ( !this.successfulUpload( response ) )
                 {
-                    throw new SourceException( 
-                        "Write to " + m_uri + " failed (" + response + ")"
+                    throw new SourceException(
+                        "Write to " + HTTPClientSource.this.m_uri + " failed (" + response + ")"
                     );
                 }
 
-                if ( m_logger.isDebugEnabled() )
+                if ( this.m_logger.isDebugEnabled() )
                 {
-                    m_logger.debug( 
-                        "Write to " + m_uri + " succeeded (" + response + ")"
+                    this.m_logger.debug(
+                        "Write to " + HTTPClientSource.this.m_uri + " succeeded (" + response + ")"
                     );
                 }
             }
@@ -821,30 +830,30 @@ public class HTTPClientSource extends AbstractLogEnabled
      */
     public void delete() throws SourceException
     {
-        final DeleteMethod delete = createDeleteMethod( m_uri );
+        final DeleteMethod delete = this.createDeleteMethod( this.m_uri );
         try
         {
-            final int response = executeMethod( delete );
+            final int response = this.executeMethod( delete );
 
-            if ( !deleteSuccessful( response ) )
+            if ( !this.deleteSuccessful( response ) )
             {
                 throw new SourceException(
-                    "Failed to delete " + m_uri + " (" + response + ")"
+                    "Failed to delete " + this.m_uri + " (" + response + ")"
                 );
             }
 
-            if ( getLogger().isDebugEnabled() )
+            if ( this.getLogger().isDebugEnabled() )
             {
-                getLogger().debug( m_uri + " deleted (" + response + ")");
+                this.getLogger().debug( this.m_uri + " deleted (" + response + ")");
             }
         }
         catch ( final IOException e )
         {
             throw new SourceException(
-                "IOException thrown during delete", e 
+                "IOException thrown during delete", e
             );
         }
-        finally 
+        finally
         {
             delete.releaseConnection();
         }
@@ -865,11 +874,11 @@ public class HTTPClientSource extends AbstractLogEnabled
     }
 
     /**
-     * Method to determine whether writing to the supplied OutputStream 
+     * Method to determine whether writing to the supplied OutputStream
      * (which must be that returned from {@link #getOutputStream()}) can
      * be cancelled
      *
-     * @return true if writing to the stream can be cancelled, 
+     * @return true if writing to the stream can be cancelled,
      *         false otherwise
      */
     public boolean canCancel( final OutputStream stream )
