@@ -75,7 +75,7 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
         String scheme = uri.substring(0, pos);
         String fileName = uri.substring(pos + 1);
         fileName = SourceUtil.decodePath(fileName);
-        init(scheme, new File(fileName));
+        this.init(scheme, new File(fileName));
     }
 
     /**
@@ -87,12 +87,12 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
      */
     public FileSource(String scheme, File file) throws SourceException
     {
-        init(scheme, file);
+        this.init(scheme, file);
     }
 
     private void init(String scheme, File file) throws SourceException
     {
-        m_scheme = scheme;
+        this.m_scheme = scheme;
 
         String uri;
         try
@@ -103,7 +103,7 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
             // TODO when we move to JDK 1.4+, we should use file.toURI().toASCIIString() instead.
             if ( uri.length() > 6 && uri.startsWith("file:/") && uri.charAt(6) != '/' )
             {
-                uri = "file://" + uri.substring(6);
+                uri = "file:///" + uri.substring(6);
             }
         }
         catch (MalformedURLException mue)
@@ -118,9 +118,9 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
             uri = scheme + ':' + uri.substring(uri.indexOf(':') + 1);
         }
 
-        m_uri = uri;
+        this.m_uri = uri;
 
-        m_file = file;
+        this.m_file = file;
     }
 
     /**
@@ -128,7 +128,7 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
      */
     public File getFile()
     {
-        return m_file;
+        return this.m_file;
     }
 
     //----------------------------------------------------------------------------------
@@ -140,7 +140,7 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
      */
     public long getContentLength()
     {
-        return m_file.length();
+        return this.m_file.length();
     }
 
     /**
@@ -150,11 +150,11 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
     {
         try
         {
-            return new FileInputStream(m_file);
+            return new FileInputStream(this.m_file);
         }
         catch (FileNotFoundException fnfe)
         {
-            throw new SourceNotFoundException(m_uri + " doesn't exist.", fnfe);
+            throw new SourceNotFoundException(this.m_uri + " doesn't exist.", fnfe);
         }
     }
 
@@ -163,7 +163,7 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
      */
     public long getLastModified()
     {
-        return m_file.lastModified();
+        return this.m_file.lastModified();
     }
 
     /**
@@ -171,7 +171,7 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
      */
     public String getMimeType()
     {
-        return URLConnection.getFileNameMap().getContentTypeFor(m_file.getName());
+        return URLConnection.getFileNameMap().getContentTypeFor(this.m_file.getName());
     }
 
     /* (non-Javadoc)
@@ -179,7 +179,7 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
      */
     public String getScheme()
     {
-        return m_scheme;
+        return this.m_scheme;
 
     }
 
@@ -188,7 +188,7 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
      */
     public String getURI()
     {
-        return m_uri;
+        return this.m_uri;
     }
 
     /**
@@ -198,9 +198,9 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
      */
     public SourceValidity getValidity()
     {
-        if (m_file.exists())
+        if (this.m_file.exists())
         {
-            return new FileTimeStampValidity(m_file);
+            return new FileTimeStampValidity(this.m_file);
         }
         else
         {
@@ -223,7 +223,7 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
      */
     public boolean exists()
     {
-        return getFile().exists();
+        return this.getFile().exists();
     }
 
     //----------------------------------------------------------------------------------
@@ -235,12 +235,12 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
      */
     public Source getChild(String name) throws SourceException
     {
-        if (!m_file.isDirectory())
+        if (!this.m_file.isDirectory())
         {
-            throw new SourceException(getURI() + " is not a directory");
+            throw new SourceException(this.getURI() + " is not a directory");
         }
 
-        return new FileSource(this.getScheme(), new File(m_file, name));
+        return new FileSource(this.getScheme(), new File(this.m_file, name));
 
     }
 
@@ -250,13 +250,13 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
     public Collection getChildren() throws SourceException
     {
 
-        if (!m_file.isDirectory())
+        if (!this.m_file.isDirectory())
         {
-            throw new SourceException(getURI() + " is not a directory");
+            throw new SourceException(this.getURI() + " is not a directory");
         }
 
         // Build a FileSource object for each of the children
-        File[] files = m_file.listFiles();
+        File[] files = this.m_file.listFiles();
 
         FileSource[] children = new FileSource[files.length];
         for (int i = 0; i < files.length; i++)
@@ -273,7 +273,7 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
      */
     public String getName()
     {
-        return m_file.getName();
+        return this.m_file.getName();
     }
 
     /**
@@ -281,7 +281,7 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
      */
     public Source getParent() throws SourceException
     {
-        return new FileSource(getScheme(), m_file.getParentFile());
+        return new FileSource(this.getScheme(), this.m_file.getParentFile());
     }
 
     /**
@@ -289,7 +289,7 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
      */
     public boolean isCollection()
     {
-        return m_file.isDirectory();
+        return this.m_file.isDirectory();
     }
 
     //----------------------------------------------------------------------------------
@@ -316,22 +316,22 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
     {
         // Create a temp file. It will replace the right one when writing terminates,
         // and serve as a lock to prevent concurrent writes.
-        File tmpFile = new File(getFile().getPath() + ".tmp");
+        File tmpFile = new File(this.getFile().getPath() + ".tmp");
 
         // Ensure the directory exists
         tmpFile.getParentFile().mkdirs();
 
         // Can we write the file ?
-        if (getFile().exists() && !getFile().canWrite())
+        if (this.getFile().exists() && !this.getFile().canWrite())
         {
-            throw new IOException("Cannot write to file " + getFile().getPath());
+            throw new IOException("Cannot write to file " + this.getFile().getPath());
         }
 
         // Check if it temp file already exists, meaning someone else currently writing
         if (!tmpFile.createNewFile())
         {
             throw new ConcurrentModificationException(
-                "File " + getFile().getPath() + " is already being written by another thread");
+                "File " + this.getFile().getPath() + " is already being written by another thread");
         }
 
         // Return a stream that will rename the temp file on close.
@@ -393,14 +393,14 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
      */
     public void delete() throws SourceException
     {
-        if (!m_file.exists())
+        if (!this.m_file.exists())
         {
-            throw new SourceNotFoundException("Cannot delete non-existing file " + m_file.toString());
+            throw new SourceNotFoundException("Cannot delete non-existing file " + this.m_file.toString());
         }
 
-        if (!m_file.delete())
+        if (!this.m_file.delete())
         {
-            throw new SourceException("Could not delete " + m_file.toString() + " (unknown reason)");
+            throw new SourceException("Could not delete " + this.m_file.toString() + " (unknown reason)");
         }
     }
 
@@ -413,7 +413,7 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
      */
     public void makeCollection() throws SourceException
     {
-        m_file.mkdirs();
+        this.m_file.mkdirs();
     }
 
     //----------------------------------------------------------------------------------
@@ -431,7 +431,7 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
         }
         catch (IOException ioe)
         {
-            throw new SourceException("Couldn't copy " + getURI() + " to " + destination.getURI(), ioe);
+            throw new SourceException("Couldn't copy " + this.getURI() + " to " + destination.getURI(), ioe);
         }
     }
 
@@ -450,9 +450,9 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
                 parent.mkdirs(); // ensure parent directories exist
             }
 
-            if (!m_file.renameTo(dest))
+            if (!this.m_file.renameTo(dest))
             {
-                throw new SourceException("Couldn't move " + getURI() + " to " + destination.getURI());
+                throw new SourceException("Couldn't move " + this.getURI() + " to " + destination.getURI());
             }
         }
         else
@@ -480,28 +480,28 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
         public FileSourceOutputStream(File tmpFile, FileSource source) throws IOException
         {
             super(tmpFile);
-            m_tmpFile = tmpFile;
-            m_source = source;
+            this.m_tmpFile = tmpFile;
+            this.m_source = source;
         }
 
         public void close() throws IOException
         {
-            if (!m_isClosed)
+            if (!this.m_isClosed)
             {
                 super.close();
                 try
                 {
                     // Delete destination file
-                    if (m_source.getFile().exists())
+                    if (this.m_source.getFile().exists())
                     {
-                        m_source.getFile().delete();
+                        this.m_source.getFile().delete();
                     }
                     // Rename temp file to destination file
-                    if (!m_tmpFile.renameTo(m_source.getFile()))
+                    if (!this.m_tmpFile.renameTo(this.m_source.getFile()))
                     {
                        throw new IOException("Could not rename " +
-                         m_tmpFile.getAbsolutePath() +
-                         " to " + m_source.getFile().getAbsolutePath());
+                         this.m_tmpFile.getAbsolutePath() +
+                         " to " + this.m_source.getFile().getAbsolutePath());
                     }
 
                 }
@@ -509,11 +509,11 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
                 {
                     // Ensure temp file is deleted, ie lock is released.
                     // If there was a failure above, written data is lost.
-                    if (m_tmpFile.exists())
+                    if (this.m_tmpFile.exists())
                     {
-                        m_tmpFile.delete();
+                        this.m_tmpFile.delete();
                     }
-                    m_isClosed = true;
+                    this.m_isClosed = true;
                 }
             }
 
@@ -521,33 +521,33 @@ public class FileSource implements ModifiableTraversableSource, MoveableSource
 
         public boolean canCancel()
         {
-            return !m_isClosed;
+            return !this.m_isClosed;
         }
 
         public void cancel() throws Exception
         {
-            if (m_isClosed)
+            if (this.m_isClosed)
             {
                 throw new IllegalStateException("Cannot cancel : outputstrem is already closed");
             }
 
-            m_isClosed = true;
+            this.m_isClosed = true;
             super.close();
-            m_tmpFile.delete();
+            this.m_tmpFile.delete();
         }
 
         public void finalize()
         {
-            if (!m_isClosed && m_tmpFile.exists())
+            if (!this.m_isClosed && this.m_tmpFile.exists())
             {
                 // Something wrong happened while writing : delete temp file
-                m_tmpFile.delete();
+                this.m_tmpFile.delete();
             }
         }
 
         public FileSource getSource()
         {
-            return m_source;
+            return this.m_source;
         }
     }
 }

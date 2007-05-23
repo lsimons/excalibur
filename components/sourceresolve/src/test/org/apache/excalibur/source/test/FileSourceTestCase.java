@@ -19,6 +19,7 @@ package org.apache.excalibur.source.test;
 import java.io.File;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.URL;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
 
@@ -228,6 +229,18 @@ public class FileSourceTestCase extends TestCase
         final String uri = src.getURI();
         int indexOfProtocol = uri.indexOf("file://");
         assertEquals("File uril is invalid.", 0, indexOfProtocol);
+    }
+
+    public void testFileUrlFileConversion() throws Exception
+    {
+        final File realFile = new File(this.m_tempDir, "file");
+        FileSource src = new FileSource("file", realFile);
+        final String uri = src.getURI();
+        // This relies on systemId being of the form "file://..."
+        File directoryFile = new File(new URL(uri).getFile());
+        String a = realFile.getAbsolutePath();
+        String b = directoryFile.getAbsolutePath();
+        assertEquals("Conversion failed", a, b);
     }
 
     protected void tearDown() throws Exception
