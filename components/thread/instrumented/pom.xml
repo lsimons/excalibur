@@ -17,9 +17,9 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
-    <groupId>org.apache.excalibur.components</groupId>
-    <artifactId>excalibur-thread-modules</artifactId>
-    <version>2-SNAPSHOT</version>
+    <groupId>org.apache.excalibur</groupId>
+    <artifactId>excalibur</artifactId>
+    <version>2</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.excalibur.components</groupId>
@@ -32,12 +32,12 @@
     <dependency>
       <groupId>org.apache.avalon.framework</groupId>
       <artifactId>avalon-framework-api</artifactId>
-      <version>4.3.2-SNAPSHOT</version>
+      <version>4.3.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.avalon.framework</groupId>
       <artifactId>avalon-framework-impl</artifactId>
-      <version>4.3.2-SNAPSHOT</version>
+      <version>4.3.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.excalibur.components</groupId>
@@ -47,12 +47,12 @@
     <dependency>
       <groupId>org.apache.excalibur.components</groupId>
       <artifactId>excalibur-pool-api</artifactId>
-      <version>2.2.2-SNAPSHOT</version>
+      <version>2.2.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.excalibur.components</groupId>
       <artifactId>excalibur-pool-impl</artifactId>
-      <version>2.2.2-SNAPSHOT</version>
+      <version>2.2.1</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -63,7 +63,7 @@
     <dependency>
       <groupId>org.apache.excalibur.containerkit</groupId>
       <artifactId>excalibur-instrument-api</artifactId>
-      <version>2.2.2-SNAPSHOT</version>
+      <version>2.2.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.excalibur.components</groupId>
@@ -73,7 +73,7 @@
     <dependency>
       <groupId>org.apache.excalibur.components</groupId>
       <artifactId>excalibur-pool-instrumented</artifactId>
-      <version>2.2.2-SNAPSHOT</version>
+      <version>2.2.1</version>
     </dependency>
   </dependencies>
   <build />
