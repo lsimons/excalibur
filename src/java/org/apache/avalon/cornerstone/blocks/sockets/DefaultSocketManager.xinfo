@@ -22,7 +22,6 @@
 
   <block>
     <version>1.0</version>
-    <schema-type>http://relaxng.org/ns/structure/1.0</schema-type>
   </block>
 
   <services>
