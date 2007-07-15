@@ -23,9 +23,9 @@
     +-->
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
-    <groupId>org.apache.excalibur.deprecated</groupId>
-    <artifactId>excalibur-deprecated-modules</artifactId>
-    <version>1</version>
+    <groupId>org.apache.excalibur</groupId>
+    <artifactId>excalibur</artifactId>
+    <version>3</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>Excalibur I18N</name>
@@ -33,8 +33,7 @@
   <groupId>org.apache.avalon.excalibur.i18n</groupId>
   <version>2.2.2-SNAPSHOT</version>
   <description>Excalibur I18N</description>
-  <dependencies>
-  </dependencies>
+  <dependencies/>
   <build/>
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/deprecated/i18n</connection>

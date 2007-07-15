@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   Licensed to the Apache Software Foundation (ASF) under one or more
   contributor license agreements.  See the NOTICE file distributed with
@@ -17,9 +17,9 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
-    <groupId>org.apache.avalon.cornerstone.sockets</groupId>
-    <artifactId>cornerstone-sockets</artifactId>
-    <version>2-SNAPSHOT</version>
+    <groupId>org.apache.excalibur</groupId>
+    <artifactId>excalibur</artifactId>
+    <version>3</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.avalon.cornerstone.sockets</groupId>
@@ -55,7 +55,7 @@
       <version>2.4.0</version>
     </dependency>
   </dependencies>
-  <build />
+  <build/>
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/cornerstone/sockets/impl</connection>
     <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/cornerstone/sockets/impl</url>
