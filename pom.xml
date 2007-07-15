@@ -87,6 +87,7 @@
                     <include name="**/*.roles" />
                     <include name="**/*.xconf" />
                     <include name="**/*.xlog" />
+                    <include name="**/*.xinfo" />
                   </fileset>
                 </copy>
               </tasks>
