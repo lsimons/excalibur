@@ -21,7 +21,6 @@
 <blockinfo>
   <block>
     <version>1.0</version>
-    <schema-type>relax-ng</schema-type>
   </block>
   <services>
     <service name="org.apache.avalon.cornerstone.services.datasources.DataSourceSelector"/>
