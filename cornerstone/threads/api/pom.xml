@@ -25,7 +25,7 @@
   <groupId>org.apache.avalon.cornerstone.threads</groupId>
   <artifactId>cornerstone-threads-api</artifactId>
   <name>Cornerstone Threads API</name>
-  <version>2.2.2-SNAPSHOT</version>
+  <version>2.2.3-SNAPSHOT</version>
   <inceptionYear>2001</inceptionYear>
   <dependencies>
     <dependency>
@@ -34,7 +34,7 @@
       <version>2.2.1</version>
     </dependency>
   </dependencies>
-  <build/>
+  <build />
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/cornerstone/threads/api</connection>
     <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/cornerstone/threads/api</url>

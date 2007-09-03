@@ -24,13 +24,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.avalon.cornerstone.sockets</groupId>
   <artifactId>cornerstone-sockets-impl</artifactId>
-  <version>2.2.2-SNAPSHOT</version>
+  <version>2.2.3-SNAPSHOT</version>
   <name>Cornerstone Sockets Implementation</name>
   <dependencies>
     <dependency>
       <groupId>org.apache.avalon.cornerstone.sockets</groupId>
       <artifactId>cornerstone-sockets-api</artifactId>
-      <version>2.2.2-SNAPSHOT</version>
+      <version>2.2.2</version>
     </dependency>
     <dependency>
       <groupId>org.apache.avalon.framework</groupId>
@@ -55,7 +55,7 @@
       <version>2.4.0</version>
     </dependency>
   </dependencies>
-  <build/>
+  <build />
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/cornerstone/sockets/impl</connection>
     <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/cornerstone/sockets/impl</url>

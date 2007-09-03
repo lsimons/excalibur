@@ -24,7 +24,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.avalon.cornerstone.scheduler</groupId>
   <artifactId>cornerstone-scheduler-api</artifactId>
-  <version>2.2.2-SNAPSHOT</version>
+  <version>2.2.3-SNAPSHOT</version>
   <name>Cornerstone Scheduler API</name>
   <dependencies>
     <dependency>
@@ -45,7 +45,7 @@
       <version>2.4.0</version>
     </dependency>
   </dependencies>
-  <build/>
+  <build />
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/cornerstone/scheduler/api</connection>
     <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/cornerstone/scheduler/api</url>
