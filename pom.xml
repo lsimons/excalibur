@@ -24,7 +24,7 @@
   </parent>
   <groupId>org.apache.excalibur</groupId>
   <artifactId>excalibur</artifactId>
-  <version>3-SNAPSHOT</version>
+  <version>3</version>
   <name>Excalibur</name>
   <packaging>pom</packaging>
   <modules>
@@ -36,9 +36,9 @@
     <module>cornerstone</module>
   </modules>
   <scm>
-    <connection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</developerConnection>
-    <url>https://svn.apache.org/repos/asf/excalibur/tags/excalibur-first-maven2-release</url>
+    <connection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-3</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/tags/excalibur-3</developerConnection>
+    <url>https://svn.apache.org/repos/asf/excalibur/tags/excalibur-3</url>
   </scm>
   <distributionManagement>
     <repository>
