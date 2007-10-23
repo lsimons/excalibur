@@ -43,10 +43,23 @@
       <version>3.0.0-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.apache.excalibur.components</groupId>
+      <artifactId>excalibur-sourceresolve-impl</artifactId>
+      <version>3.0.0-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+      <version>3.8.2</version>
+    </dependency>
   </dependencies>
   <build>
     <!--  We have to redefine this as our parent pom defines src/java as the source dir! -->
     <sourceDirectory>src/main/java</sourceDirectory>
+    <testSourceDirectory>src/main/test</testSourceDirectory>
   </build>
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/components/sourceresolve/avalon</connection>
