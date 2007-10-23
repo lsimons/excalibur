@@ -24,8 +24,6 @@ import org.apache.avalon.framework.activity.Disposable;
 import org.apache.avalon.framework.context.Context;
 import org.apache.avalon.framework.context.ContextException;
 import org.apache.avalon.framework.context.Contextualizable;
-import org.apache.avalon.framework.logger.LogEnabled;
-import org.apache.avalon.framework.logger.Logger;
 import org.apache.avalon.framework.service.ServiceException;
 import org.apache.avalon.framework.service.ServiceManager;
 import org.apache.avalon.framework.service.ServiceSelector;
@@ -60,7 +58,6 @@ public class SourceResolverImpl
     implements Serviceable,
     Contextualizable,
     Disposable,
-    LogEnabled,
     ThreadSafe
 {
 
@@ -69,9 +66,6 @@ public class SourceResolverImpl
 
     /** The special Source factories */
     protected ServiceSelector m_factorySelector;
-
-    /** Our logger. */
-    private Logger m_logger;
 
     /**
      * @see org.apache.excalibur.source.impl.AbstractSourceResolver#getSourceFactory(java.lang.String)
@@ -95,35 +89,6 @@ public class SourceResolverImpl
     protected void releaseSourceFactory(SourceFactory factory)
     {
         this.m_factorySelector.release(factory);
-    }
-
-    /**
-     * @see org.apache.avalon.framework.logger.LogEnabled#enableLogging(org.apache.avalon.framework.logger.Logger)
-     */
-    public void enableLogging(Logger logger)
-    {
-        this.m_logger = logger;
-    }
-
-    protected final Logger getLogger()
-    {
-        return this.m_logger;
-    }
-
-    /**
-     * @see org.apache.excalibur.source.impl.AbstractSourceResolver#debug(java.lang.String)
-     */
-    protected final void debug(String text)
-    {
-        this.m_logger.debug(text);
-    }
-
-    /**
-     * @see org.apache.excalibur.source.impl.AbstractSourceResolver#isDebugEnabled()
-     */
-    protected final boolean isDebugEnabled()
-    {
-        return this.m_logger.isDebugEnabled();
     }
 
     /**

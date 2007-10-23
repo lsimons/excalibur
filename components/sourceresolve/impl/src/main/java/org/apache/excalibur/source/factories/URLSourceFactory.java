@@ -70,10 +70,10 @@ public class URLSourceFactory extends AbstractLoggable implements SourceFactory
      */
     public Source getSource(String uri, Map parameters) throws MalformedURLException, IOException
     {
-        if (this.isDebugEnabled())
+        if (this.getLogger().isDebugEnabled())
         {
             final String message = "Creating source object for " + uri;
-            this.debug(message);
+            this.getLogger().debug(message);
         }
 
         // First check if it's a file
@@ -94,9 +94,9 @@ public class URLSourceFactory extends AbstractLoggable implements SourceFactory
             catch (MalformedURLException mue)
             {
                 // Maybe a file name containing a ':' ?
-                if (this.isDebugEnabled())
+                if (this.getLogger().isDebugEnabled())
                 {
-                    this.debug("URL " + uri + " is malformed. Assuming it's a file path.", mue);
+                    this.getLogger().debug("URL " + uri + " is malformed. Assuming it's a file path.", mue);
                 }
                 return createFileSource(uri);
             }

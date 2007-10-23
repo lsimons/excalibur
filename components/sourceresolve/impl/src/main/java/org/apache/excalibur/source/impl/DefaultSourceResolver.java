@@ -19,8 +19,6 @@ package org.apache.excalibur.source.impl;
 import java.util.Collections;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.excalibur.source.SourceFactory;
 import org.apache.excalibur.source.SourceResolver;
 
@@ -33,9 +31,6 @@ import org.apache.excalibur.source.SourceResolver;
 public class DefaultSourceResolver
     extends AbstractSourceResolver
 {
-
-    /** Logger */
-    protected final Log m_logger = LogFactory.getLog(getClass());
 
     /** The list of source factories. */
     protected Map m_sourceFactories = Collections.EMPTY_MAP;
@@ -51,21 +46,5 @@ public class DefaultSourceResolver
     protected SourceFactory getSourceFactory(String protocol)
     {
         return (SourceFactory)m_sourceFactories.get(protocol);
-    }
-
-    /**
-     * @see org.apache.excalibur.source.impl.AbstractSourceResolver#debug(java.lang.String)
-     */
-    protected void debug(String text)
-    {
-        m_logger.debug(text);
-    }
-
-    /**
-     * @see org.apache.excalibur.source.impl.AbstractSourceResolver#isDebugEnabled()
-     */
-    protected boolean isDebugEnabled()
-    {
-        return m_logger.isDebugEnabled();
     }
 }

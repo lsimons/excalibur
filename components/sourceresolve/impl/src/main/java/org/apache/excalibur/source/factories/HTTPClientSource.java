@@ -40,6 +40,7 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.util.DateParseException;
 import org.apache.commons.httpclient.util.DateUtil;
+import org.apache.commons.logging.Log;
 import org.apache.excalibur.source.ModifiableSource;
 import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceException;
@@ -299,9 +300,9 @@ public class HTTPClientSource extends AbstractLoggable
             final String key = (String) i.next();
             final String value = (String) this.m_parameters.get( key );
 
-            if ( this.isDebugEnabled() )
+            if ( this.getLogger().isDebugEnabled() )
             {
-                this.debug(
+                this.getLogger().debug(
                     "Adding header '" + key + "', with value '" + value + "'"
                 );
             }
@@ -372,9 +373,9 @@ public class HTTPClientSource extends AbstractLoggable
                 }
                 catch ( final IOException e )
                 {
-                    if ( this.isDebugEnabled() )
+                    if ( this.getLogger().isDebugEnabled() )
                     {
-                        this.debug(
+                        this.getLogger().debug(
                             "Unable to determine response data, using defaults", e
                         );
                     }
@@ -585,9 +586,9 @@ public class HTTPClientSource extends AbstractLoggable
         }
         catch ( final NumberFormatException e )
         {
-            if ( this.isDebugEnabled() )
+            if ( this.getLogger().isDebugEnabled() )
             {
-                this.debug(
+                this.getLogger().debug(
                     "Unable to determine content length, returning -1", e
                 );
             }
@@ -665,7 +666,7 @@ public class HTTPClientSource extends AbstractLoggable
     public OutputStream getOutputStream() throws IOException
     {
         final File tempFile = File.createTempFile("httpclient", "tmp");
-        return new WrappedFileOutputStream( tempFile, this );
+        return new WrappedFileOutputStream( tempFile, this.getLogger() );
     }
 
     /**
@@ -683,7 +684,7 @@ public class HTTPClientSource extends AbstractLoggable
         /**
          * Reference to a logger.
          */
-        private AbstractLoggable m_logger;
+        private Log m_logger;
 
         /**
          * Constructor, creates a new {@link WrappedFileOutputStream}
@@ -693,7 +694,7 @@ public class HTTPClientSource extends AbstractLoggable
          * @param logger {@link Logger} reference.
          * @exception IOException if an error occurs
          */
-        public WrappedFileOutputStream( final File file, final AbstractLoggable logger )
+        public WrappedFileOutputStream( final File file, final Log logger )
             throws IOException
         {
             super( file );
@@ -823,9 +824,9 @@ public class HTTPClientSource extends AbstractLoggable
                 );
             }
 
-            if ( this.isDebugEnabled() )
+            if ( this.getLogger().isDebugEnabled() )
             {
-                this.debug( this.m_uri + " deleted (" + response + ")");
+                this.getLogger().debug( this.m_uri + " deleted (" + response + ")");
             }
         }
         catch ( final IOException e )

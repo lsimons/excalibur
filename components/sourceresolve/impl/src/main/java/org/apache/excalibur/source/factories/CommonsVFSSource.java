@@ -67,8 +67,8 @@ public class CommonsVFSSource extends AbstractSource
             setContentLength(m_fileContent.getSize());
         } catch (final FileSystemException e) {
 
-            if (this.isWarnEnabled()) {
-                this.warn(
+            if (this.getLogger().isWarnEnabled()) {
+                this.getLogger().warn(
                     "Unable to determine content length for " + m_location, e
                 );
             }
@@ -79,8 +79,8 @@ public class CommonsVFSSource extends AbstractSource
             setLastModified(m_fileContent.getLastModifiedTime());
         } catch (final FileSystemException e) {
 
-            if (this.isWarnEnabled()) {
-                this.warn(
+            if (this.getLogger().isWarnEnabled()) {
+                this.getLogger().warn(
                     "Unable to determine last modified date for " + m_location, e
                 );
             }
@@ -114,8 +114,8 @@ public class CommonsVFSSource extends AbstractSource
             return m_fileObject.exists();
         } catch (final FileSystemException e) {
 
-            if (this.isWarnEnabled()) {
-                this.warn("Unable to determine existence for " + m_location, e);
+            if (this.getLogger().isWarnEnabled()) {
+                this.getLogger().warn("Unable to determine existence for " + m_location, e);
             }
             return false;
         }

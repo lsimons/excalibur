@@ -47,6 +47,7 @@ import org.apache.excalibur.source.URIAbsolutizer;
  * @version $Id$
  */
 public abstract class AbstractSourceResolver
+    extends AbstractLoggable
     implements SourceResolver
 {
 
@@ -59,16 +60,6 @@ public abstract class AbstractSourceResolver
     public void setBaseURL(URL baseurl)
     {
         m_baseURL = baseurl;
-    }
-
-    protected boolean isDebugEnabled()
-    {
-        return false;
-    }
-
-    protected void debug(String text)
-    {
-        // we do not log
     }
 
     protected abstract SourceFactory getSourceFactory(String protocol);
@@ -97,9 +88,9 @@ public abstract class AbstractSourceResolver
                               Map parameters )
         throws MalformedURLException, IOException, SourceException
     {
-        if( this.isDebugEnabled() )
+        if( this.getLogger().isDebugEnabled() )
         {
-            this.debug( "Resolving '" + location + "' with base '" + baseURI + "' in context '" + m_baseURL + "'" );
+            this.getLogger().debug( "Resolving '" + location + "' with base '" + baseURI + "' in context '" + m_baseURL + "'" );
         }
         if( location == null ) throw new MalformedURLException( "Invalid System ID" );
         if( null != baseURI && SourceUtil.indexOfSchemeColon(baseURI) == -1 )
@@ -141,8 +132,8 @@ public abstract class AbstractSourceResolver
             if ( factory != null )
             {
                 systemID = absolutize( factory, baseURI, systemID );
-                if( this.isDebugEnabled() )
-                    this.debug( "Resolved to systemID : " + systemID );
+                if( this.getLogger().isDebugEnabled() )
+                    this.getLogger().debug( "Resolved to systemID : " + systemID );
                 source = factory.getSource( systemID, parameters );
             }
         }
@@ -161,8 +152,8 @@ public abstract class AbstractSourceResolver
                     throw new SourceException( "Unable to select source factory for '" + systemID + "'. No default factory found.");
                 }
                 systemID = absolutize( factory, baseURI, systemID );
-                if( this.isDebugEnabled() )
-                    this.debug( "Resolved to systemID : " + systemID );
+                if( this.getLogger().isDebugEnabled() )
+                    this.getLogger().debug( "Resolved to systemID : " + systemID );
                 source = factory.getSource( systemID, parameters );
             }
             finally

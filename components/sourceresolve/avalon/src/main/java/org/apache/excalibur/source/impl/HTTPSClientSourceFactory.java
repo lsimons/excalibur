@@ -42,6 +42,8 @@ public class HTTPSClientSourceFactory extends org.apache.excalibur.source.factor
     public void parameterize( final Parameters params )
         throws ParameterException
     {
+        this.setProxyHost(params.getParameter( HTTPClientSourceFactory.PROXY_HOST, null ));
+        this.setProxyPort(params.getParameterAsInteger( HTTPClientSourceFactory.PROXY_PORT, -1 ));
         try {
             if ( params.getParameter(SSL_PROVIDER, null ) != null ) {
                 this.setProvider( params.getParameter(SSL_PROVIDER) );

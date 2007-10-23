@@ -48,10 +48,10 @@ public class ResourceSourceFactory
     public Source getSource( String location, Map parameters )
         throws MalformedURLException, IOException, SourceException
     {
-        if( this.isDebugEnabled() )
+        if( this.getLogger().isDebugEnabled() )
         {
             final String message = "Creating source object for " + location;
-            this.debug( message );
+            this.getLogger().debug( message );
         }
         return new ResourceSource( location );
     }
@@ -61,10 +61,10 @@ public class ResourceSourceFactory
      */
     public void release( Source source )
     {
-        if( null != source && this.isDebugEnabled() )
+        if( null != source && this.getLogger().isDebugEnabled() )
         {
             final String message = "Releasing source object for " + source.getURI();
-            this.debug( message );
+            this.getLogger().debug( message );
         }
         // do nothing here
     }

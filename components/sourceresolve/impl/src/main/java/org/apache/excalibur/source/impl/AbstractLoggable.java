@@ -29,43 +29,9 @@ import org.apache.commons.logging.LogFactory;
 public abstract class AbstractLoggable
 {
     /** Logger */
-    protected Log m_logger;
+    protected final Log m_logger = LogFactory.getLog(getClass());
 
-    protected void initLogger()
-    {
-        if ( m_logger == null )
-        {
-            m_logger = LogFactory.getLog(getClass());
-        }
-    }
-
-    public boolean isDebugEnabled()
-    {
-        initLogger();
-        return m_logger.isDebugEnabled();
-    }
-
-    public void debug(String text)
-    {
-        initLogger();
-        m_logger.debug(text);
-    }
-
-    public void debug(String text, Throwable t)
-    {
-        initLogger();
-        m_logger.debug(text, t);
-    }
-
-    public boolean isWarnEnabled()
-    {
-        initLogger();
-        return m_logger.isWarnEnabled();
-    }
-
-    public void warn(String text, Throwable t)
-    {
-        initLogger();
-        m_logger.warn(text, t);
+    protected Log getLogger() {
+        return m_logger;
     }
 }

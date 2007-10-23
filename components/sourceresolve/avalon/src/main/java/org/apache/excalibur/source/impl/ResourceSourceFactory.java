@@ -16,8 +16,6 @@
  */
 package org.apache.excalibur.source.impl;
 
-import org.apache.avalon.framework.logger.LogEnabled;
-import org.apache.avalon.framework.logger.Logger;
 import org.apache.avalon.framework.thread.ThreadSafe;
 
 /**
@@ -33,19 +31,6 @@ import org.apache.avalon.framework.thread.ThreadSafe;
  */
 public class ResourceSourceFactory
     extends org.apache.excalibur.source.factories.ResourceSourceFactory
-    implements LogEnabled, ThreadSafe
+    implements ThreadSafe
 {
-    /**
-     * Enables logging for this source.
-     *
-     * @param logger {@link Logger} instance to use
-     * @see org.apache.avalon.framework.logger.LogEnabled
-     *      #enableLogging(org.apache.avalon.framework.logger.Logger)
-     */
-    public void enableLogging(final Logger logger) {
-        m_logger = logger;
-    }
-
-    /** Our logging target */
-    private Logger m_logger;
 }

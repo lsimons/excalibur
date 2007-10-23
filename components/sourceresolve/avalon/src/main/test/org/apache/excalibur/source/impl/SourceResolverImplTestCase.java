@@ -52,7 +52,6 @@ public class SourceResolverImplTestCase extends TestCase
         //
 
         final SourceResolverImpl resolver = new SourceResolverImpl();
-        resolver.enableLogging( logger );
 
         //
         // create the context argument and set the root directory and
@@ -71,7 +70,6 @@ public class SourceResolverImplTestCase extends TestCase
         //
 
         final ResourceSourceFactory factory = new ResourceSourceFactory();
-        factory.enableLogging( logger.getChildLogger( "factory" ) );
 
         // create a selector and add the factory to the selector,
         // add the selector to the manager, and service the resolver
