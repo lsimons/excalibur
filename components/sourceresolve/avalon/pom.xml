@@ -49,8 +49,8 @@
     <sourceDirectory>src/main/java</sourceDirectory>
   </build>
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/components/sourceresolve/jnet</connection>
-    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/components/sourceresolve/jnet</url>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/trunk/components/sourceresolve/jnet</developerConnection>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/excalibur/trunk/components/sourceresolve/avalon</connection>
+    <url>http://svn.apache.org/viewcvs.cgi/excalibur/trunk/components/sourceresolve/avalon</url>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/excalibur/trunk/components/sourceresolve/avalon</developerConnection>
   </scm>
 </project>

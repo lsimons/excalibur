@@ -21,7 +21,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.excalibur.source.impl.FileSourceFactory;
+import org.apache.excalibur.source.factories.FileSourceFactory;
 import org.apache.excalibur.sourceresolve.jnet.Installer;
 import org.apache.excalibur.sourceresolve.jnet.source.SourceURLStreamHandlerFactory;
 import org.apache.excalibur.sourceresolve.jnet.source.SourceFactoriesManager;
