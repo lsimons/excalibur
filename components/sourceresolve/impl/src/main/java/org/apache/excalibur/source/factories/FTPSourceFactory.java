@@ -29,7 +29,7 @@ import org.apache.excalibur.source.Source;
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  * @version $Id$
  */
-public final class FTPSourceFactory extends URLSourceFactory
+public class FTPSourceFactory extends URLSourceFactory
 {
 
     public FTPSourceFactory()
