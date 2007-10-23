@@ -37,7 +37,7 @@ import org.apache.excalibur.source.impl.validity.TimeStampValidity;
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  * @version $Id$
  */
-public final class ResourceSource
+public class ResourceSource
     extends AbstractSource
     implements Source
 {

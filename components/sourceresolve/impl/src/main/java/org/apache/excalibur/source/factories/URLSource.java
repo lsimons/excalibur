@@ -72,13 +72,6 @@ public class URLSource extends AbstractSource implements Source
     /** The content type (if known) */
     protected String m_mimeType;
 
-    /**
-     * Constructor
-     */
-    public URLSource()
-    {
-    }
-
     public void setConnectTimeout(int value) {
         this.connectTimeout = value;
     }

@@ -43,11 +43,6 @@ public class FTPSource extends URLSource implements ModifiableSource
 {
     private boolean m_isAscii;
 
-    public FTPSource()
-    {
-        super();
-    }
-
     /**
      * Initialize a new object from a <code>URL</code>.
      * @param parameters This is optional
