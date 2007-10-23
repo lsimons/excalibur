@@ -30,7 +30,7 @@ import java.util.StringTokenizer;
  * request parameters.
  * <p>
  * Only particular kinds of <code>Source</code> implementations, such as
- * {@link org.apache.excalibur.source.impl.URLSource} support this kind of
+ * {@link org.apache.excalibur.source.factories.URLSource} support this kind of
  * parameters, passed as the {@link SourceResolver#URI_PARAMETERS} entry
  * in the <code>parameters</code> argument of
  * {@link SourceResolver#resolveURI(String, String, Map)}.
