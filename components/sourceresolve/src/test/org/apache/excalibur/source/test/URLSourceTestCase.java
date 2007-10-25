@@ -23,7 +23,7 @@ import java.io.FileOutputStream;
 import java.net.URL;
 import java.util.Collections;
 
-import org.apache.excalibur.source.factories.URLSource;
+import org.apache.excalibur.source.impl.URLSource;
 
 /**
  * Test case for URLSource.

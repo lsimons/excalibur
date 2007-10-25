@@ -29,7 +29,7 @@ import org.apache.excalibur.source.ModifiableSource;
 import org.apache.excalibur.source.Source;
 import org.apache.excalibur.source.SourceUtil;
 import org.apache.excalibur.source.SourceValidity;
-import org.apache.excalibur.source.factories.FileSource;
+import org.apache.excalibur.source.impl.FileSource;
 
 /**
  * Test case for FileSource.

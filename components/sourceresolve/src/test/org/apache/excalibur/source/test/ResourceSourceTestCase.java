@@ -20,7 +20,7 @@ import junit.framework.TestCase;
 
 import org.apache.excalibur.source.SourceNotFoundException;
 import org.apache.excalibur.source.SourceValidity;
-import org.apache.excalibur.source.factories.ResourceSource;
+import org.apache.excalibur.source.impl.ResourceSource;
 
 /**
  * Test case for ResourceSource.
