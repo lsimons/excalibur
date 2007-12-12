@@ -5,6 +5,8 @@
 </head>
 <body>
 
+<h1>Building the website</h1>
+
 <p>Once upon a time, we used maven to build our website. These days, it breaks:</p>
 
 <pre>
@@ -143,6 +145,20 @@ $
 <p>Alternatively, you can try and migrate all our old maven-style xdocs to
 something else. If I signed up to do that work, I would migrate it straight
 back to plain velocity/anakia.</p>
+
+<h1>Publishing the website</h1>
+
+<pre>
+svn co https://svn.apache.org/repos/asf/excalibur/site ../../excalibur-site
+rsync -av target/docs/ ../../excalibur-site/
+svn revert ../../excalibur-site/download.html # hand-edited a while ago
+svn commit -m "Re-generate the website." ../../excalibur-site
+ssh people.apache.org
+umask 002
+cd /www/excalibur.apache.org
+svn up
+# (must wait for changes to propagate to other machines)
+</pre>
 
 </body>
 
