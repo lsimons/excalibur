@@ -60,7 +60,7 @@ public class SourceURLConnection extends URLConnection {
         this.source = this.factory.getSource(this.url, this.getRequestProperties());
         this.connected = true;
         final String contentType = this.source.getMimeType();
-        if ( contentType == null ) {
+        if ( contentType != null ) {
             this.contentType = contentType;
         }
     }
