@@ -31,133 +31,131 @@ import org.apache.excalibur.source.URIAbsolutizer;
 /**
  * This is an abstract implementation of a {@link SourceResolver}.
  *
- * The source resolving is done relative to a base directory/URI (if
- * the given location is relative). The base directory/URI has to be set
- * using {@link #setBaseURL(URL)}.
+ * The source resolving is done relative to a base directory/URI (if the given
+ * location is relative). The base directory/URI has to be set using
+ * {@link #setBaseURL(URL)}.
  *
  * A subclass should implement {@link #getSourceFactory(String)} and
  * {@link #releaseSourceFactory(SourceFactory)} if required.
  *
- * To support various logging frameworks, the subclass should implement the
- * {@link #isDebugEnabled()} and the {@link #debug(String)} method.
- *
  * @see org.apache.excalibur.source.SourceResolver
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
- * @version $Id$
+ * @version $Id: AbstractSourceResolver.java 587637 2007-10-23 20:05:10Z
+ *          cziegeler $
  */
 public abstract class AbstractSourceResolver
     extends AbstractLoggable
-    implements SourceResolver
-{
+    implements SourceResolver {
 
     /**
      * The base URL
      */
-    protected URL m_baseURL;
+    protected URL baseURL;
 
     /** Set the base url. */
-    public void setBaseURL(URL baseurl)
-    {
-        m_baseURL = baseurl;
+    public void setBaseURL(URL baseurl) {
+        this.baseURL = baseurl;
     }
 
     protected abstract SourceFactory getSourceFactory(String protocol);
 
-    protected void releaseSourceFactory(SourceFactory factory)
-    {
+    protected void releaseSourceFactory(SourceFactory factory) {
         // nothing to do by default
     }
 
     /**
      * Get a <code>Source</code> object.
-     * @throws org.apache.excalibur.source.SourceNotFoundException if the source cannot be found
+     *
+     * @throws org.apache.excalibur.source.SourceNotFoundException
+     *             if the source cannot be found
      */
-    public Source resolveURI( String location )
-        throws MalformedURLException, IOException, SourceException
-    {
-        return this.resolveURI( location, null, null );
+    public Source resolveURI(String location)
+    throws MalformedURLException, IOException, SourceException {
+        return this.resolveURI(location, null, null);
     }
 
     /**
      * Get a <code>Source</code> object.
-     * @throws org.apache.excalibur.source.SourceNotFoundException if the source cannot be found
+     *
+     * @throws org.apache.excalibur.source.SourceNotFoundException
+     *             if the source cannot be found
      */
-    public Source resolveURI( String location,
-                              String baseURI,
-                              Map parameters )
-        throws MalformedURLException, IOException, SourceException
-    {
-        if( this.getLogger().isDebugEnabled() )
-        {
-            this.getLogger().debug( "Resolving '" + location + "' with base '" + baseURI + "' in context '" + m_baseURL + "'" );
+    public Source resolveURI(String location, String baseURI, Map parameters)
+    throws MalformedURLException, IOException, SourceException {
+        if (this.getLogger().isDebugEnabled()) {
+            this.getLogger().debug(
+                    "Resolving '" + location + "' with base '" + baseURI
+                            + "' in context '" + baseURL + "'");
         }
-        if( location == null ) throw new MalformedURLException( "Invalid System ID" );
-        if( null != baseURI && SourceUtil.indexOfSchemeColon(baseURI) == -1 )
-        {
-            throw new MalformedURLException( "BaseURI is not valid, it must contain a protocol: " + baseURI );
+        if (location == null) {
+            throw new MalformedURLException("Invalid System ID");
+        }
+        if (null != baseURI && SourceUtil.indexOfSchemeColon(baseURI) == -1) {
+            throw new MalformedURLException(
+                    "BaseURI is not valid, it must contain a protocol: "
+                            + baseURI);
         }
 
-        if( baseURI == null ) baseURI = m_baseURL.toExternalForm();
+        if (baseURI == null) {
+            baseURI = baseURL.toExternalForm();
+        }
 
         String systemID = location;
         // special handling for windows file paths
-        if( location.length() > 1 && location.charAt( 1 ) == ':' )
+        if (location.length() > 1 && location.charAt(1) == ':') {
             systemID = "file:/" + location;
-        else if( location.length() > 2 && location.charAt(0) == '/' && location.charAt(2) == ':' )
+        } else if (location.length() > 2 && location.charAt(0) == '/'
+                && location.charAt(2) == ':') {
             systemID = "file:" + location;
+        }
 
-        // determine protocol (scheme): first try to get the one of the systemID, if that fails, take the one of the baseURI
+        // determine protocol (scheme): first try to get the one of the
+        // systemID, if that fails, take the one of the baseURI
         String protocol;
         int protocolPos = SourceUtil.indexOfSchemeColon(systemID);
-        if( protocolPos != -1 )
-        {
-            protocol = systemID.substring( 0, protocolPos );
-        }
-        else
-        {
+        if (protocolPos != -1) {
+            protocol = systemID.substring(0, protocolPos);
+        } else {
             protocolPos = SourceUtil.indexOfSchemeColon(baseURI);
-            if( protocolPos != -1 )
-                protocol = baseURI.substring( 0, protocolPos );
-            else
+            if (protocolPos != -1) {
+                protocol = baseURI.substring(0, protocolPos);
+            } else {
                 protocol = "*";
+            }
         }
 
         Source source = null;
         // search for a SourceFactory implementing the protocol
         SourceFactory factory = null;
-        try
-        {
-            factory = this.getSourceFactory( protocol );
-            if ( factory != null )
-            {
-                systemID = absolutize( factory, baseURI, systemID );
-                if( this.getLogger().isDebugEnabled() )
-                    this.getLogger().debug( "Resolved to systemID : " + systemID );
-                source = factory.getSource( systemID, parameters );
+        try {
+            factory = this.getSourceFactory(protocol);
+            if (factory != null) {
+                systemID = absolutize(factory, baseURI, systemID);
+                if (this.getLogger().isDebugEnabled()) {
+                    this.getLogger()
+                            .debug("Resolved to systemID : " + systemID);
+                }
+                source = factory.getSource(systemID, parameters);
             }
-        }
-        finally
-        {
-            this.releaseSourceFactory( factory );
+        } finally {
+            this.releaseSourceFactory(factory);
         }
 
-        if( null == source )
-        {
-            try
-            {
+        if (null == source) {
+            try {
                 factory = this.getSourceFactory("*");
-                if ( factory == null )
-                {
-                    throw new SourceException( "Unable to select source factory for '" + systemID + "'. No default factory found.");
+                if (factory == null) {
+                    throw new SourceException(
+                            "Unable to select source factory for '" + systemID
+                                    + "'. No default factory found.");
                 }
-                systemID = absolutize( factory, baseURI, systemID );
-                if( this.getLogger().isDebugEnabled() )
-                    this.getLogger().debug( "Resolved to systemID : " + systemID );
-                source = factory.getSource( systemID, parameters );
-            }
-            finally
-            {
+                systemID = absolutize(factory, baseURI, systemID);
+                if (this.getLogger().isDebugEnabled()) {
+                    this.getLogger().debug("Resolved to systemID : " + systemID);
+                }
+                source = factory.getSource(systemID, parameters);
+            } finally {
                 this.releaseSourceFactory(factory);
             }
         }
@@ -168,43 +166,44 @@ public abstract class AbstractSourceResolver
     /**
      * Makes an absolute URI based on a baseURI and a relative URI.
      */
-    private String absolutize( SourceFactory factory, String baseURI, String systemID )
-    {
-        if( factory instanceof URIAbsolutizer )
-            systemID = ((URIAbsolutizer)factory).absolutize(baseURI, systemID);
-        else
+    private String absolutize(SourceFactory factory,
+                              String baseURI,
+                              String systemID) {
+        if (factory instanceof URIAbsolutizer) {
+            systemID = ((URIAbsolutizer) factory).absolutize(baseURI, systemID);
+        } else {
             systemID = SourceUtil.absolutize(baseURI, systemID);
+        }
         return systemID;
     }
 
     /**
      * Releases a resolved resource
-     * @param source the source to release
+     *
+     * @param source
+     *            the source to release
      */
-    public void release( final Source source )
-    {
-        if( source == null ) return;
+    public void release(final Source source) {
+        if (source == null) {
+            return;
+        }
 
         // search for a SourceFactory implementing the protocol
         final String scheme = source.getScheme();
         SourceFactory factory = null;
 
-        try
-        {
+        try {
             factory = this.getSourceFactory(scheme);
-            if ( factory == null )
-            {
+            if (factory == null) {
                 factory = this.getSourceFactory("*");
-                if ( factory == null )
-                {
-                    throw new RuntimeException( "Unable to select source factory for '" + source.getURI() + "'.");
+                if (factory == null) {
+                    throw new RuntimeException("Unable to select source factory for '"
+                                    + source.getURI() + "'.");
                 }
             }
             factory.release(source);
-        }
-        finally
-        {
-            this.releaseSourceFactory( factory );
+        } finally {
+            this.releaseSourceFactory(factory);
         }
     }
 }

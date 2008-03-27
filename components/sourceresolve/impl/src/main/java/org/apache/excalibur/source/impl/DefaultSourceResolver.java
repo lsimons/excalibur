@@ -29,22 +29,19 @@ import org.apache.excalibur.source.SourceResolver;
  * @version $Id$
  */
 public class DefaultSourceResolver
-    extends AbstractSourceResolver
-{
+    extends AbstractSourceResolver {
 
     /** The list of source factories. */
-    protected Map m_sourceFactories = Collections.EMPTY_MAP;
+    protected Map sourceFactories = Collections.EMPTY_MAP;
 
-    public void setSourceFactories(Map factories)
-    {
-        m_sourceFactories = factories;
+    public void setSourceFactories(Map factories) {
+        this.sourceFactories = factories;
     }
 
     /**
      * @see org.apache.excalibur.source.impl.AbstractSourceResolver#getSourceFactory(java.lang.String)
      */
-    protected SourceFactory getSourceFactory(String protocol)
-    {
-        return (SourceFactory)m_sourceFactories.get(protocol);
+    protected SourceFactory getSourceFactory(String protocol) {
+        return (SourceFactory)this.sourceFactories.get(protocol);
     }
 }

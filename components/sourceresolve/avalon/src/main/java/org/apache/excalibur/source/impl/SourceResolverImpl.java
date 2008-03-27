@@ -101,11 +101,11 @@ public class SourceResolverImpl
         {
             if( context.get( "context-root" ) instanceof URL )
             {
-                this.m_baseURL = (URL)context.get( "context-root" );
+                this.baseURL = (URL)context.get( "context-root" );
             }
             else
             {
-                this.m_baseURL = ( (File)context.get( "context-root" ) ).toURL();
+                this.baseURL = ( (File)context.get( "context-root" ) ).toURL();
             }
         }
         catch( ContextException ce )
@@ -113,10 +113,10 @@ public class SourceResolverImpl
             // set the base URL to the current directory
             try
             {
-                this.m_baseURL = new File( System.getProperty( "user.dir" ) ).toURL();
+                this.baseURL = new File( System.getProperty( "user.dir" ) ).toURL();
                 if( this.getLogger().isDebugEnabled() )
                 {
-                    this.getLogger().debug( "SourceResolver: Using base URL: " + this.m_baseURL );
+                    this.getLogger().debug( "SourceResolver: Using base URL: " + this.baseURL );
                 }
             }
             catch( MalformedURLException mue )

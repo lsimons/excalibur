@@ -46,8 +46,8 @@ import org.apache.excalibur.source.validity.FileTimeStampValidity;
  * @version $Id$
  */
 
-public class FileSource implements ModifiableTraversableSource, MoveableSource
-{
+public class FileSource
+    implements ModifiableTraversableSource, MoveableSource {
 
     /** The file */
     private File m_file;

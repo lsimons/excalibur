@@ -31,14 +31,13 @@ import org.apache.excalibur.source.URIAbsolutizer;
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  * @version $Id$
  */
-public class FileSourceFactory implements SourceFactory, URIAbsolutizer
-{
+public class FileSourceFactory
+    implements SourceFactory, URIAbsolutizer {
 
     /**
      * @see org.apache.excalibur.source.SourceFactory#getSource(java.lang.String, java.util.Map)
      */
-    public Source getSource(String location, Map parameters) throws IOException, MalformedURLException
-    {
+    public Source getSource(String location, Map parameters) throws IOException, MalformedURLException {
         return new FileSource(location);
     }
 
@@ -47,13 +46,11 @@ public class FileSourceFactory implements SourceFactory, URIAbsolutizer
      *
      * @see org.apache.excalibur.source.SourceFactory#release(org.apache.excalibur.source.Source)
      */
-    public void release(Source source)
-    {
+    public void release(Source source) {
         // Nothing to do here
     }
 
-    public String absolutize(String baseURI, String location)
-    {
+    public String absolutize(String baseURI, String location) {
         // Call the absolutize utility method with false for the normalizePath argument.
         // This avoids the removal of "../" from the path.
         // This way, the "../" will be resolved by the operating system, which might

@@ -32,36 +32,33 @@ import org.apache.excalibur.source.SourceValidity;
 
 public abstract class AbstractSource
     extends AbstractLoggable
-    implements Source
-{
-    private boolean m_gotInfos;
-    private long m_lastModificationDate;
-    private long m_contentLength;
-    private String m_systemId;
+    implements Source {
 
-    private String m_scheme;
+    private boolean gotInfos;
+    private long lastModificationDate;
+    private long contentLength;
+    private String systemId;
+
+    private String scheme;
 
     /**
      * Get the last modification date and content length of the source.
      * Any exceptions are ignored.
      * Override this to get the real information
      */
-    protected void getInfos()
-    {
-        this.m_contentLength = -1;
-        this.m_lastModificationDate = 0;
+    protected void getInfos() {
+        this.contentLength = -1;
+        this.lastModificationDate = 0;
     }
 
     /**
      * Call {@link #getInfos()} if it hasn't already been called since the last
      * call to {@link #refresh()}.
      */
-    protected void checkInfos()
-    {
-        if( !m_gotInfos )
-        {
+    protected void checkInfos() {
+        if( !gotInfos ) {
             getInfos();
-            m_gotInfos = true;
+            gotInfos = true;
         }
     }
 
@@ -75,25 +72,22 @@ public abstract class AbstractSource
      * @throws IOException if I/O error occured.
      */
     public InputStream getInputStream()
-        throws IOException, SourceException
-    {
+    throws IOException, SourceException {
         return null;
     }
 
     /**
      * Return the unique identifer for this source
      */
-    public String getURI()
-    {
-        return m_systemId;
+    public String getURI() {
+        return systemId;
     }
 
     /**
      * Return the protocol identifier.
      */
-    public String getScheme()
-    {
-        return this.m_scheme;
+    public String getScheme() {
+        return this.scheme;
     }
 
     /**
@@ -102,8 +96,7 @@ public abstract class AbstractSource
      *  If it is currently not possible to calculate such an information
      *  <code>null</code> is returned.
      */
-    public SourceValidity getValidity()
-    {
+    public SourceValidity getValidity() {
         return null;
     }
 
@@ -111,9 +104,8 @@ public abstract class AbstractSource
      * Refresh this object and update the last modified date
      * and content length.
      */
-    public void refresh()
-    {
-        m_gotInfos = false;
+    public void refresh() {
+        gotInfos = false;
     }
 
     /**
@@ -121,8 +113,7 @@ public abstract class AbstractSource
      * If the source is not able to determine the mime-type by itself
      * this can be null.
      */
-    public String getMimeType()
-    {
+    public String getMimeType() {
         return null;
     }
 
@@ -130,55 +121,50 @@ public abstract class AbstractSource
      * Return the content length of the content or -1 if the length is
      * unknown
      */
-    public long getContentLength()
-    {
+    public long getContentLength() {
         checkInfos();
-        return this.m_contentLength;
+        return this.contentLength;
     }
 
     /**
      * Get the last modification date of the source or 0 if it
      * is not possible to determine the date.
      */
-    public long getLastModified()
-    {
+    public long getLastModified() {
         checkInfos();
-        return this.m_lastModificationDate;
+        return this.lastModificationDate;
     }
+
     /**
      * Sets the contentLength.
      * @param contentLength The contentLength to set
      */
-    protected void setContentLength(long contentLength)
-    {
-        m_contentLength = contentLength;
+    protected void setContentLength(long contentLength) {
+        this.contentLength = contentLength;
     }
 
     /**
      * Sets the lastModificationDate.
      * @param lastModificationDate The lastModificationDate to set
      */
-    protected void setLastModified(long lastModificationDate)
-    {
-        m_lastModificationDate = lastModificationDate;
+    protected void setLastModified(long lastModificationDate) {
+        this.lastModificationDate = lastModificationDate;
     }
 
     /**
      * Sets the scheme.
      * @param scheme The scheme to set
      */
-    protected void setScheme(String scheme)
-    {
-        m_scheme = scheme;
+    protected void setScheme(String scheme) {
+        this.scheme = scheme;
     }
 
     /**
      * Sets the systemId.
      * @param systemId The systemId to set
      */
-    protected void setSystemId(String systemId)
-    {
-        m_systemId = systemId;
+    protected void setSystemId(String systemId) {
+        this.systemId = systemId;
     }
 
 }

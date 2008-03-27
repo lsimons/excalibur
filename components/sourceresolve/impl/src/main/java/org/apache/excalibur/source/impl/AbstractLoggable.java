@@ -26,8 +26,8 @@ import org.apache.commons.logging.LogFactory;
  * @version $Id$
  */
 
-public abstract class AbstractLoggable
-{
+public abstract class AbstractLoggable {
+
     /** Logger */
     protected final Log m_logger = LogFactory.getLog(getClass());
 
