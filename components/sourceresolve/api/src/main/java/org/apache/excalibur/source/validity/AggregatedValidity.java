@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.excalibur.source.impl.validity;
+package org.apache.excalibur.source.validity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,12 +24,12 @@ import java.util.List;
 import org.apache.excalibur.source.SourceValidity;
 
 /**
- * The base class for the aggregation implementations
+ * A validation object using a List.
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  * @version $Id$
  */
-public abstract class AbstractAggregatedValidity
+public final class AggregatedValidity
     implements SourceValidity
 {
     final ArrayList m_list = new ArrayList();
@@ -60,4 +60,59 @@ public abstract class AbstractAggregatedValidity
         return (SourceValidity) m_list.get(index);
     }
 
+    /**
+     * Check if the component is still valid.
+     * If <code>0</code> is returned the isValid(SourceValidity) must be
+     * called afterwards!
+     * If -1 is returned, the component is not valid anymore and if +1
+     * is returnd, the component is valid.
+     */
+    public int isValid()
+    {
+        for( final Iterator i = m_list.iterator(); i.hasNext(); )
+        {
+            final int v = ( (SourceValidity)i.next() ).isValid();
+            if( v < 1 )
+            {
+                return v;
+            }
+        }
+        return 1;
+    }
+
+    public int isValid( final SourceValidity validity )
+    {
+        if( validity instanceof AggregatedValidity )
+        {
+            final AggregatedValidity other = (AggregatedValidity)validity;
+            final List otherList = other.m_list;
+            if( m_list.size() != otherList.size() )
+            {
+                return -1;
+            }
+
+            for( final Iterator i = m_list.iterator(), j = otherList.iterator(); i.hasNext(); )
+            {
+                final SourceValidity srcA = (SourceValidity)i.next();
+                final SourceValidity srcB = (SourceValidity)j.next();
+                int result = srcA.isValid();
+                if ( result == -1)
+                {
+                    return -1;
+                }
+                if ( result == 0 )
+                {
+                    result = srcA.isValid( srcB );
+                    if ( result < 1)
+                    {
+                        return result;
+                    }
+                }
+            }
+            return 1;
+        }
+        return -1;
+    }
+
 }
+

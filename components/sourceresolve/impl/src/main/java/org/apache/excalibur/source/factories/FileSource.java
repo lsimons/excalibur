@@ -37,7 +37,7 @@ import org.apache.excalibur.source.SourceException;
 import org.apache.excalibur.source.SourceNotFoundException;
 import org.apache.excalibur.source.SourceUtil;
 import org.apache.excalibur.source.SourceValidity;
-import org.apache.excalibur.source.impl.validity.FileTimeStampValidity;
+import org.apache.excalibur.source.validity.FileTimeStampValidity;
 
 /**
  * A {@link ModifiableTraversableSource} for filesystem objects.

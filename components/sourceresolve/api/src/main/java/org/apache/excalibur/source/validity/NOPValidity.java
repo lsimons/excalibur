@@ -14,22 +14,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.excalibur.source.impl.validity;
+package org.apache.excalibur.source.validity;
 
 import org.apache.excalibur.source.SourceValidity;
 
-
 /**
- * This object delivers a validity object if required.
- * Used by the {@link DeferredAggregatedValidity}
+ * A validation object which is always valid.
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  * @version $Id$
  */
-public interface DeferredValidity {
+public final class NOPValidity
+    implements SourceValidity
+{
+    public static final SourceValidity SHARED_INSTANCE = new NOPValidity();
 
     /**
-     * Return the validity
+     * Check if the component is still valid.
+     * If <code>0</code> is returned the isValid(SourceValidity) must be
+     * called afterwards!
+     * If -1 is returned, the component is not valid anymore and if +1
+     * is returnd, the component is valid.
      */
-    SourceValidity getValidity();
+    public int isValid()
+    {
+        return 1;
+    }
+
+    public int isValid( final SourceValidity newValidity )
+    {
+        if (newValidity instanceof NOPValidity)
+        {
+            return 1;
+        }
+        return -1;
+    }
+
+    public String toString()
+    {
+        return "NOPValidity";
+    }
 }

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.excalibur.source.impl.validity;
+package org.apache.excalibur.source.validity;
 
 import org.apache.excalibur.source.SourceValidity;
 

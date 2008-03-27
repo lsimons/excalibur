@@ -28,7 +28,7 @@ import org.apache.excalibur.source.SourceNotFoundException;
 import org.apache.excalibur.source.SourceUtil;
 import org.apache.excalibur.source.SourceValidity;
 import org.apache.excalibur.source.impl.AbstractSource;
-import org.apache.excalibur.source.impl.validity.TimeStampValidity;
+import org.apache.excalibur.source.validity.TimeStampValidity;
 
 /**
  * Description of a source which is described by the resource protocol

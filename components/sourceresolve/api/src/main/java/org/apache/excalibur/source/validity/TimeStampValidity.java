@@ -14,20 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.excalibur.source.impl.validity;
+package org.apache.excalibur.source.validity;
 
 import org.apache.excalibur.source.SourceValidity;
 
 /**
- * A validation object which is always valid.
+ * A validation object for time-stamps.
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
  * @version $Id$
  */
-public final class NOPValidity
+public final class TimeStampValidity
     implements SourceValidity
 {
-    public static final SourceValidity SHARED_INSTANCE = new NOPValidity();
+    private long m_timeStamp;
+
+    public TimeStampValidity( final long timeStamp )
+    {
+        m_timeStamp = timeStamp;
+    }
 
     /**
      * Check if the component is still valid.
@@ -38,20 +43,27 @@ public final class NOPValidity
      */
     public int isValid()
     {
-        return 1;
+        return 0;
     }
 
-    public int isValid( final SourceValidity newValidity )
+    public int isValid( SourceValidity newValidity )
     {
-        if (newValidity instanceof NOPValidity)
+        if( newValidity instanceof TimeStampValidity )
         {
-            return 1;
+            final long timeStamp =
+                ( (TimeStampValidity)newValidity ).getTimeStamp();
+            return (m_timeStamp == timeStamp ? +1 : -1);
         }
         return -1;
     }
 
+    public long getTimeStamp()
+    {
+        return m_timeStamp;
+    }
+
     public String toString()
     {
-        return "NOPValidity";
+        return "TimeStampValidity: " + m_timeStamp;
     }
 }

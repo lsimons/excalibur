@@ -51,7 +51,7 @@ import org.apache.excalibur.source.SourceResolver;
 import org.apache.excalibur.source.SourceUtil;
 import org.apache.excalibur.source.SourceValidity;
 import org.apache.excalibur.source.impl.AbstractLoggable;
-import org.apache.excalibur.source.impl.validity.TimeStampValidity;
+import org.apache.excalibur.source.validity.TimeStampValidity;
 
 /**
  * HTTP URL Source object, based on the Jakarta Commons
