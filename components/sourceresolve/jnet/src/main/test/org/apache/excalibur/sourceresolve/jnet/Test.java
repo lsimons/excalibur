@@ -14,36 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.excalibur.sourceresolve.test;
+package org.apache.excalibur.sourceresolve.jnet;
 
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import junit.framework.TestCase;
+
 import org.apache.excalibur.source.factories.FileSourceFactory;
-import org.apache.excalibur.sourceresolve.jnet.Installer;
-import org.apache.excalibur.sourceresolve.jnet.source.SourceURLStreamHandlerFactory;
 import org.apache.excalibur.sourceresolve.jnet.source.SourceFactoriesManager;
+import org.apache.excalibur.sourceresolve.jnet.source.SourceURLStreamHandlerFactory;
 
-public class Test {
+public class Test extends TestCase {
 
-    public static void main(String[] args) {
-        try {
-            Installer.setURLStreamHandlerFactory(new SourceURLStreamHandlerFactory());
-            Installer.setURLStreamHandlerFactory(new SourceURLStreamHandlerFactory());
-            final Map factories = new HashMap();
-            factories.put("carsten", new FileSourceFactory());
-            SourceFactoriesManager.setGlobalFactories(factories);
-            final URL url = new URL("carsten:///Users/cziegeler/.m2/settings.xml");
-            final InputStream is = (InputStream)url.getContent();
-            final byte[] b = new byte[100000];
-            int l = is.read(b);
-            System.out.println(new String(b, 0, l));
-            is.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    protected void setUp() throws Exception {
+        super.setUp();
+        Installer.setURLStreamHandlerFactory(new SourceURLStreamHandlerFactory());
+    }
+
+    public void testFileSourceFactory() throws Exception {
+        final Map factories = new HashMap();
+        factories.put("custom", new FileSourceFactory());
+        SourceFactoriesManager.setGlobalFactories(factories);
+        final URL url = new URL("custom:pom.xml");
+        final InputStream is = (InputStream)url.getContent();
+        final byte[] b = new byte[100000];
+        int l = is.read(b);
+        is.close();
     }
 
 }
