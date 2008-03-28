@@ -32,7 +32,7 @@ public class URLStreamHandlerFactoryWrapper extends ParentAwareURLStreamHandlerF
     }
 
     /**
-     * @see org.apache.excalibur.sourceresolve.jnet.ParentAwareURLStreamHandlerFactory#create(java.lang.String)
+     * @see org.apache.excalibur.source.jnet.ParentAwareURLStreamHandlerFactory#create(java.lang.String)
      */
     protected URLStreamHandler create(String protocol) {
         return this.wrapper.createURLStreamHandler(protocol);

@@ -20,13 +20,13 @@ import java.net.URLStreamHandler;
 import java.util.Map;
 
 import org.apache.excalibur.source.SourceFactory;
-import org.apache.excalibur.sourceresolve.jnet.ParentAwareURLStreamHandlerFactory;
+import org.apache.excalibur.source.jnet.ParentAwareURLStreamHandlerFactory;
 
 public class SourceURLStreamHandlerFactory
     extends ParentAwareURLStreamHandlerFactory {
 
     /**
-     * @see org.apache.excalibur.sourceresolve.jnet.ParentAwareURLStreamHandlerFactory#create(java.lang.String)
+     * @see org.apache.excalibur.source.jnet.ParentAwareURLStreamHandlerFactory#create(java.lang.String)
      */
     protected URLStreamHandler create(String protocol) {
         final Map factories = SourceFactoriesManager.getCurrentFactories();
