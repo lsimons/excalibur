@@ -19,10 +19,21 @@ package org.apache.excalibur.sourceresolve.jnet;
 import java.net.URLStreamHandler;
 import java.net.URLStreamHandlerFactory;
 
+/**
+ * A dynamic url stream handler factory that stores the current delegate factory
+ * in a thread local variable.
+ *
+ * This allows to change the url handler factory at runtime dynamically through
+ * the {@link #push(URLStreamHandlerFactory)} and {@link #pop()} methods.
+ */
 public class DynamicURLStreamHandlerFactory extends ParentAwareURLStreamHandlerFactory {
 
+    /** The thread local holding the current factory. */
     protected static final ThreadLocal FACTORY = new InheritableThreadLocal();
 
+    /**
+     * Push a url stream handler factory on top of the stack.
+     */
     public static void push(URLStreamHandlerFactory factory) {
         // no need to synchronize as we use a thread local
         if ( !(factory instanceof ParentAwareURLStreamHandlerFactory) ) {
@@ -33,6 +44,9 @@ public class DynamicURLStreamHandlerFactory extends ParentAwareURLStreamHandlerF
         FACTORY.set(factory);
     }
 
+    /**
+     * Pop the lastest url stream handler factory from the stack.
+     */
     public static void pop() {
         ParentAwareURLStreamHandlerFactory factory = (ParentAwareURLStreamHandlerFactory)FACTORY.get();
         if ( factory != null ) {
@@ -45,6 +59,9 @@ public class DynamicURLStreamHandlerFactory extends ParentAwareURLStreamHandlerF
      */
     protected URLStreamHandler create(String protocol) {
         ParentAwareURLStreamHandlerFactory factory = (ParentAwareURLStreamHandlerFactory)FACTORY.get();
-        return factory.createURLStreamHandler(protocol);
+        if ( factory != null ) {
+            return factory.createURLStreamHandler(protocol);
+        }
+        return null;
     }
 }

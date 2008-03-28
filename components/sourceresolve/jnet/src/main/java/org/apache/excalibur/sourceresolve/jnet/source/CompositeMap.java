@@ -149,7 +149,7 @@ public class CompositeMap implements Map {
     }
 
     /**
-     * @see java.util.Map#put(K, V)
+     * @see java.util.Map#put(Object, Object)
      */
     public Object put(Object key, Object value) {
 	    throw new UnsupportedOperationException("Put is not supported");

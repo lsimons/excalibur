@@ -27,10 +27,18 @@ public abstract class ParentAwareURLStreamHandlerFactory implements URLStreamHan
 
     protected URLStreamHandlerFactory parentFactory;
 
+    /**
+     * Set the parent factory.
+     * @param factory
+     */
     public void setParentFactory(URLStreamHandlerFactory factory) {
         this.parentFactory = factory;
     }
 
+    /**
+     * Return the parent factory.
+     * @return The parent factory.
+     */
     public URLStreamHandlerFactory getParent() {
         return this.parentFactory;
     }
@@ -46,5 +54,11 @@ public abstract class ParentAwareURLStreamHandlerFactory implements URLStreamHan
         return handler;
     }
 
+    /**
+     * This method can be overwritten by subclasses to instantiate url stream
+     * handlers for the given protocol.
+     * @param protocol The protocol.
+     * @return A url stream handler for the protocol or null.
+     */
     protected abstract URLStreamHandler create(String protocol);
 }
