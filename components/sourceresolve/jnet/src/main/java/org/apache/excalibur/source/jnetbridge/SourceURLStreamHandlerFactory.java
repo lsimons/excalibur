@@ -14,34 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.excalibur.sourceresolve.jnet.source;
+package org.apache.excalibur.source.jnetbridge;
 
-import java.io.IOException;
-import java.net.Proxy;
-import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLStreamHandler;
+import java.util.Map;
 
 import org.apache.excalibur.source.SourceFactory;
+import org.apache.excalibur.sourceresolve.jnet.ParentAwareURLStreamHandlerFactory;
 
-public class SourceURLStreamHandler extends URLStreamHandler {
-
-    protected final SourceFactory sourceFactory;
-
-    public SourceURLStreamHandler(SourceFactory factory) {
-        this.sourceFactory = factory;
-    }
-
-    protected URLConnection openConnection(URL url) throws IOException {
-        return new SourceURLConnection(this.sourceFactory, url);
-    }
+public class SourceURLStreamHandlerFactory
+    extends ParentAwareURLStreamHandlerFactory {
 
     /**
-     * @see java.net.URLStreamHandler#openConnection(java.net.URL, java.net.Proxy)
+     * @see org.apache.excalibur.sourceresolve.jnet.ParentAwareURLStreamHandlerFactory#create(java.lang.String)
      */
-    protected URLConnection openConnection(URL url, Proxy proxy) throws IOException {
-        return this.openConnection(url);
+    protected URLStreamHandler create(String protocol) {
+        final Map factories = SourceFactoriesManager.getCurrentFactories();
+        final SourceFactory factory = (SourceFactory)factories.get(protocol);
+        if ( factory != null ) {
+            return new SourceURLStreamHandler(factory);
+        }
+        return null;
     }
-
 
 }

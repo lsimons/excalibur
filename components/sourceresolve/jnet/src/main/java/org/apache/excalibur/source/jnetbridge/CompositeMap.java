@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.excalibur.sourceresolve.jnet.source;
+package org.apache.excalibur.source.jnetbridge;
 
 import java.util.Collection;
 import java.util.HashSet;

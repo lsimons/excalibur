@@ -24,8 +24,8 @@ import java.util.Map;
 import junit.framework.TestCase;
 
 import org.apache.excalibur.source.factories.FileSourceFactory;
-import org.apache.excalibur.sourceresolve.jnet.source.SourceFactoriesManager;
-import org.apache.excalibur.sourceresolve.jnet.source.SourceURLStreamHandlerFactory;
+import org.apache.excalibur.source.jnetbridge.SourceFactoriesManager;
+import org.apache.excalibur.source.jnetbridge.SourceURLStreamHandlerFactory;
 
 public class Test extends TestCase {
 
