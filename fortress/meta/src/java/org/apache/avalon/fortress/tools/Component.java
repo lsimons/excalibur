@@ -1,18 +1,18 @@
-/* 
+/*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed  under the  License is distributed on an "AS IS" BASIS,
  * WITHOUT  WARRANTIES OR CONDITIONS  OF ANY KIND, either  express  or
  * implied.
- * 
+ *
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -229,7 +229,7 @@ final class Component
         {
             handler = stripQuotes( fortressHandler.getNamedParameter( ATTR_TYPE ) );
         }
-        else // no lifecycle or handler specified, and no inspection match 
+        else // no lifecycle or handler specified, and no inspection match
         {
             handler = MetaInfoEntry.PER_THREAD_HANDLER;
         }
@@ -301,7 +301,7 @@ final class Component
     {
         m_attributes.setProperty( name, value );
     }
-    
+
     /**
      * Only writes the properties file if it is new or if the existing file
      *  contains different values.
@@ -322,14 +322,14 @@ final class Component
             {
                 is.close();
             }
-            
+
             changed = !props.equals( oldProps );
         }
         else
         {
             changed = true;
         }
-        
+
         if ( changed )
         {
             FileOutputStream os = new FileOutputStream( file );
@@ -354,11 +354,11 @@ final class Component
     {
         final String fileName = getType().replace( '.', '/' ).concat( ".meta" );
         final String depsName = getType().replace( '.', '/' ).concat( ".deps" );
-        
+
         // Write out the meta file if it has changed.
         writeIfChanged( m_attributes, new File( rootDir, fileName ),
             "Meta information for " + getType() );
-        
+
         final File depsFile = new File( rootDir, depsName );
         if ( m_dependencies.size() > 0 )
         {
@@ -419,7 +419,7 @@ final class Component
 
         final String className = stripQuotes( serviceName );
 
-        if ( className != null || className.length() > 0 )
+        if ( className != null && className.length() > 0 )
         {
             if ( className.indexOf( '.' ) < 0 )
             {
