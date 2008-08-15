@@ -18,7 +18,10 @@
 */
 package org.apache.avalon.excalibur.logger.factory;
 
+import java.util.Properties;
+import javax.mail.Authenticator;
 import javax.mail.Address;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -53,6 +56,28 @@ import org.apache.log.output.net.SMTPOutputLogTarget;
  *   &lt;debug&gt;false&lt;/debug&gt;
  * &lt;/smtp&gt;
  * </pre>
+ * </p>
+ * <p>
+ * Or without a session in a context:
+ * <pre>
+ * &lt;smtp id="target-id"&gt;
+ *   &lt;session&gt;
+ *     &lt;parameter name="mail.host" value="smtp.somehost.com"/&gt;
+ *     &lt;parameter name="mail.smtp.localhost" value="@app.name@"/&gt; <!-- Needed on some servers for a name for the SMTP EHLO -->
+ *     &lt;parameter name="mail.smtp.starttls.enable" value="true"/&gt; <!-- Needed by servers like gmail -->
+ *     &lt;authentication user="USER" password="PASSWORD"/&gt; <!-- This optional element will automatically set the mail.smtp.auth parameter. -->
+ *   &lt;/session&gt;
+ *   &lt;format type="raw|pattern|extended"&gt;pattern to be used if needed&lt;/format&gt;
+ *   &lt;to&gt;address-1@host&lt;/to&gt;
+ *   &lt;to&gt;address-N@host&lt;/to&gt;
+ *   &lt;from&gt;address@host&lt;/from&gt;
+ *   &lt;subject&gt;subject line&lt;/subject&gt;
+ *   &lt;maximum-size&gt;number&lt;/maximum-size&gt;
+ *   &lt;maximum-delay-time&gt;seconds&lt;/maximum-delay-time&gt;
+ *   &lt;debug&gt;false&lt;/debug&gt;
+ * &lt;/smtp&gt;
+ * </pre>
+ * </p>
  *
  * The Factory will look for a javax.mail.Session instance in the Context using
  *  the specified context-key.   If your needs are simple, then it is also possible
@@ -83,7 +108,7 @@ import org.apache.log.output.net.SMTPOutputLogTarget;
  * <p>
  *
  * @author <a href="mailto:dev@avalon.apache.org">Avalon Development Team</a>
- * @version CVS $Revision: 1.14 $ $Date: 2004/03/10 13:54:50 $
+ * @version $Id$
  * @since 4.1
  */
 public class SMTPTargetFactory
@@ -187,9 +212,21 @@ public class SMTPTargetFactory
         }
         else
         {
-            return Session.getInstance(
-                Parameters.toProperties(
-                    Parameters.fromConfiguration( sessionConfig ) ) );
+            Properties properties = Parameters.toProperties(
+                    Parameters.fromConfiguration( sessionConfig ) );
+            
+            MailAuthenticator authenticator = null;
+            Configuration authenticationConf = sessionConfig.getChild( "authentication", false );
+            if ( authenticationConf != null )
+            {
+                String authUser = authenticationConf.getAttribute( "user" );
+                String authPassword = authenticationConf.getAttribute( "password" );
+                authenticator = new MailAuthenticator( authUser, authPassword );
+                
+                properties.setProperty( "mail.smtp.auth", "true" );
+            }
+            
+            return Session.getInstance( properties, authenticator );
         }
     }
 
@@ -297,5 +334,27 @@ public class SMTPTargetFactory
         throws AddressException
     {
         return new InternetAddress( address );
+    }
+    
+    /*---------------------------------------------------------------
+     * Inner Classes
+     *-------------------------------------------------------------*/
+    private class MailAuthenticator extends Authenticator
+    {
+        private String m_user;
+        private String m_password;
+        
+        MailAuthenticator( String user, String password )
+        {
+            super();
+            
+            m_user = user;
+            m_password = password;
+        }
+     
+        protected PasswordAuthentication getPasswordAuthentication()
+        {
+            return new PasswordAuthentication( m_user, m_password );
+        }
     }
 }
