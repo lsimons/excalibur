@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.apache.excalibur</groupId>
     <artifactId>excalibur</artifactId>
-    <version>3</version>
+    <version>4-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <name>Excalibur Lifecycle Extension API</name>
