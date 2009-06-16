@@ -20,8 +20,6 @@
 -->
 <project>
 
-    <title>Apache Excalibur</title>
-
     <body>
         <links>
             <item name="Home" href="/index.html"/>
