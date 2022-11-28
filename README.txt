@@ -1,3 +1,8 @@
+This is a git archive of the Apache Excalibur project source code. Find
+out more about Apache Excalibur from the Apache Attic:
+
+  https://attic.apache.org/projects/excalibur.html
+
 Apache Excalibur
 ================
 
